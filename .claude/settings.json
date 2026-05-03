@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/charleschen/Downloads/Python_30_Days/.venv/bin/python\" \"/Users/charleschen/Downloads/Python_30_Days/.claude/hooks/recall_memories.py\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/charleschen/Downloads/Python_30_Days/.venv/bin/python\" \"/Users/charleschen/Downloads/Python_30_Days/.claude/hooks/save_memory.py\""
+          }
+        ]
+      }
+    ]
+  }
+}
