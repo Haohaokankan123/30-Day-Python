@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30 Days of Python — Learn Python from Zero to Hero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Nunito:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LANDING PAGE -->
+<div id="landing" class="landing-page">
+  <div class="stars" id="stars"></div>
+  <div class="landing-content">
+    <div class="landing-badge">🐍 Complete Python Curriculum</div>
+    <h1 class="landing-title">30 Days of<br><span class="gradient-text">Python</span></h1>
+    <p class="landing-subtitle">Master Python from scratch — variables to APIs, data science to web development. Every concept, every exercise, all in one place.</p>
+    <div class="landing-stats">
+      <div class="stat"><span class="stat-num">30</span><span class="stat-label">Days</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">300+</span><span class="stat-label">Exercises</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">100+</span><span class="stat-label">Code Examples</span></div>
+    </div>
+    <button class="landing-btn" onclick="startLearning()">Start Learning <span>→</span></button>
+    <div class="days-preview">
+      <div class="preview-label">All 30 Days</div>
+      <div class="preview-grid" id="previewGrid"></div>
+    </div>
+  </div>
+</div>
+/
+<!-- MAIN APP -->
+<div id="app" class="app hidden">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">🐍</span>
+        <span class="logo-text">30 Days of Python</span>
+      </div>
+      <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+    </div>
+    <div class="progress-section">
+      <div class="progress-label">
+        <span>Progress</span>
+        <span id="progressText">0 / 30</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+    </div>
+    <div class="sidebar-search">
+      <input type="text" placeholder="🔍 Search days..." id="searchInput" oninput="filterDays(this.value)">
+    </div>
+    <nav class="day-nav" id="dayNav"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main" id="main">
+    <header class="topbar">
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+      <div class="topbar-day" id="topbarDay">Day 1</div>
+      <div class="topbar-actions">
+        <button class="complete-btn" id="completeBtn" onclick="toggleComplete()">Mark Complete ✓</button>
+        <button class="home-btn" onclick="goHome()">🏠</button>
+      </div>
+    </header>
+
+    <div class="content-wrap" id="contentWrap">
+      <!-- Injected by JS -->
+    </div>
+
+    <footer class="day-footer">
+      <button class="nav-btn prev-btn" id="prevBtn" onclick="navigate(-1)">← Previous</button>
+      <div class="day-dots" id="dayDots"></div>
+      <button class="nav-btn next-btn" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Celebration overlay -->
+<div id="celebration" class="celebration hidden">
+  <div class="celebration-inner">
+    <div class="celebration-emoji">🎉</div>
+    <h2>Day Complete!</h2>
+    <p id="celebrationMsg"></p>
+    <button onclick="hideCelebration()">Keep Going →</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="days-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
