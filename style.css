@@ -484,7 +484,7 @@ body {
   background: var(--bg-1);
   padding: 0 48px;
   position: sticky;
-  top: 56px;
+  top: 0;
   z-index: 40;
 }
 .tab-btn {
@@ -1101,7 +1101,8 @@ code[class*="language-"] {
 }
 
 /* ── Sliding tab indicator ── */
-.tabs-wrap { position: relative; overflow: hidden; }
+/* Keep original position:sticky — only add clip for indicator via inner wrapper */
+.tabs-wrap { overflow: visible; }
 .tab-indicator {
   position: absolute;
   bottom: 0;
@@ -1140,15 +1141,12 @@ code[class*="language-"] {
   box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,58,237,0.15);
 }
 
-/* ── Lesson section h2 gradient accent ── */
+/* ── Lesson section h2 — left accent border only, no invisible gradient text ── */
 .lesson-section h2 {
-  background: linear-gradient(90deg, var(--text-1) 0%, var(--accent-bright) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-1);
 }
 
-/* ── Day hero: subtle grid overlay ── */
+/* ── Day hero: subtle grid overlay — z-index below text ── */
 .day-hero::after {
   content: '';
   position: absolute;
@@ -1158,7 +1156,9 @@ code[class*="language-"] {
     linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px);
   background-size: 32px 32px;
   pointer-events: none;
+  z-index: 0;
 }
+.day-tag, .day-hero h1, .day-hero-subtitle, .topic-pills { position: relative; z-index: 1; }
 
 /* ── Better tab panel transition ── */
 @keyframes fadeSlideUp {
@@ -1284,10 +1284,7 @@ code[class*="language-"] {
 
 /* ── Topbar day label ── */
 .topbar-day {
-  background: linear-gradient(90deg, var(--text-2), var(--accent-bright));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-bright);
 }
 
 /* ── Day dot active glow ── */
