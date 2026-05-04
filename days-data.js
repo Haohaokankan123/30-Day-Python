@@ -626,7 +626,7 @@ hours_per_day = 8
 days_per_week = 5
 rate_per_hour = 25
 weekly_pay = hours_per_day * days_per_week * rate_per_hour
-print(f'Weekly pay: ${weekly_pay}')  # $1000
+print('Weekly pay: $' + str(weekly_pay))  # $1000
 
 # Check if number is even
 n = 42
