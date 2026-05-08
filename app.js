@@ -11,16 +11,19 @@ const state = {
 
 document.addEventListener("DOMContentLoaded", () => {
   loadState();
-  buildStars();
   buildPreviewGrid();
   buildSidebar();
+  initLandingAnimations();
 });
 
 // ─── PERSISTENCE ──────────────────────────────
 function loadState() {
   try {
     const c = localStorage.getItem("py30_completed");
-    if (c) state.completed = new Set(JSON.parse(c));
+    if (c) {
+      const parsed = JSON.parse(c);
+      if (Array.isArray(parsed)) state.completed = new Set(parsed);
+    }
     const e = localStorage.getItem("py30_exercises");
     if (e) state.exercises = JSON.parse(e);
     const q = localStorage.getItem("py30_quiz");
@@ -34,28 +37,22 @@ function saveState() {
   localStorage.setItem("py30_quiz", JSON.stringify(state.quizAnswers));
 }
 
-// ─── STARS ────────────────────────────────────
-function buildStars() {
-  const container = document.getElementById("stars");
-  for (let i = 0; i < 130; i++) {
-    const star = document.createElement("div");
-    star.className = "star";
-    const size = Math.random() * 2.5 + 0.5;
-    star.style.cssText = `width:${size}px;height:${size}px;left:${Math.random() * 100}%;top:${Math.random() * 100}%;--dur:${(Math.random() * 4 + 2).toFixed(1)}s;--delay:${(Math.random() * 4).toFixed(1)}s;`;
-    container.appendChild(star);
-  }
-}
-
 // ─── LANDING PREVIEW GRID ─────────────────────
 function buildPreviewGrid() {
   const grid = document.getElementById("previewGrid");
   grid.innerHTML = "";
   for (let i = 1; i <= 30; i++) {
+    const day = DAYS[i - 1];
+    const done = state.completed.has(i);
     const d = document.createElement("div");
-    d.className = "preview-day" + (state.completed.has(i) ? " done" : "");
-    d.textContent = i;
-    d.title = DAYS[i - 1] ? DAYS[i - 1].title : "";
-    d.onclick = () => startLearning(i);
+    d.className = "preview-day" + (done ? " done" : "");
+    d.title = day ? day.title : "";
+    d.innerHTML = `
+      <span class="preview-day-num">${done ? "✓ " : ""}${String(i).padStart(2, "0")}</span>
+      <span class="preview-day-emoji">${day ? day.emoji : ""}</span>
+      <span class="preview-day-name">${day ? day.title : ""}</span>
+    `;
+    d.style.animationDelay = `${i * 28}ms`;
     grid.appendChild(d);
   }
 }
@@ -72,10 +69,10 @@ function buildSidebar() {
       "day-nav-item" + (done ? " done" : "") + (active ? " active" : "");
     item.dataset.day = d.day;
     item.innerHTML = `
-      <div class="day-nav-check">${done ? "✓" : ""}</div>
       <span class="day-nav-num">${String(d.day).padStart(2, "0")}</span>
       <span class="day-nav-emoji">${d.emoji}</span>
       <span class="day-nav-title">${d.title}</span>
+      <span class="day-nav-check"></span>
     `;
     item.onclick = () => {
       loadDay(d.day);
@@ -88,8 +85,10 @@ function buildSidebar() {
 
 function updateProgress() {
   const done = state.completed.size;
-  document.getElementById("progressText").textContent = `${done} / 30`;
-  document.getElementById("progressBar").style.width = `${(done / 30) * 100}%`;
+  const el = document.getElementById("progressText");
+  if (el) el.textContent = done + " / 30 complete";
+  const bar = document.getElementById("progressBar");
+  if (bar) bar.style.width = ((done / 30) * 100) + "%";
 }
 
 function closeSidebarOnMobile() {
@@ -109,19 +108,27 @@ function goHome() {
   document.getElementById("app").classList.add("hidden");
   document.getElementById("landing").classList.remove("hidden");
   buildPreviewGrid();
+  // Re-trigger scroll reveals for sections now visible
+  setTimeout(() => {
+    document.querySelectorAll(".reveal:not(.visible)").forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) el.classList.add("visible");
+    });
+  }, 50);
 }
 
 function navigate(dir) {
   const next = state.currentDay + dir;
-  if (next >= 1 && next <= 30) loadDay(next);
+  if (next >= 1 && next <= DAYS.length) loadDay(next);
 }
 
 function loadDay(n) {
+  if (window.Playground) window.Playground.unmount();
   state.currentDay = n;
   const day = DAYS[n - 1];
   if (!day) return;
 
-  document.getElementById("topbarDay").textContent = `Day ${n} — ${day.title}`;
+  document.getElementById("topbarDay").textContent = state.completed.size + " / 30 complete";
   const btn = document.getElementById("completeBtn");
   const done = state.completed.has(n);
   btn.className = "complete-btn" + (done ? " done" : "");
@@ -168,20 +175,52 @@ function renderDay(day) {
       <div class="day-tag">Day ${day.day} &middot; ${day.emoji}</div>
       <h1>${day.title}</h1>
       <p class="day-hero-subtitle">${day.subtitle}</p>
-      <div class="topic-pills">
-        ${day.topics.map((t) => `<span class="topic-pill">${t}</span>`).join("")}
-      </div>
     </div>
     <div class="tabs-wrap" id="tabsWrap">
       <button class="tab-btn active" onclick="switchTab(this,'learn')">📖 Learn</button>
       <button class="tab-btn" onclick="switchTab(this,'examples')">💻 Examples</button>
       <button class="tab-btn" onclick="switchTab(this,'exercises')">✏️ Exercises</button>
+      <button class="tab-btn" onclick="switchTab(this,'playground')">🎮 Playground</button>
       <div class="tab-indicator" id="tabIndicator"></div>
     </div>
-    <div id="panel-learn" class="tab-panel active">${day.lesson}</div>
+    <div id="panel-learn" class="tab-panel active">${typeof DOMPurify !== "undefined" ? DOMPurify.sanitize(day.lesson) : day.lesson}</div>
     <div id="panel-examples" class="tab-panel">${renderExamples(day.examples)}</div>
     <div id="panel-exercises" class="tab-panel">${renderExercisesTab(day)}</div>
+    <div id="panel-playground" class="tab-panel">${renderPlayground(day)}</div>
   `;
+}
+
+function renderPlayground(day) {
+  const starter = (day.examples && day.examples[0] && day.examples[0].code)
+    ? day.examples[0].code
+    : "# Try it out!\nprint('Hello, Python!')\n";
+  return `
+    <div class="playground-card">
+      <div class="playground-header">
+        <div class="example-dots">
+          <div class="example-dot dot-red"></div>
+          <div class="example-dot dot-yellow"></div>
+          <div class="example-dot dot-green"></div>
+        </div>
+        <span class="playground-title">Day ${day.day} Playground</span>
+        <span class="playground-status" id="playgroundStatus">Press Run to start Python.</span>
+      </div>
+      <div id="aceEditor" class="ace-editor-mount" data-starter="${escapeAttr(starter)}"></div>
+      <div class="playground-actions">
+        <button class="run-btn" onclick="window.Playground.run()">▶ Run</button>
+        <button class="run-btn ghost" onclick="window.Playground.clearOutput()">Clear output</button>
+        <button class="run-btn ghost" onclick="window.Playground.reset(DAYS[${day.day - 1}])">↺ Reset code</button>
+      </div>
+      <div class="playground-output-wrap">
+        <div class="playground-output-label">Output</div>
+        <pre class="playground-out" id="playgroundOut"></pre>
+      </div>
+    </div>
+  `;
+}
+
+function escapeAttr(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function renderExamples(examples) {
@@ -347,6 +386,9 @@ function switchTab(btn, panelId) {
     panel.classList.add("active");
     if (panelId === "examples" && window.Prism)
       setTimeout(() => Prism.highlightAll(), 60);
+    if (panelId === "playground" && window.Playground) {
+      setTimeout(() => window.Playground.mount(DAYS[state.currentDay - 1]), 30);
+    }
   }
   moveTabIndicator(btn);
 }
@@ -379,12 +421,12 @@ function toggleComplete() {
   const done = state.completed.has(n);
   const btn = document.getElementById("completeBtn");
   btn.className = "complete-btn" + (done ? " done" : "");
-  btn.textContent = done ? "Completed ✓" : "Mark Complete ✓";
+  btn.textContent = done ? "✓ Completed" : "✓ Mark Complete";
+  document.getElementById("topbarDay").textContent = state.completed.size + " / 30 complete";
 
   const navItem = document.querySelector(`.day-nav-item[data-day="${n}"]`);
   if (navItem) {
     navItem.classList.toggle("done", done);
-    navItem.querySelector(".day-nav-check").textContent = done ? "✓" : "";
   }
   updateProgress();
   saveState();
@@ -432,11 +474,12 @@ function answerQuiz(btn, dayNum, qi, chosen, correct) {
   const isCorrect = chosen === correct;
   const fb = card.querySelector(".quiz-feedback");
   const day = DAYS[dayNum - 1];
-  const q = day.quiz[qi];
+  const q = day.quiz && day.quiz[qi];
+  if (!q) return;
   fb.className = `quiz-feedback ${isCorrect ? "correct" : "wrong"} show`;
   fb.innerHTML = isCorrect
     ? "✓ Correct!"
-    : `✗ Incorrect — The right answer is: <strong>${q.opts[correct]}</strong>${q.explain ? `<br><span style="font-weight:400;opacity:0.85">${q.explain}</span>` : ""}`;
+    : `✗ Incorrect — The right answer is: <strong>${escapeHtml(q.opts[correct])}</strong>${q.explain ? `<br><span style="font-weight:400;opacity:0.85">${escapeHtml(q.explain)}</span>` : ""}`;
 
   const qKey = `day_${dayNum}`;
   if (!state.quizAnswers[qKey]) state.quizAnswers[qKey] = {};
@@ -448,6 +491,7 @@ function answerQuiz(btn, dayNum, qi, chosen, correct) {
 }
 
 function updateQuizScore(dayNum, total) {
+  if (!total) return;
   const qKey = `day_${dayNum}`;
   const saved = state.quizAnswers[qKey] || {};
   const answered = Object.keys(saved).length;
@@ -479,6 +523,26 @@ function toggleSidebar() {
   document.getElementById("sidebar").classList.toggle("open");
 }
 
+function toggleSidebarCollapse() {
+  const app = document.getElementById("app");
+  const sidebar = document.getElementById("sidebar");
+  const collapsed = app.classList.toggle("sidebar-collapsed");
+  sidebar.classList.toggle("collapsed", collapsed);
+  // Update the hide button inside the sidebar header
+  const hideBtn = sidebar.querySelector(".sidebar-hide-btn");
+  if (hideBtn) hideBtn.textContent = collapsed ? "▶" : "◀";
+}
+
+// Called by the "▶ show" button that appears on the collapsed sidebar edge
+function expandSidebar() {
+  const app = document.getElementById("app");
+  const sidebar = document.getElementById("sidebar");
+  app.classList.remove("sidebar-collapsed");
+  sidebar.classList.remove("collapsed");
+  const hideBtn = sidebar.querySelector(".sidebar-hide-btn");
+  if (hideBtn) hideBtn.textContent = "◀";
+}
+
 function filterDays(q) {
   const query = q.toLowerCase();
   document.querySelectorAll(".day-nav-item").forEach((item) => {
@@ -501,10 +565,359 @@ function copyCode(btn) {
       btn.textContent = "Copy";
       btn.classList.remove("copied");
     }, 2000);
+  }).catch(() => {
+    btn.textContent = "Failed";
+    setTimeout(() => { btn.textContent = "Copy"; }, 2000);
   });
 }
 
 // ─── UTIL ─────────────────────────────────────
 function escapeHtml(str) {
   return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// ─── FLOATING PLAYGROUND ──────────────────────
+function toggleFloatingPlayground() {
+  const panel = document.getElementById("floatingPlaygroundPanel");
+  const btn = document.getElementById("playgroundTopbarBtn");
+  if (!panel) return;
+  const isOpen = panel.classList.toggle("open");
+  panel.setAttribute("aria-hidden", isOpen ? "false" : "true");
+  btn.classList.toggle("active", isOpen);
+  if (isOpen) FloatingPlayground.mount();
+}
+
+const FloatingPlayground = (() => {
+  let editor = null;
+  let pyodide = null;
+  let pyodideLoading = null;
+
+  function setStatus(text) {
+    const el = document.getElementById("floatingPlaygroundStatus");
+    if (el) el.textContent = text;
+  }
+
+  function appendOutput(text) {
+    const out = document.getElementById("floatingPlaygroundOut");
+    if (out) out.textContent += text;
+  }
+
+  async function ensurePyodide() {
+    if (pyodide) return pyodide;
+    if (pyodideLoading) return pyodideLoading;
+    setStatus("Loading Python (one-time ~5MB)…");
+    pyodideLoading = (async () => {
+      pyodide = await loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/" });
+      setStatus("Python ready. Press ▶ Run.");
+      return pyodide;
+    })();
+    return pyodideLoading;
+  }
+
+  function mount() {
+    const mountEl = document.getElementById("floatingAceEditor");
+    if (!mountEl || editor) return;
+    editor = ace.edit(mountEl, {
+      mode: "ace/mode/python",
+      theme: "ace/theme/tomorrow_night",
+      fontSize: 13,
+      showPrintMargin: false,
+      tabSize: 4,
+      useSoftTabs: true,
+      highlightActiveLine: true,
+    });
+    editor.session.setOption("useWorker", false);
+    editor.setValue("# Type your Python here!\nprint('Hello, Python!')\n", -1);
+    editor.clearSelection();
+  }
+
+  async function run() {
+    const out = document.getElementById("floatingPlaygroundOut");
+    if (out) out.textContent = "";
+    let py;
+    try {
+      py = await ensurePyodide();
+    } catch (e) {
+      setStatus("Failed to load Python.");
+      appendOutput("Error: " + e.message);
+      return;
+    }
+    setStatus("Running…");
+    py.setStdout({ batched: (s) => appendOutput(s + "\n") });
+    py.setStderr({ batched: (s) => appendOutput(s + "\n") });
+    try {
+      await py.runPythonAsync(getCode());
+      setStatus("Done.");
+    } catch (e) {
+      appendOutput((e && e.message) || String(e));
+      setStatus("Error.");
+    }
+  }
+
+  function getCode() {
+    return editor ? editor.getValue() : "";
+  }
+
+  function clearOutput() {
+    const out = document.getElementById("floatingPlaygroundOut");
+    if (out) out.textContent = "";
+  }
+
+  function reset() {
+    if (editor) {
+      editor.setValue("# Type your Python here!\nprint('Hello, Python!')\n", -1);
+      editor.clearSelection();
+      clearOutput();
+    }
+  }
+
+  return { mount, run, getCode, clearOutput, reset };
+})();
+
+window.FloatingPlayground = FloatingPlayground;
+
+// =============================================
+//   LANDING PAGE ANIMATIONS
+// =============================================
+
+function initLandingAnimations() {
+  initScrollReveal();
+  initTypewriter();
+  initCodeTyper();
+}
+
+// ── Scroll Reveal ──────────────────────────────
+function initScrollReveal() {
+  const els = document.querySelectorAll(".reveal");
+  const fades = document.querySelectorAll(".hero-sub-fade");
+
+  // Show hero immediately
+  const hero = document.querySelector(".landing-hero.reveal");
+  if (hero) {
+    setTimeout(() => { hero.classList.add("visible"); }, 100);
+  }
+
+  // Hero sub-fades on timer
+  setTimeout(() => {
+    fades.forEach((el, idx) => {
+      setTimeout(() => { el.classList.add("visible"); }, idx * 120);
+    });
+  }, 1400);
+
+  // Use IntersectionObserver where available, fallback to showing all
+  if (typeof IntersectionObserver !== "undefined") {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    }, { threshold: 0.1 });
+    els.forEach((el) => io.observe(el));
+
+    // Demo section: play on enter, reset on leave, replay on re-enter
+    const demoSection = document.getElementById("landing-features");
+    if (demoSection) {
+      const demoObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          resetDemoSection();
+          setTimeout(initDemoSequence, 400);
+        } else {
+          resetDemoSection();
+        }
+      }, { threshold: 0.2 });
+      demoObserver.observe(demoSection);
+    }
+  } else {
+    // Fallback: show everything and play demo once
+    els.forEach((el) => el.classList.add("visible"));
+    setTimeout(initDemoSequence, 1800);
+  }
+
+  // Hard fallback at 2.5s — guarantees nothing stays hidden
+  setTimeout(() => {
+    document.querySelectorAll(".reveal:not(.visible)").forEach((el) => el.classList.add("visible"));
+    document.querySelectorAll(".hero-sub-fade:not(.visible)").forEach((el) => el.classList.add("visible"));
+  }, 2500);
+}
+
+// ── Typewriter: hero titles ────────────────────
+function initTypewriter() {
+  const line1El = document.getElementById("heroTitle");
+  const line2El = document.getElementById("heroTitle2");
+  if (!line1El || !line2El) return;
+
+  const line1 = "Master Python.";
+  const line2 = "30 days.";
+  let i = 0;
+
+  line1El.innerHTML = '<span class="typewriter-cursor"></span>';
+  line2El.style.visibility = "hidden";
+
+  function typeLine1() {
+    if (i < line1.length) {
+      const cur = line1El.querySelector(".typewriter-cursor");
+      if (cur) line1El.insertBefore(document.createTextNode(line1[i]), cur);
+      i++;
+      setTimeout(typeLine1, 55);
+    } else {
+      const cur = line1El.querySelector(".typewriter-cursor");
+      if (cur) cur.parentNode.removeChild(cur);
+      setTimeout(startLine2, 180);
+    }
+  }
+
+  function startLine2() {
+    line2El.style.visibility = "visible";
+    line2El.innerHTML = '<span class="typewriter-cursor accent-cur"></span>';
+    let j = 0;
+    function typeLine2() {
+      if (j < line2.length) {
+        const cur = line2El.querySelector(".typewriter-cursor");
+        if (cur) line2El.insertBefore(document.createTextNode(line2[j]), cur);
+        j++;
+        setTimeout(typeLine2, 65);
+      }
+    }
+    typeLine2();
+  }
+
+  setTimeout(typeLine1, 300);
+}
+
+// ── Code window typing animation ──────────────
+function initCodeTyper() {
+  const pre = document.getElementById("heroCodePre");
+  if (!pre) return;
+
+  pre.innerHTML = '<span class="demo-cursor"></span>';
+
+  const segments = [
+    ["# 30 Days of Python — Day 10: Loops", "lc-comment"],
+    ["\n\n", null],
+    ["days = list(range(1, 31))", null],
+    ["\n", null],
+    ["completed = []", null],
+    ["\n", null],
+    ["for", "lc-keyword"],
+    [" day in days:\n", null],
+    ["    if day <= 10:\n", null],
+    ["        completed.append(day)\n", null],
+    ["\n", null],
+    ["print(\"Done: \" + str(len(completed)) + \"/30\")", null],
+    ["\n", null],
+    ["# Output: Done: 10/30", "lc-success"]
+  ];
+
+  let segIdx = 0, charIdx = 0;
+
+  function typeNext() {
+    const cursor = pre.querySelector(".demo-cursor");
+    if (!cursor || segIdx >= segments.length) return;
+
+    const seg = segments[segIdx];
+    const text = seg[0];
+    const cls = seg[1];
+
+    if (charIdx < text.length) {
+      const ch = text[charIdx];
+      let node;
+      if (cls) {
+        node = document.createElement("span");
+        node.className = cls;
+        node.textContent = ch;
+      } else {
+        node = document.createTextNode(ch);
+      }
+      pre.insertBefore(node, cursor);
+      charIdx++;
+      setTimeout(typeNext, ch === "\n" ? 80 : 32);
+    } else {
+      segIdx++;
+      charIdx = 0;
+      setTimeout(typeNext, segIdx % 3 === 0 ? 120 : 20);
+    }
+  }
+
+  setTimeout(typeNext, 800);
+}
+
+// ── Stagger curriculum grid entrance ──────────
+function applyCurriculumStagger() {
+  document.querySelectorAll(".preview-day").forEach((el, i) => {
+    el.style.animationDelay = (i * 30) + "ms";
+  });
+}
+
+// ── Demo section reset + auto-play ────────────
+let _demoTimers = [];
+
+function resetDemoSection() {
+  _demoTimers.forEach((t) => clearTimeout(t));
+  _demoTimers = [];
+  const output = document.getElementById("demoOutput");
+  const chatEl = document.getElementById("demoChat");
+  if (output) { output.innerHTML = ""; output.style.opacity = "0"; }
+  if (chatEl) chatEl.innerHTML = "";
+}
+
+function initDemoSequence() {
+  const output = document.getElementById("demoOutput");
+  const chatEl = document.getElementById("demoChat");
+  if (!output || !chatEl) return;
+
+  function after(ms, fn) {
+    const t = setTimeout(fn, ms);
+    _demoTimers.push(t);
+  }
+
+  // Show error first
+  after(800, function() {
+    var out = document.getElementById("demoOutput");
+    if (!out) return;
+    out.innerHTML = '<span class="lc-error">SyntaxError: invalid syntax (line 6)</span>';
+    out.style.opacity = "1";
+  });
+
+  // Then AI chat messages
+  const messages = [
+    { role: "user", text: "Why is my code getting a SyntaxError?", delay: 1800 },
+    { role: "ai",   text: "I can see the issue! On line 6, the <code>for</code> loop is missing a colon at the end.", delay: 2800 },
+    { role: "ai",   text: "Change <code>for score in scores</code> to <code>for score in scores:</code> — Python requires the colon to open a block.", delay: 3800 },
+    { role: "user", text: "Oh and what about line 9?", delay: 5000 },
+    { role: "ai",   text: "Good catch! <code>len(scores</code> is missing the closing parenthesis. Fix it to <code>len(scores)</code> and you are good to go.", delay: 6200 }
+  ];
+
+  messages.forEach((msg) => {
+    after(msg.delay, () => {
+      const el = document.getElementById("demoChat");
+      if (!el) return;
+      const div = document.createElement("div");
+      div.className = "demo-msg " + msg.role;
+      div.innerHTML = msg.text;
+      el.appendChild(div);
+      el.scrollTop = el.scrollHeight;
+    });
+  });
+}
+
+// ── Feature card tab switcher ──────────────────
+function lfSwitchTab(btn, panelId) {
+  const card = btn.closest(".landing-feature-card");
+  card.querySelectorAll(".lf-tab").forEach((b) => b.classList.remove("active"));
+  card.querySelectorAll(".lf-panel").forEach((p) => p.classList.remove("active"));
+  btn.classList.add("active");
+  const panel = document.getElementById(panelId);
+  if (panel) panel.classList.add("active");
+}
+
+function lfAnswer(btn, correct) {
+  const opts = btn.closest(".lf-quiz-opts");
+  opts.querySelectorAll(".lf-quiz-opt").forEach((b) => { b.disabled = true; });
+  if (correct) {
+    btn.classList.add("correct");
+  } else {
+    btn.classList.add("wrong");
+    opts.querySelectorAll(".lf-quiz-opt").forEach((b) => {
+      if (b.textContent.indexOf("B.") === 0) b.classList.add("correct");
+    });
+  }
 }

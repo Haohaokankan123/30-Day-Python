@@ -7,81 +7,446 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Nunito:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap"
             rel="stylesheet"
         />
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
         />
-        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="style.css?v=11" />
+        <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.32.7/src-min-noconflict/ace.js"></script>
+        <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
     </head>
     <body>
         <!-- LANDING PAGE -->
         <div id="landing" class="landing-page">
-            <div class="stars" id="stars"></div>
-            <div class="landing-content">
-                <div class="landing-badge">🐍 Complete Python Curriculum</div>
-                <h1 class="landing-title">
-                    30 Days of<br /><span class="gradient-text">Python</span>
-                </h1>
-                <p class="landing-subtitle">
-                    Master Python from scratch — variables to APIs, data science
-                    to web development. Every concept, every exercise, all in
-                    one place.
-                </p>
-                <div class="landing-stats">
-                    <div class="stat">
-                        <span class="stat-num">30</span
-                        ><span class="stat-label">Days</span>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat">
-                        <span class="stat-num">300+</span
-                        ><span class="stat-label">Exercises</span>
-                    </div>
-                    <div class="stat-divider"></div>
-                    <div class="stat">
-                        <span class="stat-num">100+</span
-                        ><span class="stat-label">Code Examples</span>
-                    </div>
+            <!-- Navbar -->
+            <nav class="landing-nav">
+                <span class="landing-logo"
+                    >🐍&nbsp;&nbsp;30 Days of Python</span
+                >
+                <div class="landing-nav-links">
+                    <a
+                        href="#landing-curriculum"
+                        onclick="
+                            document
+                                .getElementById('landing-curriculum')
+                                .scrollIntoView({ behavior: 'smooth' });
+                            return false;
+                        "
+                        >Curriculum</a
+                    >
+                    <a
+                        href="#landing-features"
+                        onclick="
+                            document
+                                .getElementById('landing-features')
+                                .scrollIntoView({ behavior: 'smooth' });
+                            return false;
+                        "
+                        >Features</a
+                    >
+                    <a
+                        href="#landing-about"
+                        onclick="
+                            document
+                                .getElementById('landing-about')
+                                .scrollIntoView({ behavior: 'smooth' });
+                            return false;
+                        "
+                        >About</a
+                    >
                 </div>
-                <button class="landing-btn" onclick="startLearning()">
-                    Start Learning <span>→</span>
+                <button class="landing-cta-btn" onclick="startLearning()">
+                    Start Free →
                 </button>
-                <div class="days-preview">
-                    <div class="preview-label">All 30 Days</div>
-                    <div class="preview-grid" id="previewGrid"></div>
+            </nav>
+
+            <!-- Hero -->
+            <div class="landing-hero reveal">
+                <p class="landing-eyebrow">
+                    FREE &nbsp;·&nbsp; 30 LESSONS &nbsp;·&nbsp; FOR BEGINNERS
+                </p>
+                <h1 class="landing-title" id="heroTitle"></h1>
+                <h1 class="landing-title accent" id="heroTitle2"></h1>
+                <p class="landing-subtitle hero-sub-fade">
+                    The most structured way to learn Python from zero to
+                    fluent.<br />No prerequisites. No fluff. Just you and the
+                    code.
+                </p>
+                <div class="landing-hero-btns hero-sub-fade">
+                    <button
+                        class="landing-btn-primary"
+                        onclick="startLearning()"
+                    >
+                        Start Day 1 →
+                    </button>
+                    <button
+                        class="landing-btn-secondary"
+                        onclick="
+                            document
+                                .getElementById('landing-curriculum')
+                                .scrollIntoView({ behavior: 'smooth' })
+                        "
+                    >
+                        View Curriculum
+                    </button>
+                </div>
+                <!-- Animated code window -->
+                <div class="landing-code-window hero-sub-fade">
+                    <div class="landing-code-titlebar">
+                        <span class="lc-dot dot-red"></span
+                        ><span class="lc-dot dot-yellow"></span
+                        ><span class="lc-dot dot-green"></span>
+                        <span class="landing-code-filename"
+                            >day_10_loops.py</span
+                        >
+                    </div>
+                    <pre class="landing-code-body" id="heroCodePre"></pre>
                 </div>
             </div>
+
+            <!-- Stats bar -->
+            <div class="landing-stats-bar reveal">
+                <div class="landing-stat">
+                    <span class="landing-stat-num">30</span>
+                    <span class="landing-stat-label">Lessons</span>
+                </div>
+                <div class="landing-stat-divider"></div>
+                <div class="landing-stat">
+                    <span class="landing-stat-num">300+</span>
+                    <span class="landing-stat-label">Code Examples</span>
+                </div>
+                <div class="landing-stat-divider"></div>
+                <div class="landing-stat">
+                    <span class="landing-stat-num">100%</span>
+                    <span class="landing-stat-label">Free Forever</span>
+                </div>
+            </div>
+
+            <!-- About section (near top — personal story) -->
+            <div class="landing-about reveal" id="landing-about">
+                <div class="landing-about-inner">
+                    <div class="landing-about-text">
+                        <p class="landing-eyebrow">Why I built this</p>
+                        <h2 class="landing-about-title">
+                            Learning Python shouldn't<br />feel like reading a
+                            textbook.
+                        </h2>
+                        <p class="landing-about-body">
+                            Most beginner Python resources fall into one of two
+                            traps: they're either walls of text you passively
+                            scroll through, or flashy courses locked behind a
+                            paywall. I wanted something different — a place
+                            where you actually <em>write</em> code from Day 1,
+                            get instant feedback, and have an AI tutor on
+                            standby when you're stuck.
+                        </p>
+                        <p class="landing-about-body">
+                            So I built 30 Days of Python. 30 structured lessons,
+                            a built-in code editor that runs real Python in your
+                            browser, and an AI tutor powered by Gemini that
+                            explains bugs and concepts in plain English. No
+                            account. No credit card. No fluff.
+                        </p>
+                        <p class="landing-about-body">
+                            If you're a complete beginner, this is the
+                            environment I wish I had when I started.
+                        </p>
+                        <button
+                            class="landing-btn-primary"
+                            onclick="startLearning()"
+                            style="margin-top: 12px"
+                        >
+                            Start for free →
+                        </button>
+                    </div>
+                    <div class="landing-about-card">
+                        <div class="landing-about-quote">
+                            "The best way to learn Python is to write Python —
+                            every single day."
+                        </div>
+                        <div class="landing-about-signature">
+                            <div class="landing-about-avatar">C</div>
+                            <div>
+                                <div class="landing-about-name">
+                                    Charles Chen
+                                </div>
+                                <div class="landing-about-role">
+                                    Creator · 30 Days of Python
+                                </div>
+                            </div>
+                        </div>
+                        <div class="landing-about-badges">
+                            <span class="landing-about-badge">🐍 Python</span>
+                            <span class="landing-about-badge">🤖 AI Tutor</span>
+                            <span class="landing-about-badge"
+                                >💻 Live Editor</span
+                            >
+                            <span class="landing-about-badge"
+                                >🆓 Free Forever</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features showcase -->
+            <div class="landing-features-section reveal" id="landing-features">
+                <p class="landing-eyebrow" style="text-align: center">
+                    What makes this different
+                </p>
+                <h2 class="landing-section-title">
+                    Built-in tools. Right in your browser.
+                </h2>
+                <p class="landing-section-desc">
+                    No installs. No setup. Just open and start coding.
+                </p>
+
+                <!-- AI Tutor + Editor demo -->
+                <div class="landing-demo-split">
+                    <!-- Left: buggy code editor -->
+                    <div class="landing-demo-editor">
+                        <div class="landing-code-titlebar">
+                            <span class="lc-dot dot-red"></span
+                            ><span class="lc-dot dot-yellow"></span
+                            ><span class="lc-dot dot-green"></span>
+                            <span class="landing-code-filename"
+                                >my_code.py</span
+                            >
+                            <span class="landing-demo-tag"
+                                >Built-in Editor</span
+                            >
+                        </div>
+                        <pre
+                            class="landing-demo-code"
+                        ><span class="lc-comment"># Calculate average score</span>
+scores = [85, 92, 78, 90, 88]
+total = 0
+
+<span class="lc-keyword">for</span> score in scores
+    total += score
+
+average = total / len(scores
+<span class="lc-error">print(f&quot;Average: {average}&quot;)</span>
+
+<span class="lc-comment"># SyntaxError: invalid syntax</span></pre>
+                        <div class="landing-demo-run-row">
+                            <button
+                                class="landing-demo-run-btn"
+                                id="demoRunBtn"
+                                onclick="runDemoCode()"
+                            >
+                                ▶ Run
+                            </button>
+                            <div
+                                class="landing-demo-output"
+                                id="demoOutput"
+                                style="opacity: 0"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <!-- Right: AI chat -->
+                    <div class="landing-demo-chat">
+                        <div class="landing-demo-chat-header">
+                            <span class="landing-demo-chat-icon">🤖</span>
+                            <div>
+                                <div class="landing-demo-chat-title">
+                                    AI Tutor
+                                </div>
+                                <div class="landing-demo-chat-sub">
+                                    Powered by Gemini
+                                </div>
+                            </div>
+                            <span class="landing-demo-online"></span>
+                        </div>
+                        <div class="landing-demo-chat-body" id="demoChat">
+                            <!-- messages injected by JS animation -->
+                        </div>
+                        <div class="landing-demo-chat-input">
+                            <span>Ask anything about Python…</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature cards row -->
+                <div class="landing-feature-cards reveal">
+                    <div class="landing-feat-card">
+                        <div class="landing-feat-icon">💻</div>
+                        <h3>Live Code Editor</h3>
+                        <p>
+                            Run real Python in your browser — no installs
+                            needed. Powered by Pyodide.
+                        </p>
+                    </div>
+                    <div class="landing-feat-card">
+                        <div class="landing-feat-icon">🤖</div>
+                        <h3>AI Tutor</h3>
+                        <p>
+                            Stuck on a bug? Ask the AI Tutor. It reads your code
+                            and explains the fix in plain English.
+                        </p>
+                    </div>
+                    <div class="landing-feat-card">
+                        <div class="landing-feat-icon">✏️</div>
+                        <h3>Exercises + Quizzes</h3>
+                        <p>
+                            Every day includes hands-on exercises and a quiz to
+                            lock in what you learned.
+                        </p>
+                    </div>
+                    <div class="landing-feat-card">
+                        <div class="landing-feat-icon">📈</div>
+                        <h3>Track Progress</h3>
+                        <p>
+                            Your progress is saved automatically. Pick up
+                            exactly where you left off.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive feature card (code/quiz tabs) -->
+            <div class="landing-feature reveal">
+                <div class="landing-feature-left">
+                    <p class="landing-eyebrow">Hands-on from Day 1.</p>
+                    <h2 class="landing-feature-title">
+                        Write it.<br />Run it.<br />Get it.
+                    </h2>
+                    <p class="landing-feature-desc">
+                        Every lesson is real, runnable Python. No passive
+                        reading — you type, you execute, you understand by
+                        doing.
+                    </p>
+                </div>
+                <div class="landing-feature-card-wrap">
+                    <div class="landing-feature-card">
+                        <div class="landing-feature-card-tag">DAY 05</div>
+                        <h3 class="landing-feature-card-title">Lists</h3>
+                        <!-- Tab switcher -->
+                        <div class="lf-tabs">
+                            <button
+                                class="lf-tab active"
+                                onclick="lfSwitchTab(this, 'lf-code')"
+                            >
+                                Code
+                            </button>
+                            <button
+                                class="lf-tab"
+                                onclick="lfSwitchTab(this, 'lf-quiz')"
+                            >
+                                Quiz
+                            </button>
+                        </div>
+                        <div class="lf-panel active" id="lf-code">
+                            <pre
+                                class="landing-feature-code"
+                            ><span class="lc-keyword2">fruits</span> = [&quot;apple&quot;, &quot;mango&quot;, &quot;kiwi&quot;]
+<span class="lc-keyword2">fruits</span>.append(&quot;grape&quot;)
+<span class="lc-comment">print(fruits[0])   # &quot;apple&quot;</span>
+<span class="lc-success">print(len(fruits)) # 4</span></pre>
+                        </div>
+                        <div class="lf-panel" id="lf-quiz">
+                            <div class="lf-quiz-q">
+                                What does <code>len(fruits)</code> return after
+                                appending "grape"?
+                            </div>
+                            <div class="lf-quiz-opts">
+                                <button
+                                    class="lf-quiz-opt"
+                                    onclick="lfAnswer(this, false)"
+                                >
+                                    A. 3
+                                </button>
+                                <button
+                                    class="lf-quiz-opt"
+                                    onclick="lfAnswer(this, true)"
+                                >
+                                    B. 4
+                                </button>
+                                <button
+                                    class="lf-quiz-opt"
+                                    onclick="lfAnswer(this, false)"
+                                >
+                                    C. 5
+                                </button>
+                                <button
+                                    class="lf-quiz-opt"
+                                    onclick="lfAnswer(this, false)"
+                                >
+                                    D. Error
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Curriculum grid -->
+            <div class="landing-curriculum reveal" id="landing-curriculum">
+                <p class="landing-eyebrow" style="text-align: center">
+                    Every day, a new skill.
+                </p>
+                <h2 class="landing-section-title">
+                    30 lessons. One clear path.
+                </h2>
+                <p class="landing-section-desc">
+                    Structured daily lessons. Each one builds on the last.
+                </p>
+                <div class="preview-grid" id="previewGrid"></div>
+            </div>
+
+            <!-- CTA section -->
+            <div class="landing-cta-section reveal">
+                <h2 class="landing-cta-title">
+                    Start for free. No account required.
+                </h2>
+                <p class="landing-cta-desc">
+                    Open Day 1 and write your first Python program in minutes.
+                </p>
+                <button
+                    class="landing-btn-primary large"
+                    onclick="startLearning()"
+                >
+                    Begin Day 1 →
+                </button>
+            </div>
+
+            <!-- Footer -->
+            <footer class="landing-footer">
+                <span>🐍&nbsp; 30 Days of Python</span>
+                <span>Built for beginners. Free forever.</span>
+            </footer>
         </div>
-        /
+
         <!-- MAIN APP -->
         <div id="app" class="app hidden">
+            <button
+                class="sidebar-expand-btn"
+                onclick="expandSidebar()"
+                title="Show sidebar"
+            >
+                ▶
+            </button>
             <!-- Sidebar -->
             <aside class="sidebar" id="sidebar">
                 <div class="sidebar-header">
-                    <div class="logo">
-                        <span class="logo-icon">🐍</span>
-                        <span class="logo-text">30 Days of Python</span>
-                    </div>
+                    <span class="logo-text">30 Days of Python</span>
                     <button class="sidebar-close" onclick="toggleSidebar()">
                         ✕
                     </button>
                 </div>
-                <div class="progress-section">
-                    <div class="progress-label">
-                        <span>Progress</span>
-                        <span id="progressText">0 / 30</span>
-                    </div>
-                    <div class="progress-bar-wrap">
-                        <div class="progress-bar-fill" id="progressBar"></div>
-                    </div>
+                <div class="sidebar-progress-badge" id="sidebarProgressBadge">
+                    <span class="topbar-progress-dot"></span>
+                    <span id="progressText">0 / 30 complete</span>
                 </div>
                 <div class="sidebar-search">
                     <input
                         type="text"
-                        placeholder="🔍 Search days..."
+                        placeholder="Search lessons…"
                         id="searchInput"
                         oninput="filterDays(this.value)"
                     />
@@ -92,19 +457,44 @@
             <!-- Main content -->
             <div class="main" id="main">
                 <header class="topbar">
-                    <button class="menu-btn" onclick="toggleSidebar()">
-                        ☰
+                    <button
+                        class="sidebar-collapse-topbar-btn"
+                        onclick="toggleSidebarCollapse()"
+                        title="Collapse sidebar"
+                    >
+                        ◀
                     </button>
-                    <div class="topbar-day" id="topbarDay">Day 1</div>
+                    <button class="home-btn" onclick="goHome()">
+                        ← Curriculum
+                    </button>
                     <div class="topbar-actions">
+                        <button
+                            class="topbar-icon-btn playground-topbar-btn"
+                            id="playgroundTopbarBtn"
+                            onclick="toggleFloatingPlayground()"
+                            title="Open code editor"
+                        >
+                            💻 Editor
+                        </button>
+                        <button
+                            class="tutor-btn"
+                            id="tutorBtn"
+                            onclick="toggleTutor()"
+                            title="Open AI Tutor"
+                        >
+                            🤖 AI Tutor
+                        </button>
+                        <div class="topbar-progress-badge" id="topbarProgress">
+                            <span class="topbar-progress-dot"></span
+                            ><span id="topbarDay">Day 1</span>
+                        </div>
                         <button
                             class="complete-btn"
                             id="completeBtn"
                             onclick="toggleComplete()"
                         >
-                            Mark Complete ✓
+                            ✓ Mark Complete
                         </button>
-                        <button class="home-btn" onclick="goHome()">🏠</button>
                     </div>
                 </header>
 
@@ -130,6 +520,157 @@
                     </button>
                 </footer>
             </div>
+
+            <!-- Floating Code Editor panel -->
+            <aside
+                class="floating-playground-panel"
+                id="floatingPlaygroundPanel"
+                aria-hidden="true"
+            >
+                <header class="tutor-header">
+                    <h3>&lt;/&gt; Code Editor</h3>
+                    <button
+                        class="tutor-close"
+                        onclick="toggleFloatingPlayground()"
+                        title="Close"
+                    >
+                        ✕
+                    </button>
+                </header>
+                <div class="floating-playground-body">
+                    <div
+                        class="playground-header"
+                        style="padding: 10px 14px 8px"
+                    >
+                        <div class="example-dots">
+                            <div class="example-dot dot-red"></div>
+                            <div class="example-dot dot-yellow"></div>
+                            <div class="example-dot dot-green"></div>
+                        </div>
+                        <span
+                            class="playground-status"
+                            id="floatingPlaygroundStatus"
+                            >Press ▶ Run to execute.</span
+                        >
+                    </div>
+                    <div
+                        id="floatingAceEditor"
+                        class="ace-editor-mount"
+                        style="height: 320px"
+                    ></div>
+                    <div class="playground-actions" style="padding: 8px 14px">
+                        <button
+                            class="run-btn"
+                            onclick="FloatingPlayground.run()"
+                        >
+                            ▶ Run
+                        </button>
+                        <button
+                            class="run-btn ghost"
+                            onclick="FloatingPlayground.clearOutput()"
+                        >
+                            Clear
+                        </button>
+                        <button
+                            class="run-btn ghost"
+                            onclick="FloatingPlayground.reset()"
+                        >
+                            ↺ Reset
+                        </button>
+                    </div>
+                    <div
+                        class="playground-output-wrap"
+                        style="margin: 0 14px 14px"
+                    >
+                        <div class="playground-output-label">Output</div>
+                        <pre
+                            class="playground-out"
+                            id="floatingPlaygroundOut"
+                            style="min-height: 80px; max-height: 200px"
+                        ></pre>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- AI Tutor floating panel -->
+            <aside class="tutor-panel" id="tutorPanel" aria-hidden="true">
+                <header class="tutor-header">
+                    <h3>🤖 AI Tutor</h3>
+                    <span style="flex: 1"></span>
+                    <button
+                        class="tutor-close"
+                        onclick="toggleTutor()"
+                        title="Close"
+                    >
+                        ✕
+                    </button>
+                </header>
+
+                <!-- API Key setup screen (shown when no key saved) -->
+                <div class="tutor-key-setup" id="tutorKeySetup">
+                    <div class="tutor-key-icon">✨</div>
+                    <h4>Enter your Gemini API Key</h4>
+                    <p>
+                        Free, fast, and no credit card needed. Your key is saved
+                        only in <strong>your browser</strong>.
+                    </p>
+                    <input
+                        type="password"
+                        id="tutorApiKeyInput"
+                        class="tutor-key-input"
+                        placeholder="Paste your Gemini API key…"
+                        autocomplete="off"
+                    />
+                    <button class="tutor-send-btn" onclick="submitTutorKey()">
+                        Save Key &amp; Start
+                    </button>
+                    <a
+                        href="https://aistudio.google.com/app/apikey"
+                        target="_blank"
+                        class="tutor-key-link"
+                        >Get a free API key from Google AI Studio →</a
+                    >
+                </div>
+
+                <!-- Chat area (shown after key is saved) -->
+                <div class="tutor-chat-area" id="tutorChatArea">
+                    <div class="tutor-status" id="tutorStatus">
+                        Ready. Ask anything about Python!
+                    </div>
+                    <div class="tutor-chat" id="tutorChat"></div>
+                    <div class="tutor-input">
+                        <div class="tutor-input-row">
+                            <button
+                                class="tutor-context-btn"
+                                id="tutorContextBtn"
+                                onclick="toggleTutorContext()"
+                                title="Attach your editor code"
+                            >
+                                📎 Use my code
+                            </button>
+                            <button
+                                class="tutor-key-change-btn"
+                                onclick="clearTutorKey()"
+                                title="Change API key"
+                            >
+                                🔑 Change key
+                            </button>
+                        </div>
+                        <textarea
+                            id="tutorTextarea"
+                            placeholder="Ask about Python…"
+                            rows="2"
+                        ></textarea>
+                        <button
+                            id="tutorSendBtn"
+                            class="tutor-send-btn"
+                            onclick="sendTutorMessage()"
+                        >
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </aside>
         </div>
 
         <!-- Celebration overlay -->
@@ -145,6 +686,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
         <script src="days-data.js"></script>
-        <script src="app.js"></script>
+        <script src="app.js?v=11"></script>
+        <script src="playground.js?v=11"></script>
+        <script src="ai-tutor.js?v=11"></script>
     </body>
 </html>

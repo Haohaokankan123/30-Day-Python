@@ -1,5 +1,5 @@
 /* =============================================
-   30 DAYS OF PYTHON — CURRICULUM DATA (Days 1–5)
+   30 DAYS OF PYTHON — CURRICULUM DATA (Days 1–11)
    Source: Asabeneh Yetayeh's 30-Days-Of-Python
    ============================================= */
 
@@ -1301,41 +1301,1470 @@ print(sum(ages) / len(ages))  # average`,
       },
     ],
   },
+
+  // ═══════════════════════════════════════════════
+  // DAY 6 — TUPLES
+  // ═══════════════════════════════════════════════
+  {
+    day: 6,
+    emoji: "📦",
+    title: "Tuples",
+    subtitle: "Learn about tuples — ordered, unchangeable collections — and how to create, access, slice, and use them.",
+    topics: ["Creating Tuples", "Indexing", "Slicing", "Tuple Methods", "Unpacking", "Immutability"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is a Tuple?</h2>
+      <p>A <strong>tuple</strong> is an ordered collection of items, just like a list — but with one key difference: <strong>tuples cannot be changed after creation</strong>. This is called being <strong>immutable</strong>.</p>
+      <p>Tuples are written with <strong>round brackets <code>()</code></strong>, and items are separated by commas.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ('banana', 'orange', 'mango', 'lemon')
+numbers = (1, 2, 3, 4, 5)
+mixed  = ('Alice', 25, True, 3.14)</pre>
+      <div class="info-box success">
+        <strong>When to use a tuple vs a list?</strong> Use a tuple when your data should not change — like days of the week, GPS coordinates, or RGB color values. Use a list when your data will be modified.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Creating Tuples</h2>
+      <p>You can create an empty tuple or a tuple with items:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Empty tuple
+empty = ()
+empty = tuple()
+
+# Tuple with items
+fruits = ('banana', 'orange', 'mango', 'lemon')
+print(len(fruits))   # 4 — len() works on tuples just like lists</pre>
+
+      <div class="section-divider"></div>
+      <h2>Accessing Items — Indexing</h2>
+      <p>Tuples use <strong>zero-based indexing</strong>, exactly like lists. The first item is at index <code>0</code>.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ('banana', 'orange', 'mango', 'lemon')
+print(fruits[0])   # banana
+print(fruits[1])   # orange
+print(fruits[-1])  # lemon  ← negative index counts from the end
+print(fruits[-2])  # mango</pre>
+
+      <div class="section-divider"></div>
+      <h2>Slicing Tuples</h2>
+      <p>You can grab a <strong>sub-section</strong> of a tuple using slice notation <code>[start:end]</code>. The end index is <em>not</em> included.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ('banana', 'orange', 'mango', 'lemon')
+print(fruits[1:3])   # ('orange', 'mango')
+print(fruits[0:])    # all items
+print(fruits[-3:-1]) # ('orange', 'mango')</pre>
+
+      <div class="section-divider"></div>
+      <h2>Tuple Immutability</h2>
+      <p>Tuples <strong>cannot be changed</strong>. If you try to assign a new value to an index, Python raises a <code>TypeError</code>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#f87171;overflow-x:auto">fruits = ('banana', 'orange', 'mango', 'lemon')
+fruits[0] = 'apple'  # ❌ TypeError: 'tuple' object does not support item assignment</pre>
+      <p>If you <em>need</em> to change a tuple, convert it to a list first, make your change, then convert back:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#86efac;overflow-x:auto">fruits = ('banana', 'orange', 'mango', 'lemon')
+fruits_list = list(fruits)      # convert to list
+fruits_list[0] = 'apple'        # change it
+fruits = tuple(fruits_list)     # convert back
+print(fruits)  # ('apple', 'orange', 'mango', 'lemon')</pre>
+
+      <div class="section-divider"></div>
+      <h2>Tuple Methods</h2>
+      <p>Because tuples can't be changed, they have only <strong>two methods</strong>:</p>
+      <table>
+        <thead><tr><th>Method</th><th>What it does</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>count(x)</code></td><td>Count how many times <code>x</code> appears</td><td><code>t.count('a')</code></td></tr>
+          <tr><td><code>index(x)</code></td><td>Find the index of the first <code>x</code></td><td><code>t.index('a')</code></td></tr>
+        </tbody>
+      </table>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ('banana', 'orange', 'mango', 'lemon', 'orange')
+print(fruits.count('orange'))  # 2
+print(fruits.index('mango'))   # 2</pre>
+
+      <div class="section-divider"></div>
+      <h2>Joining Tuples</h2>
+      <p>You can combine two tuples using the <code>+</code> operator. This creates a brand new tuple:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ('banana', 'orange', 'mango')
+veggies = ('tomato', 'potato', 'carrot')
+combined = fruits + veggies
+print(combined)
+# ('banana', 'orange', 'mango', 'tomato', 'potato', 'carrot')</pre>
+
+      <div class="section-divider"></div>
+      <h2>Checking Membership</h2>
+      <p>Use <code>in</code> to check if an item exists in a tuple:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ('banana', 'orange', 'mango', 'lemon')
+print('orange' in fruits)   # True
+print('apple' in fruits)    # False</pre>
+
+      <div class="section-divider"></div>
+      <h2>Deleting a Tuple</h2>
+      <p>You can't remove items from a tuple, but you can delete the entire tuple variable with <code>del</code>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ('banana', 'orange', 'mango')
+del fruits
+# fruits no longer exists</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Creating and Accessing Tuples",
+        desc: "Create tuples and access items by positive and negative index.",
+        code: `fruits = ('banana', 'orange', 'mango', 'lemon')
+
+print(len(fruits))    # 4
+
+# Positive indexing
+print(fruits[0])      # banana
+print(fruits[1])      # orange
+print(fruits[-1])     # lemon (last item)
+print(fruits[-2])     # mango`,
+      },
+      {
+        title: "Slicing a Tuple",
+        desc: "Extract a portion of a tuple using start:end slice notation.",
+        code: `fruits = ('banana', 'orange', 'mango', 'lemon')
+
+print(fruits[1:3])    # ('orange', 'mango')
+print(fruits[0:])     # all items
+print(fruits[:2])     # ('banana', 'orange')
+print(fruits[-3:-1])  # ('orange', 'mango')`,
+      },
+      {
+        title: "Modifying via List Conversion",
+        desc: "Tuples are immutable — to change one, convert to list, modify, convert back.",
+        code: `fruits = ('banana', 'orange', 'mango', 'lemon')
+print("Original:", fruits)
+
+# Convert → change → convert back
+fruits_list = list(fruits)
+fruits_list[0] = 'apple'
+fruits = tuple(fruits_list)
+
+print("Modified:", fruits)
+# ('apple', 'orange', 'mango', 'lemon')`,
+      },
+      {
+        title: "Tuple Methods: count() and index()",
+        desc: "The two methods available on tuples.",
+        code: `fruits = ('banana', 'orange', 'mango', 'lemon', 'orange')
+
+# count() — how many times does 'orange' appear?
+print(fruits.count('orange'))  # 2
+
+# index() — at what position is 'mango'?
+print(fruits.index('mango'))   # 2
+
+# Joining tuples with +
+veggies = ('tomato', 'potato', 'carrot')
+food = fruits + veggies
+print(food)`,
+      },
+      {
+        title: "Membership Test and Unpacking",
+        desc: "Check if an item is in a tuple, and unpack tuple values into variables.",
+        code: `fruits = ('banana', 'orange', 'mango', 'lemon')
+
+# Membership check
+print('orange' in fruits)   # True
+print('apple' in fruits)    # False
+
+# Unpacking — assign each item to a variable
+first, second, third, fourth = fruits
+print(first)   # banana
+print(fourth)  # lemon`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Create an empty tuple two different ways (using <code>()</code> and using <code>tuple()</code>).",
+        "Create a tuple called <code>siblings</code> with the names of 3 people (real or made up).",
+        "Print the first and last item of your <code>siblings</code> tuple using indexing.",
+        "Find the length of your <code>siblings</code> tuple using <code>len()</code>.",
+        "Check if a name is <code>in</code> your <code>siblings</code> tuple and print <code>True</code> or <code>False</code>.",
+        "Create a <code>parents</code> tuple with 2 names, then join <code>siblings</code> and <code>parents</code> into a <code>family</code> tuple using <code>+</code>.",
+      ],
+      level2: [
+        "Create three tuples: <code>fruits</code>, <code>vegetables</code>, and <code>animal_products</code>. Join them into one tuple called <code>food</code>.",
+        "Convert your <code>food</code> tuple into a list, then slice out just the middle items.",
+        "Use <code>count()</code> to check how many times a specific item appears in a tuple.",
+        "Convert a tuple to a list, change the first item, then convert it back to a tuple and print the result.",
+        "Unpack a 4-item tuple into 4 separate variables, then print each one.",
+        "Check if <code>'Iceland'</code> and <code>'Estonia'</code> are in the tuple <code>('Denmark', 'Finland', 'Iceland', 'Norway', 'Sweden')</code>.",
+      ],
+      level3: [
+        "Create a tuple of 10 numbers. Slice it into three parts: first third, middle third, last third. Print each.",
+        "Write a program that takes a list with duplicate items, converts it to a tuple, and prints both the list and tuple lengths to show duplicates are preserved.",
+        "Create a nested tuple like <code>((1,2),(3,4),(5,6))</code> and access the value <code>4</code> using double indexing.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "Which bracket type is used to create a tuple in Python?",
+        opts: ["Square brackets []", "Curly brackets {}", "Round brackets ()", "Angle brackets <>"],
+        answer: 2,
+        explain: "Tuples are created with round brackets (). For example: fruits = ('apple', 'mango').",
+      },
+      {
+        q: "What happens if you try to change an item in a tuple?",
+        opts: ["The item is changed silently", "Python raises a TypeError", "Python raises a ValueError", "The tuple becomes a list"],
+        answer: 1,
+        explain: "Tuples are immutable. Trying to assign fruits[0] = 'apple' raises a TypeError.",
+      },
+      {
+        q: "How many built-in methods do tuples have?",
+        opts: ["0", "1", "2", "Many, same as lists"],
+        answer: 2,
+        explain: "Tuples have exactly two methods: count() and index(). They have no add, remove, or sort methods.",
+      },
+      {
+        q: "What does fruits.index('mango') return for ('banana', 'orange', 'mango', 'lemon')?",
+        opts: ["1", "2", "3", "'mango'"],
+        answer: 1,
+        explain: "index() returns the position (0-based) of the first match. 'mango' is at index 2.",
+      },
+      {
+        q: "What is the correct way to join two tuples t1 and t2?",
+        opts: ["t1.append(t2)", "t1 + t2", "t1.extend(t2)", "join(t1, t2)"],
+        answer: 1,
+        explain: "Use the + operator to join tuples: t1 + t2 creates a new tuple containing all items from both.",
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════
+  // DAY 7 — SETS
+  // ═══════════════════════════════════════════════
+  {
+    day: 7,
+    emoji: "🔵",
+    title: "Sets",
+    subtitle: "Discover sets — unordered collections of unique items — and master set operations like union, intersection, and difference.",
+    topics: ["Creating Sets", "Adding & Removing", "Set Operations", "Union", "Intersection", "Difference"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is a Set?</h2>
+      <p>A <strong>set</strong> is a collection of <strong>unordered, unique items</strong>. This means:</p>
+      <ul>
+        <li><strong>No duplicates</strong> — adding the same item twice has no effect.</li>
+        <li><strong>No guaranteed order</strong> — you can't access items by index.</li>
+        <li><strong>Very fast membership checks</strong> — checking <code>x in my_set</code> is extremely quick.</li>
+      </ul>
+      <p>Sets are written with <strong>curly brackets <code>{}</code></strong>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = {'banana', 'orange', 'mango', 'lemon'}
+numbers = {1, 2, 3, 4, 5}</pre>
+      <div class="info-box warning">
+        <strong>Careful:</strong> <code>{}</code> by itself creates an empty <em>dictionary</em>, not an empty set! To create an empty set, use <code>set()</code>.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Creating Sets</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Empty set — must use set(), not {}
+empty = set()
+
+# Set with items
+fruits = {'banana', 'orange', 'mango', 'lemon'}
+print(len(fruits))   # 4
+
+# Convert a list to a set (removes duplicates!)
+names = ['Alice', 'Bob', 'Alice', 'Charlie', 'Bob']
+unique_names = set(names)
+print(unique_names)  # {'Alice', 'Bob', 'Charlie'}</pre>
+
+      <div class="section-divider"></div>
+      <h2>Adding Items</h2>
+      <p>Use <code>add()</code> for one item, or <code>update()</code> for multiple items:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = {'banana', 'orange', 'mango'}
+fruits.add('lemon')              # add one item
+fruits.update(['grape', 'kiwi']) # add multiple items
+print(fruits)</pre>
+
+      <div class="section-divider"></div>
+      <h2>Removing Items</h2>
+      <table>
+        <thead><tr><th>Method</th><th>Behaviour</th></tr></thead>
+        <tbody>
+          <tr><td><code>remove(x)</code></td><td>Removes <code>x</code>. Raises <code>KeyError</code> if not found.</td></tr>
+          <tr><td><code>discard(x)</code></td><td>Removes <code>x</code>. Does <em>nothing</em> if not found (safe).</td></tr>
+          <tr><td><code>pop()</code></td><td>Removes and returns a <em>random</em> item.</td></tr>
+          <tr><td><code>clear()</code></td><td>Empties the entire set.</td></tr>
+        </tbody>
+      </table>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = {'banana', 'orange', 'mango', 'lemon'}
+fruits.remove('orange')   # removes 'orange'
+fruits.discard('grape')   # no error even though 'grape' isn't there
+print(fruits)</pre>
+
+      <div class="section-divider"></div>
+      <h2>Set Operations</h2>
+      <p>Sets support <strong>mathematical operations</strong> you may remember from school:</p>
+
+      <h3>Union — combine all items from both sets</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">A = {1, 2, 3, 4}
+B = {3, 4, 5, 6}
+print(A.union(B))   # {1, 2, 3, 4, 5, 6}
+print(A | B)        # same thing with | operator</pre>
+
+      <h3>Intersection — only items in BOTH sets</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">A = {1, 2, 3, 4}
+B = {3, 4, 5, 6}
+print(A.intersection(B))  # {3, 4}
+print(A & B)               # same thing</pre>
+
+      <h3>Difference — items in A but NOT in B</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">A = {1, 2, 3, 4}
+B = {3, 4, 5, 6}
+print(A.difference(B))  # {1, 2}  ← in A but not B
+print(B.difference(A))  # {5, 6}  ← in B but not A</pre>
+
+      <h3>Symmetric Difference — items in either set, but NOT both</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">A = {1, 2, 3, 4}
+B = {3, 4, 5, 6}
+print(A.symmetric_difference(B))  # {1, 2, 5, 6}</pre>
+
+      <div class="section-divider"></div>
+      <h2>Subset, Superset & Disjoint</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">evens = {0, 2, 4, 6, 8, 10}
+whole = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+print(evens.issubset(whole))    # True  — all evens are in whole
+print(whole.issuperset(evens))  # True  — whole contains all of evens
+
+odds = {1, 3, 5, 7, 9}
+print(evens.isdisjoint(odds))   # True  — no items in common</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Creating Sets and Removing Duplicates",
+        desc: "Sets automatically remove duplicate items — great for finding unique values.",
+        code: `# Normal set
+fruits = {'banana', 'orange', 'mango', 'lemon'}
+print(fruits)
+print(len(fruits))  # 4
+
+# Convert list to set — duplicates removed!
+ages = [22, 19, 24, 25, 26, 24, 25, 24]
+unique_ages = set(ages)
+print(unique_ages)
+print("List length:", len(ages), "| Set length:", len(unique_ages))`,
+      },
+      {
+        title: "Adding and Removing Items",
+        desc: "Use add(), update(), remove(), and discard() to manage set contents.",
+        code: `companies = {'Google', 'Apple', 'Microsoft'}
+
+companies.add('Amazon')                    # add one
+companies.update(['Meta', 'Netflix'])      # add multiple
+print("After adding:", companies)
+
+companies.remove('Netflix')               # remove (raises error if missing)
+companies.discard('Oracle')               # safe remove (no error if missing)
+print("After removing:", companies)`,
+      },
+      {
+        title: "Union and Intersection",
+        desc: "Combine sets or find what they have in common.",
+        code: `python_skills = {'Python', 'Django', 'Flask'}
+js_skills = {'JavaScript', 'React', 'Node', 'Python'}
+
+# Union — all skills from both
+all_skills = python_skills.union(js_skills)
+print("All skills:", all_skills)
+
+# Intersection — skills in BOTH
+shared = python_skills.intersection(js_skills)
+print("Shared skills:", shared)`,
+      },
+      {
+        title: "Difference and Symmetric Difference",
+        desc: "Find what's unique to each set.",
+        code: `A = {19, 22, 24, 20, 25, 26}
+B = {19, 22, 20, 25, 26, 24, 28, 27}
+
+# Difference: in A but not B
+print("Only in A:", A.difference(B))  # set()
+
+# Difference: in B but not A
+print("Only in B:", B.difference(A))  # {28, 27}
+
+# Symmetric difference: in either but not both
+print("Not shared:", A.symmetric_difference(B))`,
+      },
+      {
+        title: "Subset, Superset, Disjoint",
+        desc: "Check the relationship between two sets.",
+        code: `whole_numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+even_numbers  = {0, 2, 4, 6, 8, 10}
+odd_numbers   = {1, 3, 5, 7, 9}
+
+print(even_numbers.issubset(whole_numbers))    # True
+print(whole_numbers.issuperset(even_numbers))  # True
+print(even_numbers.isdisjoint(odd_numbers))    # True — no overlap`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Create an empty set using <code>set()</code> (not <code>{}</code>) and print its type.",
+        "Create a set called <code>it_companies</code> with: <code>'Facebook', 'Google', 'Microsoft', 'Apple', 'IBM', 'Oracle', 'Amazon'</code>.",
+        "Print the length of <code>it_companies</code>.",
+        "Add <code>'Twitter'</code> to <code>it_companies</code> using <code>add()</code>.",
+        "Remove one company from <code>it_companies</code> using <code>remove()</code>.",
+        "Explain in a comment: what is the difference between <code>remove()</code> and <code>discard()</code>?",
+      ],
+      level2: [
+        "Given <code>A = {19, 22, 24, 20, 25, 26}</code> and <code>B = {19, 22, 20, 25, 26, 24, 28, 27}</code> — find the union of A and B.",
+        "Find the intersection of A and B.",
+        "Check if A is a subset of B using <code>issubset()</code>.",
+        "Check if A and B are disjoint sets.",
+        "Find the symmetric difference between A and B.",
+        "Delete both sets completely using <code>del</code>.",
+      ],
+      level3: [
+        "Given <code>age = [22, 19, 24, 25, 26, 24, 25, 24]</code> — convert to a set and compare lengths. Which is bigger and why?",
+        "Write a program that finds the unique letters shared between the words <code>'python'</code> and <code>'dragon'</code> using set intersection.",
+        "Given this sentence: <code>'I am a teacher and I love to inspire and teach people'</code> — use <code>split()</code> and <code>set()</code> to find how many unique words it contains.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What makes sets different from lists?",
+        opts: ["Sets are ordered and allow duplicates", "Sets are unordered and only store unique items", "Sets use square brackets", "Sets can only hold numbers"],
+        answer: 1,
+        explain: "Sets are unordered (no index) and automatically remove duplicates, so each item is stored only once.",
+      },
+      {
+        q: "How do you create an empty set in Python?",
+        opts: ["{}", "[]", "set()", "empty_set()"],
+        answer: 2,
+        explain: "{} creates an empty dictionary, not a set. You must use set() to create an empty set.",
+      },
+      {
+        q: "What does A.intersection(B) return for A = {1,2,3} and B = {2,3,4}?",
+        opts: ["{1, 2, 3, 4}", "{2, 3}", "{1, 4}", "{1}"],
+        answer: 1,
+        explain: "intersection() returns only items that appear in BOTH sets. 2 and 3 are in both A and B.",
+      },
+      {
+        q: "Which method safely removes an item without raising an error if it doesn't exist?",
+        opts: ["remove()", "pop()", "discard()", "delete()"],
+        answer: 2,
+        explain: "discard() removes the item if it exists, and does nothing if it doesn't. remove() raises a KeyError if the item is missing.",
+      },
+      {
+        q: "What does A.symmetric_difference(B) return for A = {1,2,3} and B = {3,4,5}?",
+        opts: ["{3}", "{1, 2, 4, 5}", "{1, 2, 3, 4, 5}", "{}"],
+        answer: 1,
+        explain: "Symmetric difference returns items that are in either set but NOT in both. 3 is shared so it's excluded.",
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════
+  // DAY 8 — DICTIONARIES
+  // ═══════════════════════════════════════════════
+  {
+    day: 8,
+    emoji: "📖",
+    title: "Dictionaries",
+    subtitle: "Master dictionaries — Python's key-value store — to label, organize, and look up data with ease.",
+    topics: ["Creating Dicts", "Accessing Values", "Adding & Modifying", "Removing Items", "Keys & Values", "Nested Dicts"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is a Dictionary?</h2>
+      <p>A <strong>dictionary</strong> is a collection of <strong>key: value pairs</strong>. Instead of accessing items by a number (like lists do), you access them by a <strong>key</strong> — usually a descriptive string.</p>
+      <p>Dictionaries are written with <strong>curly brackets <code>{}</code></strong>, with each pair separated by a comma:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">person = {
+    'name': 'Alice',
+    'age': 25,
+    'city': 'New York'
+}
+print(person['name'])  # Alice</pre>
+      <div class="info-box success">
+        <strong>Think of it like a contact card:</strong> each field (name, age, city) is a key, and the actual data is the value.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Creating a Dictionary</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Empty dictionary
+empty = {}
+
+# Dictionary with values — values can be ANY type
+person = {
+    'first_name': 'Asabeneh',
+    'last_name': 'Yetayeh',
+    'age': 250,
+    'is_married': True,
+    'skills': ['JavaScript', 'React', 'Python'],   # list as a value!
+    'address': {'street': 'Space street', 'zipcode': '02210'}  # nested dict!
+}
+print(len(person))  # 6</pre>
+
+      <div class="section-divider"></div>
+      <h2>Accessing Values</h2>
+      <p>There are two ways to get a value from a dictionary:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">person = {'name': 'Alice', 'age': 25, 'city': 'NY'}
+
+# Method 1: square bracket — raises KeyError if key doesn't exist
+print(person['name'])   # Alice
+
+# Method 2: .get() — returns None if key doesn't exist (safer)
+print(person.get('age'))     # 25
+print(person.get('email'))   # None  ← no error!</pre>
+      <div class="info-box">
+        <strong>Tip:</strong> Use <code>.get()</code> when you're not sure the key exists.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Adding and Modifying Items</h2>
+      <p>You can add a new key or change an existing one using the same syntax:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">person = {'name': 'Alice', 'age': 25}
+
+# Add a new key
+person['email'] = 'alice@example.com'
+
+# Modify an existing key
+person['age'] = 26
+
+print(person)</pre>
+
+      <div class="section-divider"></div>
+      <h2>Removing Items</h2>
+      <table>
+        <thead><tr><th>Method</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>pop('key')</code></td><td>Remove a specific key and return its value</td></tr>
+          <tr><td><code>popitem()</code></td><td>Remove and return the last inserted key-value pair</td></tr>
+          <tr><td><code>del d['key']</code></td><td>Delete a specific key</td></tr>
+          <tr><td><code>clear()</code></td><td>Empty the entire dictionary</td></tr>
+        </tbody>
+      </table>
+
+      <div class="section-divider"></div>
+      <h2>Checking if a Key Exists</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">person = {'name': 'Alice', 'age': 25}
+print('name' in person)   # True
+print('email' in person)  # False</pre>
+
+      <div class="section-divider"></div>
+      <h2>Keys, Values, and Items</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">person = {'name': 'Alice', 'age': 25, 'city': 'NY'}
+
+print(person.keys())    # dict_keys(['name', 'age', 'city'])
+print(person.values())  # dict_values(['Alice', 25, 'NY'])
+print(person.items())   # dict_items([('name', 'Alice'), ...])
+
+# Convert to list if needed
+keys_list = list(person.keys())
+print(keys_list)  # ['name', 'age', 'city']</pre>
+
+      <div class="section-divider"></div>
+      <h2>Copying a Dictionary</h2>
+      <p>Use <code>.copy()</code> to make an independent copy. If you just do <code>copy = original</code>, both variables point to the same dictionary and changes affect both.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">original = {'a': 1, 'b': 2}
+safe_copy = original.copy()
+safe_copy['c'] = 3
+print(original)   # {'a': 1, 'b': 2}  ← unchanged
+print(safe_copy)  # {'a': 1, 'b': 2, 'c': 3}</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Creating and Accessing a Dictionary",
+        desc: "Build a person profile and access values by key.",
+        code: `person = {
+    'first_name': 'Asabeneh',
+    'last_name': 'Yetayeh',
+    'age': 250,
+    'country': 'Finland',
+    'skills': ['JavaScript', 'React', 'Python']
+}
+
+print(person['first_name'])        # Asabeneh
+print(person['country'])           # Finland
+print(person['skills'][0])         # JavaScript (first skill)
+print(person.get('email'))         # None (no error)
+print(len(person))                 # 5`,
+      },
+      {
+        title: "Adding, Modifying, and Removing",
+        desc: "Update a dictionary after it's created.",
+        code: `person = {'name': 'Alice', 'age': 25}
+
+# Add new keys
+person['email'] = 'alice@example.com'
+person['city'] = 'New York'
+
+# Modify existing key
+person['age'] = 26
+
+print("After update:", person)
+
+# Remove a key
+removed = person.pop('city')
+print("Removed:", removed)
+print("After pop:", person)`,
+      },
+      {
+        title: "Iterating Over a Dictionary",
+        desc: "Loop through keys, values, or both using .items().",
+        code: `student = {
+    'name': 'Bob',
+    'grade': 'A',
+    'score': 95
+}
+
+# Loop over keys
+for key in student:
+    print(key)
+
+# Loop over key-value pairs
+for key, value in student.items():
+    print(f"{key}: {value}")`,
+      },
+      {
+        title: "Checking Keys and Nested Dicts",
+        desc: "Test if a key exists and access nested dictionary values.",
+        code: `person = {
+    'name': 'Alice',
+    'skills': ['Python', 'Django'],
+    'address': {
+        'street': '123 Main St',
+        'city': 'Boston'
+    }
+}
+
+# Check key existence
+print('name' in person)      # True
+print('email' in person)     # False
+
+# Access nested dict
+print(person['address']['city'])   # Boston
+print(person['skills'][1])         # Django`,
+      },
+      {
+        title: "Keys, Values, Items, and Copy",
+        desc: "Extract all keys or values, and safely copy a dictionary.",
+        code: `scores = {'Alice': 95, 'Bob': 82, 'Charlie': 91}
+
+print(list(scores.keys()))    # ['Alice', 'Bob', 'Charlie']
+print(list(scores.values()))  # [95, 82, 91]
+print(list(scores.items()))   # [('Alice', 95), ...]
+
+# Safe copy
+backup = scores.copy()
+backup['Dave'] = 78
+print("Original:", scores)
+print("Backup:", backup)`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Create an empty dictionary called <code>dog</code>.",
+        "Add keys to <code>dog</code>: <code>name</code>, <code>color</code>, <code>breed</code>, <code>legs</code>, <code>age</code>.",
+        "Create a <code>student</code> dictionary with keys: <code>first_name</code>, <code>last_name</code>, <code>age</code>, <code>country</code>, <code>skills</code> (a list).",
+        "Print the length of your <code>student</code> dictionary.",
+        "Get the value of <code>skills</code> from <code>student</code> and check its data type — it should be a list.",
+        "Use <code>'email' in student</code> to check whether the <code>email</code> key exists.",
+      ],
+      level2: [
+        "Add two new skills to <code>student['skills']</code> using <code>append()</code>.",
+        "Get all keys from <code>student</code> as a list using <code>.keys()</code>.",
+        "Get all values from <code>student</code> as a list using <code>.values()</code>.",
+        "Convert the student dictionary to a list of tuples using <code>.items()</code> and print it.",
+        "Delete one key from <code>student</code> using <code>pop()</code> or <code>del</code>.",
+        "Clear the entire <code>dog</code> dictionary using <code>.clear()</code>.",
+      ],
+      level3: [
+        "Build a nested dictionary for a school: it should contain at least 3 students, each with a name, grade, and list of subjects.",
+        "Write a program that counts how many times each character appears in the string <code>'hello world'</code> using a dictionary.",
+        "Given a list of words, build a dictionary that maps each word to its length: <code>{'apple': 5, 'cat': 3, ...}</code>.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "How do you access the value for key 'name' in a dictionary called person?",
+        opts: ["person(name)", "person.name", "person['name']", "person->name"],
+        answer: 2,
+        explain: "Use square brackets with the key as a string: person['name']. This returns the value stored for that key.",
+      },
+      {
+        q: "What does person.get('email') return if 'email' is not in the dictionary?",
+        opts: ["KeyError", "0", "None", "False"],
+        answer: 2,
+        explain: ".get() returns None (instead of raising an error) when the key doesn't exist, making it the safer choice.",
+      },
+      {
+        q: "Which method returns all key-value pairs as a list of tuples?",
+        opts: [".keys()", ".values()", ".items()", ".pairs()"],
+        answer: 2,
+        explain: ".items() returns dict_items of (key, value) tuples. You can loop over them with: for k, v in d.items().",
+      },
+      {
+        q: "What happens if you do: d = {'a': 1}; d['a'] = 99?",
+        opts: ["A new key 'a' is added", "The value for 'a' is updated to 99", "An error is raised", "Nothing changes"],
+        answer: 1,
+        explain: "Assigning to an existing key updates its value. Assigning to a new key adds it. No error is raised either way.",
+      },
+      {
+        q: "How do you remove the key 'city' from a dictionary and get its value back?",
+        opts: ["del d['city']", "d.remove('city')", "d.pop('city')", "d.discard('city')"],
+        answer: 2,
+        explain: "pop('key') removes the key and returns its value. del d['key'] also removes it but doesn't return the value.",
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════
+  // DAY 9 — CONDITIONALS
+  // ═══════════════════════════════════════════════
+  {
+    day: 9,
+    emoji: "🔀",
+    title: "Conditionals",
+    subtitle: "Teach your code to make decisions using if, elif, and else — the foundation of all program logic.",
+    topics: ["if Statement", "if/else", "elif", "Nested Conditions", "and / or", "Ternary Expression"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What are Conditionals?</h2>
+      <p>By default, Python runs your code line by line from top to bottom. <strong>Conditionals</strong> let you say: <em>"Only run this code IF a certain condition is true."</em></p>
+      <p>The main keyword is <strong><code>if</code></strong>. After the condition, you write a <strong>colon <code>:</code></strong>, then indent the code that should run when the condition is true.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">a = 3
+if a > 0:
+    print('A is positive')</pre>
+      <div class="info-box warning">
+        <strong>Indentation matters!</strong> Python uses indentation (spaces) to define which code belongs to the <code>if</code> block. Missing indentation causes an error.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>if / else</h2>
+      <p>Add an <strong><code>else</code></strong> block to run code when the condition is <em>false</em>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">a = -3
+if a > 0:
+    print('A is positive')
+else:
+    print('A is not positive')</pre>
+
+      <div class="section-divider"></div>
+      <h2>if / elif / else</h2>
+      <p>Use <strong><code>elif</code></strong> (short for "else if") to check multiple conditions:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">a = 0
+if a > 0:
+    print('Positive')
+elif a < 0:
+    print('Negative')
+else:
+    print('Zero')
+
+# Grade example
+score = 85
+if score >= 90:
+    print('A')
+elif score >= 80:
+    print('B')
+elif score >= 70:
+    print('C')
+else:
+    print('Below C')</pre>
+      <div class="info-box">
+        <strong>Python checks conditions top to bottom</strong> and stops at the first one that's true. Only one block ever runs.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Nested Conditions</h2>
+      <p>You can put an <code>if</code> inside another <code>if</code>. Each inner level needs another indent:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">a = 6
+if a > 0:
+    if a % 2 == 0:
+        print('Positive and even')
+    else:
+        print('Positive and odd')
+else:
+    print('Not positive')</pre>
+
+      <div class="section-divider"></div>
+      <h2>Logical Operators: and / or</h2>
+      <p>Combine multiple conditions in a single <code>if</code>:</p>
+      <table>
+        <thead><tr><th>Operator</th><th>Meaning</th><th>True when…</th></tr></thead>
+        <tbody>
+          <tr><td><code>and</code></td><td>Both must be true</td><td>A is true AND B is true</td></tr>
+          <tr><td><code>or</code></td><td>At least one must be true</td><td>A is true OR B is true</td></tr>
+          <tr><td><code>not</code></td><td>Flip the result</td><td>NOT A</td></tr>
+        </tbody>
+      </table>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">age = 20
+has_id = True
+
+if age >= 18 and has_id:
+    print('Access granted')
+else:
+    print('Access denied')
+
+# OR example
+day = 'Saturday'
+if day == 'Saturday' or day == 'Sunday':
+    print('Weekend!')</pre>
+
+      <div class="section-divider"></div>
+      <h2>Shorthand (Ternary) Expression</h2>
+      <p>For simple if/else in one line, Python has a <strong>ternary expression</strong>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">a = 3
+label = 'positive' if a > 0 else 'not positive'
+print(label)
+
+# Or directly in print:
+print('Even') if a % 2 == 0 else print('Odd')</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Basic if / elif / else",
+        desc: "Check a number and print whether it's positive, negative, or zero.",
+        code: `a = 0
+
+if a > 0:
+    print('A is positive')
+elif a < 0:
+    print('A is negative')
+else:
+    print('A is zero')`,
+      },
+      {
+        title: "Grade Calculator",
+        desc: "Assign a letter grade based on a numeric score.",
+        code: `score = 78
+
+if score >= 90:
+    grade = 'A'
+elif score >= 80:
+    grade = 'B'
+elif score >= 70:
+    grade = 'C'
+elif score >= 60:
+    grade = 'D'
+else:
+    grade = 'F'
+
+print(f"Score: {score} → Grade: {grade}")`,
+      },
+      {
+        title: "Using and / or",
+        desc: "Combine conditions with logical operators.",
+        code: `age = 20
+has_id = True
+
+# AND — both must be true
+if age >= 18 and has_id:
+    print('Access granted!')
+else:
+    print('Access denied!')
+
+# OR — at least one must be true
+user = 'James'
+access_level = 3
+if user == 'admin' or access_level >= 4:
+    print('Admin access')
+else:
+    print('Regular access')`,
+      },
+      {
+        title: "Nested Conditions",
+        desc: "Check multiple layers of conditions.",
+        code: `a = 6
+
+if a > 0:
+    if a % 2 == 0:
+        print('Positive and even')
+    else:
+        print('Positive and odd')
+elif a == 0:
+    print('Zero')
+else:
+    print('Negative')`,
+      },
+      {
+        title: "Season Detector",
+        desc: "Use elif to determine the season from a month name.",
+        code: `month = 'July'
+
+if month in ('December', 'January', 'February'):
+    season = 'Winter'
+elif month in ('March', 'April', 'May'):
+    season = 'Spring'
+elif month in ('June', 'July', 'August'):
+    season = 'Summer'
+else:
+    season = 'Autumn'
+
+print(f"{month} is in {season}")`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Write an <code>if/else</code> that prints <code>'Positive'</code> if a number is greater than 0, and <code>'Not positive'</code> otherwise.",
+        "Write an <code>if/elif/else</code> that checks whether a number is positive, negative, or zero.",
+        "Write code that prints <code>'Even'</code> if a number is divisible by 2, and <code>'Odd'</code> otherwise. (Hint: use <code>%</code>)",
+        "Assign a letter grade to a score using <code>if/elif/else</code>: A (90+), B (80-89), C (70-79), D (60-69), F (below 60).",
+        "Use a ternary expression to assign <code>'adult'</code> or <code>'minor'</code> based on whether age is 18 or older.",
+        "Write code that checks if a number is divisible by both 2 and 3 using <code>and</code>.",
+      ],
+      level2: [
+        "Given <code>fruits = ['banana', 'orange', 'mango', 'lemon']</code> — write code that checks if <code>'apple'</code> is in the list. If not, add it. If it is, print that it already exists.",
+        "Write a season detector: given a month name, print the correct season (Winter, Spring, Summer, Autumn).",
+        "Write a program that checks if a year is a leap year. A leap year is divisible by 4, but not 100, unless also divisible by 400.",
+        "Write a number comparison: given two numbers <code>a</code> and <code>b</code>, print which is bigger, or if they're equal.",
+      ],
+      level3: [
+        "Given a <code>person</code> dictionary with <code>skills</code>, <code>country</code>, and <code>is_married</code> keys — write conditions to: check if Python is in skills, classify them as frontend/backend/fullstack developer, and print a message if they are married and live in Finland.",
+        "Write a BMI calculator: BMI = weight / height². Then classify: Underweight (<18.5), Normal (18.5–24.9), Overweight (25–29.9), Obese (30+).",
+        "Write a rock-paper-scissors game logic (no input needed — just hard-code player1 and player2 choices and print the winner).",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What keyword do you add to check a second condition if the first one is false?",
+        opts: ["else if", "elseif", "elif", "otherwise"],
+        answer: 2,
+        explain: "Python uses elif (short for 'else if') to chain additional conditions after the initial if.",
+      },
+      {
+        q: "What is the output of: x = 5; print('big') if x > 3 else print('small')?",
+        opts: ["small", "big", "Error", "None"],
+        answer: 1,
+        explain: "x = 5 which is > 3, so the condition is True and 'big' is printed.",
+      },
+      {
+        q: "Which logical operator requires ALL conditions to be true?",
+        opts: ["or", "not", "and", "all()"],
+        answer: 2,
+        explain: "The 'and' operator returns True only when every condition it connects is True.",
+      },
+      {
+        q: "What happens when Python finds the first true condition in an if/elif/else chain?",
+        opts: ["It checks all conditions anyway", "It runs that block and skips the rest", "It raises an error", "It runs all matching blocks"],
+        answer: 1,
+        explain: "Python checks conditions top-to-bottom and stops at the first True one — only that block executes.",
+      },
+      {
+        q: "What does indentation do in Python if/else blocks?",
+        opts: ["It's optional and just for style", "It defines which code belongs to the if/else block", "It makes code run faster", "It is required only for functions"],
+        answer: 1,
+        explain: "Python uses indentation to define code blocks. All code inside an if must be indented consistently, or you'll get an IndentationError.",
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════
+  // DAY 10 — LOOPS
+  // ═══════════════════════════════════════════════
+  {
+    day: 10,
+    emoji: "🔁",
+    title: "Loops",
+    subtitle: "Repeat code automatically with for and while loops — and control them with break, continue, and range().",
+    topics: ["while Loop", "for Loop", "range()", "break & continue", "Nested Loops", "for/else"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>Why Loops?</h2>
+      <p>Imagine printing the numbers 1 to 100. Without loops you'd write 100 <code>print()</code> statements. With a loop, it's two lines. <strong>Loops</strong> let you repeat a block of code automatically.</p>
+
+      <div class="section-divider"></div>
+      <h2>The while Loop</h2>
+      <p>A <strong>while loop</strong> keeps running as long as a condition is <code>True</code>. The condition is checked <em>before</em> each iteration.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">count = 0
+while count < 5:
+    print(count)
+    count += 1     # IMPORTANT: always update the variable or loop runs forever!</pre>
+      <div class="info-box warning">
+        <strong>Infinite loop danger!</strong> If the condition never becomes False, the loop runs forever. Always make sure the loop variable changes each iteration.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>The for Loop</h2>
+      <p>A <strong>for loop</strong> iterates over a <strong>sequence</strong> (list, tuple, string, range, dict, set) — one item at a time.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Looping over a list
+fruits = ['banana', 'orange', 'mango']
+for fruit in fruits:
+    print(fruit)
+
+# Looping over a string
+for letter in 'Python':
+    print(letter)</pre>
+
+      <div class="section-divider"></div>
+      <h2>The range() Function</h2>
+      <p><code>range()</code> generates a sequence of numbers. It takes up to 3 arguments:</p>
+      <table>
+        <thead><tr><th>Call</th><th>What it produces</th></tr></thead>
+        <tbody>
+          <tr><td><code>range(5)</code></td><td>0, 1, 2, 3, 4</td></tr>
+          <tr><td><code>range(1, 6)</code></td><td>1, 2, 3, 4, 5</td></tr>
+          <tr><td><code>range(0, 11, 2)</code></td><td>0, 2, 4, 6, 8, 10 (step of 2)</td></tr>
+          <tr><td><code>range(10, 0, -1)</code></td><td>10, 9, 8, … 1 (count down)</td></tr>
+        </tbody>
+      </table>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">for i in range(5):
+    print(i)         # 0 1 2 3 4
+
+for i in range(1, 6):
+    print(i)         # 1 2 3 4 5
+
+for i in range(0, 11, 2):
+    print(i)         # 0 2 4 6 8 10</pre>
+
+      <div class="section-divider"></div>
+      <h2>break and continue</h2>
+      <p><strong><code>break</code></strong> — exits the loop immediately:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">for i in range(10):
+    if i == 5:
+        break         # stop when i reaches 5
+    print(i)          # prints 0 1 2 3 4</pre>
+
+      <p><strong><code>continue</code></strong> — skips the current iteration and moves to the next:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">for i in range(6):
+    if i == 3:
+        continue      # skip 3
+    print(i)          # prints 0 1 2 4 5</pre>
+
+      <div class="section-divider"></div>
+      <h2>Nested Loops</h2>
+      <p>A loop inside another loop. The inner loop completes fully for every single iteration of the outer loop:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">for i in range(1, 4):
+    for j in range(1, 4):
+        print(f"{i} x {j} = {i*j}")
+    print("---")</pre>
+
+      <div class="section-divider"></div>
+      <h2>for / else</h2>
+      <p>Python's <code>for</code> loop can have an <code>else</code> block that runs only if the loop <em>completed normally</em> (without a <code>break</code>):</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">for number in range(11):
+    print(number)
+else:
+    print('Loop finished at:', number)</pre>
+
+      <div class="section-divider"></div>
+      <h2>pass</h2>
+      <p><code>pass</code> is a placeholder — it does nothing but prevents Python from complaining about an empty block:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">for i in range(5):
+    pass   # placeholder — loop runs but does nothing yet</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "while Loop Basics",
+        desc: "Count up and count down using while loops.",
+        code: `# Count up
+count = 0
+while count < 5:
+    print(count)
+    count += 1
+
+print("---")
+
+# Count down
+n = 5
+while n > 0:
+    print(n)
+    n -= 1
+print("Blast off!")`,
+      },
+      {
+        title: "for Loop with range()",
+        desc: "Use range() to control how many times a loop runs.",
+        code: `# range(5) → 0,1,2,3,4
+for i in range(5):
+    print(i)
+
+print("---")
+
+# range(1, 6) → 1,2,3,4,5
+for i in range(1, 6):
+    print(i)
+
+print("---")
+
+# range(0, 11, 2) → even numbers
+for i in range(0, 11, 2):
+    print(i)`,
+      },
+      {
+        title: "Looping Over Collections",
+        desc: "Iterate over lists, strings, tuples, and dictionaries.",
+        code: `# List
+fruits = ['banana', 'orange', 'mango']
+for fruit in fruits:
+    print(fruit)
+
+# String (character by character)
+for letter in 'Python':
+    print(letter)
+
+# Dictionary key-value pairs
+person = {'name': 'Alice', 'age': 25}
+for key, value in person.items():
+    print(f"{key}: {value}")`,
+      },
+      {
+        title: "break and continue",
+        desc: "Control loop flow — stop early or skip iterations.",
+        code: `# break — stop when we find 'mango'
+fruits = ['banana', 'orange', 'mango', 'lemon']
+for fruit in fruits:
+    if fruit == 'mango':
+        print("Found mango! Stopping.")
+        break
+    print(fruit)
+
+print("---")
+
+# continue — skip even numbers
+for i in range(10):
+    if i % 2 == 0:
+        continue
+    print(i)   # only odd numbers`,
+      },
+      {
+        title: "Nested Loops and Patterns",
+        desc: "Use nested for loops to build a multiplication table and patterns.",
+        code: `# Triangle pattern
+for i in range(1, 6):
+    print('#' * i)
+
+print("---")
+
+# Multiplication table (3x3)
+for i in range(1, 4):
+    for j in range(1, 4):
+        print(f"{i}x{j}={i*j}", end="  ")
+    print()   # newline after each row`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Use a <code>for</code> loop with <code>range()</code> to print numbers 0 to 10.",
+        "Use a <code>while</code> loop to print numbers 10 down to 0.",
+        "Loop through the list <code>['Python', 'Numpy', 'Pandas', 'Django', 'Flask']</code> and print each item.",
+        "Print all even numbers from 0 to 100 using a loop and <code>if</code>.",
+        "Print all odd numbers from 0 to 100.",
+        "Use a <code>for</code> loop to print this triangle pattern (7 rows of #).",
+      ],
+      level2: [
+        "Calculate the sum of all numbers from 0 to 100 using a loop. The answer should be 5050.",
+        "Calculate the sum of all even numbers from 0 to 100 (answer: 2550) and all odd numbers (answer: 2500).",
+        "Use a nested loop to print a 5×5 grid of <code>#</code> symbols.",
+        "Print the multiplication table for numbers 1 through 5 using nested loops.",
+        "Reverse the list <code>['banana', 'orange', 'mango', 'lemon']</code> using a loop (without using <code>.reverse()</code>).",
+      ],
+      level3: [
+        "Write a loop that prints the first 20 Fibonacci numbers (each number is the sum of the previous two: 0, 1, 1, 2, 3, 5…).",
+        "Write a program using a loop that checks if a number is prime.",
+        "Use <code>range()</code> with a step to print all multiples of 7 from 0 to 100.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What is the output of: for i in range(3): print(i)?",
+        opts: ["1 2 3", "0 1 2 3", "0 1 2", "1 2"],
+        answer: 2,
+        explain: "range(3) produces 0, 1, 2. It starts at 0 and stops BEFORE 3.",
+      },
+      {
+        q: "What does 'break' do inside a loop?",
+        opts: ["Skips the current iteration", "Pauses the loop temporarily", "Exits the loop immediately", "Restarts the loop"],
+        answer: 2,
+        explain: "break exits the loop entirely the moment it's reached, regardless of the loop condition.",
+      },
+      {
+        q: "What does 'continue' do inside a loop?",
+        opts: ["Exits the loop", "Skips to the next iteration", "Restarts from iteration 0", "Does nothing"],
+        answer: 1,
+        explain: "continue skips the rest of the current iteration and jumps to the next one.",
+      },
+      {
+        q: "What does range(2, 10, 2) produce?",
+        opts: ["2, 4, 6, 8, 10", "2, 4, 6, 8", "0, 2, 4, 6, 8", "2, 3, 4, 5, 6, 7, 8, 9"],
+        answer: 1,
+        explain: "range(start, stop, step) → starts at 2, counts by 2, stops before 10: gives 2, 4, 6, 8.",
+      },
+      {
+        q: "Which loop type checks its condition BEFORE each iteration?",
+        opts: ["for loop", "while loop", "Both", "Neither"],
+        answer: 1,
+        explain: "The while loop evaluates its condition before each run. If False from the start, the body never executes.",
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════
+  // DAY 11 — FUNCTIONS
+  // ═══════════════════════════════════════════════
+  {
+    day: 11,
+    emoji: "⚙️",
+    title: "Functions",
+    subtitle: "Write reusable blocks of code with functions — learn def, parameters, return values, default arguments, and *args.",
+    topics: ["def & return", "Parameters", "Default Args", "*args **kwargs", "Scope", "Functions as Args"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is a Function?</h2>
+      <p>A <strong>function</strong> is a named, reusable block of code. Instead of writing the same logic over and over, you define it once and <strong>call</strong> it whenever you need it.</p>
+      <p>Functions are declared with the <strong><code>def</code></strong> keyword:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def greet():
+    print("Hello, World!")
+
+greet()   # call the function → Hello, World!</pre>
+      <div class="info-box">
+        <strong>Defining vs calling:</strong> <code>def greet():</code> creates the function. <code>greet()</code> runs it. Nothing happens until you call it.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Return Values</h2>
+      <p>Use <strong><code>return</code></strong> to send a result back to whoever called the function. Without <code>return</code>, the function returns <code>None</code>.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def add(a, b):
+    return a + b
+
+result = add(3, 5)
+print(result)   # 8</pre>
+
+      <div class="section-divider"></div>
+      <h2>Parameters and Arguments</h2>
+      <p><strong>Parameters</strong> are the variable names listed in the function definition. <strong>Arguments</strong> are the actual values you pass in when calling the function.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def greet(name):           # 'name' is a parameter
+    return name + ', welcome!'
+
+print(greet('Alice'))      # 'Alice' is the argument → Alice, welcome!
+print(greet('Bob'))        # → Bob, welcome!</pre>
+
+      <h3>Multiple parameters</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def full_name(first, last):
+    return first + ' ' + last
+
+print(full_name('Asabeneh', 'Yetayeh'))
+
+# Keyword arguments — order doesn't matter
+print(full_name(last='Yetayeh', first='Asabeneh'))</pre>
+
+      <div class="section-divider"></div>
+      <h2>Default Parameters</h2>
+      <p>Give a parameter a <strong>default value</strong> so it works even when no argument is passed:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def greet(name='Guest'):
+    return f'Hello, {name}!'
+
+print(greet())          # Hello, Guest!
+print(greet('Alice'))   # Hello, Alice!</pre>
+
+      <div class="section-divider"></div>
+      <h2>*args — Arbitrary Number of Arguments</h2>
+      <p><strong><code>*args</code></strong> lets a function accept <em>any number</em> of positional arguments. They come in as a tuple.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def total(*nums):
+    return sum(nums)
+
+print(total(1, 2, 3))        # 6
+print(total(1, 2, 3, 4, 5))  # 15</pre>
+
+      <div class="section-divider"></div>
+      <h2>**kwargs — Arbitrary Keyword Arguments</h2>
+      <p><strong><code>**kwargs</code></strong> lets a function accept any number of <em>named</em> arguments. They come in as a dictionary.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def show_info(**info):
+    for key, value in info.items():
+        print(f"{key}: {value}")
+
+show_info(name='Alice', age=25, city='NY')</pre>
+
+      <div class="section-divider"></div>
+      <h2>Functions as Arguments</h2>
+      <p>In Python, functions are <strong>first-class objects</strong> — you can pass them as arguments to other functions:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def square(n):
+    return n ** 2
+
+def apply(func, value):
+    return func(value)
+
+print(apply(square, 4))   # 16</pre>
+
+      <div class="section-divider"></div>
+      <h2>Variable Scope</h2>
+      <p>Variables created <em>inside</em> a function are <strong>local</strong> — they only exist within that function. Variables created <em>outside</em> are <strong>global</strong>.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">x = 10   # global
+
+def show():
+    y = 5  # local — only exists inside show()
+    print(x)   # can read global
+    print(y)
+
+show()
+# print(y)  ← would cause NameError — y doesn't exist outside</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Functions Without and With Parameters",
+        desc: "Define functions that do work with and without input.",
+        code: `# No parameters
+def say_hello():
+    print("Hello, World!")
+
+say_hello()
+
+# With parameter and return
+def square(n):
+    return n * n
+
+print(square(4))   # 16
+print(square(7))   # 49`,
+      },
+      {
+        title: "Multiple Parameters and Keyword Arguments",
+        desc: "Functions with multiple inputs, and calling with keyword syntax.",
+        code: `def calculate_age(current_year, birth_year):
+    return current_year - birth_year
+
+print(calculate_age(2025, 1999))   # 26
+
+# Keyword arguments — order doesn't matter
+def weight(mass, gravity=9.81):
+    return mass * gravity
+
+print(weight(100))          # uses default gravity (Earth)
+print(weight(100, 1.62))    # Moon gravity`,
+      },
+      {
+        title: "Default Parameters",
+        desc: "Parameters with fallback values when no argument is passed.",
+        code: `def greet(name='Guest', language='English'):
+    if language == 'Spanish':
+        return f'Hola, {name}!'
+    return f'Hello, {name}!'
+
+print(greet())                      # Hello, Guest!
+print(greet('Alice'))               # Hello, Alice!
+print(greet('Carlos', 'Spanish'))   # Hola, Carlos!`,
+      },
+      {
+        title: "*args — Accept Any Number of Arguments",
+        desc: "Use *args to pass as many values as you need.",
+        code: `def sum_all(*numbers):
+    total = 0
+    for n in numbers:
+        total += n
+    return total
+
+print(sum_all(1, 2, 3))         # 6
+print(sum_all(1, 2, 3, 4, 5))  # 15
+print(sum_all(10, 20))          # 30
+
+# *args with a fixed first argument
+def show_team(team_name, *members):
+    print(f"Team: {team_name}")
+    for m in members:
+        print(f"  - {m}")
+
+show_team('Alpha', 'Alice', 'Bob', 'Charlie')`,
+      },
+      {
+        title: "Returning Different Data Types",
+        desc: "Functions can return strings, numbers, booleans, and lists.",
+        code: `def is_even(n):
+    return n % 2 == 0
+
+print(is_even(4))   # True
+print(is_even(7))   # False
+
+def find_evens(limit):
+    return [i for i in range(limit + 1) if i % 2 == 0]
+
+print(find_evens(10))  # [0, 2, 4, 6, 8, 10]
+
+def area_of_circle(r):
+    PI = 3.14159
+    return PI * r ** 2
+
+print(round(area_of_circle(5), 2))  # 78.54`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Declare a function <code>add_two_numbers(a, b)</code> that returns the sum of two numbers.",
+        "Declare a function <code>area_of_circle(r)</code> that returns the area. Formula: <code>PI × r²</code> (use PI = 3.14).",
+        "Declare a function <code>convert_celsius_to_fahrenheit(c)</code>. Formula: <code>(c × 9/5) + 32</code>.",
+        "Declare a function <code>check_season(month)</code> that returns the season (Spring, Summer, Autumn, Winter).",
+        "Declare a function <code>print_list(lst)</code> that takes a list and prints each element.",
+        "Declare a function <code>sum_of_numbers(n)</code> that adds all numbers from 0 to <code>n</code>. Verify: <code>sum_of_numbers(10)</code> = 55, <code>sum_of_numbers(100)</code> = 5050.",
+      ],
+      level2: [
+        "Declare a function <code>evens_and_odds(n)</code> that counts even and odd numbers from 0 to <code>n</code>.",
+        "Declare a function <code>factorial(n)</code> that returns <code>n!</code> (5! = 120).",
+        "Declare a function <code>reverse_list(lst)</code> that returns the reversed list using a loop (not <code>.reverse()</code>).",
+        "Declare a function <code>capitalize_list_items(lst)</code> that returns a new list with all strings capitalized.",
+        "Write a function <code>greet(name='Guest')</code> that prints <code>'Hello, Guest!'</code> when called with no argument, and <code>'Hello, [name]!'</code> otherwise.",
+        "Write a function <code>show_args(**kwargs)</code> that prints each key-value pair it receives.",
+      ],
+      level3: [
+        "Write a function <code>is_prime(n)</code> that returns <code>True</code> if <code>n</code> is a prime number.",
+        "Write a function <code>calculate_mean(lst)</code> that returns the average of a list of numbers.",
+        "Write a function <code>unique_items(lst)</code> that returns <code>True</code> if all items in the list are unique.",
+        "Write a function <code>solve_quadratic(a, b, c)</code> that returns both solutions of <code>ax² + bx + c = 0</code> using the quadratic formula.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What keyword is used to define a function in Python?",
+        opts: ["function", "func", "def", "define"],
+        answer: 2,
+        explain: "Functions are defined with the def keyword, followed by the function name and parentheses.",
+      },
+      {
+        q: "What does a function return if it has no return statement?",
+        opts: ["0", "False", "None", "An error"],
+        answer: 2,
+        explain: "Without a return statement, Python implicitly returns None.",
+      },
+      {
+        q: "What does *args allow you to do?",
+        opts: ["Pass a dictionary of arguments", "Pass any number of positional arguments", "Create a global variable", "Define a recursive function"],
+        answer: 1,
+        explain: "*args collects any number of positional arguments into a tuple inside the function.",
+      },
+      {
+        q: "What is a default parameter?",
+        opts: ["A parameter that is always required", "A parameter with a preset value used when no argument is passed", "The first parameter of any function", "A parameter that cannot be changed"],
+        answer: 1,
+        explain: "Default parameters have a value defined in the function signature (e.g. def greet(name='Guest')). If no argument is passed, the default is used.",
+      },
+      {
+        q: "What is the scope of a variable declared inside a function?",
+        opts: ["Global — visible everywhere", "Local — only inside that function", "Module — visible in the same file", "Permanent — exists until deleted"],
+        answer: 1,
+        explain: "Variables created inside a function are local — they only exist within that function and are destroyed when it returns.",
+      },
+    ],
+  },
+
 ]; // end of DAYS array
 
-// Fill remaining days 6-30 with placeholder so navigation doesn't break
-for (let d = 6; d <= 30; d++) {
+// Fill remaining days 12-30 with placeholder so navigation doesn't break
+for (let d = 12; d <= 30; d++) {
   const topics = {
-    6: {
-      emoji: "📦",
-      title: "Tuples",
-      sub: "Immutable ordered sequences, packing & unpacking.",
-    },
-    7: {
-      emoji: "🔵",
-      title: "Sets",
-      sub: "Unordered collections of unique items and set operations.",
-    },
-    8: {
-      emoji: "📖",
-      title: "Dictionaries",
-      sub: "Key-value pairs for structured, labeled data.",
-    },
-    9: {
-      emoji: "🔀",
-      title: "Conditionals",
-      sub: "if, elif, else — making decisions in code.",
-    },
-    10: {
-      emoji: "🔁",
-      title: "Loops",
-      sub: "for loops, while loops, break, continue, and pass.",
-    },
-    11: {
-      emoji: "⚙️",
-      title: "Functions",
-      sub: "def, parameters, return values, scope, *args, **kwargs.",
-    },
     12: {
       emoji: "📦",
       title: "Modules",
@@ -1447,7 +2876,7 @@ for (let d = 6; d <= 30; d++) {
           <p style="color:var(--text-3);max-width:480px;margin:0 auto 24px;font-size:16px">${t.sub}</p>
           <div class="info-box" style="max-width:480px;margin:0 auto;text-align:left">
             <strong>Coming Soon</strong>
-            This lesson will be added in the next update. Days 1–5 are fully complete — practice those first!
+            This lesson will be added in the next update. Days 1–11 are fully complete — practice those first!
           </div>
         </div>
       </div>
