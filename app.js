@@ -53,6 +53,7 @@ function buildPreviewGrid() {
       <span class="preview-day-name">${day ? day.title : ""}</span>
     `;
     d.style.animationDelay = `${i * 28}ms`;
+    d.onclick = () => startLearning(i);
     grid.appendChild(d);
   }
 }
@@ -87,7 +88,9 @@ function updateProgress() {
   const done = state.completed.size;
   const el = document.getElementById("progressText");
   if (el) el.textContent = done + " / 30 complete";
-  const bar = document.getElementById("progressBar");
+  const topbarEl = document.getElementById("topbarProgressText");
+  if (topbarEl) topbarEl.textContent = done + " / 30 complete";
+  const bar = document.getElementById("progressPopupBar");
   if (bar) bar.style.width = ((done / 30) * 100) + "%";
 }
 
@@ -128,7 +131,7 @@ function loadDay(n) {
   const day = DAYS[n - 1];
   if (!day) return;
 
-  document.getElementById("topbarDay").textContent = state.completed.size + " / 30 complete";
+  // topbarDay removed — progress shown in sidebar badge only
   const btn = document.getElementById("completeBtn");
   const done = state.completed.has(n);
   btn.className = "complete-btn" + (done ? " done" : "");
@@ -139,8 +142,12 @@ function loadDay(n) {
   });
 
   document.getElementById("prevBtn").disabled = n === 1;
-  document.getElementById("nextBtn").disabled = n === 30;
+  document.getElementById("nextBtn").disabled = n >= DAYS.length;
 
+  if (!day) {
+    document.getElementById("contentWrap").innerHTML = `<div style="padding:60px;text-align:center;opacity:0.6"><h2>Coming Soon</h2><p>This lesson is still being written. Check back soon!</p></div>`;
+    return;
+  }
   document.getElementById("contentWrap").innerHTML = renderDay(day);
 
   setTimeout(() => {
@@ -422,7 +429,7 @@ function toggleComplete() {
   const btn = document.getElementById("completeBtn");
   btn.className = "complete-btn" + (done ? " done" : "");
   btn.textContent = done ? "✓ Completed" : "✓ Mark Complete";
-  document.getElementById("topbarDay").textContent = state.completed.size + " / 30 complete";
+  // topbarDay removed — progress shown in sidebar badge only
 
   const navItem = document.querySelector(`.day-nav-item[data-day="${n}"]`);
   if (navItem) {
@@ -529,7 +536,7 @@ function toggleSidebarCollapse() {
   const collapsed = app.classList.toggle("sidebar-collapsed");
   sidebar.classList.toggle("collapsed", collapsed);
   // Update the hide button inside the sidebar header
-  const hideBtn = sidebar.querySelector(".sidebar-hide-btn");
+  const hideBtn = sidebar.querySelector(".sidebar-collapse-topbar-btn");
   if (hideBtn) hideBtn.textContent = collapsed ? "▶" : "◀";
 }
 
@@ -539,7 +546,7 @@ function expandSidebar() {
   const sidebar = document.getElementById("sidebar");
   app.classList.remove("sidebar-collapsed");
   sidebar.classList.remove("collapsed");
-  const hideBtn = sidebar.querySelector(".sidebar-hide-btn");
+  const hideBtn = sidebar.querySelector(".sidebar-collapse-topbar-btn");
   if (hideBtn) hideBtn.textContent = "◀";
 }
 
@@ -921,3 +928,63 @@ function lfAnswer(btn, correct) {
     });
   }
 }
+
+// ─── PROGRESS POPUP ───────────────────────────
+function openProgressPopup() {
+  const overlay = document.getElementById("progressPopupOverlay");
+  const popup   = document.getElementById("progressPopup");
+  if (!overlay || !popup) return;
+  renderProgressPopup();
+  overlay.classList.add("open");
+  popup.classList.add("open");
+}
+
+function closeProgressPopup() {
+  const overlay = document.getElementById("progressPopupOverlay");
+  const popup   = document.getElementById("progressPopup");
+  if (!overlay || !popup) return;
+  overlay.classList.remove("open");
+  popup.classList.remove("open");
+}
+
+function renderProgressPopup() {
+  const done  = state.completed.size;
+  const cur   = state.currentDay;
+
+  // Progress bar
+  document.getElementById("progressPopupBar").style.width = ((done / 30) * 100) + "%";
+  document.getElementById("progressPopupLabel").textContent = done + " of 30 lessons complete";
+
+  // Dot grid
+  const grid = document.getElementById("progressPopupGrid");
+  grid.innerHTML = "";
+  for (let i = 1; i <= 30; i++) {
+    const dot = document.createElement("div");
+    dot.className = "progress-popup-dot";
+    if (state.completed.has(i)) dot.classList.add("done");
+    if (i === cur)              dot.classList.add("current");
+    dot.title = "Day " + i;
+    dot.onclick = () => { closeProgressPopup(); loadDay(i); };
+    grid.appendChild(dot);
+  }
+
+  // Prev / Next buttons
+  const prevBtn = document.getElementById("progressPopupPrev");
+  const nextBtn = document.getElementById("progressPopupNext");
+  document.getElementById("progressPopupPrevNum").textContent = cur - 1;
+  document.getElementById("progressPopupNextNum").textContent = cur + 1;
+  prevBtn.disabled = cur <= 1;
+  nextBtn.disabled = cur >= DAYS.length;
+}
+
+function progressPopupNavigate(dir) {
+  const next = state.currentDay + dir;
+  if (next < 1 || next > DAYS.length) return;
+  closeProgressPopup();
+  loadDay(next);
+}
+
+// Close popup with Escape key
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeProgressPopup();
+});

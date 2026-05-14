@@ -14,3 +14,7 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+test.js
+.playwright-mcp/
+.claude/commands/
+.zed/debug.json

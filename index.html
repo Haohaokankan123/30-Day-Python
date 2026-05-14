@@ -439,7 +439,13 @@ average = total / len(scores
                         ✕
                     </button>
                 </div>
-                <div class="sidebar-progress-badge" id="sidebarProgressBadge">
+                <div
+                    class="sidebar-progress-badge"
+                    id="sidebarProgressBadge"
+                    onclick="openProgressPopup()"
+                    title="View your progress"
+                    style="cursor: pointer"
+                >
                     <span class="topbar-progress-dot"></span>
                     <span id="progressText">0 / 30 complete</span>
                 </div>
@@ -484,10 +490,15 @@ average = total / len(scores
                         >
                             🤖 AI Tutor
                         </button>
-                        <div class="topbar-progress-badge" id="topbarProgress">
-                            <span class="topbar-progress-dot"></span
-                            ><span id="topbarDay">Day 1</span>
-                        </div>
+                        <button
+                            class="topbar-progress-btn"
+                            id="topbarProgressBtn"
+                            onclick="openProgressPopup()"
+                            title="View your progress"
+                        >
+                            <span class="topbar-progress-dot"></span>
+                            <span id="topbarProgressText">0 / 30 complete</span>
+                        </button>
                         <button
                             class="complete-btn"
                             id="completeBtn"
@@ -680,6 +691,39 @@ average = total / len(scores
                 <h2>Day Complete!</h2>
                 <p id="celebrationMsg"></p>
                 <button onclick="hideCelebration()">Keep Going →</button>
+            </div>
+        </div>
+
+        <!-- Progress Popup -->
+        <div
+            class="progress-popup-overlay"
+            id="progressPopupOverlay"
+            onclick="closeProgressPopup()"
+        ></div>
+        <div class="progress-popup" id="progressPopup" aria-hidden="true">
+            <h2 class="progress-popup-title">Your Progress</h2>
+            <div class="progress-popup-bar-wrap">
+                <div class="progress-popup-bar" id="progressPopupBar"></div>
+            </div>
+            <p class="progress-popup-label" id="progressPopupLabel">
+                0 of 30 lessons complete
+            </p>
+            <div class="progress-popup-grid" id="progressPopupGrid"></div>
+            <div class="progress-popup-footer">
+                <button
+                    class="progress-popup-prev"
+                    id="progressPopupPrev"
+                    onclick="progressPopupNavigate(-1)"
+                >
+                    ← Day <span id="progressPopupPrevNum"></span>
+                </button>
+                <button
+                    class="progress-popup-next"
+                    id="progressPopupNext"
+                    onclick="progressPopupNavigate(1)"
+                >
+                    Day <span id="progressPopupNextNum"></span> →
+                </button>
             </div>
         </div>
 

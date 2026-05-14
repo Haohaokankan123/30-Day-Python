@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"/Users/charleschen/Downloads/Python_30_Days/.venv/bin/python\" \"/Users/charleschen/Downloads/Python_30_Days/.claude/hooks/recall_memories.py\""
+            "command": "\"/Users/charleschen/Downloads/Projects/python-30-days/.venv/bin/python\" \"/Users/charleschen/Downloads/Projects/python-30-days/.claude/hooks/recall_memories.py\""
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"/Users/charleschen/Downloads/Python_30_Days/.venv/bin/python\" \"/Users/charleschen/Downloads/Python_30_Days/.claude/hooks/save_memory.py\""
+            "command": "\"/Users/charleschen/Downloads/Projects/python-30-days/.venv/bin/python\" \"/Users/charleschen/Downloads/Projects/python-30-days/.claude/hooks/save_memory.py\""
           }
         ]
       }
