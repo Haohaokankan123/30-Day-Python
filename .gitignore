@@ -18,3 +18,4 @@ test.js
 .playwright-mcp/
 .claude/commands/
 .zed/debug.json
+stress.py

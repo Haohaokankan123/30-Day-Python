@@ -2,11 +2,42 @@
    30 DAYS OF PYTHON — APP LOGIC
    ============================================= */
 
+const LEVELS = [
+  { level: 1, name: "Beginner",   xp: 0 },
+  { level: 2, name: "Apprentice", xp: 200 },
+  { level: 3, name: "Coder",      xp: 500 },
+  { level: 4, name: "Developer",  xp: 1000 },
+  { level: 5, name: "Pythonista", xp: 2000 },
+  { level: 6, name: "Master",     xp: 3500 },
+  { level: 7, name: "Legend",     xp: 5000 },
+];
+
+const BADGES = [
+  { id: "first_day",      name: "First Step",      emoji: "🐣", desc: "Complete Day 1" },
+  { id: "week_one",       name: "Week 1 Done",      emoji: "📅", desc: "Complete Days 1–7" },
+  { id: "halfway",        name: "Halfway There",    emoji: "🏁", desc: "Complete 15 days" },
+  { id: "all_done",       name: "Python Master",    emoji: "🏆", desc: "Complete all 30 days" },
+  { id: "streak_3",       name: "On a Roll",        emoji: "🔥", desc: "3-day streak" },
+  { id: "streak_7",       name: "Week Warrior",     emoji: "⚡", desc: "7-day streak" },
+  { id: "streak_30",      name: "Unstoppable",      emoji: "💎", desc: "30-day streak" },
+  { id: "xp_500",         name: "XP Grinder",       emoji: "💪", desc: "Earn 500 XP" },
+  { id: "xp_2000",        name: "XP Machine",       emoji: "🤖", desc: "Earn 2000 XP" },
+  { id: "exercises_all_1",name: "Day 1 Expert",     emoji: "⭐", desc: "All exercises in Day 1" },
+  { id: "quiz_ace",       name: "Quiz Ace",          emoji: "🧠", desc: "Answer 10 quizzes correctly" },
+];
+
 const state = {
   currentDay: 1,
   completed: new Set(),
   exercises: {},
   quizAnswers: {},
+  xp: 0,
+  level: 1,
+  streak: 0,
+  lastActiveDate: null,
+  badges: new Set(),
+  aiUsedDays: new Set(),
+  solutionUsed: {},
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -14,6 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
   buildPreviewGrid();
   buildSidebar();
   initLandingAnimations();
+  renderTopbarStats();
+  initAiTutorHooks();
 });
 
 // ─── PERSISTENCE ──────────────────────────────
@@ -28,6 +61,21 @@ function loadState() {
     if (e) state.exercises = JSON.parse(e);
     const q = localStorage.getItem("py30_quiz");
     if (q) state.quizAnswers = JSON.parse(q);
+    const xp = localStorage.getItem("py30_xp");
+    if (xp !== null) state.xp = parseInt(xp, 10) || 0;
+    const lv = localStorage.getItem("py30_level");
+    if (lv !== null) {
+      const parsed = parseInt(lv, 10);
+      state.level = (parsed >= 1 && parsed <= LEVELS.length) ? parsed : 1;
+    }
+    const sk = localStorage.getItem("py30_streak");
+    if (sk !== null) state.streak = parseInt(sk, 10) || 0;
+    const lad = localStorage.getItem("py30_last_active");
+    if (lad) state.lastActiveDate = lad;
+    const bd = localStorage.getItem("py30_badges");
+    if (bd) state.badges = new Set(JSON.parse(bd));
+    const ai = localStorage.getItem("py30_ai_days");
+    if (ai) state.aiUsedDays = new Set(JSON.parse(ai));
   } catch (_) {}
 }
 
@@ -35,6 +83,195 @@ function saveState() {
   localStorage.setItem("py30_completed", JSON.stringify([...state.completed]));
   localStorage.setItem("py30_exercises", JSON.stringify(state.exercises));
   localStorage.setItem("py30_quiz", JSON.stringify(state.quizAnswers));
+  localStorage.setItem("py30_xp", state.xp);
+  localStorage.setItem("py30_level", state.level);
+  localStorage.setItem("py30_streak", state.streak);
+  if (state.lastActiveDate) localStorage.setItem("py30_last_active", state.lastActiveDate);
+  localStorage.setItem("py30_badges", JSON.stringify([...state.badges]));
+  localStorage.setItem("py30_ai_days", JSON.stringify([...state.aiUsedDays]));
+}
+
+// ─── GAMIFICATION ─────────────────────────────
+function updateStreak() {
+  const d = new Date();
+  const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  if (!state.lastActiveDate) {
+    state.streak = 1;
+  } else if (state.lastActiveDate === today) {
+    return; // already active today, no change
+  } else {
+    const last = new Date(state.lastActiveDate);
+    const now = new Date(today);
+    const diffDays = Math.round((now - last) / 86400000);
+    if (diffDays === 1) {
+      state.streak += 1;
+    } else {
+      state.streak = 1;
+    }
+  }
+  state.lastActiveDate = today;
+}
+
+function checkLevel() {
+  let newLevel = 1;
+  for (const lvl of LEVELS) {
+    if (state.xp >= lvl.xp) newLevel = lvl.level;
+  }
+  if (newLevel > state.level) {
+    state.level = newLevel;
+    const lvlData = LEVELS.find(l => l.level === newLevel);
+    showToast(`🎉 Level up! You're now a <strong>${lvlData.name}</strong>`);
+  }
+}
+
+function checkBadges() {
+  const newBadges = [];
+
+  const completedCount = state.completed.size;
+  if (!state.badges.has("first_day") && state.completed.has(1)) newBadges.push("first_day");
+  if (!state.badges.has("week_one") && [1,2,3,4,5,6,7].every(d => state.completed.has(d))) newBadges.push("week_one");
+  if (!state.badges.has("halfway") && completedCount >= 15) newBadges.push("halfway");
+  if (!state.badges.has("all_done") && completedCount >= 30) newBadges.push("all_done");
+
+  if (!state.badges.has("streak_3") && state.streak >= 3) newBadges.push("streak_3");
+  if (!state.badges.has("streak_7") && state.streak >= 7) newBadges.push("streak_7");
+  if (!state.badges.has("streak_30") && state.streak >= 30) newBadges.push("streak_30");
+
+  if (!state.badges.has("xp_500") && state.xp >= 500) newBadges.push("xp_500");
+  if (!state.badges.has("xp_2000") && state.xp >= 2000) newBadges.push("xp_2000");
+
+  if (!state.badges.has("exercises_all_1")) {
+    const day1 = DAYS[0];
+    const saved = state.exercises["day_1"] || {};
+    const levels = ["level1", "level2", "level3"];
+    const allExercises = levels.flatMap(key =>
+      (day1.exercises[key] || []).map((_, i) => `${key}_${i}`)
+    );
+    if (allExercises.length > 0 && allExercises.every(id => saved[id])) newBadges.push("exercises_all_1");
+  }
+
+  if (!state.badges.has("quiz_ace")) {
+    const correctTotal = Object.values(state.quizAnswers)
+      .flatMap(day => Object.values(day))
+      .filter(a => a.correct).length;
+    if (correctTotal >= 10) newBadges.push("quiz_ace");
+  }
+
+  for (const id of newBadges) {
+    state.badges.add(id);
+    const badge = BADGES.find(b => b.id === id);
+    if (badge) showToast(`${badge.emoji} Badge unlocked: <strong>${badge.name}</strong>`);
+  }
+}
+
+function awardXP(amount) {
+  if (amount < 0) {
+    state.xp = Math.max(0, state.xp + amount);
+    renderTopbarStats();
+    saveState();
+    return;
+  }
+  state.xp += amount;
+  updateStreak();
+  checkLevel();
+  checkBadges();
+  renderTopbarStats();
+  saveState();
+}
+
+function renderTopbarStats() {
+  const lvlData = LEVELS.find(l => l.level === state.level) || LEVELS[0];
+  const nextLvl = LEVELS.find(l => l.level === state.level + 1);
+  const xpForThis = lvlData.xp;
+  const xpForNext = nextLvl ? nextLvl.xp : lvlData.xp;
+  const xpProgress = nextLvl ? Math.min(((state.xp - xpForThis) / (xpForNext - xpForThis)) * 100, 100) : 100;
+
+  const elLevel = document.getElementById("statLevel");
+  const elLevelName = document.getElementById("statLevelName");
+  const elXpFill = document.getElementById("statXpFill");
+  const elXpText = document.getElementById("statXpText");
+  const elStreak = document.getElementById("statStreak");
+  const elBadges = document.getElementById("topbarBadges");
+
+  if (elLevel) elLevel.textContent = state.level;
+  if (elLevelName) elLevelName.textContent = lvlData.name;
+  if (elXpFill) elXpFill.style.width = xpProgress + "%";
+  if (elXpText) elXpText.textContent = nextLvl ? `${state.xp - xpForThis} / ${xpForNext - xpForThis} XP` : "MAX";
+  if (elStreak) elStreak.textContent = state.streak;
+  if (elBadges) elBadges.textContent = `🏆 ${state.badges.size}`;
+}
+
+function showToast(html) {
+  const toast = document.createElement("div");
+  toast.className = "gamification-toast";
+  toast.innerHTML = html;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add("show"));
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 400);
+  }, 3000);
+}
+
+function openBadgePopup() {
+  const grid = document.getElementById("badgePopupGrid");
+  if (!grid) return;
+  grid.innerHTML = "";
+  for (const badge of BADGES) {
+    const earned = state.badges.has(badge.id);
+    const el = document.createElement("div");
+    el.className = "badge-card" + (earned ? " earned" : " locked");
+    el.innerHTML = `
+      <span class="badge-emoji">${badge.emoji}</span>
+      <span class="badge-name">${badge.name}</span>
+      <span class="badge-desc">${earned ? "Unlocked!" : badge.desc}</span>
+    `;
+    grid.appendChild(el);
+  }
+  document.getElementById("badgePopup").classList.remove("hidden");
+  document.getElementById("badgePopupOverlay").classList.remove("hidden");
+}
+
+function closeBadgePopup() {
+  document.getElementById("badgePopup").classList.add("hidden");
+  document.getElementById("badgePopupOverlay").classList.add("hidden");
+}
+
+function flagAiUsed() {
+  if (state.aiUsedDays.has(state.currentDay)) return;
+  state.aiUsedDays.add(state.currentDay);
+  saveState();
+  // Update warning banner if visible
+  const banner = document.getElementById("aiWarningBanner");
+  if (banner) banner.classList.remove("hidden");
+}
+
+function initAiTutorHooks() {
+  const origSend = window.sendTutorMessage;
+  if (origSend) {
+    window.sendTutorMessage = function() {
+      flagAiUsed();
+      return origSend.apply(this, arguments);
+    };
+  }
+  const origToggle = window.toggleTutor;
+  if (origToggle) {
+    window.toggleTutor = function() {
+      origToggle.apply(this, arguments);
+      // Show warning banner when panel opens
+      const panel = document.getElementById("tutorPanel");
+      if (panel && panel.classList.contains("open")) {
+        const banner = document.getElementById("aiWarningBanner");
+        if (banner) {
+          const used = state.aiUsedDays.has(state.currentDay);
+          banner.classList.remove("hidden");
+          banner.textContent = used
+            ? "⚠️ AI help used — this day will give 50 XP on completion."
+            : "⚠️ Asking the AI will reduce this day's XP to 50 when you complete it.";
+        }
+      }
+    };
+  }
 }
 
 // ─── LANDING PREVIEW GRID ─────────────────────
@@ -292,6 +529,12 @@ function renderExercisesTab(day) {
                 <div style="flex:1">
                   <div class="exercise-num">${level.label.replace("Level ", "L")}.${i + 1}</div>
                   <div class="exercise-text">${ex}</div>
+                  <button class="exercise-example-btn" onclick="event.stopPropagation(); toggleExerciseExample(this)">💡 Example</button>
+                  <div class="exercise-example-box hidden">
+                    <div class="exercise-example-content">
+                      Try it step by step: read the task carefully, write your code in the editor above, then run it to see if it works. If you're stuck, look at today's lesson examples for hints.
+                    </div>
+                  </div>
                 </div>
               </div>`;
             })
@@ -358,6 +601,9 @@ function renderQuiz(questions, dayNum) {
       </div>`
           : '<div class="quiz-feedback"></div>';
 
+      const solutionBtn = prev === undefined
+        ? `<button class="quiz-solution-btn" onclick="revealQuizSolution(this, ${dayNum}, ${qi}, ${q.answer})">📖 Show Solution <span class="xp-cost">-30 XP</span></button>`
+        : "";
       return `
       <div class="quiz-card">
         <div class="quiz-question">
@@ -366,6 +612,7 @@ function renderQuiz(questions, dayNum) {
         </div>
         <div class="quiz-options">${opts}</div>
         ${feedback}
+        ${solutionBtn}
       </div>`;
     })
     .join("");
@@ -417,13 +664,50 @@ function initTabIndicator() {
 }
 
 // ─── COMPLETE ─────────────────────────────────
+function allExercisesDone(dayNum) {
+  const day = DAYS[dayNum - 1];
+  if (!day || !day.exercises) return true; // no exercises = no gate
+  const exKey = `day_${dayNum}`;
+  const saved = state.exercises[exKey] || {};
+  const levels = ["level1", "level2", "level3"];
+  const allIds = levels.flatMap(key =>
+    (day.exercises[key] || []).map((_, i) => `${key}_${i}`)
+  );
+  if (allIds.length === 0) return true;
+  return allIds.every(id => !!saved[id]);
+}
+
+function showExerciseGateNotification() {
+  const existing = document.getElementById("exerciseGateNotif");
+  if (existing) return; // don't stack duplicates
+  const notif = document.createElement("div");
+  notif.id = "exerciseGateNotif";
+  notif.className = "exercise-gate-notif";
+  notif.innerHTML = `
+    <span>📝 Complete all exercises first before marking this day done!</span>
+    <button onclick="this.parentElement.remove()" class="gate-notif-close">✕</button>
+  `;
+  document.body.appendChild(notif);
+  requestAnimationFrame(() => notif.classList.add("show"));
+  setTimeout(() => {
+    notif.classList.remove("show");
+    setTimeout(() => notif.remove(), 400);
+  }, 4000);
+}
+
 function toggleComplete() {
   const n = state.currentDay;
   if (state.completed.has(n)) {
     state.completed.delete(n);
   } else {
+    if (!allExercisesDone(n)) {
+      showExerciseGateNotification();
+      return;
+    }
     state.completed.add(n);
     showCelebration(n);
+    const xpForDay = state.aiUsedDays.has(n) ? 50 : 100;
+    awardXP(xpForDay);
   }
   const done = state.completed.has(n);
   const btn = document.getElementById("completeBtn");
@@ -436,7 +720,7 @@ function toggleComplete() {
     navItem.classList.toggle("done", done);
   }
   updateProgress();
-  saveState();
+  if (!done) saveState();
   buildDayDots(n);
 }
 
@@ -463,9 +747,23 @@ function toggleExercise(el, dayKey, id) {
   const isChecked = el.classList.toggle("checked");
   el.querySelector(".exercise-checkbox").textContent = isChecked ? "✓" : "";
   if (!state.exercises[dayKey]) state.exercises[dayKey] = {};
-  if (isChecked) state.exercises[dayKey][id] = true;
-  else delete state.exercises[dayKey][id];
-  saveState();
+  if (isChecked) {
+    state.exercises[dayKey][id] = true;
+    const xpMap = { level1: 10, level2: 20, level3: 30 };
+    const levelKey = id.split("_")[0];
+    awardXP(xpMap[levelKey] || 10);
+  } else {
+    delete state.exercises[dayKey][id];
+    saveState();
+  }
+}
+
+function toggleExerciseExample(btn) {
+  const box = btn.nextElementSibling;
+  if (!box) return;
+  const isHidden = box.classList.contains("hidden");
+  box.classList.toggle("hidden", !isHidden);
+  btn.textContent = isHidden ? "💡 Hide Example" : "💡 Example";
 }
 
 // ─── QUIZ ─────────────────────────────────────
@@ -490,11 +788,53 @@ function answerQuiz(btn, dayNum, qi, chosen, correct) {
 
   const qKey = `day_${dayNum}`;
   if (!state.quizAnswers[qKey]) state.quizAnswers[qKey] = {};
+  const alreadyAnswered = !!state.quizAnswers[qKey][qi];
   state.quizAnswers[qKey][qi] = { chosen, correct: isCorrect };
-  saveState();
+  if (isCorrect && !alreadyAnswered) {
+    awardXP(15);
+  } else if (!isCorrect && !alreadyAnswered) {
+    awardXP(-10);
+    showToast("✗ Wrong answer: <strong>-10 XP</strong>");
+    saveState();
+  } else {
+    saveState();
+  }
 
   // Update score bar
   updateQuizScore(dayNum, day.quiz.length);
+}
+
+function revealQuizSolution(btn, dayNum, qi, correctAnswer) {
+  const key = `${dayNum}_${qi}`;
+  const card = btn.closest(".quiz-card");
+
+  // Apply -30 XP penalty once
+  if (!state.solutionUsed[key]) {
+    state.solutionUsed[key] = true;
+    awardXP(-30);
+    showToast("📖 Solution revealed: <strong>-30 XP</strong>");
+  }
+
+  // Disable all options and highlight correct answer
+  const optBtns = card.querySelectorAll(".quiz-opt");
+  let correctText = "";
+  optBtns.forEach((ob, i) => {
+    ob.disabled = true;
+    if (i === correctAnswer) {
+      ob.classList.add("correct");
+      correctText = ob.textContent.replace(/^[A-D]\s*/, "").trim();
+    }
+  });
+
+  // Show feedback
+  const fb = card.querySelector(".quiz-feedback");
+  if (fb) {
+    fb.className = "quiz-feedback correct show";
+    fb.innerHTML = `📖 Solution: <strong>${correctText}</strong>`;
+  }
+
+  // Hide the solution button
+  btn.style.display = "none";
 }
 
 function updateQuizScore(dayNum, total) {
