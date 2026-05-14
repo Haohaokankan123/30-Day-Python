@@ -475,15 +475,31 @@ average = total / len(scores
                     </button>
                     <div class="topbar-actions">
                         <div class="topbar-stats">
-                            <span class="topbar-level">🐍 Lv.<span id="statLevel">1</span> <span id="statLevelName">Beginner</span></span>
+                            <span class="topbar-level"
+                                >🐍 Lv.<span id="statLevel">1</span>
+                                <span id="statLevelName">Beginner</span></span
+                            >
                             <div class="topbar-xp-wrap">
                                 <div class="topbar-xp-bar">
-                                    <div class="topbar-xp-fill" id="statXpFill"></div>
+                                    <div
+                                        class="topbar-xp-fill"
+                                        id="statXpFill"
+                                    ></div>
                                 </div>
-                                <span class="topbar-xp-text" id="statXpText">0 / 200 XP</span>
+                                <span class="topbar-xp-text" id="statXpText"
+                                    >0 / 200 XP</span
+                                >
                             </div>
-                            <span class="topbar-streak">🔥 <span id="statStreak">0</span></span>
-                            <button class="topbar-badges-btn" id="topbarBadges" onclick="openBadgePopup()">🏆 0</button>
+                            <span class="topbar-streak"
+                                >🔥 <span id="statStreak">0</span></span
+                            >
+                            <button
+                                class="topbar-badges-btn"
+                                id="topbarBadges"
+                                onclick="openBadgePopup()"
+                            >
+                                🏆 0
+                            </button>
                         </div>
                         <button
                             class="topbar-icon-btn playground-topbar-btn"
@@ -627,9 +643,10 @@ average = total / len(scores
                         ✕
                     </button>
                 </header>
-                    <div class="ai-warning-banner hidden" id="aiWarningBanner">
-                        ⚠️ Asking the AI will reduce this day's XP to 50 when you complete it.
-                    </div>
+                <div class="ai-warning-banner hidden" id="aiWarningBanner">
+                    ⚠️ Asking the AI will reduce this day's XP to 50 when you
+                    complete it.
+                </div>
 
                 <!-- API Key setup screen (shown when no key saved) -->
                 <div class="tutor-key-setup" id="tutorKeySetup">
@@ -742,11 +759,17 @@ average = total / len(scores
         </div>
 
         <!-- Badge Popup -->
-        <div class="badge-popup-overlay hidden" id="badgePopupOverlay" onclick="closeBadgePopup()"></div>
+        <div
+            class="badge-popup-overlay hidden"
+            id="badgePopupOverlay"
+            onclick="closeBadgePopup()"
+        ></div>
         <div class="badge-popup hidden" id="badgePopup">
             <div class="badge-popup-header">
                 <span>Your Badges</span>
-                <button class="badge-popup-close" onclick="closeBadgePopup()">✕</button>
+                <button class="badge-popup-close" onclick="closeBadgePopup()">
+                    ✕
+                </button>
             </div>
             <div class="badge-popup-grid" id="badgePopupGrid"></div>
         </div>
