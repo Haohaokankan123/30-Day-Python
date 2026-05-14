@@ -3383,6 +3383,7 @@ button {
 .progress-popup-next:disabled {
     opacity: 0.4;
     cursor: not-allowed;
+}
 
 /* ─── GAMIFICATION TOPBAR STATS ─────────────── */
 .topbar-stats {
