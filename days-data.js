@@ -4525,10 +4525,3015 @@ for c in data["countries"]:
     ],
   },
 
+  {
+    day: 20,
+    emoji: "📦",
+    title: "Python Package Manager",
+    subtitle: "Use pip to install, manage, and share packages. Build your own module and understand the Python ecosystem.",
+    topics: ["pip install", "pip freeze", "requirements.txt", "requests", "Creating packages", "Package ecosystem"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is pip?</h2>
+      <p><strong>pip</strong> stands for <em>Preferred Installer Program</em>. It's Python's built-in tool for downloading and installing third-party packages from <strong>PyPI</strong> — the Python Package Index, a registry of over 400,000 packages.</p>
+      <div class="info-box">
+        <strong>Run pip in your terminal</strong> — not inside Python itself. These are shell commands, not Python code.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Core pip Commands</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">pip install package</div><div class="cheatsheet-desc">Download and install a package</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">pip uninstall package</div><div class="cheatsheet-desc">Remove an installed package</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">pip list</div><div class="cheatsheet-desc">Show all installed packages</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">pip show package</div><div class="cheatsheet-desc">Show version, author, location</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">pip freeze</div><div class="cheatsheet-desc">List installed packages with exact versions</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">pip install -r requirements.txt</div><div class="cheatsheet-desc">Install everything in a requirements file</div></div>
+      </div>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Install packages
+pip install numpy
+pip install pandas
+pip install requests
+
+# Save your environment
+pip freeze > requirements.txt
+
+# Recreate an environment from the file
+pip install -r requirements.txt</pre>
+
+      <div class="section-divider"></div>
+      <h2>The requests Module</h2>
+      <p>One of the most popular third-party packages. It lets you fetch data from the web — APIs, web pages, JSON feeds — in a few lines.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import requests
+
+response = requests.get('https://api.github.com')
+print(response.status_code)   # 200 = OK
+print(response.headers['content-type'])
+data = response.json()        # parse JSON automatically
+print(data)</pre>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">response.status_code</div><div class="cheatsheet-desc">HTTP status (200=OK, 404=not found, 500=server error)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">response.text</div><div class="cheatsheet-desc">Response body as a string</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">response.json()</div><div class="cheatsheet-desc">Parse JSON body into a Python dict/list</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">response.headers</div><div class="cheatsheet-desc">Response headers as a dict</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Creating Your Own Package</h2>
+      <p>A <strong>package</strong> is a folder with an <code>__init__.py</code> file. That file (even if empty) tells Python "this folder is importable".</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">mypackage/
+    __init__.py       ← marks this as a package
+    arithmetic.py     ← module inside the package
+    strings.py        ← another module</pre>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># arithmetic.py
+def add(a, b): return a + b
+def subtract(a, b): return a - b
+
+# In main.py
+from mypackage.arithmetic import add
+print(add(3, 5))   # 8</pre>
+
+      <div class="section-divider"></div>
+      <h2>The Python Ecosystem</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Data Science</div><div class="cheatsheet-desc">numpy, pandas, matplotlib, scikit-learn</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Web</div><div class="cheatsheet-desc">flask, django, fastapi, requests</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Automation</div><div class="cheatsheet-desc">selenium, playwright, pyautogui</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">APIs</div><div class="cheatsheet-desc">requests, httpx, aiohttp</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Databases</div><div class="cheatsheet-desc">sqlalchemy, pymongo, psycopg2</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">AI / ML</div><div class="cheatsheet-desc">tensorflow, pytorch, openai</div></div>
+      </div>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "pip Commands Reference",
+        desc: "Key commands you'll use in your terminal (not runnable in browser).",
+        code: `# Install a package
+# pip install requests
+
+# Check installed packages
+# pip list
+
+# Show details about a package
+# pip show requests
+
+# Save environment
+# pip freeze > requirements.txt
+
+# Recreate environment
+# pip install -r requirements.txt
+
+print("Run these in your terminal, not in Python!")
+print("pip is a terminal tool, not a Python function.")`,
+      },
+      {
+        title: "Simulating an API Response",
+        desc: "What requests.get().json() gives you — shown with a mock dict.",
+        code: `import json
+
+# This simulates what requests.get(url).json() returns
+mock_response = {
+    "status": "ok",
+    "country": "Finland",
+    "capital": "Helsinki",
+    "population": 5540720,
+    "languages": ["Finnish", "Swedish"]
+}
+
+print("Country:", mock_response["country"])
+print("Capital:", mock_response["capital"])
+print("Population:", f"{mock_response['population']:,}")
+print("Languages:", ", ".join(mock_response["languages"]))`,
+      },
+      {
+        title: "Working with JSON Data",
+        desc: "Parse and explore a JSON payload like an API would return.",
+        code: `import json
+
+raw = '''
+[
+  {"name": "numpy",   "version": "1.26.0", "category": "data"},
+  {"name": "requests","version": "2.31.0", "category": "web"},
+  {"name": "flask",   "version": "3.0.0",  "category": "web"},
+  {"name": "pandas",  "version": "2.1.0",  "category": "data"}
+]
+'''
+
+packages = json.loads(raw)
+
+web = [p for p in packages if p["category"] == "web"]
+print("Web packages:")
+for p in web:
+    print(f"  {p['name']} v{p['version']}")`,
+      },
+      {
+        title: "Building a Simple Package Structure",
+        desc: "How you'd organize a reusable package (concept demo).",
+        code: `# Imagine this is mypackage/arithmetic.py
+def add(a, b):      return a + b
+def subtract(a, b): return a - b
+def multiply(a, b): return a * b
+def divide(a, b):
+    if b == 0:
+        raise ValueError("Cannot divide by zero")
+    return a / b
+
+# And mypackage/strings.py
+def is_palindrome(s):
+    s = s.lower().replace(" ", "")
+    return s == s[::-1]
+
+# Inline demo (no folder structure needed here)
+print(add(10, 5))
+print(divide(10, 4))
+print(is_palindrome("racecar"))   # True`,
+      },
+      {
+        title: "requirements.txt Format",
+        desc: "What a real requirements file looks like.",
+        code: `# This is what pip freeze produces — exact versions pinned
+requirements = """
+requests==2.31.0
+numpy==1.26.4
+pandas==2.2.0
+flask==3.0.2
+python-dotenv==1.0.1
+""".strip()
+
+print("requirements.txt contents:")
+print(requirements)
+print()
+for line in requirements.splitlines():
+    name, version = line.split("==")
+    print(f"  {name:20s} → {version}")`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Open your terminal and run <code>pip list</code> to see what's installed. How many packages do you have?",
+        "Run <code>pip show pip</code> to see information about pip itself.",
+        "Run <code>pip freeze</code> in your terminal. What format does it use?",
+        "What command installs a package called <code>colorama</code>?",
+        "What command would you run to save all installed packages to a file?",
+        "What does the <code>__init__.py</code> file do inside a folder?",
+      ],
+      level2: [
+        "Install the <code>requests</code> library and write a script that fetches <code>https://api.github.com</code> and prints the status code.",
+        "Use <code>requests.get()</code> on a public API (e.g. <code>https://catfact.ninja/fact</code>) and print the JSON result.",
+        "Create a <code>requirements.txt</code> from your current environment using <code>pip freeze</code>.",
+        "Create a package folder called <code>mymath</code> with an <code>__init__.py</code> and an <code>arithmetic.py</code> containing <code>add</code> and <code>subtract</code> functions.",
+        "Import your <code>mymath</code> package in a <code>main.py</code> and test it.",
+        "Use <code>pip show requests</code> to find out who authored the requests library.",
+      ],
+      level3: [
+        "Fetch the countries REST API at <code>https://restcountries.com/v3.1/all</code>, parse the JSON, and print the 10 most populated countries.",
+        "Write a script that reads a <code>requirements.txt</code> and prints each package name and version in a formatted table.",
+        "Build a package <code>texttools</code> with modules for string analysis (word count, most common words) and character analysis (vowel count, palindrome check).",
+        "Create a simple CLI script that takes a URL as a command-line argument (<code>sys.argv[1]</code>) and prints the HTTP status code and response size.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What does pip stand for?",
+        opts: ["Python Install Package", "Preferred Installer Program", "Package Index Python", "Python Integration Program"],
+        answer: 1,
+        explain: "pip stands for Preferred Installer Program — it's Python's official tool for installing packages from PyPI.",
+      },
+      {
+        q: "Which command saves your installed packages to a file?",
+        opts: ["pip save", "pip export", "pip freeze > requirements.txt", "pip list --save"],
+        answer: 2,
+        explain: "pip freeze outputs all installed packages with exact versions; redirect with > to save to requirements.txt.",
+      },
+      {
+        q: "What makes a folder a Python package?",
+        opts: ["A .py file inside it", "An __init__.py file inside it", "Being named 'package'", "Having more than one module"],
+        answer: 1,
+        explain: "The presence of __init__.py (even empty) tells Python to treat the folder as an importable package.",
+      },
+      {
+        q: "What does response.json() do in the requests library?",
+        opts: ["Sends JSON to the server", "Converts the response body from JSON to a Python dict/list", "Returns the raw JSON string", "Saves JSON to a file"],
+        answer: 1,
+        explain: "response.json() parses the HTTP response body as JSON and returns the equivalent Python object (dict or list).",
+      },
+      {
+        q: "Which command installs all packages listed in requirements.txt?",
+        opts: ["pip install requirements.txt", "pip load -r requirements.txt", "pip install -r requirements.txt", "pip get requirements.txt"],
+        answer: 2,
+        explain: "The -r flag tells pip to read a requirements file and install everything listed in it.",
+      },
+    ],
+  },
+
+  {
+    day: 21,
+    emoji: "🏛️",
+    title: "Classes and Objects",
+    subtitle: "Model real-world things in code. Learn OOP with class, __init__, methods, inheritance, and more.",
+    topics: ["class & __init__", "self", "Methods", "Inheritance", "super()", "Method overriding"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is Object-Oriented Programming?</h2>
+      <p><strong>OOP</strong> is a way of organizing code around <strong>objects</strong> — bundles of data (attributes) and behavior (methods). A <strong>class</strong> is the blueprint; an <strong>object</strong> is what you create from it.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">class Person:
+    def __init__(self, name, age):
+        self.name = name     # attribute
+        self.age = age
+
+    def greet(self):         # method
+        return f"Hi, I'm {self.name}, {self.age} years old."
+
+alice = Person("Alice", 30)  # create an object
+print(alice.greet())         # Hi, I'm Alice, 30 years old.</pre>
+
+      <div class="info-box">
+        <strong>Key terms:</strong> <code>class</code> = blueprint · <code>object</code> = instance · <code>__init__</code> = constructor (runs on creation) · <code>self</code> = reference to this specific object
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>The <code>__init__</code> Constructor</h2>
+      <p><code>__init__</code> is a special method that runs automatically when you create a new object. Use it to set up the object's initial state:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">class Student:
+    def __init__(self, name, grade):
+        self.name = name
+        self.grade = grade
+        self.courses = []     # all students start with empty list
+
+    def add_course(self, course):
+        self.courses.append(course)
+
+s = Student("Bob", "A")
+s.add_course("Python")
+s.add_course("Math")
+print(s.courses)   # ['Python', 'Math']</pre>
+
+      <div class="section-divider"></div>
+      <h2>Default Parameter Values</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">class Animal:
+    def __init__(self, name, sound="..."):
+        self.name = name
+        self.sound = sound
+
+    def speak(self):
+        return f"{self.name} says {self.sound}"
+
+cat = Animal("Cat", "meow")
+fish = Animal("Fish")    # uses default
+print(cat.speak())       # Cat says meow
+print(fish.speak())      # Fish says ...</pre>
+
+      <div class="section-divider"></div>
+      <h2>Inheritance</h2>
+      <p><strong>Inheritance</strong> lets a child class reuse everything from a parent class, and add or change specific behavior. Write <code>class Child(Parent):</code> to inherit.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def info(self):
+        return f"{self.name}, age {self.age}"
+
+class Student(Person):       # inherits from Person
+    def __init__(self, name, age, student_id):
+        super().__init__(name, age)   # call parent __init__
+        self.student_id = student_id
+
+    def info(self):           # override parent method
+        return f"{super().info()} | ID: {self.student_id}"
+
+s = Student("Carol", 20, "S001")
+print(s.info())   # Carol, age 20 | ID: S001</pre>
+
+      <div class="info-box">
+        <strong><code>super()</code></strong> gives you access to the parent class. Always call <code>super().__init__()</code> in a child's constructor so the parent's setup code still runs.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Modifying Attributes via Methods</h2>
+      <p>Encapsulate state changes inside methods — don't reach into objects and set attributes directly from outside:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">class BankAccount:
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self.balance = balance
+
+    def deposit(self, amount):
+        self.balance += amount
+
+    def withdraw(self, amount):
+        if amount > self.balance:
+            raise ValueError("Insufficient funds")
+        self.balance -= amount
+
+    def __str__(self):
+        return f"{self.owner}: " + f"\${self.balance:,.2f}"
+
+acc = BankAccount("Alice", 1000)
+acc.deposit(500)
+acc.withdraw(200)
+print(acc)   # Alice: $1,300.00</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Basic Class — Person",
+        desc: "Define a class, create objects, call methods.",
+        code: `class Person:
+    def __init__(self, first, last, age):
+        self.first = first
+        self.last = last
+        self.age = age
+
+    def full_name(self):
+        return f"{self.first} {self.last}"
+
+    def describe(self):
+        return f"{self.full_name()} is {self.age} years old."
+
+p1 = Person("Alice", "Smith", 30)
+p2 = Person("Bob", "Jones", 25)
+
+print(p1.describe())
+print(p2.describe())
+print(p1.full_name())`,
+      },
+      {
+        title: "Class with Mutable Default — Student",
+        desc: "Track changing state inside an object.",
+        code: `class Student:
+    def __init__(self, name):
+        self.name = name
+        self.scores = []
+
+    def add_score(self, score):
+        self.scores.append(score)
+
+    def average(self):
+        if not self.scores:
+            return 0
+        return sum(self.scores) / len(self.scores)
+
+    def __str__(self):
+        return f"{self.name}: avg={self.average():.1f}"
+
+s = Student("Alice")
+s.add_score(85)
+s.add_score(92)
+s.add_score(78)
+print(s)`,
+      },
+      {
+        title: "Inheritance — Employee from Person",
+        desc: "Child class extends parent with extra attributes.",
+        code: `class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def info(self):
+        return f"{self.name} ({self.age})"
+
+class Employee(Person):
+    def __init__(self, name, age, company, salary):
+        super().__init__(name, age)
+        self.company = company
+        self.salary = salary
+
+    def info(self):
+        return f"{super().info()} @ {self.company}, " + f"\${self.salary:,}"
+
+e = Employee("Carol", 32, "Acme Corp", 95000)
+print(e.info())`,
+      },
+      {
+        title: "BankAccount — Encapsulation",
+        desc: "Control state through methods, not direct access.",
+        code: `class BankAccount:
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self.balance = balance
+        self.history = []
+
+    def deposit(self, amount):
+        self.balance += amount
+        self.history.append("+" + str(amount))
+
+    def withdraw(self, amount):
+        if amount > self.balance:
+            print("Insufficient funds")
+            return
+        self.balance -= amount
+        self.history.append("-" + str(amount))
+
+    def __str__(self):
+        return f"{self.owner}: " + f"\${self.balance:,.2f}"
+
+acc = BankAccount("Alice", 1000)
+acc.deposit(500)
+acc.withdraw(200)
+acc.withdraw(2000)
+print(acc)
+print("History:", acc.history)`,
+      },
+      {
+        title: "Statistics Class",
+        desc: "A class that computes stats on a list of numbers.",
+        code: `class Statistics:
+    def __init__(self, data):
+        self.data = sorted(data)
+
+    def mean(self):
+        return sum(self.data) / len(self.data)
+
+    def median(self):
+        n = len(self.data)
+        mid = n // 2
+        if n % 2 == 0:
+            return (self.data[mid-1] + self.data[mid]) / 2
+        return self.data[mid]
+
+    def mode(self):
+        from collections import Counter
+        return Counter(self.data).most_common(1)[0][0]
+
+    def std(self):
+        m = self.mean()
+        return (sum((x - m)**2 for x in self.data) / len(self.data)) ** 0.5
+
+s = Statistics([9, 3, 8, 3, 7, 5, 3, 6])
+print(f"Mean:   {s.mean():.2f}")
+print(f"Median: {s.median()}")
+print(f"Mode:   {s.mode()}")
+print(f"Std:    {s.std():.2f}")`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Create a class <code>Dog</code> with attributes <code>name</code> and <code>breed</code>, and a method <code>bark()</code> that returns <code>'Woof!'</code>.",
+        "Create a class <code>Rectangle</code> with <code>width</code> and <code>height</code>, and methods <code>area()</code> and <code>perimeter()</code>.",
+        "Create a class <code>Circle</code> with a <code>radius</code> attribute and methods <code>area()</code> and <code>circumference()</code>.",
+        "Create a class <code>Person</code> with <code>first_name</code>, <code>last_name</code>, and <code>age</code>, and a method <code>full_name()</code>.",
+        "Instantiate two <code>Person</code> objects and print their full names.",
+        "Add a <code>__str__</code> method to <code>Person</code> that returns a formatted string.",
+      ],
+      level2: [
+        "Build a <code>Student(Person)</code> class that inherits from <code>Person</code> and adds <code>student_id</code> and a <code>courses</code> list.",
+        "Add <code>add_course()</code> and <code>remove_course()</code> methods to <code>Student</code>.",
+        "Create a <code>Teacher(Person)</code> class with a <code>subject</code> attribute and an <code>info()</code> method that overrides the parent's.",
+        "Build a <code>BankAccount</code> class with <code>deposit</code>, <code>withdraw</code>, and <code>balance</code>. Raise <code>ValueError</code> on overdraft.",
+        "Add a <code>transfer(amount, other_account)</code> method to <code>BankAccount</code>.",
+        "Create a <code>Statistics</code> class that takes a list and has <code>mean()</code>, <code>median()</code>, and <code>mode()</code> methods.",
+      ],
+      level3: [
+        "Build a <code>PersonAccount</code> class with <code>incomes</code> and <code>expenses</code> lists, and methods <code>total_income()</code>, <code>total_expense()</code>, and <code>account_balance()</code>.",
+        "Create a <code>Shape</code> base class and subclasses <code>Circle</code>, <code>Rectangle</code>, <code>Triangle</code> — each with <code>area()</code> and <code>perimeter()</code>.",
+        "Build a class hierarchy: <code>Animal → Mammal → Dog</code> and <code>Animal → Bird → Parrot</code>. Each level adds attributes and overrides <code>speak()</code>.",
+        "Create a <code>Stack</code> class backed by a list with <code>push()</code>, <code>pop()</code>, <code>peek()</code>, <code>is_empty()</code>, and <code>size()</code>.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What does `__init__` do?",
+        opts: ["Destroys an object", "Runs automatically when a new object is created", "Imports a module", "Defines a class variable"],
+        answer: 1,
+        explain: "__init__ is the constructor — it runs the moment you create an instance and sets up the object's initial attributes.",
+      },
+      {
+        q: "What is `self` in a class method?",
+        opts: ["The class itself", "A reference to the specific instance the method is called on", "A global variable", "The parent class"],
+        answer: 1,
+        explain: "self refers to the current instance. It lets methods access and modify the object's own attributes.",
+      },
+      {
+        q: "How do you make a class inherit from another?",
+        opts: ["class Child extends Parent:", "class Child inherits Parent:", "class Child(Parent):", "child = Child(Parent)"],
+        answer: 2,
+        explain: "Put the parent class name in parentheses: class Child(Parent): — this is Python's inheritance syntax.",
+      },
+      {
+        q: "What does `super().__init__()` do in a child class?",
+        opts: ["Creates a new parent object", "Calls the parent class's __init__ to run its setup code", "Deletes the parent", "Imports the parent module"],
+        answer: 1,
+        explain: "super() gives access to the parent class. Calling super().__init__() ensures the parent's constructor runs and sets up inherited attributes.",
+      },
+      {
+        q: "What is an instance?",
+        opts: ["The class definition", "A specific object created from a class", "A class method", "A module import"],
+        answer: 1,
+        explain: "An instance is a concrete object created from a class blueprint. `alice = Person('Alice', 30)` creates an instance named alice.",
+      },
+    ],
+  },
+
+  {
+    day: 22,
+    emoji: "🕸️",
+    title: "Web Scraping",
+    subtitle: "Extract data from websites automatically using requests and BeautifulSoup.",
+    topics: ["requests.get()", "BeautifulSoup", "find() & find_all()", "HTML parsing", "Extracting data", "Ethics & robots.txt"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is Web Scraping?</h2>
+      <p><strong>Web scraping</strong> is automatically extracting data from websites. You fetch the HTML of a page, then parse it to pull out the information you need — prices, headlines, scores, tables, anything.</p>
+      <div class="info-box warning">
+        <strong>Always check robots.txt first.</strong> Visit <code>site.com/robots.txt</code> to see what the site allows scrapers to access. Scraping without permission can violate terms of service.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Step 1 — Fetch the Page with requests</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import requests
+
+url = "https://example.com"
+response = requests.get(url)
+
+print(response.status_code)   # 200 = success
+print(response.text[:500])    # raw HTML of the page</pre>
+
+      <div class="section-divider"></div>
+      <h2>Step 2 — Parse HTML with BeautifulSoup</h2>
+      <p><strong>BeautifulSoup</strong> turns raw HTML into a structured object you can navigate. Install it with <code>pip install beautifulsoup4</code>.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from bs4 import BeautifulSoup
+
+html = response.text
+soup = BeautifulSoup(html, 'html.parser')
+
+# Find the first h1 tag
+title = soup.find('h1')
+print(title.get_text())</pre>
+
+      <div class="section-divider"></div>
+      <h2>find() vs find_all()</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">soup.find('tag')</div><div class="cheatsheet-desc">First matching element, or None</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">soup.find_all('tag')</div><div class="cheatsheet-desc">All matching elements as a list</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">soup.find('tag', class_='name')</div><div class="cheatsheet-desc">Match by CSS class (note the underscore)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">element.get_text()</div><div class="cheatsheet-desc">Extract the visible text content</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">element['href']</div><div class="cheatsheet-desc">Read an attribute value (like a link)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">element.get('attr')</div><div class="cheatsheet-desc">Same, but returns None if missing</div></div>
+      </div>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import requests
+from bs4 import BeautifulSoup
+
+response = requests.get("https://python.org/blogs/")
+soup = BeautifulSoup(response.text, 'html.parser')
+
+# Get all links on the page
+links = soup.find_all('a')
+for link in links[:5]:
+    href = link.get('href')
+    text = link.get_text(strip=True)
+    print(f"{text} → {href}")</pre>
+
+      <div class="section-divider"></div>
+      <h2>Extracting a Table</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">table = soup.find('table')
+rows = table.find_all('tr')
+
+for row in rows:
+    cells = row.find_all(['td', 'th'])
+    values = [c.get_text(strip=True) for c in cells]
+    print(values)</pre>
+
+      <div class="section-divider"></div>
+      <h2>Full Scraping Pipeline</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">import requests
+from bs4 import BeautifulSoup
+import json
+
+url = "https://books.toscrape.com/"
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'html.parser')
+
+books = []
+for article in soup.find_all('article', class_='product_pod'):
+    title = article.find('h3').find('a')['title']
+    price = article.find('p', class_='price_color').get_text()
+    books.append({"title": title, "price": price})
+
+print(json.dumps(books[:3], indent=2))</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "BeautifulSoup with Local HTML",
+        desc: "Parse HTML without needing a network request.",
+        code: `from bs4 import BeautifulSoup
+
+html = """
+<html>
+  <body>
+    <h1>Python News</h1>
+    <ul>
+      <li class="article">Python 3.13 released</li>
+      <li class="article">NumPy hits 1.0 billion downloads</li>
+      <li class="article">PyCon 2025 dates announced</li>
+    </ul>
+    <a href="https://python.org">Python.org</a>
+  </body>
+</html>
+"""
+
+soup = BeautifulSoup(html, 'html.parser')
+
+print(soup.find('h1').get_text())
+
+articles = soup.find_all('li', class_='article')
+for a in articles:
+    print(" -", a.get_text())
+
+link = soup.find('a')
+print("Link:", link['href'])`,
+      },
+      {
+        title: "Parsing a Table from HTML",
+        desc: "Extract rows and cells from an HTML table.",
+        code: `from bs4 import BeautifulSoup
+
+html = """
+<table>
+  <tr><th>Country</th><th>Capital</th><th>Pop (M)</th></tr>
+  <tr><td>Finland</td><td>Helsinki</td><td>5.5</td></tr>
+  <tr><td>Sweden</td><td>Stockholm</td><td>10.4</td></tr>
+  <tr><td>Norway</td><td>Oslo</td><td>5.4</td></tr>
+</table>
+"""
+
+soup = BeautifulSoup(html, 'html.parser')
+rows = soup.find_all('tr')
+
+for row in rows:
+    cells = row.find_all(['th', 'td'])
+    print([c.get_text() for c in cells])`,
+      },
+      {
+        title: "Collecting All Links",
+        desc: "Find every anchor tag and extract href and text.",
+        code: `from bs4 import BeautifulSoup
+
+html = """
+<html>
+<body>
+  <nav>
+    <a href="/home">Home</a>
+    <a href="/about">About</a>
+    <a href="https://python.org">Python.org</a>
+  </nav>
+  <p>Visit <a href="https://docs.python.org">the docs</a> for more.</p>
+</body>
+</html>
+"""
+
+soup = BeautifulSoup(html, 'html.parser')
+links = soup.find_all('a')
+
+for link in links:
+    text = link.get_text(strip=True)
+    href = link.get('href', 'no href')
+    print(f"{text:12s} → {href}")`,
+      },
+      {
+        title: "Scraping Pipeline — Books (Concept)",
+        desc: "The full pattern: fetch → parse → extract → store.",
+        code: `# This shows the pattern without actually hitting the network
+# In real code you'd do: response = requests.get(url)
+
+from bs4 import BeautifulSoup
+import json
+
+# Simulated HTML (like books.toscrape.com returns)
+html = """
+<div>
+  <article class="product_pod">
+    <h3><a title="A Light in the Attic">A Light in the Attic</a></h3>
+    <p class="price_color">£51.77</p>
+  </article>
+  <article class="product_pod">
+    <h3><a title="Tipping the Velvet">Tipping the Velvet</a></h3>
+    <p class="price_color">£53.74</p>
+  </article>
+</div>
+"""
+
+soup = BeautifulSoup(html, 'html.parser')
+books = []
+for article in soup.find_all('article', class_='product_pod'):
+    title = article.find('h3').find('a')['title']
+    price = article.find('p', class_='price_color').get_text()
+    books.append({"title": title, "price": price})
+
+print(json.dumps(books, indent=2))`,
+      },
+      {
+        title: "Finding Elements by Class and Tag",
+        desc: "Use class_ to narrow your search.",
+        code: `from bs4 import BeautifulSoup
+
+html = """
+<div class="container">
+  <p class="highlight">Important message</p>
+  <p class="normal">Regular text</p>
+  <p class="highlight">Another key point</p>
+  <span class="tag">python</span>
+  <span class="tag">tutorial</span>
+</div>
+"""
+
+soup = BeautifulSoup(html, 'html.parser')
+
+highlights = soup.find_all('p', class_='highlight')
+for h in highlights:
+    print("Highlight:", h.get_text())
+
+tags = soup.find_all('span', class_='tag')
+print("Tags:", [t.get_text() for t in tags])`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Create a BeautifulSoup object from a hand-written HTML string and extract the <code>&lt;h1&gt;</code> text.",
+        "Use <code>find_all('p')</code> on a local HTML string and print each paragraph.",
+        "Extract the <code>href</code> attribute from all <code>&lt;a&gt;</code> tags in an HTML string.",
+        "Use <code>find('table')</code> to locate a table and print its raw HTML.",
+        "Use <code>get_text(strip=True)</code> to extract clean text from a tag.",
+        "What HTTP status code means 'success'? What does 404 mean?",
+      ],
+      level2: [
+        "Scrape <code>https://books.toscrape.com/</code> (a safe practice site) and list the first 10 book titles and prices.",
+        "Scrape <code>https://quotes.toscrape.com/</code> and print 5 quotes with their authors.",
+        "Parse an HTML table from a web page into a list of dicts, one per row.",
+        "Collect all unique domain names from links on a web page.",
+        "Extract all image <code>src</code> URLs from a page.",
+        "Save scraped data to a JSON file using <code>json.dump()</code>.",
+      ],
+      level3: [
+        "Scrape the Wikipedia table of U.S. Presidents and convert it to a list of dicts with name, term, and party.",
+        "Scrape multiple pages of a paginated site (e.g. books.toscrape.com pages 1-5) and aggregate results.",
+        "Write a scraper that checks a product price across multiple pages and alerts (prints) when it drops below a threshold.",
+        "Convert a scraped dataset to CSV using the <code>csv</code> module.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What does `requests.get(url)` return?",
+        opts: ["The HTML as a string", "A Response object with status_code, text, json() etc.", "A BeautifulSoup object", "A dictionary of the page content"],
+        answer: 1,
+        explain: "requests.get() returns a Response object. Access .text for HTML, .json() for JSON data, and .status_code for HTTP status.",
+      },
+      {
+        q: "What is the difference between find() and find_all()?",
+        opts: ["find() is faster", "find() returns the first match; find_all() returns a list of all matches", "find_all() only works on tables", "No difference"],
+        answer: 1,
+        explain: "find() returns the first matching tag (or None). find_all() returns a list of every matching tag.",
+      },
+      {
+        q: "Why do you use `class_` (with underscore) in BeautifulSoup instead of `class`?",
+        opts: ["It's faster", "class is a reserved keyword in Python — the underscore avoids the conflict", "class_ searches more tags", "It's case-insensitive"],
+        answer: 1,
+        explain: "class is a Python keyword (used to define classes), so BeautifulSoup uses class_ as the parameter name to avoid a syntax conflict.",
+      },
+      {
+        q: "What should you check before scraping a website?",
+        opts: ["The page's font size", "The robots.txt file and terms of service", "Whether the site uses Python", "The server's location"],
+        answer: 1,
+        explain: "robots.txt (e.g. site.com/robots.txt) tells crawlers what is allowed. Always check it and the terms of service before scraping.",
+      },
+      {
+        q: "What does `element.get_text(strip=True)` do?",
+        opts: ["Deletes the element", "Returns the visible text content with leading/trailing whitespace removed", "Returns the HTML of the element", "Finds the next sibling"],
+        answer: 1,
+        explain: "get_text() extracts only the visible text (no HTML tags). strip=True removes leading and trailing whitespace.",
+      },
+    ],
+  },
+
+  {
+    day: 23,
+    emoji: "🔒",
+    title: "Virtual Environment",
+    subtitle: "Keep projects isolated. Create clean environments so packages don't conflict between projects.",
+    topics: ["Why venv?", "virtualenv", "Creating & activating", "pip inside venv", "deactivate", "pipenv"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>The Problem — Why Virtual Environments?</h2>
+      <p>Imagine Project A needs <code>flask==2.0</code> and Project B needs <code>flask==3.0</code>. If you install both globally, one will overwrite the other and one project will break.</p>
+      <p>A <strong>virtual environment</strong> is an isolated Python installation for each project — its own packages, its own versions, completely separate from everything else.</p>
+      <div class="info-box">
+        <strong>Rule of thumb:</strong> Always use a virtual environment for every project. It takes 10 seconds to set up and saves hours of debugging version conflicts.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Creating a Virtual Environment</h2>
+      <p>Python 3 ships with the <code>venv</code> module built in:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Create a virtual environment in a folder called 'venv'
+python -m venv venv
+
+# Or on some systems:
+python3 -m venv venv</pre>
+
+      <div class="section-divider"></div>
+      <h2>Activating and Deactivating</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Mac / Linux</div><div class="cheatsheet-desc">source venv/bin/activate</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Windows (PowerShell)</div><div class="cheatsheet-desc">venv\\Scripts\\activate</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Windows (Git Bash)</div><div class="cheatsheet-desc">source venv/Scripts/activate</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Deactivate (any OS)</div><div class="cheatsheet-desc">deactivate</div></div>
+      </div>
+      <p>Once activated, your terminal prompt shows <code>(venv)</code> — everything you <code>pip install</code> now goes into that environment only.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">(venv) $ pip install flask
+(venv) $ pip install requests
+(venv) $ pip freeze > requirements.txt
+(venv) $ deactivate
+$   # back to global Python</pre>
+
+      <div class="section-divider"></div>
+      <h2>The Full Workflow</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto"># 1. Create project folder
+mkdir my_project && cd my_project
+
+# 2. Create virtual environment
+python -m venv venv
+
+# 3. Activate it
+source venv/bin/activate     # Mac/Linux
+
+# 4. Install what you need
+pip install flask requests
+
+# 5. Work on your project...
+
+# 6. Save dependencies
+pip freeze > requirements.txt
+
+# 7. Deactivate when done
+deactivate
+
+# Anyone else clones your project and runs:
+# pip install -r requirements.txt</pre>
+
+      <div class="section-divider"></div>
+      <h2>What to Add to .gitignore</h2>
+      <p>Never commit your <code>venv/</code> folder to git — it's huge and system-specific. Commit <code>requirements.txt</code> instead:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto"># .gitignore
+venv/
+__pycache__/
+*.pyc
+.env</pre>
+
+      <div class="section-divider"></div>
+      <h2>Alternative: pipenv</h2>
+      <p><strong>pipenv</strong> combines pip and venv into one tool, managing a <code>Pipfile</code> automatically:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">pip install pipenv       # install once
+
+pipenv install flask     # creates venv + installs
+pipenv shell             # activate the shell
+pipenv run python app.py # run without activating</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "venv Workflow Reference",
+        desc: "Complete virtual environment setup — run in terminal.",
+        code: `# === Run these in your terminal (not Python) ===
+
+# Step 1: Create the environment
+# python -m venv venv
+
+# Step 2: Activate (Mac/Linux)
+# source venv/bin/activate
+
+# Step 2: Activate (Windows)
+# venv\\Scripts\\activate
+
+# Step 3: Install packages
+# pip install requests flask
+
+# Step 4: Save dependencies
+# pip freeze > requirements.txt
+
+# Step 5: Deactivate
+# deactivate
+
+print("Virtual environments keep projects clean and isolated!")
+print("One venv per project — always.")`,
+      },
+      {
+        title: "Checking Your Python Environment",
+        desc: "See which Python and pip you're using right now.",
+        code: `import sys
+import os
+
+print("Python version:", sys.version)
+print("Python executable:", sys.executable)
+print()
+
+# Check if we're in a virtual environment
+in_venv = hasattr(sys, 'real_prefix') or (
+    hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix
+)
+
+if in_venv:
+    print("Running inside a virtual environment")
+    print("venv path:", sys.prefix)
+else:
+    print("Running in global Python")
+    print("Consider creating a venv for your project!")`,
+      },
+      {
+        title: "requirements.txt — Read and Parse",
+        desc: "Parse a requirements file programmatically.",
+        code: `requirements_content = """
+flask==3.0.2
+requests==2.31.0
+python-dotenv==1.0.1
+beautifulsoup4==4.12.3
+numpy==1.26.4
+pandas==2.2.0
+""".strip()
+
+packages = []
+for line in requirements_content.splitlines():
+    if line and not line.startswith('#'):
+        if '==' in line:
+            name, version = line.split('==')
+            packages.append({'name': name, 'version': version})
+
+print(f"{'Package':<20} {'Version'}")
+print("-" * 30)
+for p in packages:
+    print(f"{p['name']:<20} {p['version']}")`,
+      },
+      {
+        title: "Project Structure Best Practice",
+        desc: "The standard layout for a Python project.",
+        code: `structure = """
+my_project/
+├── venv/               ← virtual environment (NOT committed to git)
+├── src/
+│   ├── __init__.py
+│   └── main.py
+├── tests/
+│   └── test_main.py
+├── .gitignore          ← includes venv/ and __pycache__/
+├── requirements.txt    ← committed to git
+└── README.md
+"""
+
+gitignore_content = """
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.DS_Store
+"""
+
+print("Standard project layout:")
+print(structure)
+print(".gitignore should contain:")
+print(gitignore_content)`,
+      },
+      {
+        title: "Simulating a Dependency Conflict",
+        desc: "Why venvs matter — version conflicts illustrated.",
+        code: `# Illustrate why isolated environments matter
+
+project_a_needs = {"flask": "2.0.0", "requests": "2.25.0"}
+project_b_needs = {"flask": "3.0.2", "requests": "2.31.0"}
+
+print("Without virtual environments:")
+print("Installing Project A's packages globally...")
+global_packages = dict(project_a_needs)
+print("Global packages:", global_packages)
+
+print()
+print("Now installing Project B's packages...")
+for pkg, ver in project_b_needs.items():
+    if pkg in global_packages and global_packages[pkg] != ver:
+        print(f"  CONFLICT: {pkg} {global_packages[pkg]} → overwritten by {ver}")
+    global_packages[pkg] = ver
+
+print()
+print("Project A now broken — it needed flask 2.0.0 but got", global_packages["flask"])
+print()
+print("With virtual environments: each project keeps its own packages.")`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Create a virtual environment called <code>venv</code> in a new project folder.",
+        "Activate the virtual environment and run <code>pip list</code> — what packages are there?",
+        "Install <code>requests</code> inside the venv and verify with <code>pip show requests</code>.",
+        "Run <code>pip freeze > requirements.txt</code> and open the file to see the output.",
+        "Deactivate the virtual environment.",
+        "Add <code>venv/</code> and <code>__pycache__/</code> to a <code>.gitignore</code> file.",
+      ],
+      level2: [
+        "Create two separate project folders, each with their own venv, and install different versions of a package in each.",
+        "Write a Python script that checks whether it's running inside a virtual environment.",
+        "Clone a project that has a <code>requirements.txt</code> and recreate its environment from scratch.",
+        "Use <code>pip install pipenv</code> and create a new project with <code>pipenv install flask</code>.",
+        "Explain the difference between <code>pip freeze</code> and <code>pip list</code> in your own words.",
+        "Create a project template script that automatically creates a venv and installs from a requirements list.",
+      ],
+      level3: [
+        "Write a shell script (or Python script using <code>subprocess</code>) that automates the full project setup: create folder, create venv, install from requirements.txt.",
+        "Research <code>poetry</code> as an alternative to pip+venv. How does <code>pyproject.toml</code> compare to <code>requirements.txt</code>?",
+        "Set up a virtual environment for a Flask project and a separate one for a data science project. Document the difference in their dependencies.",
+        "Write a script that reads two requirements files and prints the packages that differ between them.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "Why do you use a virtual environment?",
+        opts: ["To make Python run faster", "To isolate project dependencies so packages don't conflict between projects", "To access the internet", "To compile Python to bytecode"],
+        answer: 1,
+        explain: "Virtual environments keep each project's packages isolated — Project A can use flask 2.0 while Project B uses flask 3.0 without conflicts.",
+      },
+      {
+        q: "Which command creates a virtual environment called 'venv'?",
+        opts: ["venv create venv", "python -m venv venv", "pip create venv", "virtualenv --new venv"],
+        answer: 1,
+        explain: "python -m venv venv uses the built-in venv module to create an isolated environment in a folder called 'venv'.",
+      },
+      {
+        q: "How do you activate a virtual environment on Mac/Linux?",
+        opts: ["activate venv", "venv activate", "source venv/bin/activate", "python venv/activate"],
+        answer: 2,
+        explain: "On Mac/Linux, use: source venv/bin/activate. On Windows PowerShell: venv\\Scripts\\activate.",
+      },
+      {
+        q: "Should you commit the venv/ folder to git?",
+        opts: ["Yes, always", "No — add it to .gitignore and commit requirements.txt instead", "Only on Windows", "Only if it's small"],
+        answer: 1,
+        explain: "The venv/ folder is large and system-specific. Commit requirements.txt so others can recreate the environment with pip install -r requirements.txt.",
+      },
+      {
+        q: "How do you leave a virtual environment?",
+        opts: ["exit", "close", "deactivate", "quit"],
+        answer: 2,
+        explain: "Type 'deactivate' in the terminal to leave the virtual environment and return to the global Python.",
+      },
+    ],
+  },
+
+  {
+    day: 24,
+    emoji: "📊",
+    title: "Statistics",
+    subtitle: "Analyze data with Python's statistics module and NumPy. Work with arrays, distributions, and linear algebra.",
+    topics: ["statistics module", "numpy arrays", "Array math", "Statistical functions", "Random arrays", "Linear algebra"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>The statistics Module</h2>
+      <p>Python's built-in <code>statistics</code> module handles common statistical calculations without any extra install:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from statistics import mean, median, mode, stdev, variance
+
+data = [2, 3, 5, 7, 11, 13, 5, 7, 5]
+print(mean(data))      # 6.44
+print(median(data))    # 5
+print(mode(data))      # 5
+print(stdev(data))     # 3.5</pre>
+
+      <div class="section-divider"></div>
+      <h2>NumPy — Fast Array Computing</h2>
+      <p><strong>NumPy</strong> is the foundation of Python's data science ecosystem. It provides fast multi-dimensional arrays and math operations that work on entire arrays at once — no loops needed.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import numpy as np
+
+arr = np.array([1, 2, 3, 4, 5])
+print(arr * 2)        # [2 4 6 8 10] — no loop needed!
+print(arr ** 2)       # [1 4 9 16 25]
+print(arr.mean())     # 3.0
+print(arr.sum())      # 15</pre>
+
+      <div class="section-divider"></div>
+      <h2>Creating Arrays</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">np.array([1,2,3])</div><div class="cheatsheet-desc">From a Python list</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">np.zeros((3, 3))</div><div class="cheatsheet-desc">3×3 array of zeros</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">np.ones((2, 4))</div><div class="cheatsheet-desc">2×4 array of ones</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">np.arange(0, 10, 2)</div><div class="cheatsheet-desc">0,2,4,6,8 (like range but for arrays)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">np.linspace(0, 1, 5)</div><div class="cheatsheet-desc">5 evenly spaced values between 0 and 1</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">np.random.randint(0,10,(3,3))</div><div class="cheatsheet-desc">3×3 of random ints</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Array Properties and Slicing</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import numpy as np
+
+m = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+print(m.shape)   # (3, 3)
+print(m.dtype)   # int64
+print(m.size)    # 9
+
+# Slicing — same syntax as Python lists but works on 2D
+print(m[0])       # first row: [1 2 3]
+print(m[:, 1])    # second column: [2 5 8]
+print(m[1:, 1:])  # bottom-right 2x2</pre>
+
+      <div class="section-divider"></div>
+      <h2>Statistical Functions</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">np.min() / np.max()</div><div class="cheatsheet-desc">Minimum / maximum value</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">np.mean()</div><div class="cheatsheet-desc">Average</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">np.median()</div><div class="cheatsheet-desc">Middle value</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">np.std()</div><div class="cheatsheet-desc">Standard deviation</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">np.sum()</div><div class="cheatsheet-desc">Sum of all elements</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">np.cumsum()</div><div class="cheatsheet-desc">Cumulative sum</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Linear Algebra</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import numpy as np
+
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+
+print(np.dot(A, B))            # matrix multiplication
+print(np.linalg.det(A))        # determinant: -2.0
+print(A.T)                     # transpose</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "statistics Module",
+        desc: "Built-in stats — no install needed.",
+        code: `from statistics import mean, median, mode, stdev, variance
+
+scores = [85, 92, 78, 95, 88, 92, 76, 92, 100, 84]
+
+print(f"Mean:     {mean(scores):.1f}")
+print(f"Median:   {median(scores)}")
+print(f"Mode:     {mode(scores)}")
+print(f"Std Dev:  {stdev(scores):.2f}")
+print(f"Variance: {variance(scores):.2f}")
+print(f"Min:      {min(scores)}")
+print(f"Max:      {max(scores)}")`,
+      },
+      {
+        title: "NumPy Array Basics",
+        desc: "Create arrays and do math on all elements at once.",
+        code: `import numpy as np
+
+arr = np.array([1, 2, 3, 4, 5])
+print("Array:    ", arr)
+print("Times 2:  ", arr * 2)
+print("Squared:  ", arr ** 2)
+print("Sum:      ", arr.sum())
+print("Mean:     ", arr.mean())
+print("Shape:    ", arr.shape)
+print("Dtype:    ", arr.dtype)`,
+      },
+      {
+        title: "2D Arrays and Slicing",
+        desc: "Multi-dimensional arrays and how to index them.",
+        code: `import numpy as np
+
+m = np.array([[1, 2, 3],
+              [4, 5, 6],
+              [7, 8, 9]])
+
+print("Full matrix:")
+print(m)
+print("Row 0:    ", m[0])
+print("Col 1:    ", m[:, 1])
+print("Bottom-right 2x2:")
+print(m[1:, 1:])
+print("Shape:", m.shape, "  Size:", m.size)`,
+      },
+      {
+        title: "Statistical Functions on Arrays",
+        desc: "Apply stats to the whole array in one call.",
+        code: `import numpy as np
+
+data = np.array([14, 18, 11, 13, 6, 8, 2, 14, 3, 2, 14, 3, 3, 15, 11])
+
+print(f"Count:  {data.size}")
+print(f"Min:    {data.min()}")
+print(f"Max:    {data.max()}")
+print(f"Mean:   {data.mean():.2f}")
+print(f"Median: {np.median(data)}")
+print(f"Std:    {data.std():.2f}")
+print(f"Sum:    {data.sum()}")`,
+      },
+      {
+        title: "Creating Special Arrays",
+        desc: "zeros, ones, arange, linspace, random.",
+        code: `import numpy as np
+
+print("Zeros 3x3:")
+print(np.zeros((3, 3)))
+
+print("Ones 2x4:")
+print(np.ones((2, 4)))
+
+print("arange(0, 20, 3):", np.arange(0, 20, 3))
+
+print("linspace(0, 1, 6):", np.linspace(0, 1, 6))
+
+print("Random 3x3 (0-9):")
+print(np.random.randint(0, 10, (3, 3)))`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Use the <code>statistics</code> module to find the mean, median, and mode of <code>[4, 5, 6, 6, 7, 8, 8, 8, 9]</code>.",
+        "Create a NumPy array from the list <code>[10, 20, 30, 40, 50]</code> and multiply every element by 3.",
+        "Create a <code>np.zeros((3, 4))</code> array and print its shape.",
+        "Use <code>np.arange(1, 11)</code> to create an array of 1 through 10.",
+        "Use <code>np.linspace(0, 100, 5)</code> and print the result.",
+        "Print the <code>.mean()</code> and <code>.std()</code> of <code>[3, 7, 2, 8, 1, 9, 4, 6]</code> using NumPy.",
+      ],
+      level2: [
+        "Create a random 5×5 integer array and find the min, max, and mean of each row.",
+        "Create two 2×2 matrices and compute their dot product with <code>np.dot()</code>.",
+        "Use <code>np.reshape()</code> to convert a 1D array of 12 elements into a 3×4 matrix.",
+        "Use <code>np.hstack()</code> and <code>np.vstack()</code> to combine two arrays.",
+        "Compute the cumulative sum of <code>[1, 2, 3, 4, 5]</code> using <code>np.cumsum()</code>.",
+        "Generate 1000 random numbers from a normal distribution and compute their mean and std.",
+      ],
+      level3: [
+        "Implement a <code>Statistics</code> class (no external libraries) with methods: <code>mean</code>, <code>median</code>, <code>mode</code>, <code>std</code>, <code>variance</code>, <code>percentile(p)</code>.",
+        "Use NumPy to solve a system of linear equations Ax = b using <code>np.linalg.solve()</code>.",
+        "Generate a 100×100 random matrix, compute its transpose, and verify that <code>A @ A.T</code> is symmetric.",
+        "Simulate rolling two dice 10,000 times with NumPy and plot the frequency distribution of sums (describe what the histogram would look like).",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What does `np.array([1,2,3]) * 2` produce?",
+        opts: ["[[1,2,3],[1,2,3]]", "[1,2,3,1,2,3]", "[2,4,6]", "An error"],
+        answer: 2,
+        explain: "NumPy applies the operation element-wise to the entire array — multiplying each element by 2 gives [2,4,6].",
+      },
+      {
+        q: "What is the shape of np.zeros((3, 4))?",
+        opts: ["(4, 3)", "(12,)", "(3, 4)", "(7,)"],
+        answer: 2,
+        explain: "np.zeros((3, 4)) creates a 2D array with 3 rows and 4 columns — shape (3, 4).",
+      },
+      {
+        q: "How do you get the second column of a 2D NumPy array m?",
+        opts: ["m[1]", "m[:, 1]", "m[1, :]", "m.col(1)"],
+        answer: 1,
+        explain: "m[:, 1] means: all rows (:), column index 1. m[1] would be the second row.",
+      },
+      {
+        q: "Which module do you import for mean/median/mode without pip installing anything?",
+        opts: ["numpy", "pandas", "statistics", "math"],
+        answer: 2,
+        explain: "The statistics module is part of Python's standard library — no install needed.",
+      },
+      {
+        q: "What does np.linspace(0, 1, 5) return?",
+        opts: ["[0, 0.25, 0.5, 0.75, 1.0]", "[0, 1, 2, 3, 4]", "[0.2, 0.4, 0.6, 0.8, 1.0]", "[0, 1]"],
+        answer: 0,
+        explain: "np.linspace(start, stop, num) gives num evenly spaced values from start to stop inclusive.",
+      },
+    ],
+  },
+
+  {
+    day: 25,
+    emoji: "🐼",
+    title: "Pandas",
+    subtitle: "The go-to library for data analysis. Work with DataFrames, filter rows, read CSVs, and explore datasets.",
+    topics: ["Series", "DataFrame", "read_csv()", "head() & tail()", "Boolean filtering", "describe() & info()"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is Pandas?</h2>
+      <p><strong>Pandas</strong> is Python's most important data analysis library. It gives you two core objects: <code>Series</code> (one column) and <code>DataFrame</code> (a table). Install with <code>pip install pandas</code>.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import pandas as pd</pre>
+
+      <div class="section-divider"></div>
+      <h2>Series — One Column</h2>
+      <p>A <code>Series</code> is like a labeled list. Each value has an <strong>index</strong>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import pandas as pd
+
+s = pd.Series([85, 92, 78, 95], index=['Alice','Bob','Carol','Dave'])
+print(s)
+# Alice    85
+# Bob      92
+# Carol    78
+# Dave     95
+
+print(s['Alice'])   # 85
+print(s.mean())     # 87.5</pre>
+
+      <div class="section-divider"></div>
+      <h2>DataFrame — A Table</h2>
+      <p>A <code>DataFrame</code> is a 2D table with labeled rows and columns — like an Excel sheet:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import pandas as pd
+
+data = {
+    'name': ['Alice', 'Bob', 'Carol'],
+    'age':  [30, 25, 35],
+    'city': ['Helsinki', 'Stockholm', 'Oslo']
+}
+
+df = pd.DataFrame(data)
+print(df)
+#     name  age       city
+# 0  Alice   30   Helsinki
+# 1    Bob   25  Stockholm
+# 2  Carol   35       Oslo</pre>
+
+      <div class="section-divider"></div>
+      <h2>Exploring a DataFrame</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">df.head(n)</div><div class="cheatsheet-desc">First n rows (default 5)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">df.tail(n)</div><div class="cheatsheet-desc">Last n rows</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">df.shape</div><div class="cheatsheet-desc">Tuple: (rows, columns)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">df.columns</div><div class="cheatsheet-desc">List of column names</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">df.describe()</div><div class="cheatsheet-desc">Stats summary for numeric columns</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">df.info()</div><div class="cheatsheet-desc">Data types and null counts</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Reading a CSV File</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">df = pd.read_csv('data.csv')
+print(df.head())
+print(df.shape)</pre>
+
+      <div class="section-divider"></div>
+      <h2>Boolean Filtering</h2>
+      <p>Filter rows using conditions — like SQL <code>WHERE</code>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import pandas as pd
+
+data = {'name':['Alice','Bob','Carol','Dave'], 'age':[30,25,35,28]}
+df = pd.DataFrame(data)
+
+over_30 = df[df['age'] >= 30]
+print(over_30)
+
+# Filter with string contains
+# python_titles = df[df['title'].str.contains('python', case=False)]</pre>
+
+      <div class="section-divider"></div>
+      <h2>Adding and Modifying Columns</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">df['age_in_months'] = df['age'] * 12
+df['name'] = df['name'].str.upper()
+print(df)</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Creating a Series and DataFrame",
+        desc: "The two core Pandas data structures.",
+        code: `import pandas as pd
+
+# Series
+s = pd.Series([100, 200, 300, 400], index=['Q1','Q2','Q3','Q4'])
+print("Series:")
+print(s)
+print(f"Mean: {s.mean()}, Total: {s.sum()}")
+
+# DataFrame from dict
+data = {
+    'country': ['Finland', 'Sweden', 'Norway', 'Denmark'],
+    'population': [5540000, 10400000, 5380000, 5900000],
+    'area_km2': [338440, 450295, 323802, 42933]
+}
+df = pd.DataFrame(data)
+print("\\nDataFrame:")
+print(df)`,
+      },
+      {
+        title: "Exploring a DataFrame",
+        desc: "head, tail, shape, describe, columns.",
+        code: `import pandas as pd
+
+data = {
+    'name': ['Alice','Bob','Carol','Dave','Eve'],
+    'score': [88, 72, 95, 63, 91],
+    'grade': ['B','C','A','D','A'],
+    'passed': [True, True, True, False, True]
+}
+df = pd.DataFrame(data)
+
+print("First 3 rows:")
+print(df.head(3))
+print("\\nShape:", df.shape)
+print("Columns:", list(df.columns))
+print("\\nNumeric summary:")
+print(df.describe())`,
+      },
+      {
+        title: "Boolean Filtering",
+        desc: "Select rows that match a condition.",
+        code: `import pandas as pd
+
+data = {
+    'name': ['Alice','Bob','Carol','Dave','Eve','Frank'],
+    'score': [88, 72, 95, 63, 91, 55],
+    'passed': [True, True, True, False, True, False]
+}
+df = pd.DataFrame(data)
+
+high_scorers = df[df['score'] >= 88]
+print("High scorers (>=88):")
+print(high_scorers)
+
+failed = df[df['passed'] == False]
+print("\\nFailed:")
+print(failed[['name','score']])`,
+      },
+      {
+        title: "Adding Columns and Type Conversion",
+        desc: "Transform and extend a DataFrame.",
+        code: `import pandas as pd
+
+df = pd.DataFrame({
+    'name': ['alice', 'bob', 'carol'],
+    'price': ['10.50', '25.99', '7.75'],
+    'qty': [3, 1, 5]
+})
+
+# Convert string to float
+df['price'] = df['price'].astype(float)
+
+# Add calculated column
+df['total'] = df['price'] * df['qty']
+
+# Capitalize names
+df['name'] = df['name'].str.title()
+
+print(df)
+print("Grand total: " + str(round(df["total"].sum(), 2)))`,
+      },
+      {
+        title: "Reading CSV with StringIO (in-browser safe)",
+        desc: "Simulate reading a CSV file without disk access.",
+        code: `import pandas as pd
+from io import StringIO
+
+csv_data = """title,score,votes
+The Shawshank Redemption,9.3,2700000
+The Godfather,9.2,1800000
+The Dark Knight,9.0,2600000
+Pulp Fiction,8.9,2000000
+Forrest Gump,8.8,2100000
+"""
+
+df = pd.read_csv(StringIO(csv_data))
+print(df)
+print("\\nTop 3 by score:")
+print(df.nlargest(3, 'score')[['title','score']])`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Create a <code>pd.Series</code> of 5 countries and their populations.",
+        "Create a <code>pd.DataFrame</code> from a dict with columns <code>name</code>, <code>age</code>, <code>city</code>.",
+        "Print the first 3 rows of a DataFrame with <code>df.head(3)</code>.",
+        "Print the shape, column names, and dtypes of a DataFrame.",
+        "Use <code>df.describe()</code> on a DataFrame with numeric columns.",
+        "Filter rows where <code>age > 30</code> using boolean indexing.",
+      ],
+      level2: [
+        "Read a CSV file with <code>pd.read_csv()</code> and print the first 5 rows and shape.",
+        "Filter a DataFrame to show only rows where a column contains the word <code>'python'</code> (case-insensitive).",
+        "Add a new column <code>total = price * quantity</code> to an existing DataFrame.",
+        "Convert a column from string to float using <code>.astype(float)</code>.",
+        "Sort a DataFrame by a numeric column descending using <code>.sort_values()</code>.",
+        "Extract only the title column as a <code>Series</code> and count unique values.",
+      ],
+      level3: [
+        "Read the Hacker News CSV, filter for titles containing <code>'python'</code> or <code>'Python'</code>, and display the top 10 by score.",
+        "Group a DataFrame by a category column and compute the mean of a numeric column per group using <code>.groupby()</code>.",
+        "Read a CSV of countries, find the 10 most populated, and calculate the percentage of world population each represents.",
+        "Merge two DataFrames on a shared key column using <code>pd.merge()</code>.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What is the difference between a Series and a DataFrame?",
+        opts: ["No difference", "Series is 1D (one column); DataFrame is 2D (a table)", "DataFrame is faster", "Series can only hold strings"],
+        answer: 1,
+        explain: "A Series is a labeled 1D array (like one column). A DataFrame is a 2D table of multiple Series sharing the same index.",
+      },
+      {
+        q: "How do you read a CSV file into a DataFrame?",
+        opts: ["pd.open('file.csv')", "pd.read_csv('file.csv')", "pd.load('file.csv')", "pd.DataFrame.from_csv()"],
+        answer: 1,
+        explain: "pd.read_csv('file.csv') reads a CSV file and returns a DataFrame.",
+      },
+      {
+        q: "What does df[df['age'] > 30] do?",
+        opts: ["Selects the age column", "Filters rows where age is greater than 30", "Deletes rows where age > 30", "Returns a count"],
+        answer: 1,
+        explain: "df['age'] > 30 creates a boolean mask, and df[mask] returns only the rows where the condition is True.",
+      },
+      {
+        q: "What does df.shape return?",
+        opts: ["The column names", "A tuple of (number of rows, number of columns)", "The data types", "The index"],
+        answer: 1,
+        explain: "df.shape returns a tuple (rows, columns) — e.g. (100, 5) for a 100-row, 5-column DataFrame.",
+      },
+      {
+        q: "What does df.describe() show?",
+        opts: ["The first 5 rows", "The last 5 rows", "Statistical summary: count, mean, std, min, max, quartiles for numeric columns", "The column data types"],
+        answer: 2,
+        explain: "describe() gives a statistical summary of all numeric columns: count, mean, standard deviation, min, quartiles, and max.",
+      },
+    ],
+  },
+
+  {
+    day: 26,
+    emoji: "🌐",
+    title: "Python Web (Flask)",
+    subtitle: "Build web applications with Flask. Create routes, render HTML templates, handle forms, and serve a web app.",
+    topics: ["Flask setup", "@app.route()", "render_template()", "Jinja2 templates", "Forms & POST", "url_for()"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is Flask?</h2>
+      <p><strong>Flask</strong> is a lightweight Python web framework. You write Python functions, decorate them with <code>@app.route()</code>, and Flask turns them into web pages. Install with <code>pip install flask</code>.</p>
+      <div class="info-box">
+        <strong>Note:</strong> Flask runs as a local server — code in this day won't run in the browser playground. Run it in your terminal with <code>python app.py</code>.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Minimal Flask App</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return '&lt;h1&gt;Hello, World!&lt;/h1&gt;'
+
+@app.route('/about')
+def about():
+    return '&lt;p&gt;This is my Python web app.&lt;/p&gt;'
+
+if __name__ == '__main__':
+    app.run(debug=True)</pre>
+      <p>Run it: <code>python app.py</code> → open <code>http://localhost:5000</code></p>
+
+      <div class="section-divider"></div>
+      <h2>HTML Templates with Jinja2</h2>
+      <p>Return full HTML files from a <code>templates/</code> folder using <code>render_template()</code>. Jinja2 lets you inject Python variables into HTML:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from flask import Flask, render_template
+app = Flask(__name__)
+
+@app.route('/user/&lt;name&gt;')
+def user(name):
+    return render_template('user.html', username=name)</pre>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">&lt;!-- templates/user.html --&gt;
+&lt;h1&gt;Hello, {{ username }}!&lt;/h1&gt;
+
+{% for item in items %}
+  &lt;li&gt;{{ item }}&lt;/li&gt;
+{% endfor %}
+
+{% if user_logged_in %}
+  &lt;p&gt;Welcome back!&lt;/p&gt;
+{% endif %}</pre>
+
+      <div class="section-divider"></div>
+      <h2>Jinja2 Syntax Cheatsheet</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">{{ variable }}</div><div class="cheatsheet-desc">Output a variable value</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">{% for x in list %} {% endfor %}</div><div class="cheatsheet-desc">Loop</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">{% if condition %} {% endif %}</div><div class="cheatsheet-desc">Conditional</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">{% extends 'base.html' %}</div><div class="cheatsheet-desc">Template inheritance</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">{% block content %} {% endblock %}</div><div class="cheatsheet-desc">Define a slot in a base template</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">{{ url_for('route_name') }}</div><div class="cheatsheet-desc">Generate URL for a route</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Handling Forms (GET and POST)</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from flask import Flask, request, render_template, redirect, url_for
+
+app = Flask(__name__)
+
+@app.route('/form', methods=['GET', 'POST'])
+def form():
+    if request.method == 'POST':
+        name = request.form['name']
+        return f'&lt;h1&gt;Hello, {name}!&lt;/h1&gt;'
+    return render_template('form.html')</pre>
+
+      <div class="section-divider"></div>
+      <h2>Project Structure</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">my_flask_app/
+├── app.py
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   └── form.html
+├── static/
+│   └── style.css
+└── requirements.txt</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Flask App Structure (Reference)",
+        desc: "A complete minimal Flask app — run in your terminal.",
+        code: `# app.py — run with: python app.py
+# Then open http://localhost:5000 in your browser
+
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return '<h1>Home Page</h1><a href="/about">About</a>'
+
+@app.route('/about')
+def about():
+    return '<h1>About Page</h1>'
+
+@app.route('/user/<name>')
+def user(name):
+    return f'<h1>Hello, {name.title()}!</h1>'
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+print("To run: python app.py")
+print("Then visit: http://localhost:5000")`,
+      },
+      {
+        title: "Jinja2 Template Rendering (Simulated)",
+        desc: "See how Jinja2 fills templates with data.",
+        code: `# Jinja2 renders templates like this:
+# {{ name }} becomes the actual value
+# {% for item in list %} becomes a loop
+
+# Simulating what Flask sends to a template
+context = {
+    "username": "Charles",
+    "items": ["Python", "Flask", "HTML", "CSS"],
+    "is_admin": True
+}
+
+# This is what the Jinja2 engine does (simplified)
+template = """
+Hello, {username}!
+Your items:
+{items_list}
+{admin_msg}
+"""
+
+items_html = "\\n".join(f"  - {item}" for item in context["items"])
+admin_msg = "You have admin access." if context["is_admin"] else ""
+
+print(template.format(
+    username=context["username"],
+    items_list=items_html,
+    admin_msg=admin_msg
+))`,
+      },
+      {
+        title: "Route Patterns",
+        desc: "Dynamic routes, URL parameters, and url_for.",
+        code: `# Flask route patterns reference
+
+routes = [
+    ("@app.route('/')",           "home page"),
+    ("@app.route('/about')",      "static about page"),
+    ("@app.route('/user/<name>')", "dynamic — name is a variable"),
+    ("@app.route('/post/<int:id>)","dynamic — id must be an integer"),
+    ("@app.route('/form', methods=['GET','POST'])", "accepts both methods"),
+]
+
+print("Flask Route Patterns:")
+for route, desc in routes:
+    print(f"  {route}")
+    print(f"    → {desc}")
+    print()
+
+print("url_for examples:")
+print("  url_for('home')           → '/'")
+print("  url_for('user', name='Alice') → '/user/Alice'")`,
+      },
+      {
+        title: "Form Handling Logic",
+        desc: "What happens on GET vs POST.",
+        code: `# Simulating Flask form handling logic
+
+def handle_form(method, form_data=None):
+    if method == 'GET':
+        return "Show empty form to user"
+    elif method == 'POST':
+        name = form_data.get('name', '')
+        message = form_data.get('message', '')
+        if not name:
+            return "Error: name is required"
+        return f"Thank you, {name}! Message received: '{message}'"
+
+# GET request (user visits the page)
+print(handle_form('GET'))
+
+# POST request (user submits the form)
+print(handle_form('POST', {'name': 'Alice', 'message': 'Hello!'}))
+
+# POST with missing field
+print(handle_form('POST', {'message': 'no name here'}))`,
+      },
+      {
+        title: "Template Inheritance Concept",
+        desc: "How base.html + child templates work.",
+        code: `# Flask's template inheritance explained in code
+
+base_template = """
+<!DOCTYPE html>
+<html>
+<head><title>{title}</title></head>
+<body>
+  <nav>Home | About | Contact</nav>
+  {content}
+  <footer>© 2026 My Site</footer>
+</body>
+</html>
+"""
+
+# Child page fills in the slots
+def render_page(title, content):
+    return base_template.format(title=title, content=content)
+
+# Home page
+home_content = "<h1>Welcome!</h1><p>This is the home page.</p>"
+print(render_page("Home", home_content))`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Create a minimal Flask app with one route <code>'/'</code> that returns <code>'Hello, World!'</code>. Run it and open it in your browser.",
+        "Add a second route <code>'/about'</code> that returns a short paragraph about yourself.",
+        "Create a dynamic route <code>'/user/&lt;name&gt;'</code> that returns <code>'Hello, &lt;name&gt;!'</code>.",
+        "Create a <code>templates/</code> folder and a <code>home.html</code> file. Use <code>render_template('home.html')</code> to serve it.",
+        "Add a Jinja2 variable <code>{{ title }}</code> to your template and pass it from the route.",
+        "Add a <code>{% for %}</code> loop to your template to render a list of items.",
+      ],
+      level2: [
+        "Build a route that accepts a name via URL parameter and renders a greeting template.",
+        "Create a form in HTML and a Flask route that handles GET (show form) and POST (process input).",
+        "Use template inheritance: create <code>base.html</code> with a nav and footer, and extend it in child templates.",
+        "Add a CSS file to <code>static/</code> and link it in your template using <code>url_for('static', filename='style.css')</code>.",
+        "Create a route that accepts an integer <code>/multiply/&lt;int:a&gt;/&lt;int:b&gt;</code> and returns the product.",
+        "Use <code>redirect(url_for('home'))</code> after a POST to prevent form resubmission.",
+      ],
+      level3: [
+        "Build a text analyzer web app: a form where users paste text, submit it, and see word count, character count, and most common words.",
+        "Add a simple in-memory 'database' (a Python list of dicts) and create routes to view, add, and delete items.",
+        "Build a multi-page site with a navigation bar that highlights the active page using Jinja2 conditionals.",
+        "Deploy your Flask app to a free hosting service (Railway, Render, or PythonAnywhere) and share the URL.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What decorator defines a Flask route?",
+        opts: ["@flask.route()", "@app.url()", "@app.route()", "@route.flask()"],
+        answer: 2,
+        explain: "@app.route('/path') tells Flask to call the decorated function when that URL is visited.",
+      },
+      {
+        q: "What does render_template('page.html') do?",
+        opts: ["Creates an HTML file", "Reads and renders an HTML file from the templates/ folder", "Downloads a template from the internet", "Converts Python to HTML"],
+        answer: 1,
+        explain: "render_template() reads the specified HTML file from the templates/ directory, processes Jinja2 syntax, and returns the result.",
+      },
+      {
+        q: "In Jinja2, how do you output a variable?",
+        opts: ["{variable}", "#{variable}", "{{ variable }}", "[[variable]]"],
+        answer: 2,
+        explain: "Double curly braces {{ variable }} output a variable's value in Jinja2 templates.",
+      },
+      {
+        q: "What does `methods=['GET', 'POST']` do in a route?",
+        opts: ["Makes the route faster", "Allows the route to handle both GET (view) and POST (submit) requests", "Connects to a database", "Creates two separate routes"],
+        answer: 1,
+        explain: "By default Flask only accepts GET. Adding POST allows the route to handle form submissions.",
+      },
+      {
+        q: "What does `request.form['name']` access?",
+        opts: ["A URL parameter", "Data submitted in an HTML form via POST", "A query string parameter", "A cookie"],
+        answer: 1,
+        explain: "request.form accesses data submitted in an HTML form's POST body — the input field with name='name'.",
+      },
+    ],
+  },
+
+  {
+    day: 27,
+    emoji: "🍃",
+    title: "Python with MongoDB",
+    subtitle: "Store and query data in MongoDB — a NoSQL database. Learn CRUD operations with pymongo.",
+    topics: ["SQL vs NoSQL", "pymongo", "insert_one/many", "find & filter", "update & delete", "Collections"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>SQL vs NoSQL</h2>
+      <p>Traditional <strong>SQL databases</strong> store data in rigid tables with fixed columns. <strong>NoSQL databases</strong> like MongoDB store data as flexible JSON-like documents — no fixed schema required.</p>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">SQL</div><div class="cheatsheet-desc">Tables, rows, fixed columns, strict schema</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">MongoDB</div><div class="cheatsheet-desc">Collections, documents (JSON), flexible schema</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Table</div><div class="cheatsheet-desc">→ Collection</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Row</div><div class="cheatsheet-desc">→ Document (a dict/JSON object)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Column</div><div class="cheatsheet-desc">→ Field (key in the dict)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">PRIMARY KEY</div><div class="cheatsheet-desc">→ _id (auto-generated ObjectId)</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Connecting with pymongo</h2>
+      <p>Install: <code>pip install pymongo</code>. Connect to a MongoDB Atlas cluster (free tier available at mongodb.com):</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from pymongo import MongoClient
+
+# Atlas connection string (from your cluster's Connect button)
+client = MongoClient("mongodb+srv://user:password@cluster.mongodb.net/")
+
+db = client["my_database"]
+collection = db["students"]</pre>
+
+      <div class="section-divider"></div>
+      <h2>CRUD Operations</h2>
+      <h3>Create — Insert</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">student = {"name": "Alice", "age": 20, "grade": "A"}
+result = collection.insert_one(student)
+print(result.inserted_id)   # the auto-generated _id
+
+students = [
+    {"name": "Bob",   "age": 22, "grade": "B"},
+    {"name": "Carol", "age": 21, "grade": "A"},
+]
+collection.insert_many(students)</pre>
+
+      <h3>Read — Find</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">for doc in collection.find():
+    print(doc)
+
+# Filter
+alice = collection.find_one({"name": "Alice"})
+a_students = collection.find({"grade": "A"})
+
+# Sort and limit
+top = collection.find().sort("age", -1).limit(3)</pre>
+
+      <h3>Update</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">collection.update_one(
+    {"name": "Alice"},
+    {"$set": {"age": 21}}
+)
+
+collection.update_many(
+    {"grade": "B"},
+    {"$set": {"grade": "B+"}}
+)</pre>
+
+      <h3>Delete</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">collection.delete_one({"name": "Bob"})
+collection.delete_many({"grade": "D"})
+collection.drop()   # delete the whole collection</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Simulating MongoDB Documents",
+        desc: "MongoDB stores Python dicts as documents — practice with dicts.",
+        code: `# MongoDB documents are just Python dicts
+# This simulates a 'students' collection in memory
+
+students = [
+    {"_id": 1, "name": "Alice", "age": 20, "grade": "A"},
+    {"_id": 2, "name": "Bob",   "age": 22, "grade": "B"},
+    {"_id": 3, "name": "Carol", "age": 21, "grade": "A"},
+    {"_id": 4, "name": "Dave",  "age": 23, "grade": "C"},
+]
+
+# find() — return all
+print("All students:")
+for s in students:
+    print(f"  {s['name']} ({s['grade']})")
+
+# find_one() — filter
+alice = next((s for s in students if s['name'] == 'Alice'), None)
+print("\\nAlice:", alice)
+
+# find() with filter
+a_grade = [s for s in students if s['grade'] == 'A']
+print("\\nA students:", [s['name'] for s in a_grade])`,
+      },
+      {
+        title: "CRUD Simulation",
+        desc: "Insert, find, update, delete — MongoDB style.",
+        code: `# Simulating pymongo CRUD without a live connection
+
+class FakeCollection:
+    def __init__(self):
+        self.docs = []
+        self._counter = 1
+
+    def insert_one(self, doc):
+        doc['_id'] = self._counter
+        self._counter += 1
+        self.docs.append(doc)
+        return doc
+
+    def find(self, query=None):
+        if not query:
+            return self.docs
+        return [d for d in self.docs
+                if all(d.get(k) == v for k, v in query.items())]
+
+    def update_one(self, query, update):
+        for d in self.docs:
+            if all(d.get(k) == v for k, v in query.items()):
+                d.update(update.get('$set', {}))
+                return
+
+    def delete_one(self, query):
+        for i, d in enumerate(self.docs):
+            if all(d.get(k) == v for k, v in query.items()):
+                self.docs.pop(i)
+                return
+
+col = FakeCollection()
+col.insert_one({"name": "Alice", "grade": "A"})
+col.insert_one({"name": "Bob",   "grade": "B"})
+print("All:", col.find())
+col.update_one({"name": "Bob"}, {"$set": {"grade": "B+"}})
+print("After update:", col.find())
+col.delete_one({"name": "Alice"})
+print("After delete:", col.find())`,
+      },
+      {
+        title: "MongoDB Query Operators",
+        desc: "Filter with comparison operators.",
+        code: `# MongoDB uses special operators in query dicts
+# In real pymongo: collection.find({"age": {"$gt": 20}})
+
+data = [
+    {"name": "Alice", "age": 20, "score": 88},
+    {"name": "Bob",   "age": 25, "score": 72},
+    {"name": "Carol", "age": 22, "score": 95},
+    {"name": "Dave",  "age": 28, "score": 63},
+]
+
+def mongo_find(collection, query):
+    results = []
+    for doc in collection:
+        match = True
+        for field, condition in query.items():
+            if isinstance(condition, dict):
+                val = doc.get(field, 0)
+                if "$gt" in condition and not (val > condition["$gt"]):
+                    match = False
+                if "$gte" in condition and not (val >= condition["$gte"]):
+                    match = False
+            else:
+                if doc.get(field) != condition:
+                    match = False
+        if match:
+            results.append(doc)
+    return results
+
+print("age > 21:", [d['name'] for d in mongo_find(data, {"age": {"$gt": 21}})])
+print("score >= 80:", [d['name'] for d in mongo_find(data, {"score": {"$gte": 80}})])`,
+      },
+      {
+        title: "Sort and Limit Simulation",
+        desc: "Replicate .sort().limit() behavior.",
+        code: `students = [
+    {"name": "Alice", "age": 20, "gpa": 3.9},
+    {"name": "Bob",   "age": 22, "gpa": 3.2},
+    {"name": "Carol", "age": 21, "gpa": 3.8},
+    {"name": "Dave",  "age": 23, "gpa": 3.5},
+    {"name": "Eve",   "age": 20, "gpa": 4.0},
+]
+
+# Sort by GPA descending (like .sort("gpa", -1))
+sorted_by_gpa = sorted(students, key=lambda s: s['gpa'], reverse=True)
+
+# Limit to top 3 (like .limit(3))
+top_3 = sorted_by_gpa[:3]
+
+print("Top 3 students by GPA:")
+for s in top_3:
+    print(f"  {s['name']}: {s['gpa']}")`,
+      },
+      {
+        title: "Document Structure Best Practices",
+        desc: "Designing MongoDB documents for real projects.",
+        code: `import json
+
+# Good MongoDB document design
+
+user_doc = {
+    "_id": "user_001",
+    "name": {"first": "Alice", "last": "Smith"},
+    "email": "alice@example.com",
+    "age": 30,
+    "tags": ["python", "data-science"],
+    "address": {
+        "city": "Helsinki",
+        "country": "Finland"
+    },
+    "created_at": "2026-01-15T10:00:00Z"
+}
+
+print("User document:")
+print(json.dumps(user_doc, indent=2))
+print()
+print("Access nested field:")
+print("City:", user_doc["address"]["city"])
+print("First name:", user_doc["name"]["first"])`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "What is the difference between a MongoDB collection and a document?",
+        "Write the pymongo code to connect to a local MongoDB instance at <code>mongodb://localhost:27017/</code>.",
+        "Write the code to insert one document <code>{'name': 'Alice', 'age': 25}</code> into a collection.",
+        "Write the code to retrieve all documents from a collection using <code>find()</code>.",
+        "Write the code to find the first document where <code>name == 'Alice'</code>.",
+        "What does <code>collection.drop()</code> do?",
+      ],
+      level2: [
+        "Insert 5 student documents into a collection and retrieve only those with <code>grade == 'A'</code>.",
+        "Update all documents where <code>grade == 'B'</code> to set <code>grade = 'B+'</code>.",
+        "Sort documents by <code>age</code> descending and limit to 3 results.",
+        "Delete a document where <code>name == 'Bob'</code>.",
+        "Count the number of documents in a collection using <code>collection.count_documents({})</code>.",
+        "Use <code>{'$gt': 20}</code> to find documents where age is greater than 20.",
+      ],
+      level3: [
+        "Build a simple student management CLI: menu-driven add/list/update/delete using pymongo.",
+        "Design a MongoDB document schema for a blog: posts with embedded comments and tags.",
+        "Write a script that reads a JSON file and bulk-inserts all records into MongoDB using <code>insert_many()</code>.",
+        "Create an index on the <code>email</code> field using <code>collection.create_index('email', unique=True)</code> and explain why.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What is a MongoDB collection?",
+        opts: ["A SQL table with fixed columns", "A group of JSON-like documents (like a table but flexible)", "A Python list", "A database connection"],
+        answer: 1,
+        explain: "A collection is MongoDB's equivalent of a table — it holds documents (JSON objects) that can have different fields.",
+      },
+      {
+        q: "Which pymongo method inserts one document?",
+        opts: ["collection.add()", "collection.insert()", "collection.insert_one()", "collection.push()"],
+        answer: 2,
+        explain: "insert_one() inserts a single document. insert_many() inserts a list of documents.",
+      },
+      {
+        q: "What does collection.find({'grade': 'A'}) return?",
+        opts: ["A single document", "A cursor (iterable) of all documents where grade equals 'A'", "True or False", "The count of matching documents"],
+        answer: 1,
+        explain: "find() returns a cursor — an iterable of all matching documents. Use find_one() for a single result.",
+      },
+      {
+        q: "What does {'$set': {'age': 21}} do in update_one?",
+        opts: ["Creates a new document", "Sets the age field to 21 in the matched document", "Deletes the age field", "Filters by age"],
+        answer: 1,
+        explain: "$set is an update operator that modifies specific fields without replacing the whole document.",
+      },
+      {
+        q: "How is MongoDB different from a SQL database?",
+        opts: ["MongoDB is slower", "MongoDB stores data in flexible JSON documents, not fixed-column tables", "MongoDB doesn't support queries", "MongoDB can only store text"],
+        answer: 1,
+        explain: "MongoDB is NoSQL — documents can have different fields and nested structures. SQL requires a fixed schema (columns) for every row.",
+      },
+    ],
+  },
+
+  {
+    day: 28,
+    emoji: "📡",
+    title: "APIs",
+    subtitle: "Understand how APIs work. Consume REST APIs using HTTP methods, status codes, and JSON data.",
+    topics: ["What is an API", "REST", "HTTP methods", "Status codes", "JSON responses", "requests library"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is an API?</h2>
+      <p>An <strong>API</strong> (Application Programming Interface) is a defined way for programs to communicate. A <strong>Web API</strong> lets you send an HTTP request to a URL and get data back — usually JSON.</p>
+      <p>Think of it as a waiter: you (the client) tell the waiter (API) what you want, and it brings data from the kitchen (server) back to you.</p>
+
+      <div class="section-divider"></div>
+      <h2>REST — How Web APIs Are Structured</h2>
+      <p>Most modern web APIs are <strong>RESTful</strong>. REST uses standard HTTP methods to perform operations:</p>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">GET</div><div class="cheatsheet-desc">Retrieve data — read only, no side effects</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">POST</div><div class="cheatsheet-desc">Create new data — sends a body</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">PUT</div><div class="cheatsheet-desc">Replace/update an existing resource</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">DELETE</div><div class="cheatsheet-desc">Remove a resource</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>HTTP Status Codes</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">200 OK</div><div class="cheatsheet-desc">Request succeeded</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">201 Created</div><div class="cheatsheet-desc">New resource created (POST success)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">400 Bad Request</div><div class="cheatsheet-desc">Your request was malformed</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">401 Unauthorized</div><div class="cheatsheet-desc">Authentication required</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">404 Not Found</div><div class="cheatsheet-desc">Resource doesn't exist</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">500 Server Error</div><div class="cheatsheet-desc">Something broke on the server</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Consuming an API with requests</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import requests
+
+# GET request
+response = requests.get('https://api.github.com/users/Asabeneh')
+print(response.status_code)   # 200
+data = response.json()
+print(data['name'])
+print(data['public_repos'])</pre>
+
+      <h3>With Headers (API Key)</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">headers = {'Authorization': 'Bearer YOUR_API_KEY'}
+response = requests.get(url, headers=headers)
+
+# POST — send JSON body
+payload = {'title': 'New Post', 'body': 'Content here'}
+response = requests.post(url, json=payload, headers=headers)
+print(response.status_code)   # 201 Created</pre>
+
+      <div class="section-divider"></div>
+      <h2>API Response Structure</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">{
+  "status": "ok",
+  "total_results": 3,
+  "data": [
+    { "id": 1, "name": "Alice", "score": 88 },
+    { "id": 2, "name": "Bob",   "score": 72 }
+  ]
+}</pre>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">data = response.json()
+for person in data['data']:
+    print(person['name'], person['score'])</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "HTTP Methods and Status Codes",
+        desc: "Understanding the building blocks of APIs.",
+        code: `# The 4 core HTTP methods and what they map to
+http_methods = {
+    "GET":    "Read/retrieve data",
+    "POST":   "Create new data",
+    "PUT":    "Update/replace existing data",
+    "DELETE": "Delete data"
+}
+
+status_codes = {
+    200: ("OK",           "Request succeeded"),
+    201: ("Created",      "POST succeeded, new resource created"),
+    400: ("Bad Request",  "Your request was malformed"),
+    401: ("Unauthorized", "Authentication required"),
+    403: ("Forbidden",    "You don't have permission"),
+    404: ("Not Found",    "The resource doesn't exist"),
+    500: ("Server Error", "Something broke on the server side"),
+}
+
+print("HTTP Methods:")
+for method, desc in http_methods.items():
+    print(f"  {method:<8} → {desc}")
+
+print("\\nCommon Status Codes:")
+for code, (name, desc) in status_codes.items():
+    print(f"  {code} {name:<15} → {desc}")`,
+      },
+      {
+        title: "Simulating an API Response",
+        desc: "Parse JSON like you'd get from a real API call.",
+        code: `import json
+
+# What response.json() would return from a countries API
+raw_json = '''
+{
+  "status": "ok",
+  "count": 4,
+  "data": [
+    {"name": "Finland", "capital": "Helsinki", "population": 5540000},
+    {"name": "Sweden",  "capital": "Stockholm","population": 10400000},
+    {"name": "Norway",  "capital": "Oslo",     "population": 5380000},
+    {"name": "Denmark", "capital": "Copenhagen","population": 5900000}
+  ]
+}
+'''
+
+data = json.loads(raw_json)
+print(f"Status: {data['status']}, Count: {data['count']}")
+print()
+for country in data['data']:
+    print(f"{country['name']:10s} ({country['capital']}) — {country['population']:,}")`,
+      },
+      {
+        title: "Using the requests Library",
+        desc: "A real GET request to a public API.",
+        code: `import requests
+
+# JSONPlaceholder is a free fake API for testing
+url = "https://jsonplaceholder.typicode.com/posts/1"
+
+response = requests.get(url)
+print(f"Status: {response.status_code}")
+print(f"Content-Type: {response.headers.get('content-type')}")
+print()
+
+post = response.json()
+print(f"Title: {post['title']}")
+print(f"Body:  {post['body'][:80]}...")
+print(f"User ID: {post['userId']}")`,
+      },
+      {
+        title: "Handling API Errors",
+        desc: "Check status codes before processing the response.",
+        code: `import requests
+
+def safe_get(url):
+    try:
+        response = requests.get(url, timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 404:
+            print(f"Not found: {url}")
+        elif response.status_code == 401:
+            print("Authentication required — check your API key")
+        else:
+            print(f"Error {response.status_code}: {response.text[:100]}")
+    except requests.exceptions.Timeout:
+        print("Request timed out")
+    except requests.exceptions.ConnectionError:
+        print("Could not connect to the server")
+    return None
+
+result = safe_get("https://jsonplaceholder.typicode.com/posts/1")
+if result:
+    print("Got:", result['title'])`,
+      },
+      {
+        title: "Query Parameters",
+        desc: "Pass filters to an API via URL parameters.",
+        code: `import requests
+
+# Many APIs accept query parameters for filtering
+# e.g. GET /posts?userId=1&_limit=3
+
+url = "https://jsonplaceholder.typicode.com/posts"
+params = {
+    "userId": 1,    # filter by user
+    "_limit": 3     # limit to 3 results
+}
+
+response = requests.get(url, params=params)
+# requests builds: https://...posts?userId=1&_limit=3
+
+print(f"URL called: {response.url}")
+print(f"Status: {response.status_code}")
+posts = response.json()
+print(f"Got {len(posts)} posts:")
+for post in posts:
+    print(f"  [{post['id']}] {post['title'][:50]}")`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "What does HTTP GET do? When would you use POST instead?",
+        "What do status codes 200, 404, and 500 mean?",
+        "Use <code>requests.get('https://jsonplaceholder.typicode.com/posts/1')</code> and print the status code and title.",
+        "Use <code>response.json()</code> to parse the response and print the <code>body</code> field.",
+        "What is the <code>Content-Type</code> header used for?",
+        "What is the difference between a REST API and a regular website?",
+      ],
+      level2: [
+        "Fetch all posts from <code>https://jsonplaceholder.typicode.com/posts</code> and print the title of the first 5.",
+        "Use query parameters to fetch only posts by <code>userId=2</code>.",
+        "Write a function <code>get_post(id)</code> that fetches a single post by ID and returns the dict.",
+        "Handle the case where the API returns a 404 — print a friendly error message.",
+        "Fetch data from a real public API (e.g. <code>https://catfact.ninja/fact</code>) and print the result.",
+        "Add a <code>timeout=5</code> parameter to your request and handle <code>requests.exceptions.Timeout</code>.",
+      ],
+      level3: [
+        "Fetch all 100 posts from JSONPlaceholder, group them by <code>userId</code>, and print how many posts each user made.",
+        "Build a function that paginates through multiple pages of an API and returns all results combined.",
+        "Use the <code>requests</code> library to make a POST request to JSONPlaceholder and print the created resource.",
+        "Fetch exchange rates from a free currency API and write a <code>convert(amount, from_currency, to_currency)</code> function.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What does REST stand for in REST API?",
+        opts: ["Really Easy Server Technology", "Representational State Transfer", "Remote Execution of Server Tasks", "Resource Endpoint Service Transfer"],
+        answer: 1,
+        explain: "REST stands for Representational State Transfer — an architectural style for building web APIs using HTTP.",
+      },
+      {
+        q: "Which HTTP method retrieves data without changing anything?",
+        opts: ["POST", "DELETE", "PUT", "GET"],
+        answer: 3,
+        explain: "GET is read-only — it retrieves data without creating, modifying, or deleting anything on the server.",
+      },
+      {
+        q: "What does a 404 status code mean?",
+        opts: ["Server crashed", "Request succeeded", "The requested resource was not found", "Authentication required"],
+        answer: 2,
+        explain: "404 Not Found means the URL/resource you requested doesn't exist on the server.",
+      },
+      {
+        q: "What does response.json() do?",
+        opts: ["Sends JSON to the server", "Converts the response body from JSON to a Python dict or list", "Saves the response to a file", "Prints the raw JSON"],
+        answer: 1,
+        explain: "response.json() parses the JSON response body and returns the equivalent Python object (dict or list).",
+      },
+      {
+        q: "How do you pass query parameters with requests.get()?",
+        opts: ["Append them manually to the URL string", "Use the params= argument with a dict", "Use the query= argument", "Query parameters aren't supported"],
+        answer: 1,
+        explain: "Pass params={'key': 'value'} to requests.get() and it will automatically append them to the URL correctly.",
+      },
+    ],
+  },
+
+  {
+    day: 29,
+    emoji: "🔨",
+    title: "Building an API",
+    subtitle: "Build your own REST API with Flask. Create routes that return JSON and handle full CRUD operations.",
+    topics: ["Flask JSON routes", "jsonify()", "GET & POST routes", "PUT & DELETE routes", "Status codes", "MongoDB integration"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>From Consuming to Building</h2>
+      <p>Day 28 covered <em>consuming</em> APIs. Today you build your own. Instead of returning HTML, your Flask routes will return <strong>JSON data</strong> that any client (web app, mobile app, another Python script) can consume.</p>
+
+      <div class="section-divider"></div>
+      <h2>Returning JSON from Flask</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+students = [
+    {"id": 1, "name": "Alice", "grade": "A"},
+    {"id": 2, "name": "Bob",   "grade": "B"},
+]
+
+@app.route('/api/students', methods=['GET'])
+def get_students():
+    return jsonify(students), 200
+
+@app.route('/api/students/&lt;int:id&gt;', methods=['GET'])
+def get_student(id):
+    student = next((s for s in students if s['id'] == id), None)
+    if not student:
+        return jsonify({"error": "Not found"}), 404
+    return jsonify(student), 200</pre>
+
+      <div class="section-divider"></div>
+      <h2>Creating Resources — POST</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from flask import Flask, jsonify, request
+
+@app.route('/api/students', methods=['POST'])
+def create_student():
+    data = request.get_json()
+    if not data or 'name' not in data:
+        return jsonify({"error": "name is required"}), 400
+    new_student = {
+        "id": len(students) + 1,
+        "name": data['name'],
+        "grade": data.get('grade', 'ungraded')
+    }
+    students.append(new_student)
+    return jsonify(new_student), 201   # 201 = Created</pre>
+
+      <div class="section-divider"></div>
+      <h2>Updating — PUT</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">@app.route('/api/students/&lt;int:id&gt;', methods=['PUT'])
+def update_student(id):
+    student = next((s for s in students if s['id'] == id), None)
+    if not student:
+        return jsonify({"error": "Not found"}), 404
+    data = request.get_json()
+    student.update(data)
+    return jsonify(student), 200</pre>
+
+      <div class="section-divider"></div>
+      <h2>Deleting — DELETE</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">@app.route('/api/students/&lt;int:id&gt;', methods=['DELETE'])
+def delete_student(id):
+    global students
+    before = len(students)
+    students = [s for s in students if s['id'] != id]
+    if len(students) == before:
+        return jsonify({"error": "Not found"}), 404
+    return jsonify({"message": "Deleted"}), 200</pre>
+
+      <div class="section-divider"></div>
+      <h2>REST API Design Pattern</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">GET /api/students</div><div class="cheatsheet-desc">List all students</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">GET /api/students/1</div><div class="cheatsheet-desc">Get student with id=1</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">POST /api/students</div><div class="cheatsheet-desc">Create a new student</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">PUT /api/students/1</div><div class="cheatsheet-desc">Update student with id=1</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">DELETE /api/students/1</div><div class="cheatsheet-desc">Delete student with id=1</div></div>
+      </div>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Complete Student API",
+        desc: "Full CRUD API — run in your terminal with Flask.",
+        code: `# app.py — run with: python app.py
+# Test with: curl http://localhost:5000/api/students
+
+from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+
+students = [
+    {"id": 1, "name": "Alice", "grade": "A"},
+    {"id": 2, "name": "Bob",   "grade": "B"},
+]
+
+@app.route('/api/students')
+def list_students():
+    return jsonify(students)
+
+@app.route('/api/students/<int:id>')
+def get_student(id):
+    s = next((s for s in students if s['id'] == id), None)
+    return jsonify(s) if s else (jsonify({"error":"not found"}), 404)
+
+@app.route('/api/students', methods=['POST'])
+def create_student():
+    data = request.get_json()
+    s = {"id": len(students)+1, "name": data['name'], "grade": data.get('grade','?')}
+    students.append(s)
+    return jsonify(s), 201
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+print("Full CRUD API ready at http://localhost:5000/api/students")`,
+      },
+      {
+        title: "CRUD Logic Without Flask",
+        desc: "The in-memory CRUD logic that powers the API.",
+        code: `students = [
+    {"id": 1, "name": "Alice", "grade": "A"},
+    {"id": 2, "name": "Bob",   "grade": "B"},
+]
+_next_id = 3
+
+def create(name, grade="?"):
+    global _next_id
+    s = {"id": _next_id, "name": name, "grade": grade}
+    students.append(s)
+    _next_id += 1
+    return s
+
+def read_all():
+    return students
+
+def read_one(id):
+    return next((s for s in students if s['id'] == id), None)
+
+def update(id, **fields):
+    s = read_one(id)
+    if s: s.update(fields)
+    return s
+
+def delete(id):
+    global students
+    prev = len(students)
+    students = [s for s in students if s['id'] != id]
+    return len(students) < prev
+
+print(create("Carol", "A+"))
+print(update(1, grade="A+"))
+print(delete(2))
+print(read_all())`,
+      },
+      {
+        title: "Status Codes in API Design",
+        desc: "Return the right code for each situation.",
+        code: `def api_response_guide():
+    guide = {
+        "GET /items         (success)": (200, {"items": [...]}),
+        "GET /items/99      (not found)": (404, {"error": "Not found"}),
+        "POST /items        (created)": (201, {"id": 3, "name": "new item"}),
+        "POST /items        (bad input)": (400, {"error": "name is required"}),
+        "DELETE /items/1    (success)": (200, {"message": "Deleted"}),
+        "PUT /items/1       (unauthorized)": (401, {"error": "Auth required"}),
+    }
+    print(f"{'Scenario':<40} {'Status':<8} Response")
+    print("-" * 70)
+    for scenario, (code, body) in guide.items():
+        print(f"{scenario:<40} {code:<8} {body}")
+
+api_response_guide()`,
+      },
+      {
+        title: "Testing Your API with requests",
+        desc: "How to test a Flask API from Python.",
+        code: `import requests
+import json
+
+BASE = "https://jsonplaceholder.typicode.com"
+
+# GET all posts
+r = requests.get(f"{BASE}/posts", params={"_limit": 3})
+print(f"GET /posts → {r.status_code}")
+for p in r.json():
+    print(f"  [{p['id']}] {p['title'][:40]}")
+
+# POST — create a new post
+new_post = {"title": "My Test Post", "body": "Hello API!", "userId": 1}
+r = requests.post(f"{BASE}/posts", json=new_post)
+print(f"\\nPOST /posts → {r.status_code}")
+print(r.json())
+
+# DELETE
+r = requests.delete(f"{BASE}/posts/1")
+print(f"\\nDELETE /posts/1 → {r.status_code}")`,
+      },
+      {
+        title: "API with Input Validation",
+        desc: "Always validate before saving data.",
+        code: `def validate_student(data):
+    errors = []
+    if not data:
+        return ["Request body is required"]
+    if "name" not in data or not data["name"].strip():
+        errors.append("'name' is required and cannot be empty")
+    if "grade" in data and data["grade"] not in ["A","B","C","D","F","?"]:
+        errors.append(f"Invalid grade: {data['grade']}")
+    if "age" in data:
+        try:
+            age = int(data["age"])
+            if age < 5 or age > 100:
+                errors.append("Age must be between 5 and 100")
+        except (ValueError, TypeError):
+            errors.append("Age must be an integer")
+    return errors
+
+# Test validation
+test_cases = [
+    {"name": "Alice", "grade": "A", "age": 20},  # valid
+    {},                                             # missing name
+    {"name": "", "grade": "Z"},                    # bad grade
+    {"name": "Bob", "age": "old"},                 # bad age type
+]
+
+for data in test_cases:
+    errors = validate_student(data)
+    if errors:
+        print(f"INVALID {data}: {errors}")
+    else:
+        print(f"VALID: {data}")`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Create a Flask route <code>GET /api/items</code> that returns a JSON list of 3 items.",
+        "Add a route <code>GET /api/items/&lt;int:id&gt;</code> that returns one item by ID, or a 404 error.",
+        "What HTTP status code should a POST route return when it successfully creates a resource?",
+        "What does <code>jsonify()</code> do in Flask?",
+        "What does <code>request.get_json()</code> return in a POST route?",
+        "Write a route that returns <code>{'error': 'Not found'}</code> with status code 404.",
+      ],
+      level2: [
+        "Add a <code>POST /api/students</code> route that reads JSON from the request body and appends a new student.",
+        "Add a <code>PUT /api/students/&lt;id&gt;</code> route that updates a specific student.",
+        "Add a <code>DELETE /api/students/&lt;id&gt;</code> route that removes a student.",
+        "Add input validation that returns 400 if <code>name</code> is missing from a POST body.",
+        "Test your API using the <code>requests</code> library in a separate script.",
+        "Add a <code>GET /api/students?grade=A</code> query parameter filter using <code>request.args.get('grade')</code>.",
+      ],
+      level3: [
+        "Connect your Flask API to MongoDB using pymongo instead of an in-memory list.",
+        "Add error handling middleware that catches unhandled exceptions and returns a 500 JSON response.",
+        "Deploy your API to Railway or Render and test it with a real HTTP client.",
+        "Add a simple API key check: require an <code>X-API-Key</code> header on all routes and return 401 if missing.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What does jsonify() do in Flask?",
+        opts: ["Reads JSON from the request", "Converts a Python dict/list to a JSON HTTP response with correct Content-Type", "Parses query parameters", "Connects to a database"],
+        answer: 1,
+        explain: "jsonify() takes a Python object, serializes it to JSON, and returns a Flask Response with Content-Type: application/json.",
+      },
+      {
+        q: "What status code should a successful POST (create) return?",
+        opts: ["200", "201", "204", "301"],
+        answer: 1,
+        explain: "201 Created is the correct status for a successful POST that created a new resource. 200 OK is for successful GET/PUT.",
+      },
+      {
+        q: "How do you read JSON from an incoming POST request in Flask?",
+        opts: ["request.json()", "request.body", "request.get_json()", "flask.parse_json()"],
+        answer: 2,
+        explain: "request.get_json() parses the request body as JSON and returns the Python dict/list.",
+      },
+      {
+        q: "What does `methods=['GET', 'POST']` do in a route decorator?",
+        opts: ["Creates two separate routes", "Allows the route to handle both GET and POST requests", "Makes it faster", "Sets the Content-Type"],
+        answer: 1,
+        explain: "By default Flask only allows GET. Specifying methods=['GET','POST'] lets one route function handle both request types.",
+      },
+      {
+        q: "What should your API return when a requested resource doesn't exist?",
+        opts: ["200 with an empty body", "404 Not Found with an error message", "301 Redirect", "200 with null"],
+        answer: 1,
+        explain: "Return 404 Not Found with a JSON error body like {'error': 'Not found'} so the client knows exactly what happened.",
+      },
+    ],
+  },
+
+  {
+    day: 30,
+    emoji: "🎓",
+    title: "Conclusions",
+    subtitle: "You made it. Review what you built, celebrate the journey, and map out your next steps as a Python developer.",
+    topics: ["30-day recap", "What you built", "Python paths", "Projects to build", "Resources", "Next steps"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>Congratulations — You Did It.</h2>
+      <p>You just completed 30 days of structured Python learning. From <code>print("Hello, World!")</code> to building REST APIs, you've covered the entire core of the Python language and its ecosystem.</p>
+      <div class="info-box">
+        <strong>This is not the end.</strong> 30 Days of Python is the foundation. What you build on it is up to you.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>What You Learned — 30 Days in Review</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Days 1–3</div><div class="cheatsheet-desc">Data types, variables, operators, comments</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Days 4–8</div><div class="cheatsheet-desc">Strings, Lists, Tuples, Sets, Dictionaries</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Days 9–11</div><div class="cheatsheet-desc">Conditionals, Loops, Functions</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Days 12–14</div><div class="cheatsheet-desc">Modules, List Comprehension, Higher Order Functions</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Days 15–17</div><div class="cheatsheet-desc">Type Errors, DateTime, Exception Handling</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Days 18–19</div><div class="cheatsheet-desc">Regular Expressions, File Handling</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Days 20–21</div><div class="cheatsheet-desc">Packages (pip), Classes & Objects (OOP)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Days 22–23</div><div class="cheatsheet-desc">Web Scraping, Virtual Environments</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Days 24–25</div><div class="cheatsheet-desc">Statistics & NumPy, Pandas</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Days 26–29</div><div class="cheatsheet-desc">Flask Web Apps, MongoDB, APIs, Building APIs</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Four Paths from Here</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Web Development</div><div class="cheatsheet-desc">Django, FastAPI, HTML/CSS/JS → build full web apps</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Data Science</div><div class="cheatsheet-desc">NumPy, Pandas, Matplotlib, Seaborn → analyze real data</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Machine Learning</div><div class="cheatsheet-desc">scikit-learn, TensorFlow, PyTorch → build AI models</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">Automation</div><div class="cheatsheet-desc">Selenium, Playwright, schedule → automate tasks</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Projects to Build Next</h2>
+      <ul style="margin:12px 0 16px 24px;color:var(--text-2);line-height:2">
+        <li>Personal finance tracker (pandas + matplotlib + Flask)</li>
+        <li>Web scraper that emails you alerts (requests + smtplib)</li>
+        <li>REST API with full auth (Flask + JWT + MongoDB)</li>
+        <li>Portfolio website with a contact form (Flask + deployment)</li>
+        <li>Data visualization dashboard (pandas + plotly + Dash)</li>
+        <li>Discord or Telegram bot (discord.py or python-telegram-bot)</li>
+      </ul>
+
+      <div class="section-divider"></div>
+      <h2>Keep Learning Resources</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">docs.python.org</div><div class="cheatsheet-desc">Official Python docs — the ground truth</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">realpython.com</div><div class="cheatsheet-desc">In-depth tutorials for every Python topic</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">github.com/Asabeneh</div><div class="cheatsheet-desc">The original 30 Days of Python and more</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">kaggle.com</div><div class="cheatsheet-desc">Real datasets + Python notebooks to practice data science</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">leetcode.com</div><div class="cheatsheet-desc">Coding challenges to sharpen your Python logic</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">stackoverflow.com</div><div class="cheatsheet-desc">Search first — your question has probably been answered</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>The Most Important Thing</h2>
+      <p><strong>Build things.</strong> Not tutorials, not courses, not exercises — real things you actually care about. That's when Python stops being something you're learning and becomes something you use.</p>
+      <p>The gap between "I finished 30 days" and "I'm a Python developer" is exactly one project.</p>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Python Skills Self-Assessment",
+        desc: "Test how much you remember across all 30 days.",
+        code: `# A quick skills quiz — try to answer each before running
+
+skills = {
+    "List comprehension: squares of 1-10": [n**2 for n in range(1, 11)],
+    "Dict from two lists": dict(zip(['a','b','c'], [1,2,3])),
+    "Lambda: sort by second element": sorted([(1,'b'),(2,'a'),(3,'c')], key=lambda x: x[1]),
+    "Filter evens from 1-20": list(filter(lambda n: n%2==0, range(1,21))),
+    "Flatten [[1,2],[3,4],[5,6]]": [n for row in [[1,2],[3,4],[5,6]] for n in row],
+    "String methods chain": "  hello, world  ".strip().title().replace(",", ""),
+}
+
+print("30-Day Python — Quick Recap Test")
+print("=" * 40)
+for question, answer in skills.items():
+    print(f"\\n{question}")
+    print(f"→ {answer}")`,
+      },
+      {
+        title: "What You Now Know",
+        desc: "A tour through 30 days of Python concepts.",
+        code: `# Each line demonstrates a concept you've learned
+
+# Day 1-3: Basics
+name, age = "Charles", 12
+print(f"Name: {name}, Age: {age}")
+
+# Day 4: Strings
+print("python".upper().center(20, "-"))
+
+# Day 5: Lists + Day 13: Comprehensions
+squares = [n**2 for n in range(1, 6)]
+
+# Day 8: Dicts
+person = {"name": name, "squares": squares}
+
+# Day 11: Functions
+def greet(n): return f"Hello, {n}!"
+
+# Day 14: Higher Order Functions
+doubled = list(map(lambda x: x*2, squares))
+
+# Day 16: DateTime
+from datetime import datetime
+print(datetime.now().strftime("%Y-%m-%d"))
+
+# Day 17: Exception Handling
+try:
+    x = int("42")
+except ValueError as e:
+    print(e)
+
+# Day 18: Regex
+import re
+emails = re.findall(r'\\w+@\\w+\\.\\w+', 'test@example.com hello@world.org')
+print(emails)
+
+print("\\n30 days done. What will you build?")`,
+      },
+      {
+        title: "Your First Real Project Skeleton",
+        desc: "A starter template for a Flask + data project.",
+        code: `# A real project structure for your next build
+
+project_structure = """
+my_first_real_project/
+├── venv/                      (Day 23)
+├── app/
+│   ├── __init__.py            (Day 20)
+│   ├── models.py              (Day 21 — Classes)
+│   ├── routes.py              (Day 26 — Flask routes)
+│   └── api.py                 (Day 29 — JSON API)
+├── data/
+│   └── dataset.csv            (Day 25 — Pandas)
+├── tests/
+│   └── test_models.py
+├── requirements.txt           (Day 20)
+├── .env                       (API keys — never commit!)
+└── README.md
+"""
+
+workflow = [
+    "1. Create project folder",
+    "2. python -m venv venv && source venv/bin/activate",
+    "3. pip install flask pandas requests pymongo",
+    "4. pip freeze > requirements.txt",
+    "5. Write your models (classes)",
+    "6. Write your routes",
+    "7. Test locally",
+    "8. Deploy",
+]
+
+print("Project structure:")
+print(project_structure)
+print("Build workflow:")
+for step in workflow:
+    print(f"  {step}")`,
+      },
+      {
+        title: "Full Python Cheatsheet",
+        desc: "One-line reminders of the most important syntax.",
+        code: `cheatsheet = {
+    # Data structures
+    "list":          "[1, 2, 3]",
+    "tuple":         "(1, 2, 3)",
+    "set":           "{1, 2, 3}",
+    "dict":          "{'a': 1, 'b': 2}",
+
+    # Comprehensions
+    "list comp":     "[x*2 for x in range(5) if x > 0]",
+    "dict comp":     "{k: v for k, v in items}",
+    "set comp":      "{x%3 for x in range(10)}",
+
+    # Functions
+    "lambda":        "lambda x: x**2",
+    "args":          "def f(*args, **kwargs): ...",
+
+    # OOP
+    "class":         "class Dog(Animal): def __init__(self, name): ...",
+    "inherit":       "class Child(Parent): super().__init__(...)",
+
+    # Error handling
+    "try/except":    "try: risky() except ValueError as e: ...",
+
+    # File I/O
+    "read file":     "with open('f.txt') as f: data = f.read()",
+    "write file":    "with open('f.txt', 'w') as f: f.write('hello')",
+
+    # APIs
+    "GET":           "requests.get(url).json()",
+    "POST":          "requests.post(url, json=data)",
+}
+
+for concept, syntax in cheatsheet.items():
+    print(f"{concept:<14} → {syntax}")`,
+      },
+      {
+        title: "Next Steps — Build Something Real",
+        desc: "Ideas organized by what you want to specialize in.",
+        code: `paths = {
+    "Web Dev": [
+        "Build a portfolio site with Flask",
+        "Add a contact form (sends real emails)",
+        "Connect to a database (SQLite or MongoDB)",
+        "Learn Django for bigger apps",
+        "Deploy to Railway or Render"
+    ],
+    "Data Science": [
+        "Analyze a Kaggle dataset with Pandas",
+        "Create visualizations with Matplotlib",
+        "Build a data dashboard with Streamlit",
+        "Learn SQL to complement your Python",
+        "Take a stats course alongside Pandas"
+    ],
+    "Automation": [
+        "Automate a repetitive task you do manually",
+        "Write a web scraper for data you care about",
+        "Schedule scripts with cron or schedule library",
+        "Build a Telegram or Discord bot"
+    ],
+    "Machine Learning": [
+        "Learn scikit-learn with a real dataset",
+        "Build a classifier (predict categories)",
+        "Learn what train/test split means",
+        "Try a Kaggle competition"
+    ]
+}
+
+for path, steps in paths.items():
+    print(f"\\n{path}:")
+    for i, step in enumerate(steps, 1):
+        print(f"  {i}. {step}")`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Write a list comprehension that produces the first 10 perfect squares.",
+        "Write a function that uses <code>try/except</code> to safely convert a string to <code>float</code>.",
+        "Write a class <code>Counter</code> with a <code>count</code> attribute and <code>increment()</code>, <code>decrement()</code>, and <code>reset()</code> methods.",
+        "Open a file, read its content, and count the number of words.",
+        "Use the <code>datetime</code> module to print how many days you've been alive.",
+        "Write a regex that validates an email address format.",
+      ],
+      level2: [
+        "Write a web scraper that fetches quotes from <code>quotes.toscrape.com</code> and saves them to a JSON file.",
+        "Build a <code>Statistics</code> class with <code>mean</code>, <code>median</code>, <code>mode</code>, <code>std</code>, and <code>describe()</code> methods.",
+        "Create a Flask API with <code>GET /api/todos</code> and <code>POST /api/todos</code> routes.",
+        "Read a CSV with Pandas, clean the data (drop nulls, fix types), and print a summary.",
+        "Write a higher-order function <code>memoize(func)</code> that caches results of expensive function calls.",
+        "Build a file organizer: move files in a folder into subfolders by extension (images, docs, code, etc.).",
+      ],
+      level3: [
+        "Build a complete Flask REST API for a todo app: full CRUD, JSON responses, input validation, proper status codes.",
+        "Scrape a website, store the data in MongoDB, and expose it through a Flask API — a complete data pipeline.",
+        "Build a CLI tool that takes a GitHub username and prints their repositories, sorted by stars.",
+        "Your final challenge: build something YOU want to use. Any domain, any complexity — just ship it.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "Which Python data structure guarantees no duplicate values?",
+        opts: ["list", "tuple", "dict", "set"],
+        answer: 3,
+        explain: "Sets automatically remove duplicates — {1, 2, 2, 3} becomes {1, 2, 3}.",
+      },
+      {
+        q: "What does `super().__init__()` do in a child class?",
+        opts: ["Creates a new instance", "Calls the parent class's constructor to run its setup code", "Imports the parent module", "Deletes the parent class"],
+        answer: 1,
+        explain: "super() gives access to the parent class. Calling __init__ on it ensures the parent's setup code runs in the child.",
+      },
+      {
+        q: "What is the best way to open a file in Python?",
+        opts: ["f = open('file.txt'); f.close()", "with open('file.txt') as f: ...", "file.open('file.txt')", "import file; file.read()"],
+        answer: 1,
+        explain: "The with statement automatically closes the file when the block exits — even if an error occurs.",
+      },
+      {
+        q: "What is the correct HTTP status code for 'resource created successfully'?",
+        opts: ["200", "201", "204", "302"],
+        answer: 1,
+        explain: "201 Created is the standard response for a successful POST that created a new resource.",
+      },
+      {
+        q: "What is the most important thing to do after finishing 30 Days of Python?",
+        opts: ["Read more Python books", "Start another 30-day course", "Build a real project you actually care about", "Memorize all the syntax"],
+        answer: 2,
+        explain: "Building real projects is what turns knowledge into skill. The gap between 'I know Python' and 'I'm a Python developer' is exactly one project.",
+      },
+    ],
+  },
+
 ]; // end of DAYS array
 
-// Fill remaining days 20-30 with placeholder so navigation doesn't break
-for (let d = 20; d <= 30; d++) {
+// No more placeholders needed — all 30 days are complete!
+for (let d = 99; d <= 30; d++) {
   const topics = {
     20: {
       emoji: "📦",

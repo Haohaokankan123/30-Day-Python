@@ -487,8 +487,8 @@ body {
 .sidebar {
     width: 240px;
     min-width: 240px;
-    background: #161616;
-    border-right: 1px solid rgba(44, 44, 44, 0.4);
+    background: var(--bg-1);
+    border-right: 1px solid var(--border-light);
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -669,11 +669,11 @@ body {
 .topbar {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 0 24px;
-    height: 60px;
-    background: #161616;
-    border-bottom: 1px solid rgba(44, 44, 44, 0.4);
+    gap: 12px;
+    padding: 0 20px;
+    height: 56px;
+    background: var(--bg-1);
+    border-bottom: 1px solid var(--border-light);
     position: sticky;
     top: 0;
     z-index: 50;
@@ -701,27 +701,29 @@ body {
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 .complete-btn {
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.4);
-    color: #10b981;
-    padding: 7px 18px;
-    border-radius: 8px;
+    background: transparent;
+    border: 1px solid rgba(62, 207, 142, 0.4);
+    color: #3ECF8E;
+    padding: 6px 16px;
+    border-radius: 6px;
     font-size: 12px;
     font-weight: 600;
     font-family: "Inter", sans-serif;
     cursor: pointer;
-    transition: all 0.2s;
+    letter-spacing: 0.02em;
+    transition: background 0.15s, border-color 0.15s;
 }
 .complete-btn:hover {
-    background: rgba(16, 185, 129, 0.2);
+    background: rgba(62, 207, 142, 0.08);
+    border-color: rgba(62, 207, 142, 0.7);
 }
 .complete-btn.done {
-    background: rgba(16, 185, 129, 0.12);
-    color: #10b981;
-    border-color: rgba(16, 185, 129, 0.4);
+    background: rgba(62, 207, 142, 0.12);
+    color: #3ECF8E;
+    border-color: rgba(62, 207, 142, 0.5);
 }
 .home-btn {
     background: none;
@@ -1156,35 +1158,35 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 14px;
-    background: var(--bg-card);
+    background: var(--bg-1);
     border: 1px solid var(--border-light);
     border-radius: var(--radius);
-    padding: 14px 16px;
-    margin-bottom: 10px;
+    padding: 16px 18px;
+    margin-bottom: 8px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: border-color 0.15s, background 0.15s;
 }
 .exercise-item:hover {
     border-color: var(--border);
     background: var(--bg-2);
 }
 .exercise-item.checked {
-    background: rgba(16, 185, 129, 0.06);
-    border-color: rgba(16, 185, 129, 0.25);
+    background: rgba(62, 207, 142, 0.05);
+    border-color: rgba(62, 207, 142, 0.2);
 }
 .exercise-checkbox {
-    width: 20px;
-    height: 20px;
-    min-width: 20px;
-    border-radius: 6px;
-    border: 2px solid var(--bg-3);
-    background: var(--bg-2);
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border-radius: 5px;
+    border: 1.5px solid var(--border);
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
-    transition: all 0.2s;
-    margin-top: 1px;
+    font-size: 10px;
+    transition: background 0.15s, border-color 0.15s;
+    margin-top: 2px;
 }
 .exercise-item.checked .exercise-checkbox {
     background: var(--green);
@@ -1193,8 +1195,8 @@ body {
 }
 .exercise-text {
     color: var(--text-2);
-    font-size: 14.5px;
-    line-height: 1.6;
+    font-size: 14px;
+    line-height: 1.65;
 }
 .exercise-item.checked .exercise-text {
     text-decoration: line-through;
@@ -1501,7 +1503,7 @@ code[class*="language-"] {
 .quiz-options {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 10px;
 }
 @media (max-width: 600px) {
     .quiz-options {
@@ -1509,22 +1511,23 @@ code[class*="language-"] {
     }
 }
 .quiz-opt {
-    background: var(--bg-2);
+    background: var(--bg-1);
     border: 1px solid var(--border-light);
     border-radius: 8px;
-    padding: 10px 14px;
+    padding: 13px 16px;
     font-size: 14px;
     color: var(--text-2);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
     text-align: left;
     font-family: "Inter", sans-serif;
     display: flex;
     align-items: center;
     gap: 10px;
+    line-height: 1.45;
 }
 .quiz-opt:hover:not([disabled]) {
-    background: var(--bg-3);
+    background: var(--bg-2);
     border-color: var(--accent);
     color: var(--text-1);
 }
@@ -2169,19 +2172,29 @@ button {
    ============================================= */
 
 .tutor-btn {
-    background: rgba(252, 212, 77, 0.12);
-    color: var(--accent);
-    border: 1px solid rgba(252, 212, 77, 0.3);
-    padding: 8px 14px;
-    border-radius: 10px;
+    background: transparent;
+    color: var(--text-3);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 6px;
     font-family: "Inter", sans-serif;
     font-weight: 600;
     font-size: 13px;
     cursor: pointer;
+    letter-spacing: 0.01em;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
 .tutor-btn:hover {
-    background: rgba(252, 212, 77, 0.2);
+    background: rgba(255,255,255,0.05);
+    border-color: var(--border);
+    color: var(--text-1);
+}
+
+.tutor-btn.active {
+    background: rgba(255, 212, 59, 0.1);
+    border-color: rgba(255, 212, 59, 0.4);
+    color: var(--accent);
 }
 
 .tutor-panel {
@@ -2447,9 +2460,9 @@ button {
 
 /* ─── TOPBAR ICON BUTTONS ───────────────────── */
 .topbar-icon-btn {
-    background: var(--bg-2);
-    border: 1px solid var(--border-light);
-    color: var(--text-2);
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-3);
     padding: 6px 11px;
     border-radius: 8px;
     font-size: 13px;
@@ -2460,16 +2473,19 @@ button {
     white-space: nowrap;
 }
 
-.topbar-icon-btn:hover,
+.topbar-icon-btn:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: var(--border);
+    color: var(--text-1);
+}
 .topbar-icon-btn.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-    box-shadow: 0 4px 12px var(--accent-glow);
+    background: rgba(255, 212, 59, 0.1);
+    border-color: rgba(255, 212, 59, 0.4);
+    color: var(--accent);
 }
 
 .playground-topbar-btn {
-    letter-spacing: -0.5px;
+    letter-spacing: 0;
 }
 
 /* ─── FLOATING PLAYGROUND PANEL ─────────────── */
@@ -2494,10 +2510,16 @@ button {
     transform: translateX(0);
 }
 
-/* When both tutor AND playground are open, offset tutor */
-.tutor-panel.open + .floating-playground-panel.open,
-.floating-playground-panel.open ~ .tutor-panel.open {
-    right: 520px;
+/* When both panels open: playground sits left of tutor */
+.floating-playground-panel.both-open {
+    right: 400px;
+}
+
+/* Tutor button active state */
+.tutor-btn.active {
+    background: rgba(255, 212, 59, 0.1);
+    border-color: rgba(255, 212, 59, 0.4);
+    color: var(--accent);
 }
 
 .floating-playground-body {
@@ -3396,16 +3418,16 @@ button {
 .topbar-stats {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     padding: 0 4px;
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
-    margin-right: 8px;
+    border-right: 1px solid var(--border-light);
+    margin-right: 4px;
 }
 
 .topbar-level {
     font-size: 12px;
     font-weight: 600;
-    color: #fcd44d;
+    color: var(--accent);
     white-space: nowrap;
     letter-spacing: 0.02em;
 }
@@ -3418,16 +3440,16 @@ button {
 }
 
 .topbar-xp-bar {
-    width: 80px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.1);
+    width: 72px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 3px;
     overflow: hidden;
 }
 
 .topbar-xp-fill {
     height: 100%;
-    background: linear-gradient(90deg, #fcd44d, #f59e0b);
+    background: var(--accent);
     border-radius: 3px;
     width: 0%;
     transition: width 0.4s ease;
@@ -3435,34 +3457,35 @@ button {
 
 .topbar-xp-text {
     font-size: 10px;
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--text-4);
     white-space: nowrap;
 }
 
 .topbar-streak {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
-    color: #f97316;
+    color: var(--text-3);
     white-space: nowrap;
+    letter-spacing: 0.01em;
 }
 
 .topbar-badges-btn {
     background: none;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--border-light);
     border-radius: 6px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-3);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
+    font-family: "Inter", sans-serif;
     padding: 3px 8px;
     cursor: pointer;
-    transition:
-        background 0.15s,
-        border-color 0.15s;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
     white-space: nowrap;
 }
 .topbar-badges-btn:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--border);
+    color: var(--text-2);
 }
 
 /* ─── BADGE POPUP ────────────────────────────── */

@@ -234,9 +234,11 @@ Rules:
   // ─── UI actions ───────────────────────────────
   function toggle() {
     const panel = document.getElementById("tutorPanel");
+    const btn = document.getElementById("tutorBtn");
     if (!panel) return;
     const isOpen = panel.classList.toggle("open");
     panel.setAttribute("aria-hidden", isOpen ? "false" : "true");
+    if (btn) btn.classList.toggle("active", isOpen);
     if (isOpen) {
       if (getKey()) {
         hideKeyInput();
@@ -247,6 +249,7 @@ Rules:
         if (input) input.value = "";
       }
     }
+    if (typeof syncPanelPositions === "function") syncPanelPositions();
   }
 
   function toggleContext() {

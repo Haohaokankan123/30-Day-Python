@@ -198,7 +198,11 @@ function renderTopbarStats() {
   if (elXpFill) elXpFill.style.width = xpProgress + "%";
   if (elXpText) elXpText.textContent = nextLvl ? `${state.xp - xpForThis} / ${xpForNext - xpForThis} XP` : "MAX";
   if (elStreak) elStreak.textContent = state.streak;
-  if (elBadges) elBadges.textContent = `🏆 ${state.badges.size}`;
+  if (elBadges) {
+    const countEl = elBadges.querySelector("#topbarBadgeCount");
+    if (countEl) countEl.textContent = state.badges.size;
+    else elBadges.textContent = `${state.badges.size} badges`;
+  }
 }
 
 function showToast(html) {
@@ -924,6 +928,14 @@ function escapeHtml(str) {
 }
 
 // ─── FLOATING PLAYGROUND ──────────────────────
+function syncPanelPositions() {
+  const playground = document.getElementById("floatingPlaygroundPanel");
+  const tutor = document.getElementById("tutorPanel");
+  if (!playground || !tutor) return;
+  const bothOpen = playground.classList.contains("open") && tutor.classList.contains("open");
+  playground.classList.toggle("both-open", bothOpen);
+}
+
 function toggleFloatingPlayground() {
   const panel = document.getElementById("floatingPlaygroundPanel");
   const btn = document.getElementById("playgroundTopbarBtn");
@@ -932,6 +944,7 @@ function toggleFloatingPlayground() {
   panel.setAttribute("aria-hidden", isOpen ? "false" : "true");
   btn.classList.toggle("active", isOpen);
   if (isOpen) FloatingPlayground.mount();
+  syncPanelPositions();
 }
 
 const FloatingPlayground = (() => {

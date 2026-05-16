@@ -476,7 +476,7 @@ average = total / len(scores
                     <div class="topbar-actions">
                         <div class="topbar-stats">
                             <span class="topbar-level"
-                                >🐍 Lv.<span id="statLevel">1</span>
+                                >Lv.<span id="statLevel">1</span>
                                 <span id="statLevelName">Beginner</span></span
                             >
                             <div class="topbar-xp-wrap">
@@ -491,14 +491,14 @@ average = total / len(scores
                                 >
                             </div>
                             <span class="topbar-streak"
-                                >🔥 <span id="statStreak">0</span></span
+                                ><span id="statStreak">0</span> streak</span
                             >
                             <button
                                 class="topbar-badges-btn"
                                 id="topbarBadges"
                                 onclick="openBadgePopup()"
                             >
-                                🏆 0
+                                <span id="topbarBadgeCount">0</span> badges
                             </button>
                         </div>
                         <button
@@ -507,7 +507,7 @@ average = total / len(scores
                             onclick="toggleFloatingPlayground()"
                             title="Open code editor"
                         >
-                            💻 Editor
+                            Editor
                         </button>
                         <button
                             class="tutor-btn"
@@ -515,7 +515,7 @@ average = total / len(scores
                             onclick="toggleTutor()"
                             title="Open AI Tutor"
                         >
-                            🤖 AI Tutor
+                            AI Tutor
                         </button>
                         <button
                             class="topbar-progress-btn"
@@ -531,7 +531,7 @@ average = total / len(scores
                             id="completeBtn"
                             onclick="toggleComplete()"
                         >
-                            ✓ Mark Complete
+                            Mark Complete
                         </button>
                     </div>
                 </header>
