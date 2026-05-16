@@ -2760,51 +2760,1776 @@ print(round(area_of_circle(5), 2))  # 78.54`,
     ],
   },
 
+  {
+    day: 12,
+    emoji: "📦",
+    title: "Modules",
+    subtitle: "Reuse code by splitting it into files. Learn import, from...import, and tour Python's standard library.",
+    topics: ["import", "from...import", "as alias", "math & random", "os & sys", "Custom modules"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is a Module?</h2>
+      <p>A <strong>module</strong> is just a Python file (<code>.py</code>) that contains code — functions, variables, or classes — that you can reuse in other files. Instead of rewriting the same logic everywhere, you write it once in a module and <strong>import</strong> it where you need it.</p>
+      <p>Python comes with a huge <strong>standard library</strong> — hundreds of built-in modules ready to use without installing anything.</p>
+
+      <div class="section-divider"></div>
+      <h2>Importing a Whole Module</h2>
+      <p>Use the <strong><code>import</code></strong> keyword. Then access things inside it with <code>module.name</code>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import math
+
+print(math.pi)          # 3.141592653589793
+print(math.sqrt(25))    # 5.0
+print(math.floor(2.9))  # 2</pre>
+
+      <div class="section-divider"></div>
+      <h2>Importing Specific Items</h2>
+      <p>If you only need one or two things from a module, use <strong><code>from ... import ...</code></strong>. Then you can use the name directly — no <code>module.</code> prefix needed:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from math import pi, sqrt
+
+print(pi)        # 3.141592653589793
+print(sqrt(81))  # 9.0</pre>
+
+      <div class="section-divider"></div>
+      <h2>Renaming with <code>as</code></h2>
+      <p>Use <strong><code>as</code></strong> to give an imported module or item a shorter alias:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import math as m
+from statistics import mean as avg
+
+print(m.pi)
+print(avg([1, 2, 3, 4, 5]))   # 3</pre>
+
+      <div class="section-divider"></div>
+      <h2>A Tour of Useful Standard Modules</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">math</div><div class="cheatsheet-desc">pi, sqrt, pow, floor, ceil, log10</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">random</div><div class="cheatsheet-desc">random(), randint(a,b), choice(seq), shuffle(seq)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">statistics</div><div class="cheatsheet-desc">mean, median, mode, stdev</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">os</div><div class="cheatsheet-desc">getcwd(), listdir(), mkdir(), path operations</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">sys</div><div class="cheatsheet-desc">argv, version, exit(), maxsize, path</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">string</div><div class="cheatsheet-desc">ascii_letters, digits, punctuation</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Creating Your Own Module</h2>
+      <p>A module is just a file. If you make <strong><code>mymath.py</code></strong>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto"># mymath.py
+def double(n):
+    return n * 2
+
+def triple(n):
+    return n * 3</pre>
+      <p>You can import it from another file in the same folder:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># main.py
+from mymath import double, triple
+
+print(double(5))   # 10
+print(triple(5))   # 15</pre>
+
+      <div class="section-divider"></div>
+      <h2>The <code>__name__ == "__main__"</code> Pattern</h2>
+      <p>When a Python file runs directly, its <code>__name__</code> equals <code>"__main__"</code>. When it's imported, <code>__name__</code> equals the module's name. This lets you write code that only runs when the file is the main program:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def greet(name):
+    print(f"Hello, {name}!")
+
+if __name__ == "__main__":
+    # Only runs when this file is executed directly
+    greet("World")</pre>
+      <div class="info-box">
+        <strong>Why bother?</strong> Without that guard, every <code>import</code> would trigger your demo code. With it, your file is safe to import as a library AND runnable on its own.
+      </div>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Math Module Basics",
+        desc: "Constants and common math functions.",
+        code: `import math
+
+print(math.pi)                # 3.141592653589793
+print(math.sqrt(144))         # 12.0
+print(math.pow(2, 10))        # 1024.0
+print(math.floor(3.7))        # 3
+print(math.ceil(3.2))         # 4
+print(math.log10(1000))       # 3.0`,
+      },
+      {
+        title: "Random Module — Numbers and Choices",
+        desc: "Generate random numbers and pick from sequences.",
+        code: `import random
+
+print(random.random())              # float between 0.0 and 1.0
+print(random.randint(1, 100))       # integer between 1 and 100 inclusive
+print(random.choice(['a','b','c'])) # random pick from list
+
+deck = [1, 2, 3, 4, 5]
+random.shuffle(deck)
+print(deck)`,
+      },
+      {
+        title: "Statistics Module",
+        desc: "Quick stats on a list of numbers.",
+        code: `from statistics import mean, median, mode, stdev
+
+scores = [88, 92, 75, 92, 80, 100, 92]
+
+print("Mean:  ", mean(scores))
+print("Median:", median(scores))
+print("Mode:  ", mode(scores))
+print("Stdev: ", round(stdev(scores), 2))`,
+      },
+      {
+        title: "Importing with Aliases",
+        desc: "Shorten long module names with as.",
+        code: `import math as m
+from random import randint as ri
+
+print(m.pi)                    # 3.141592653589793
+print(m.sqrt(49))              # 7.0
+print(ri(1, 6), ri(1, 6))      # roll two dice`,
+      },
+      {
+        title: "Building a Random User ID",
+        desc: "Combine string + random to build IDs.",
+        code: `import random
+import string
+
+def user_id(length=8):
+    chars = string.ascii_letters + string.digits
+    return ''.join(random.choice(chars) for _ in range(length))
+
+print(user_id())       # e.g. 'aZ3kPq9X'
+print(user_id(12))     # 12-character ID
+print(user_id(6))      # 6-character ID`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Import the <code>math</code> module and print <code>math.pi</code> and <code>math.sqrt(2)</code>.",
+        "Use <code>from math import floor, ceil</code> and print <code>floor(3.7)</code> and <code>ceil(3.2)</code>.",
+        "Import <code>random</code> and print a random integer between 1 and 100 using <code>random.randint()</code>.",
+        "Use <code>random.choice()</code> to pick a random color from <code>['red','blue','green','yellow']</code>.",
+        "Import <code>statistics</code> and print the <code>mean</code> and <code>median</code> of <code>[10, 20, 30, 40, 50]</code>.",
+        "Import <code>math</code> as <code>m</code> and print <code>m.pow(2, 8)</code>.",
+      ],
+      level2: [
+        "Write a function <code>rgb_color()</code> that returns a tuple of three random integers between 0 and 255.",
+        "Write a function <code>random_user_id()</code> that returns a 6-character random ID using letters and digits.",
+        "Write a function <code>list_of_rgb_colors(n)</code> that returns a list of <code>n</code> random RGB tuples.",
+        "Use <code>random.shuffle()</code> to shuffle the list <code>[1,2,3,4,5,6,7,8,9,10]</code> and print it.",
+        "Write a function <code>generate_password(length)</code> that returns a random password mixing letters, digits, and punctuation.",
+        "Use the <code>statistics</code> module to compute the standard deviation of <code>[2, 4, 4, 4, 5, 5, 7, 9]</code>.",
+      ],
+      level3: [
+        "Build a custom module <code>shapes.py</code> with functions for area of circle, square, and triangle. Import and use them.",
+        "Write a function <code>generate_colors(kind, n)</code> that returns <code>n</code> random colors as RGB tuples if <code>kind == 'rgb'</code>, or hex strings if <code>kind == 'hex'</code>.",
+        "Use the <code>__name__ == '__main__'</code> guard in a script that defines a function and only calls it when run directly.",
+        "Write a function <code>seven_unique_numbers()</code> that returns seven unique random numbers between 0 and 9 (hint: use <code>random.sample()</code>).",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What is a module in Python?",
+        opts: ["A class with one method", "A Python file you can import and reuse", "A built-in keyword", "A type of variable"],
+        answer: 1,
+        explain: "A module is simply a Python file containing reusable code — functions, variables, or classes — that other files can import.",
+      },
+      {
+        q: "Which statement imports only the sqrt function from math?",
+        opts: ["import sqrt from math", "from math import sqrt", "import math.sqrt", "use math.sqrt"],
+        answer: 1,
+        explain: "The correct syntax is from <module> import <name>, so: from math import sqrt.",
+      },
+      {
+        q: "What does `import math as m` do?",
+        opts: ["Renames the math module to m for use in this file", "Makes math global", "Imports only m from math", "Deletes math"],
+        answer: 0,
+        explain: "The 'as' keyword gives the imported module a local alias — here, m — so you can write m.pi instead of math.pi.",
+      },
+      {
+        q: "What is the purpose of `if __name__ == '__main__':`?",
+        opts: ["Required at the top of every Python file", "Prevents the file from running", "Lets code run only when the file is executed directly, not when imported", "Defines a function"],
+        answer: 2,
+        explain: "It separates code that should only run when the file is the main program from code that should always run when imported.",
+      },
+      {
+        q: "Which module would you use to pick a random item from a list?",
+        opts: ["math", "statistics", "random", "os"],
+        answer: 2,
+        explain: "The random module's choice() function picks a random element from a sequence.",
+      },
+    ],
+  },
+
+  {
+    day: 13,
+    emoji: "🗜️",
+    title: "List Comprehension",
+    subtitle: "Write loops in a single line. Build new lists, sets, and dicts with concise, readable syntax.",
+    topics: ["Basic syntax", "if filter", "Nested loops", "Set & dict comprehensions", "Lambda functions", "When NOT to use"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is a List Comprehension?</h2>
+      <p>A <strong>list comprehension</strong> builds a new list from an existing iterable in one expressive line. It does the work of a <code>for</code> loop + <code>append()</code> — but shorter and often faster.</p>
+
+      <h3>The traditional way</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">squares = []
+for n in range(1, 6):
+    squares.append(n * n)
+print(squares)   # [1, 4, 9, 16, 25]</pre>
+
+      <h3>The comprehension way</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">squares = [n * n for n in range(1, 6)]
+print(squares)   # [1, 4, 9, 16, 25]</pre>
+
+      <div class="info-box">
+        <strong>The pattern:</strong> <code>[expression for item in iterable]</code> — read left to right: "give me <em>expression</em> for each <em>item</em> in <em>iterable</em>."
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Adding an <code>if</code> Filter</h2>
+      <p>Add a condition at the end to skip items you don't want:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">numbers = [1, -2, 3, -4, 5, -6, 7]
+positives = [n for n in numbers if n > 0]
+print(positives)   # [1, 3, 5, 7]
+
+evens = [n for n in range(1, 11) if n % 2 == 0]
+print(evens)       # [2, 4, 6, 8, 10]</pre>
+
+      <div class="section-divider"></div>
+      <h2>if / else Inside</h2>
+      <p>Use <code>if/else</code> <em>before</em> the <code>for</code> to transform each item conditionally:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">labels = ["even" if n % 2 == 0 else "odd" for n in range(1, 6)]
+print(labels)   # ['odd', 'even', 'odd', 'even', 'odd']</pre>
+
+      <div class="section-divider"></div>
+      <h2>Nested Loops — Flattening</h2>
+      <p>Flatten a 2D list into a 1D list with two <code>for</code> clauses:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+flat = [n for row in matrix for n in row]
+print(flat)   # [1, 2, 3, 4, 5, 6, 7, 8, 9]</pre>
+
+      <div class="section-divider"></div>
+      <h2>Set and Dict Comprehensions</h2>
+      <p>The same idea works for sets <code>{}</code> and dicts <code>{key: value}</code>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># set comprehension — duplicates removed automatically
+unique = {n % 5 for n in range(20)}
+print(unique)   # {0, 1, 2, 3, 4}
+
+# dict comprehension
+squares = {n: n * n for n in range(1, 6)}
+print(squares)  # {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}</pre>
+
+      <div class="section-divider"></div>
+      <h2>Lambda Functions</h2>
+      <p>A <strong>lambda</strong> is a tiny anonymous function — one line, no <code>def</code>, no name (unless you assign it). Useful when you need a quick function to pass to something else.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">add = lambda a, b: a + b
+print(add(3, 4))   # 7
+
+square = lambda n: n * n
+print(square(5))   # 25</pre>
+      <div class="info-box">
+        <strong>Rule:</strong> <code>lambda parameters: expression</code> — only ONE expression allowed (no statements, no multiple lines). Use <code>def</code> for anything more complex.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>When NOT to Use Comprehensions</h2>
+      <p>If the logic needs multiple steps, nested conditions, or side effects, write a normal loop. A comprehension that takes 3 minutes to understand is worse than a 6-line loop anyone can read.</p>
+      <div class="info-box warning">
+        <strong>Readability first.</strong> Comprehensions shine when they fit comfortably on one line and the intent is obvious. If you need a comment to explain it, use a regular loop instead.
+      </div>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Squares with Comprehension",
+        desc: "Build a list of squares in one line.",
+        code: `squares = [n ** 2 for n in range(1, 11)]
+print(squares)   # [1, 4, 9, ..., 100]
+
+cubes = [n ** 3 for n in range(1, 6)]
+print(cubes)     # [1, 8, 27, 64, 125]`,
+      },
+      {
+        title: "Filtering with if",
+        desc: "Keep only items that pass a test.",
+        code: `numbers = [-4, -2, 0, 1, 3, 5, -7, 8]
+
+positives = [n for n in numbers if n > 0]
+print(positives)   # [1, 3, 5, 8]
+
+evens = [n for n in range(1, 21) if n % 2 == 0]
+print(evens)       # [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]`,
+      },
+      {
+        title: "Flatten a 2D List",
+        desc: "Turn a list of lists into a single flat list.",
+        code: `matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+flat = [n for row in matrix for n in row]
+print(flat)   # [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+# Bonus: only even numbers
+even_flat = [n for row in matrix for n in row if n % 2 == 0]
+print(even_flat)  # [2, 4, 6, 8]`,
+      },
+      {
+        title: "Dict and Set Comprehensions",
+        desc: "Same pattern, different container.",
+        code: `# Dict — word → length
+words = ["apple", "banana", "cherry", "date"]
+lengths = {w: len(w) for w in words}
+print(lengths)
+# {'apple': 5, 'banana': 6, 'cherry': 6, 'date': 4}
+
+# Set — first letters, no duplicates
+letters = {w[0] for w in ['apple', 'avocado', 'banana', 'berry']}
+print(letters)   # {'a', 'b'}`,
+      },
+      {
+        title: "Lambda Functions",
+        desc: "Small one-line functions assigned to a name or used inline.",
+        code: `double = lambda n: n * 2
+print(double(7))            # 14
+
+# Lambda in sorted()
+people = [('Alice', 30), ('Bob', 25), ('Carol', 35)]
+by_age = sorted(people, key=lambda p: p[1])
+print(by_age)
+# [('Bob', 25), ('Alice', 30), ('Carol', 35)]`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Use a list comprehension to build a list of the squares of numbers 1 to 10.",
+        "Use a list comprehension with <code>if</code> to keep only the even numbers from <code>range(20)</code>.",
+        "Use a list comprehension to convert <code>['apple','banana','cherry']</code> to all uppercase.",
+        "Use a list comprehension to build a list of the lengths of each word in <code>['hi','hello','hey','greetings']</code>.",
+        "Write a lambda function <code>add</code> that takes two numbers and returns their sum.",
+        "Write a lambda function <code>cube</code> that returns <code>n ** 3</code>.",
+      ],
+      level2: [
+        "Given <code>nums = [-3, -1, 0, 2, 4, -5, 6]</code>, use a comprehension to keep only positive numbers.",
+        "Flatten <code>[[1,2],[3,4],[5,6]]</code> into <code>[1,2,3,4,5,6]</code> using a nested comprehension.",
+        "Build a dict comprehension that maps each number from 1 to 5 to its factorial. (Hint: <code>math.factorial</code>.)",
+        "Use a comprehension to build <code>['odd' if n%2 else 'even' for n in range(10)]</code> — predict the output, then run it.",
+        "Sort <code>[('Alice', 30), ('Bob', 25), ('Carol', 35)]</code> by age using <code>sorted()</code> and a <code>lambda</code>.",
+        "Use a set comprehension to get all unique first letters of <code>['cat','car','dog','duck','eel']</code>.",
+      ],
+      level3: [
+        "Given <code>countries = [['Finland','Helsinki'],['Sweden','Stockholm'],['Norway','Oslo']]</code>, use a comprehension to build <code>['FINLAND-HELSINKI', ...]</code>.",
+        "Write a list comprehension that returns all coordinates <code>(x, y)</code> where <code>x</code> is in <code>range(3)</code> and <code>y</code> is in <code>range(3)</code> AND <code>x != y</code>.",
+        "Convert <code>[{'name':'Alice','age':30}, {'name':'Bob','age':25}]</code> into a list of just the names using a comprehension.",
+        "Write a function that takes a list of numbers and returns a dict <code>{n: n**2}</code> for only the even ones, using a single comprehension.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What does `[n * 2 for n in range(5)]` produce?",
+        opts: ["[0, 1, 2, 3, 4]", "[0, 2, 4, 6, 8]", "[2, 4, 6, 8, 10]", "[10]"],
+        answer: 1,
+        explain: "It doubles each number from range(5) which is 0,1,2,3,4 → 0,2,4,6,8.",
+      },
+      {
+        q: "Where does the if filter go in a list comprehension?",
+        opts: ["At the beginning", "After the expression, before for", "At the end, after the for clause", "Inside the brackets only as if/else"],
+        answer: 2,
+        explain: "Pattern: [expression for item in iterable if condition] — the filter goes last.",
+      },
+      {
+        q: "What does `[n for row in matrix for n in row]` do?",
+        opts: ["Counts items in matrix", "Sorts the matrix", "Flattens a 2D list into a 1D list", "Reverses each row"],
+        answer: 2,
+        explain: "Two for clauses produce a nested loop — it walks each row, then each item, building a flat list.",
+      },
+      {
+        q: "What is a lambda function?",
+        opts: ["A function with no return value", "A small anonymous one-expression function", "A function that runs in parallel", "A function defined with def"],
+        answer: 1,
+        explain: "Lambdas are tiny, anonymous functions limited to a single expression — useful where you need a quick function inline.",
+      },
+      {
+        q: "What does `{n: n*n for n in range(1, 4)}` produce?",
+        opts: ["[1, 4, 9]", "{1, 4, 9}", "{1: 1, 2: 4, 3: 9}", "(1, 4, 9)"],
+        answer: 2,
+        explain: "Curly braces with a key:value expression make a dict comprehension — n maps to n*n for each n.",
+      },
+    ],
+  },
+
+  {
+    day: 14,
+    emoji: "🏗️",
+    title: "Higher Order Functions",
+    subtitle: "Functions that take or return other functions. Master map, filter, reduce, and decorators.",
+    topics: ["Functions as values", "map()", "filter()", "reduce()", "Closures", "Decorators"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>Functions Are First-Class Values</h2>
+      <p>In Python, functions are <strong>objects</strong>. You can assign them to variables, pass them as arguments, and return them from other functions. A function that takes or returns another function is called a <strong>higher order function</strong>.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def shout(text):
+    return text.upper()
+
+# Assign function to a variable
+yell = shout
+print(yell("hello"))   # HELLO
+
+# Pass function as an argument
+def apply(func, value):
+    return func(value)
+
+print(apply(shout, "hi there"))   # HI THERE</pre>
+
+      <div class="section-divider"></div>
+      <h2>The Three Classics: map, filter, reduce</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">map(func, iterable)</div><div class="cheatsheet-desc">Apply func to every item — returns an iterator</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">filter(func, iterable)</div><div class="cheatsheet-desc">Keep items where func returns True</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">reduce(func, iterable)</div><div class="cheatsheet-desc">Combine items pairwise into one value (from functools)</div></div>
+      </div>
+
+      <h3>map()</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">numbers = [1, 2, 3, 4]
+doubled = list(map(lambda n: n * 2, numbers))
+print(doubled)   # [2, 4, 6, 8]</pre>
+
+      <h3>filter()</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">numbers = [1, 2, 3, 4, 5, 6, 7, 8]
+evens = list(filter(lambda n: n % 2 == 0, numbers))
+print(evens)   # [2, 4, 6, 8]</pre>
+
+      <h3>reduce()</h3>
+      <p><code>reduce</code> isn't built-in — you import it from <code>functools</code>. It reduces a list to one value by combining pairs:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from functools import reduce
+
+numbers = [1, 2, 3, 4, 5]
+total = reduce(lambda a, b: a + b, numbers)
+print(total)   # 15  (((1+2)+3)+4)+5</pre>
+
+      <div class="section-divider"></div>
+      <h2>Closures</h2>
+      <p>A <strong>closure</strong> is a function that "remembers" variables from the scope where it was created — even after that outer scope has finished.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def make_multiplier(n):
+    def multiply(x):
+        return x * n   # 'n' is remembered
+    return multiply
+
+double = make_multiplier(2)
+triple = make_multiplier(3)
+
+print(double(10))   # 20
+print(triple(10))   # 30</pre>
+
+      <div class="section-divider"></div>
+      <h2>Decorators</h2>
+      <p>A <strong>decorator</strong> is a function that wraps another function to add behavior — without changing its code. You apply it with <code>@decorator_name</code> above the <code>def</code>.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def shouting(func):
+    def wrapper(text):
+        result = func(text)
+        return result.upper() + "!!!"
+    return wrapper
+
+@shouting
+def greet(name):
+    return f"hello {name}"
+
+print(greet("alice"))   # HELLO ALICE!!!</pre>
+      <div class="info-box">
+        <strong>What <code>@shouting</code> means:</strong> Python rewrites <code>greet = shouting(greet)</code>. Now whenever you call <code>greet()</code>, you're really calling the wrapper that the decorator returned.
+      </div>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Passing a Function as an Argument",
+        desc: "Functions are objects — you can pass them around.",
+        code: `def square(n):
+    return n * n
+
+def cube(n):
+    return n ** 3
+
+def apply(func, value):
+    return func(value)
+
+print(apply(square, 5))   # 25
+print(apply(cube, 5))     # 125`,
+      },
+      {
+        title: "map() with lambda",
+        desc: "Transform every item in a list.",
+        code: `numbers = [1, 2, 3, 4, 5]
+
+doubled = list(map(lambda n: n * 2, numbers))
+print(doubled)   # [2, 4, 6, 8, 10]
+
+names = ['alice', 'bob', 'carol']
+upper = list(map(str.upper, names))
+print(upper)     # ['ALICE', 'BOB', 'CAROL']`,
+      },
+      {
+        title: "filter() — Keep What Matches",
+        desc: "Drop items that fail a test.",
+        code: `numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+evens = list(filter(lambda n: n % 2 == 0, numbers))
+print(evens)   # [2, 4, 6, 8, 10]
+
+words = ['hi', 'hello', 'hey', 'greetings', 'yo']
+long_words = list(filter(lambda w: len(w) > 3, words))
+print(long_words)   # ['hello', 'greetings']`,
+      },
+      {
+        title: "reduce() — Collapse to One Value",
+        desc: "Combine items pairwise.",
+        code: `from functools import reduce
+
+# Sum
+total = reduce(lambda a, b: a + b, [1, 2, 3, 4, 5])
+print(total)   # 15
+
+# Max
+biggest = reduce(lambda a, b: a if a > b else b, [3, 1, 7, 2, 9, 4])
+print(biggest)   # 9
+
+# Product
+product = reduce(lambda a, b: a * b, [1, 2, 3, 4, 5])
+print(product)   # 120`,
+      },
+      {
+        title: "A Simple Decorator",
+        desc: "Wrap a function to add behavior.",
+        code: `def timestamp(func):
+    def wrapper(*args, **kwargs):
+        print(f"[Running {func.__name__}...]")
+        result = func(*args, **kwargs)
+        print(f"[Done]")
+        return result
+    return wrapper
+
+@timestamp
+def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("Alice"))
+# [Running greet...]
+# [Done]
+# Hello, Alice!`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Explain in your own words the difference between <code>map</code>, <code>filter</code>, and <code>reduce</code>.",
+        "Define a function <code>double(n)</code> and pass it to <code>map()</code> with <code>[1,2,3,4,5]</code>.",
+        "Use <code>filter()</code> with a lambda to keep only the odd numbers in <code>range(20)</code>.",
+        "Use <code>map()</code> with a lambda to convert <code>['python','is','fun']</code> to all uppercase.",
+        "Use <code>map()</code> to square each number in <code>[1,2,3,4,5]</code>.",
+        "Use <code>filter()</code> with <code>lambda w: len(w) > 4</code> on <code>['hi','hello','hey','python']</code>.",
+      ],
+      level2: [
+        "Use <code>filter()</code> to keep only countries from <code>['Finland','Sweden','Norway','Iceland','Denmark']</code> that contain the substring <code>'land'</code>.",
+        "Use <code>filter()</code> to keep countries with exactly 6 letters.",
+        "Use <code>filter()</code> to keep countries that start with the letter <code>'E'</code>.",
+        "Use <code>reduce()</code> to sum all numbers in <code>[10, 20, 30, 40, 50]</code>.",
+        "Use <code>reduce()</code> to concatenate <code>['Python', 'is', 'fun']</code> into the string <code>'Python is fun'</code>.",
+        "Write a closure <code>make_adder(n)</code> that returns a function adding <code>n</code> to its argument. Verify <code>make_adder(10)(5) == 15</code>.",
+      ],
+      level3: [
+        "Write a decorator <code>@uppercase</code> that converts the return value of any function it wraps to uppercase.",
+        "Chain <code>map()</code> and <code>filter()</code>: take <code>[1,2,3,4,5,6,7,8,9,10]</code>, keep only even numbers, then square each one.",
+        "Write a decorator <code>@log_calls</code> that prints the function name and arguments before calling it.",
+        "Write a closure <code>counter()</code> that returns a function which, each time it's called, returns 1, 2, 3, ... in order.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What is a higher order function?",
+        opts: ["Any function with more than 5 lines", "A function that takes or returns another function", "A function that runs faster", "A function that uses recursion"],
+        answer: 1,
+        explain: "Higher order functions take other functions as arguments or return them. map, filter, and reduce are classic examples.",
+      },
+      {
+        q: "What does `list(map(lambda x: x*2, [1,2,3]))` produce?",
+        opts: ["[1, 2, 3]", "[2, 4, 6]", "[1, 4, 9]", "[3]"],
+        answer: 1,
+        explain: "map applies the lambda (x*2) to each element: 1→2, 2→4, 3→6.",
+      },
+      {
+        q: "Where is reduce() defined?",
+        opts: ["Built-in (no import needed)", "In the math module", "In the functools module", "In the itertools module"],
+        answer: 2,
+        explain: "Unlike map and filter, reduce was moved out of built-ins — you must import it: from functools import reduce.",
+      },
+      {
+        q: "What is a closure?",
+        opts: ["A function that closes a file", "A function that remembers variables from its enclosing scope", "A function with no return value", "A built-in Python function"],
+        answer: 1,
+        explain: "A closure is a function defined inside another function that 'captures' and remembers variables from the outer function's scope.",
+      },
+      {
+        q: "What does the @ symbol do above a function definition?",
+        opts: ["Comment line", "Applies a decorator to the function", "Marks it as private", "Imports a module"],
+        answer: 1,
+        explain: "@decorator above a def is syntactic sugar for `func = decorator(func)` — it wraps the function with the decorator.",
+      },
+    ],
+  },
+
+  {
+    day: 15,
+    emoji: "🐛",
+    title: "Python Type Errors",
+    subtitle: "Read tracebacks like a detective. Understand the most common Python errors and how to fix them.",
+    topics: ["Reading tracebacks", "SyntaxError", "NameError", "TypeError", "ValueError", "IndexError & KeyError", "ImportError"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>How to Read a Traceback</h2>
+      <p>When Python hits an error, it stops and prints a <strong>traceback</strong> — a report of what went wrong and where. Read it from <em>bottom to top</em>: the last line tells you the error type and message; the lines above show where it happened.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">Traceback (most recent call last):
+  File "main.py", line 3, in <module>
+    print(x)
+NameError: name 'x' is not defined</pre>
+      <div class="info-box">
+        <strong>The fix is in the message.</strong> Almost every error tells you what's missing or wrong. Learning to read tracebacks is half the battle.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>The Big Ten — Errors You'll Actually See</h2>
+
+      <h3>1. SyntaxError</h3>
+      <p>You wrote something Python can't parse. Often a missing parenthesis, colon, or quote.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">print "Hello"        # SyntaxError — Python 3 needs parentheses
+print("Hello")       # ✓</pre>
+
+      <h3>2. NameError</h3>
+      <p>You used a name that wasn't defined.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">print(age)           # NameError: name 'age' is not defined
+age = 30
+print(age)           # ✓ 30</pre>
+
+      <h3>3. IndexError</h3>
+      <p>You asked for a list index that doesn't exist.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">colors = ['red', 'green']
+print(colors[5])     # IndexError: list index out of range
+print(colors[1])     # ✓ green</pre>
+
+      <h3>4. KeyError</h3>
+      <p>You asked for a dictionary key that doesn't exist.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">user = {'name': 'Alice'}
+print(user['age'])   # KeyError: 'age'
+print(user.get('age', 'unknown'))   # ✓ uses default</pre>
+
+      <h3>5. TypeError</h3>
+      <p>You used an operation on the wrong type — like adding a number to a string.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">result = '4' + 4     # TypeError: can only concatenate str to str
+result = int('4') + 4   # ✓ 8</pre>
+
+      <h3>6. ValueError</h3>
+      <p>The type is right but the value can't be used. Classic: converting a non-numeric string to <code>int</code>.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">n = int('hello')     # ValueError: invalid literal for int()
+n = int('42')        # ✓ 42</pre>
+
+      <h3>7. AttributeError</h3>
+      <p>You called a method that doesn't exist on this object.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">numbers = [1, 2, 3]
+numbers.push(4)      # AttributeError — lists have no .push()
+numbers.append(4)    # ✓</pre>
+
+      <h3>8. ZeroDivisionError</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">result = 10 / 0      # ZeroDivisionError: division by zero
+result = 10 / 2      # ✓ 5.0</pre>
+
+      <h3>9. ImportError / ModuleNotFoundError</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">import maath        # ModuleNotFoundError — typo
+import math         # ✓
+
+from math import sqrtt   # ImportError — name doesn't exist
+from math import sqrt    # ✓</pre>
+
+      <h3>10. IndentationError</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">def greet():
+print("Hello")       # IndentationError — body not indented
+
+def greet():
+    print("Hello")   # ✓</pre>
+
+      <div class="section-divider"></div>
+      <div class="info-box">
+        <strong>Pro tip:</strong> When you see an error you don't recognize, copy the last line into a search engine. Almost every Python error has a clear, common cause.
+      </div>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "NameError — Undefined Variable",
+        desc: "Try running, then fix it.",
+        code: `# This raises NameError
+# print(score)
+
+# Define it first
+score = 100
+print(score)   # ✓ 100`,
+      },
+      {
+        title: "TypeError — Mixing Types",
+        desc: "Can't add a string and a number directly.",
+        code: `age = '25'
+# total = age + 5         # TypeError
+total = int(age) + 5      # ✓ convert first
+print(total)              # 30
+
+# Same problem in reverse
+# msg = 'You are ' + 25   # TypeError
+msg = 'You are ' + str(25) + ' years old'
+print(msg)`,
+      },
+      {
+        title: "IndexError and KeyError",
+        desc: "Out-of-bounds list or missing dict key.",
+        code: `colors = ['red', 'green', 'blue']
+# print(colors[10])     # IndexError
+print(colors[-1])       # ✓ 'blue'
+
+user = {'name': 'Alice', 'age': 30}
+# print(user['email'])  # KeyError
+print(user.get('email', 'no email'))   # ✓ default value`,
+      },
+      {
+        title: "ValueError — Bad Conversion",
+        desc: "int() on a non-numeric string fails.",
+        code: `# n = int('hello')   # ValueError
+n = int('42')        # ✓ 42
+print(n)
+
+# Safe conversion pattern
+def safe_int(s):
+    try:
+        return int(s)
+    except ValueError:
+        return None
+
+print(safe_int('100'))      # 100
+print(safe_int('oops'))     # None`,
+      },
+      {
+        title: "ZeroDivisionError",
+        desc: "Divide-by-zero is always an error.",
+        code: `def safe_divide(a, b):
+    if b == 0:
+        return "Can't divide by zero"
+    return a / b
+
+print(safe_divide(10, 2))   # 5.0
+print(safe_divide(10, 0))   # Can't divide by zero`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Predict the error type: <code>print(x)</code> when <code>x</code> is not defined.",
+        "Predict the error type: <code>print([1,2,3][5])</code>.",
+        "Predict the error type: <code>print('hello' + 5)</code>.",
+        "Predict the error type: <code>print(int('abc'))</code>.",
+        "Predict the error type: <code>print(10 / 0)</code>.",
+        "Predict the error type: <code>import xyzmodule</code>.",
+      ],
+      level2: [
+        "Run each broken example in the lesson in the playground, observe the error message, then fix it.",
+        "Write a function that catches a <code>ValueError</code> when converting a string to <code>int</code> and returns <code>0</code> instead.",
+        "Write code that produces a <code>KeyError</code>, then rewrite it using <code>.get()</code> with a default value.",
+        "Write code that produces an <code>IndexError</code>, then rewrite it to check <code>len(lst)</code> first.",
+        "Write code that produces a <code>TypeError</code> by adding a string and a number — then fix it with proper conversion.",
+        "Write a function <code>safe_divide(a, b)</code> that returns <code>None</code> when <code>b == 0</code>.",
+      ],
+      level3: [
+        "Write a function <code>parse_int_list(strings)</code> that takes a list of strings and returns a list of integers, skipping any string that can't be converted.",
+        "Write a function that takes a dictionary and a list of keys and returns a list of the values, using <code>None</code> for missing keys.",
+        "Read the traceback of a multi-function call and identify exactly which line caused the error.",
+        "Write a wrapper function <code>try_run(func, *args)</code> that calls <code>func</code> with <code>args</code> and prints the error type if it fails.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What does `NameError: name 'x' is not defined` mean?",
+        opts: ["x is the wrong type", "You used x before defining it", "x is read-only", "x is too big"],
+        answer: 1,
+        explain: "NameError means Python looked up the name and didn't find it in any scope — it was never assigned.",
+      },
+      {
+        q: "Which error does `int('hello')` raise?",
+        opts: ["TypeError", "ValueError", "SyntaxError", "NameError"],
+        answer: 1,
+        explain: "The type (string) is correct for int(), but the value 'hello' can't be parsed as a number — that's a ValueError.",
+      },
+      {
+        q: "Which error does `[1,2,3][10]` raise?",
+        opts: ["KeyError", "TypeError", "IndexError", "ValueError"],
+        answer: 2,
+        explain: "Lists raise IndexError when the index is outside the valid range. (Dictionaries raise KeyError.)",
+      },
+      {
+        q: "How should you read a Python traceback?",
+        opts: ["Top to bottom", "Bottom to top — the error message is on the last line", "Only the first line matters", "Skip it and re-run"],
+        answer: 1,
+        explain: "Read tracebacks from the bottom up. The last line tells you the error type and message; the lines above trace the call path.",
+      },
+      {
+        q: "What error does `import maath` raise?",
+        opts: ["NameError", "ValueError", "ModuleNotFoundError", "SyntaxError"],
+        answer: 2,
+        explain: "When Python can't find a module with that name, it raises ModuleNotFoundError (a subclass of ImportError).",
+      },
+    ],
+  },
+
+  {
+    day: 16,
+    emoji: "📅",
+    title: "Python DateTime",
+    subtitle: "Work with dates and times. Format, parse, calculate durations, and use timedelta.",
+    topics: ["datetime.now()", "date & time", "strftime", "strptime", "timedelta", "Time differences"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>The <code>datetime</code> Module</h2>
+      <p>The <strong><code>datetime</code></strong> module gives you classes for working with dates and times. It's part of the standard library — no install needed.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from datetime import datetime, date, time, timedelta
+
+now = datetime.now()
+print(now)            # 2026-05-15 14:23:45.123456
+print(now.year)       # 2026
+print(now.month)      # 5
+print(now.day)        # 15
+print(now.hour)       # 14</pre>
+
+      <div class="section-divider"></div>
+      <h2>Formatting with <code>strftime</code></h2>
+      <p><strong><code>strftime</code></strong> ("string format time") turns a datetime into a custom string. You pass a format string built from special codes:</p>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">%Y</div><div class="cheatsheet-desc">4-digit year (2026)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">%m</div><div class="cheatsheet-desc">Month as number (01–12)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">%d</div><div class="cheatsheet-desc">Day of month (01–31)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">%B</div><div class="cheatsheet-desc">Full month name (May)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">%A</div><div class="cheatsheet-desc">Full weekday name (Friday)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">%H:%M:%S</div><div class="cheatsheet-desc">Hour:minute:second</div></div>
+      </div>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from datetime import datetime
+
+now = datetime.now()
+print(now.strftime("%Y-%m-%d"))            # 2026-05-15
+print(now.strftime("%d/%m/%Y, %H:%M:%S"))  # 15/05/2026, 14:23:45
+print(now.strftime("%A, %B %d, %Y"))       # Friday, May 15, 2026</pre>
+
+      <div class="section-divider"></div>
+      <h2>Parsing with <code>strptime</code></h2>
+      <p><strong><code>strptime</code></strong> ("string parse time") goes the other way — text to datetime. You give it the string AND the format code:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from datetime import datetime
+
+text = "15 May, 2026"
+date_obj = datetime.strptime(text, "%d %B, %Y")
+print(date_obj)          # 2026-05-15 00:00:00
+print(date_obj.year)     # 2026</pre>
+
+      <div class="section-divider"></div>
+      <h2><code>date</code> and <code>time</code> Alone</h2>
+      <p>If you only need the date or time part:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from datetime import date, time
+
+today = date.today()
+print(today)             # 2026-05-15
+
+birthday = date(2013, 10, 11)
+print(birthday)          # 2013-10-11
+
+t = time(14, 30, 0)
+print(t)                 # 14:30:00</pre>
+
+      <div class="section-divider"></div>
+      <h2>Time Differences with <code>timedelta</code></h2>
+      <p>Subtracting two dates gives a <strong><code>timedelta</code></strong> — a duration:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from datetime import datetime, timedelta
+
+now = datetime.now()
+new_year = datetime(2027, 1, 1)
+diff = new_year - now
+
+print(diff.days)          # 231 (or however many days away)
+print(diff.seconds)       # leftover seconds
+
+# Add or subtract duration
+tomorrow = now + timedelta(days=1)
+next_week = now + timedelta(weeks=1)
+two_hours_later = now + timedelta(hours=2)
+print(tomorrow)
+print(next_week)
+print(two_hours_later)</pre>
+
+      <div class="info-box">
+        <strong>Real use cases:</strong> scheduling reminders, calculating ages, measuring how long a task took, formatting timestamps for logs, finding business days between two dates.
+      </div>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Get Current Date and Time",
+        desc: "Pull each piece out of datetime.now().",
+        code: `from datetime import datetime
+
+now = datetime.now()
+print("Now:    ", now)
+print("Year:   ", now.year)
+print("Month:  ", now.month)
+print("Day:    ", now.day)
+print("Hour:   ", now.hour)
+print("Minute: ", now.minute)
+print("Second: ", now.second)
+print("Weekday:", now.strftime("%A"))`,
+      },
+      {
+        title: "Formatting with strftime",
+        desc: "Turn datetime into a custom string.",
+        code: `from datetime import datetime
+
+now = datetime.now()
+
+print(now.strftime("%Y-%m-%d"))
+print(now.strftime("%d/%m/%Y, %H:%M:%S"))
+print(now.strftime("%B %d, %Y"))
+print(now.strftime("%A, %d %B %Y"))
+print(now.strftime("%I:%M %p"))`,
+      },
+      {
+        title: "Parsing with strptime",
+        desc: "Read text into a datetime object.",
+        code: `from datetime import datetime
+
+text = "5 December, 2019"
+parsed = datetime.strptime(text, "%d %B, %Y")
+
+print(parsed)              # 2019-12-05 00:00:00
+print(parsed.year)         # 2019
+print(parsed.month)        # 12
+print(parsed.day)          # 5
+print(parsed.strftime("%A"))   # Thursday`,
+      },
+      {
+        title: "Time Difference",
+        desc: "Subtract dates to get a duration.",
+        code: `from datetime import datetime, date
+
+today = date.today()
+new_year = date(today.year + 1, 1, 1)
+diff = new_year - today
+
+print(f"Days until new year: {diff.days}")
+
+# Age in days
+birthday = date(2013, 10, 11)
+days_old = (today - birthday).days
+print(f"You are {days_old} days old")`,
+      },
+      {
+        title: "timedelta — Adding and Subtracting Time",
+        desc: "Move dates forward or backward.",
+        code: `from datetime import datetime, timedelta
+
+now = datetime.now()
+
+print("Now:           ", now)
+print("Tomorrow:      ", now + timedelta(days=1))
+print("Next week:     ", now + timedelta(weeks=1))
+print("3 hours later: ", now + timedelta(hours=3))
+print("2 days ago:    ", now - timedelta(days=2))`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Import <code>datetime</code> and print the current date and time.",
+        "Print just the current <code>year</code>, <code>month</code>, and <code>day</code> using attributes on <code>datetime.now()</code>.",
+        "Print today's date as <code>YYYY-MM-DD</code> using <code>strftime</code>.",
+        "Print today's date as <code>DD/MM/YYYY, HH:MM:SS</code>.",
+        "Print the full weekday name (e.g. <code>Monday</code>) for today using <code>%A</code>.",
+        "Create a <code>date</code> object for January 1, 2030 and print it.",
+      ],
+      level2: [
+        "Parse the string <code>'5 December, 2019'</code> into a datetime object using <code>strptime</code>.",
+        "Calculate how many days until next New Year's Day from today.",
+        "Use <code>timedelta(days=30)</code> to print the date 30 days from now.",
+        "Use <code>timedelta(weeks=2, hours=3)</code> to print a future datetime.",
+        "Calculate the difference in days between January 1, 1970 and today.",
+        "Given a birth date, write a function that returns the person's age in years.",
+      ],
+      level3: [
+        "Write a function <code>days_between(date1, date2)</code> that returns the number of days between two date strings in <code>YYYY-MM-DD</code> format.",
+        "Write a function <code>is_weekend(date_obj)</code> that returns <code>True</code> if the date falls on Saturday or Sunday.",
+        "Write a function <code>add_business_days(start, n)</code> that returns the date <code>n</code> business days (Mon–Fri) after <code>start</code>.",
+        "Use <code>datetime</code> to time how long a loop takes: store <code>datetime.now()</code> before and after, then print the <code>timedelta</code>.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "Which module gives you the datetime class?",
+        opts: ["time", "date", "datetime", "calendar"],
+        answer: 2,
+        explain: "The datetime module contains the datetime class. Import with `from datetime import datetime`.",
+      },
+      {
+        q: "What does `strftime` do?",
+        opts: ["Parses a string into a date", "Formats a datetime as a custom string", "Returns the current time", "Compares two dates"],
+        answer: 1,
+        explain: "strftime = 'string format time' — turns a datetime into a custom-formatted string using % codes.",
+      },
+      {
+        q: "What format code prints the full weekday name?",
+        opts: ["%w", "%A", "%D", "%W"],
+        answer: 1,
+        explain: "%A is the full weekday name (Monday, Tuesday, ...). %a is the short version (Mon, Tue).",
+      },
+      {
+        q: "What does subtracting two datetime objects return?",
+        opts: ["A number of seconds", "A new datetime", "A timedelta", "A string"],
+        answer: 2,
+        explain: "datetime - datetime gives a timedelta — a duration object with .days and .seconds attributes.",
+      },
+      {
+        q: "How do you get tomorrow's date from today?",
+        opts: ["today + 1", "today.add_day()", "today + timedelta(days=1)", "today.next()"],
+        answer: 2,
+        explain: "Use timedelta(days=1) and add it: `tomorrow = today + timedelta(days=1)`.",
+      },
+    ],
+  },
+
+  {
+    day: 17,
+    emoji: "🛡️",
+    title: "Exception Handling",
+    subtitle: "Catch errors before they crash your program. Master try, except, else, finally, and raise.",
+    topics: ["try / except", "Multiple except", "except as e", "else & finally", "raise", "Custom exceptions"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>Why Handle Exceptions?</h2>
+      <p>If your code might fail — bad user input, missing file, network error — you can <strong>catch</strong> the failure instead of letting your program crash. That's exception handling.</p>
+
+      <div class="section-divider"></div>
+      <h2>Basic try / except</h2>
+      <p>Put the risky code in <code>try</code>. If anything goes wrong, control jumps to <code>except</code>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">try:
+    n = int("hello")
+except:
+    print("That wasn't a number!")
+
+# Program continues
+print("Still running")</pre>
+
+      <div class="info-box warning">
+        <strong>Avoid bare <code>except:</code></strong> — it catches everything, including bugs you didn't expect. Always catch a specific error type when you can.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Catching a Specific Error</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">try:
+    n = int("hello")
+except ValueError:
+    print("Couldn't convert to int")</pre>
+
+      <h3>Multiple specific errors</h3>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">try:
+    n = int(input_string)
+    result = 100 / n
+except ValueError:
+    print("Not a valid number")
+except ZeroDivisionError:
+    print("Can't divide by zero")</pre>
+
+      <div class="section-divider"></div>
+      <h2>Capturing the Error: <code>except ... as e</code></h2>
+      <p>Use <code>as</code> to get the actual exception object — useful for logging or showing the message:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">try:
+    n = int("hello")
+except ValueError as e:
+    print(f"Error: {e}")
+# Error: invalid literal for int() with base 10: 'hello'</pre>
+
+      <div class="section-divider"></div>
+      <h2><code>else</code> and <code>finally</code></h2>
+      <ul style="margin:8px 0 16px 24px;color:var(--text-2);line-height:1.8">
+        <li><strong><code>else</code></strong> — runs only if the <code>try</code> block succeeded (no exception)</li>
+        <li><strong><code>finally</code></strong> — runs no matter what, even if an exception was raised</li>
+      </ul>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">try:
+    n = int("42")
+except ValueError:
+    print("Bad number")
+else:
+    print(f"Got {n}")        # only if no error
+finally:
+    print("Cleanup runs every time")</pre>
+
+      <div class="section-divider"></div>
+      <h2>Raising Your Own Exceptions</h2>
+      <p>Use <strong><code>raise</code></strong> to trigger an exception yourself — when bad input deserves a hard stop:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def set_age(age):
+    if age < 0:
+        raise ValueError("Age cannot be negative")
+    return age
+
+print(set_age(25))   # 25
+# print(set_age(-3))   # ValueError: Age cannot be negative</pre>
+
+      <div class="section-divider"></div>
+      <h2>Custom Exception Classes</h2>
+      <p>Create your own exception by inheriting from <code>Exception</code>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">class TooYoungError(Exception):
+    pass
+
+def check_age(age):
+    if age < 13:
+        raise TooYoungError(f"Age {age} is too young to join")
+    return "Welcome!"
+
+try:
+    print(check_age(10))
+except TooYoungError as e:
+    print(f"Sorry: {e}")
+# Sorry: Age 10 is too young to join</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Basic try / except",
+        desc: "Catch a bad conversion.",
+        code: `def safe_int(s):
+    try:
+        return int(s)
+    except ValueError:
+        return None
+
+print(safe_int('42'))     # 42
+print(safe_int('hello'))  # None
+print(safe_int('3.14'))   # None  (int() can't parse decimals)`,
+      },
+      {
+        title: "Multiple except Clauses",
+        desc: "Handle different error types differently.",
+        code: `def divide(a, b):
+    try:
+        return int(a) / int(b)
+    except ValueError:
+        return "One of those wasn't a number"
+    except ZeroDivisionError:
+        return "Can't divide by zero"
+
+print(divide('10', '2'))      # 5.0
+print(divide('hi', '2'))      # One of those wasn't a number
+print(divide('10', '0'))      # Can't divide by zero`,
+      },
+      {
+        title: "except ... as e — Getting the Message",
+        desc: "Capture the exception object.",
+        code: `try:
+    user = {'name': 'Alice'}
+    print(user['email'])
+except KeyError as e:
+    print(f"Missing key: {e}")
+# Missing key: 'email'
+
+try:
+    n = int('not-a-number')
+except ValueError as e:
+    print(f"Bad input — {e}")`,
+      },
+      {
+        title: "else and finally",
+        desc: "Run code only on success / always.",
+        code: `def parse_age(s):
+    try:
+        age = int(s)
+    except ValueError:
+        print("Bad input")
+    else:
+        print(f"Got age: {age}")
+    finally:
+        print("Done parsing")
+    print("---")
+
+parse_age('25')
+parse_age('hello')`,
+      },
+      {
+        title: "raise and Custom Exceptions",
+        desc: "Throw your own errors.",
+        code: `class NegativeNumberError(Exception):
+    pass
+
+def square_root(n):
+    if n < 0:
+        raise NegativeNumberError(f"Can't sqrt negative number: {n}")
+    return n ** 0.5
+
+try:
+    print(square_root(16))    # 4.0
+    print(square_root(-9))    # raises
+except NegativeNumberError as e:
+    print(f"Error: {e}")`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Wrap <code>int('hello')</code> in a <code>try/except ValueError</code> that prints <code>'bad input'</code>.",
+        "Wrap <code>10 / 0</code> in a <code>try/except ZeroDivisionError</code>.",
+        "Wrap a dictionary lookup that misses (<code>{'a': 1}['b']</code>) in a <code>try/except KeyError</code>.",
+        "Wrap a list lookup that's out of bounds in <code>try/except IndexError</code>.",
+        "Catch the error message with <code>except ValueError as e</code> and print it.",
+        "Use a <code>finally</code> block that prints <code>'cleanup'</code> regardless of what happens.",
+      ],
+      level2: [
+        "Write a function <code>safe_divide(a, b)</code> that uses <code>try/except ZeroDivisionError</code> and returns <code>None</code> on failure.",
+        "Write a function <code>parse_int(s)</code> that uses <code>try/except ValueError</code> and returns <code>0</code> if the string can't be converted.",
+        "Write a loop that asks for a list of values and converts each to <code>int</code>, skipping ones that fail.",
+        "Use <code>raise ValueError('...')</code> inside a function that rejects negative numbers.",
+        "Use both <code>else</code> and <code>finally</code> in one <code>try</code> block.",
+        "Catch two different error types in the same <code>try</code> block with two <code>except</code> clauses.",
+      ],
+      level3: [
+        "Create a custom exception class <code>InvalidEmailError</code> and a function that raises it if a string has no <code>'@'</code>.",
+        "Write a function <code>retry(func, attempts=3)</code> that calls <code>func</code> and retries up to <code>attempts</code> times on any exception.",
+        "Write a function <code>safe_get(d, *keys)</code> that navigates nested dicts and returns <code>None</code> if any key is missing.",
+        "Write a context-style function using <code>try/finally</code> that simulates opening and always closing a resource, even on error.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What does the `try` block contain?",
+        opts: ["The error handler", "Code that might raise an exception", "Cleanup code", "Code that always runs"],
+        answer: 1,
+        explain: "Put potentially-failing code inside try. If an exception happens, control jumps to the matching except clause.",
+      },
+      {
+        q: "Why is `except:` (bare except) discouraged?",
+        opts: ["It's slower", "It catches every exception including ones you didn't anticipate (like KeyboardInterrupt)", "It's deprecated", "It causes infinite loops"],
+        answer: 1,
+        explain: "Bare except swallows ALL exceptions including bugs and system interrupts — catch specific types instead.",
+      },
+      {
+        q: "When does the `finally` block run?",
+        opts: ["Only when an exception is raised", "Only when no exception is raised", "Always — exception or not", "Only when else runs"],
+        answer: 2,
+        explain: "finally always runs, making it perfect for cleanup like closing files or releasing resources.",
+      },
+      {
+        q: "What does `raise ValueError('bad')` do?",
+        opts: ["Catches a ValueError", "Triggers a ValueError manually", "Defines a new exception class", "Prints 'bad'"],
+        answer: 1,
+        explain: "raise manually triggers an exception. The string is the error message attached to it.",
+      },
+      {
+        q: "How do you capture the exception object for inspection?",
+        opts: ["except ValueError: e", "except ValueError as e:", "except ValueError -> e:", "except e is ValueError:"],
+        answer: 1,
+        explain: "The 'as' keyword binds the exception object to a variable name you choose — typically `e`.",
+      },
+    ],
+  },
+
+  {
+    day: 18,
+    emoji: "🔍",
+    title: "Regular Expressions",
+    subtitle: "Find, match, and transform text patterns with the re module. Powerful pattern matching in one line.",
+    topics: ["re.match & re.search", "re.findall", "re.sub", "Character classes", "Quantifiers", "Groups"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>What is a Regular Expression?</h2>
+      <p>A <strong>regular expression</strong> (regex) is a tiny pattern language for describing text. You can use it to find, match, replace, or split strings based on rules — instead of writing loops with <code>if</code>s.</p>
+      <p>In Python, regex lives in the <strong><code>re</code></strong> module.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import re
+
+text = "I have 3 apples and 12 oranges."
+numbers = re.findall(r"\\d+", text)
+print(numbers)   # ['3', '12']</pre>
+
+      <div class="section-divider"></div>
+      <h2>The Main <code>re</code> Functions</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">re.match(pattern, str)</div><div class="cheatsheet-desc">Match only at the START of the string</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">re.search(pattern, str)</div><div class="cheatsheet-desc">Find first match ANYWHERE</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">re.findall(pattern, str)</div><div class="cheatsheet-desc">Return list of all matches</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">re.sub(pattern, repl, str)</div><div class="cheatsheet-desc">Replace matches with new text</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">re.split(pattern, str)</div><div class="cheatsheet-desc">Split string at every match</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Pattern Building Blocks</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">.</div><div class="cheatsheet-desc">Any single character (except newline)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">\\d</div><div class="cheatsheet-desc">A digit (0–9)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">\\D</div><div class="cheatsheet-desc">NOT a digit</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">\\w</div><div class="cheatsheet-desc">Word character (letter, digit, underscore)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">\\s</div><div class="cheatsheet-desc">Whitespace (space, tab, newline)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">[abc]</div><div class="cheatsheet-desc">Any one of a, b, or c</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">[a-z]</div><div class="cheatsheet-desc">Any lowercase letter</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">[^abc]</div><div class="cheatsheet-desc">Anything EXCEPT a, b, or c</div></div>
+      </div>
+
+      <h3>Quantifiers — how many?</h3>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">*</div><div class="cheatsheet-desc">0 or more</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">+</div><div class="cheatsheet-desc">1 or more</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">?</div><div class="cheatsheet-desc">0 or 1 (optional)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">{3}</div><div class="cheatsheet-desc">exactly 3</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">{2,5}</div><div class="cheatsheet-desc">2 to 5</div></div>
+      </div>
+
+      <h3>Anchors — where?</h3>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">^</div><div class="cheatsheet-desc">Start of string</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">$</div><div class="cheatsheet-desc">End of string</div></div>
+      </div>
+
+      <div class="info-box">
+        <strong>Always use raw strings:</strong> Write <code>r"\\d+"</code>, not <code>"\\d+"</code>. The <code>r</code> tells Python "don't interpret backslashes" so regex shortcuts like <code>\\d</code> survive.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Groups with <code>()</code></h2>
+      <p>Parentheses capture parts of the match so you can pull them out:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import re
+
+text = "Charles is 12 years old."
+m = re.search(r"(\\w+) is (\\d+) years old", text)
+if m:
+    print(m.group(0))   # whole match
+    print(m.group(1))   # 'Charles'
+    print(m.group(2))   # '12'</pre>
+
+      <div class="section-divider"></div>
+      <h2>Replacing with <code>re.sub</code></h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import re
+
+text = "Call me at 555-1234 or 555-9999."
+hidden = re.sub(r"\\d", "*", text)
+print(hidden)
+# Call me at ***-**** or ***-****.</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Find All Numbers in Text",
+        desc: "Pull every digit-run out of a string.",
+        code: `import re
+
+text = "There are 3 cats, 12 dogs, and 7 hamsters."
+nums = re.findall(r"\\d+", text)
+print(nums)              # ['3', '12', '7']
+
+# Convert to ints
+totals = [int(n) for n in nums]
+print(sum(totals))       # 22`,
+      },
+      {
+        title: "re.search vs re.match",
+        desc: "search() finds anywhere; match() only at the start.",
+        code: `import re
+
+text = "hello world"
+
+m1 = re.match(r"world", text)
+print(m1)   # None — not at start
+
+m2 = re.search(r"world", text)
+print(m2)   # <re.Match object; ...>
+print(m2.group())   # 'world'`,
+      },
+      {
+        title: "Replace with re.sub",
+        desc: "Mask all digits in a string.",
+        code: `import re
+
+text = "My number is 555-867-5309."
+masked = re.sub(r"\\d", "*", text)
+print(masked)   # My number is ***-***-****.
+
+# Replace with a string
+shouty = re.sub(r"\\bworld\\b", "WORLD", "hello world wide world")
+print(shouty)   # hello WORLD wide WORLD`,
+      },
+      {
+        title: "Splitting Text",
+        desc: "Use a regex to split on any non-word character.",
+        code: `import re
+
+sentence = "Python, is; really: powerful! And -- fun."
+words = re.split(r"[^\\w]+", sentence)
+print(words)
+# ['Python', 'is', 'really', 'powerful', 'And', 'fun', '']
+
+# Filter out empties
+clean = [w for w in words if w]
+print(clean)`,
+      },
+      {
+        title: "Capturing Groups",
+        desc: "Pull dates apart into year, month, day.",
+        code: `import re
+
+text = "Today is 2026-05-15."
+m = re.search(r"(\\d{4})-(\\d{2})-(\\d{2})", text)
+if m:
+    print("Year: ", m.group(1))    # 2026
+    print("Month:", m.group(2))    # 05
+    print("Day:  ", m.group(3))    # 15
+    print("Full: ", m.group(0))    # 2026-05-15`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Use <code>re.findall(r'\\d+', text)</code> to extract all numbers from <code>'I have 3 apples and 12 oranges'</code>.",
+        "Use <code>re.search()</code> to check if the word <code>'python'</code> appears in a string.",
+        "Use <code>re.match()</code> to check whether a string STARTS with <code>'hello'</code>.",
+        "Use <code>re.sub(r'\\d', '*', text)</code> to mask all digits.",
+        "Use <code>re.split(r'\\s+', text)</code> to split a string on whitespace.",
+        "Use a character class <code>[aeiou]</code> with <code>re.findall</code> to count vowels in a sentence.",
+      ],
+      level2: [
+        "Use <code>re.findall(r'-?\\d+', text)</code> to extract positive AND negative numbers.",
+        "Write a regex that validates a Python variable name: starts with a letter or underscore, followed by letters, digits, or underscores.",
+        "Use <code>re.sub</code> to strip all punctuation from a sentence (replace <code>[^\\w\\s]</code> with <code>''</code>).",
+        "Use <code>re.split</code> on a paragraph to get a list of all words, then count word frequencies.",
+        "Write a regex with capturing groups to extract <code>(year, month, day)</code> from <code>'2026-05-15'</code>.",
+        "Validate an email-like string using <code>r'\\w+@\\w+\\.\\w+'</code>.",
+      ],
+      level3: [
+        "Given a paragraph, find the most common word using <code>re.findall(r'\\w+', text.lower())</code> + a dictionary count.",
+        "Extract all hashtags (words starting with <code>#</code>) from a tweet-like string.",
+        "Find the difference between the largest and smallest numbers in a text using a regex.",
+        "Write a function <code>clean_text(s)</code> that removes all special characters and returns the three most frequent words.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "What does `re.findall(r'\\d+', text)` return?",
+        opts: ["A single match object", "A boolean True/False", "A list of all matched substrings", "The first match only"],
+        answer: 2,
+        explain: "findall returns a list of every match in the string. r'\\d+' matches one or more digits, so you get a list of digit-runs.",
+      },
+      {
+        q: "What is the difference between re.match and re.search?",
+        opts: ["No difference", "match only checks the start; search finds anywhere", "match is faster", "search returns a list"],
+        answer: 1,
+        explain: "re.match anchors to the start of the string; re.search scans the whole string for the first match.",
+      },
+      {
+        q: "What does the `+` quantifier mean?",
+        opts: ["Exactly one", "Zero or one", "One or more", "Zero or more"],
+        answer: 2,
+        explain: "+ means one or more occurrences. * means zero or more. ? means zero or one.",
+      },
+      {
+        q: "What does `\\d` match?",
+        opts: ["Any character", "Any digit (0–9)", "Whitespace", "A literal 'd'"],
+        answer: 1,
+        explain: "\\d is shorthand for [0-9] — any single digit character.",
+      },
+      {
+        q: "Why use a raw string `r'...'` for regex patterns?",
+        opts: ["It's faster", "So Python doesn't interpret backslashes — your regex escapes survive", "Required for findall only", "It's case-sensitive"],
+        answer: 1,
+        explain: "Raw strings prevent Python from processing \\n, \\t, \\d, etc., so the regex engine sees your pattern exactly as written.",
+      },
+    ],
+  },
+
+  {
+    day: 19,
+    emoji: "📂",
+    title: "File Handling",
+    subtitle: "Read, write, and manage files. Work with text, JSON, and CSV — the building blocks of real data work.",
+    topics: ["open() & modes", "with statement", "read & write", "JSON files", "CSV files", "Deleting files"],
+
+    lesson: `
+    <div class="lesson-section">
+      <h2>Opening a File</h2>
+      <p>Use the built-in <strong><code>open()</code></strong> function. It takes a filename and a <strong>mode</strong>:</p>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'r'</div><div class="cheatsheet-desc">Read (default) — file must exist</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'w'</div><div class="cheatsheet-desc">Write — overwrites or creates</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'a'</div><div class="cheatsheet-desc">Append — adds to the end</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'x'</div><div class="cheatsheet-desc">Create — fails if file exists</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'r+'</div><div class="cheatsheet-desc">Read AND write</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'b'</div><div class="cheatsheet-desc">Binary mode (e.g. 'rb' for binary read)</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>The <code>with</code> Statement (Always Use It)</h2>
+      <p>Files need to be closed when you're done. The <strong><code>with</code></strong> statement does this for you automatically — even if an error happens:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">with open("notes.txt", "r") as f:
+    contents = f.read()
+    print(contents)
+# file is automatically closed here</pre>
+
+      <div class="info-box warning">
+        <strong>The old way:</strong> <code>f = open(...)</code> followed by <code>f.close()</code> works, but if an error happens between them, the file stays open and may leak. <code>with</code> prevents that.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Reading Files</h2>
+      <div class="cheatsheet-grid">
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">f.read()</div><div class="cheatsheet-desc">Whole file as one string</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">f.readline()</div><div class="cheatsheet-desc">One line at a time</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">f.readlines()</div><div class="cheatsheet-desc">List of all lines</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">for line in f:</div><div class="cheatsheet-desc">Iterate line by line (most memory-efficient)</div></div>
+      </div>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">with open("notes.txt") as f:
+    for line in f:
+        print(line.strip())</pre>
+
+      <div class="section-divider"></div>
+      <h2>Writing Files</h2>
+      <p><code>"w"</code> opens for writing — it ERASES existing content. Use <code>"a"</code> to append.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">with open("notes.txt", "w") as f:
+    f.write("Hello, world!\\n")
+    f.write("Second line.\\n")
+
+with open("notes.txt", "a") as f:
+    f.write("Appended line.\\n")</pre>
+
+      <div class="section-divider"></div>
+      <h2>JSON Files</h2>
+      <p><strong>JSON</strong> (JavaScript Object Notation) is a universal data format that maps cleanly to Python dicts and lists. Use the <code>json</code> module:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import json
+
+# Write a dict as JSON
+data = {"name": "Charles", "age": 12, "hobbies": ["coding", "chess"]}
+with open("data.json", "w") as f:
+    json.dump(data, f, indent=2)
+
+# Read JSON back into a dict
+with open("data.json") as f:
+    loaded = json.load(f)
+print(loaded["name"])   # Charles</pre>
+
+      <div class="info-box">
+        <strong>4 functions to remember:</strong>
+        <ul style="margin-top:8px;padding-left:20px">
+          <li><code>json.dump(data, file)</code> — write to file</li>
+          <li><code>json.load(file)</code> — read from file</li>
+          <li><code>json.dumps(data)</code> — convert to JSON string</li>
+          <li><code>json.loads(text)</code> — parse JSON string</li>
+        </ul>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>CSV Files</h2>
+      <p><strong>CSV</strong> (Comma-Separated Values) is the simplest tabular format. Use the <code>csv</code> module:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import csv
+
+# Write rows
+with open("scores.csv", "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerow(["name", "score"])
+    writer.writerow(["Alice", 95])
+    writer.writerow(["Bob", 82])
+
+# Read rows
+with open("scores.csv") as f:
+    reader = csv.reader(f)
+    for row in reader:
+        print(row)</pre>
+
+      <div class="section-divider"></div>
+      <h2>Deleting Files</h2>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import os
+
+if os.path.exists("notes.txt"):
+    os.remove("notes.txt")
+    print("Deleted.")
+else:
+    print("File doesn't exist.")</pre>
+    </div>
+    `,
+
+    examples: [
+      {
+        title: "Write and Read a Text File (in-memory demo)",
+        desc: "Use io.StringIO to simulate a file without touching disk.",
+        code: `import io
+
+# Pretend this is a file
+fake_file = io.StringIO()
+fake_file.write("Line 1\\n")
+fake_file.write("Line 2\\n")
+fake_file.write("Line 3\\n")
+
+# Rewind and read it back
+fake_file.seek(0)
+for line in fake_file:
+    print(line.strip())`,
+      },
+      {
+        title: "JSON — Dict to String and Back",
+        desc: "Use dumps/loads to convert without files.",
+        code: `import json
+
+data = {
+    "name": "Charles",
+    "age": 12,
+    "hobbies": ["python", "chess"]
+}
+
+# Dict → JSON string
+text = json.dumps(data, indent=2)
+print(text)
+
+# JSON string → dict
+parsed = json.loads(text)
+print(parsed["name"])              # Charles
+print(parsed["hobbies"][0])        # python`,
+      },
+      {
+        title: "CSV — Build and Parse with StringIO",
+        desc: "Write CSV rows to memory, then read them back.",
+        code: `import csv
+import io
+
+# Write to in-memory file
+buf = io.StringIO()
+writer = csv.writer(buf)
+writer.writerow(["name", "score"])
+writer.writerow(["Alice", 95])
+writer.writerow(["Bob", 82])
+writer.writerow(["Carol", 88])
+
+# Read it back
+buf.seek(0)
+reader = csv.reader(buf)
+for row in reader:
+    print(row)`,
+      },
+      {
+        title: "Count Lines and Words",
+        desc: "Common file-analysis pattern.",
+        code: `text = """Python is great.
+Reading files is easy.
+JSON and CSV make data simple.
+"""
+
+lines = text.strip().split("\\n")
+print(f"Lines: {len(lines)}")
+
+word_count = sum(len(line.split()) for line in lines)
+print(f"Words: {word_count}")`,
+      },
+      {
+        title: "Reading a JSON 'File' from a String",
+        desc: "Parse JSON data and pull out fields.",
+        code: `import json
+
+raw = '''
+{
+    "countries": [
+        {"name": "Finland", "population": 5500000},
+        {"name": "Sweden",  "population": 10400000},
+        {"name": "Norway",  "population": 5400000}
+    ]
+}
+'''
+
+data = json.loads(raw)
+for c in data["countries"]:
+    print(f"{c['name']:8s} — {c['population']:,}")`,
+      },
+    ],
+
+    exercises: {
+      level1: [
+        "Open a file with <code>open('notes.txt', 'w')</code> and write the line <code>'Hello, file!'</code>. Use <code>with</code>.",
+        "Open <code>'notes.txt'</code> in read mode and print its contents using <code>f.read()</code>.",
+        "Use <code>f.readlines()</code> to get a list of every line.",
+        "Open the same file in <code>'a'</code> mode and append a new line.",
+        "Use <code>os.path.exists('notes.txt')</code> to check whether a file exists before opening it.",
+        "Delete a file with <code>os.remove()</code>.",
+      ],
+      level2: [
+        "Use <code>json.dumps</code> to convert <code>{'name': 'Alice', 'age': 30}</code> to a JSON string.",
+        "Use <code>json.loads</code> to parse <code>'{\"name\": \"Alice\"}'</code> back to a dict.",
+        "Use <code>json.dump</code> to save a dictionary to a file named <code>'data.json'</code>.",
+        "Use <code>csv.writer</code> to write three rows to a CSV file: a header and two data rows.",
+        "Use <code>csv.reader</code> to read those rows back and print each one.",
+        "Write a function <code>count_words(text)</code> that returns the number of words in a string.",
+      ],
+      level3: [
+        "Write a function <code>read_json(path)</code> that reads a JSON file and returns the parsed Python object.",
+        "Given a JSON list of <code>{name, population}</code> dicts, find the ten most populated entries.",
+        "Write a function <code>most_common_words(text, n)</code> that returns the <code>n</code> most frequent words in the text.",
+        "Write a function <code>extract_emails(text)</code> that returns all email addresses using <code>re.findall</code>.",
+      ],
+    },
+
+    quiz: [
+      {
+        q: "Why use `with open(...) as f:` instead of `f = open(...)`?",
+        opts: ["Faster execution", "Automatically closes the file even if an error happens", "Works with all file types", "Saves disk space"],
+        answer: 1,
+        explain: "The 'with' statement guarantees the file is closed when the block exits — even on exceptions — preventing resource leaks.",
+      },
+      {
+        q: "What does mode 'w' do if the file already exists?",
+        opts: ["Appends to it", "Raises an error", "Overwrites it (erases all content)", "Reads it"],
+        answer: 2,
+        explain: "Opening with 'w' truncates the file to zero bytes. Use 'a' to append, or 'x' to fail if the file exists.",
+      },
+      {
+        q: "Which function reads the entire file into one string?",
+        opts: ["f.readlines()", "f.read()", "f.line()", "f.all()"],
+        answer: 1,
+        explain: "f.read() returns the whole file as a single string. readlines() returns a list of lines.",
+      },
+      {
+        q: "Which function converts a Python dict to a JSON string?",
+        opts: ["json.dump", "json.dumps", "json.load", "json.loads"],
+        answer: 1,
+        explain: "json.dumps returns a JSON string. json.dump writes directly to a file. The 's' suffix means 'string'.",
+      },
+      {
+        q: "How do you safely delete a file?",
+        opts: ["os.delete('file.txt')", "Check os.path.exists() first, then os.remove()", "file.delete()", "os.unlink_all()"],
+        answer: 1,
+        explain: "Check existence with os.path.exists() before calling os.remove() to avoid a FileNotFoundError.",
+      },
+    ],
+  },
+
 ]; // end of DAYS array
 
-// Fill remaining days 12-30 with placeholder so navigation doesn't break
-for (let d = 12; d <= 30; d++) {
+// Fill remaining days 20-30 with placeholder so navigation doesn't break
+for (let d = 20; d <= 30; d++) {
   const topics = {
-    12: {
-      emoji: "📦",
-      title: "Modules",
-      sub: "import, from...import, standard library, custom modules.",
-    },
-    13: {
-      emoji: "🗜️",
-      title: "List Comprehension",
-      sub: "Write concise, powerful list, dict, and set comprehensions.",
-    },
-    14: {
-      emoji: "🏗️",
-      title: "Higher Order Functions",
-      sub: "map(), filter(), reduce(), lambda — functional programming.",
-    },
-    15: {
-      emoji: "🐛",
-      title: "Python Type Errors",
-      sub: "Understand, read, and fix Python error messages.",
-    },
-    16: {
-      emoji: "📅",
-      title: "Python DateTime",
-      sub: "Work with dates, times, timedelta, and strftime.",
-    },
-    17: {
-      emoji: "🛡️",
-      title: "Exception Handling",
-      sub: "try, except, finally, raise — handle errors gracefully.",
-    },
-    18: {
-      emoji: "🔍",
-      title: "Regular Expressions",
-      sub: "Pattern matching with the re module.",
-    },
-    19: {
-      emoji: "📂",
-      title: "File Handling",
-      sub: "Read, write, and manage files. Work with CSV and JSON.",
-    },
     20: {
       emoji: "📦",
       title: "Package Manager",

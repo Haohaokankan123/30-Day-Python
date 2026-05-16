@@ -3,26 +3,27 @@
    ============================================= */
 
 :root {
-    --bg-0: #0c0c0c;
-    --bg-1: #111111;
-    --bg-2: #161616;
-    --bg-3: #1f1f1f;
-    --bg-card: #161616;
-    --bg-code: #0c0c0c;
-    --accent: #fcd44d;
-    --accent-dark: #0c0c0c;
-    --accent-glow: rgba(252, 212, 77, 0.25);
-    --cyan: #3b82f6;
-    --cyan-glow: rgba(59, 130, 246, 0.25);
-    --green: #10b981;
-    --amber: #fcd44d;
-    --red: #ef4444;
-    --text-1: #f0f0f0;
-    --text-2: #a0a0a0;
-    --text-3: #707070;
-    --text-4: #404040;
-    --border: rgba(44, 44, 44, 0.6);
-    --border-light: rgba(44, 44, 44, 0.4);
+    /* Palette extracted from 30-days-python.pptx (GitHub-dark Python theme) */
+    --bg-0: #0D1117;
+    --bg-1: #161B22;
+    --bg-2: #1E3556;
+    --bg-3: #152540;
+    --bg-card: #161B22;
+    --bg-code: #0F1D30;
+    --accent: #FFD43B;            /* Python yellow */
+    --accent-dark: #0D1117;
+    --accent-glow: rgba(255, 212, 59, 0.25);
+    --cyan: #4B8BBE;              /* Python blue */
+    --cyan-glow: rgba(75, 139, 200, 0.25);
+    --green: #3ECF8E;             /* Mint success */
+    --amber: #FFBD2E;
+    --red: #FF5F56;
+    --text-1: #FFFFFF;
+    --text-2: #E6EDF3;
+    --text-3: #7A8FAA;
+    --text-4: #4B5972;
+    --border: rgba(75, 139, 200, 0.20);
+    --border-light: rgba(75, 139, 200, 0.10);
     --radius: 10px;
     --radius-lg: 14px;
     --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
