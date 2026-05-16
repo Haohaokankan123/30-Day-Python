@@ -4,44 +4,44 @@
    ============================================= */
 
 :root {
-    /* --- Base surfaces --- */
-    --bg-0:    #0A0A0F;    /* page bg — near black with a blue tint */
-    --bg-1:    #111118;    /* sidebar, topbar */
-    --bg-2:    #16161F;    /* cards, panels */
-    --bg-3:    #1C1C28;    /* code blocks, inset surfaces */
-    --bg-card: #16161F;
-    --bg-code: #0E0E18;
+    /* --- Base surfaces (from 30-days-python.pptx) --- */
+    --bg-0:    #0D1117;
+    --bg-1:    #161B22;
+    --bg-2:    #1E3556;
+    --bg-3:    #152540;
+    --bg-card: #161B22;
+    --bg-code: #0F1D30;
 
-    /* --- Brand --- */
-    --accent:       #FFD43B;              /* Python yellow */
-    --accent-dark:  #0A0A0F;
-    --accent-glow:  rgba(255, 212, 59, 0.18);
+    /* --- Brand (Python yellow + blue) --- */
+    --accent:       #FFD43B;
+    --accent-dark:  #0D1117;
+    --accent-glow:  rgba(255, 212, 59, 0.25);
     --accent-muted: rgba(255, 212, 59, 0.10);
 
     /* --- Semantic colours --- */
     --cyan:         #4B8BBE;
-    --cyan-glow:    rgba(75, 139, 200, 0.18);
+    --cyan-glow:    rgba(75, 139, 200, 0.25);
     --green:        #3ECF8E;
     --amber:        #FFBD2E;
     --red:          #FF5F56;
 
     /* --- Typography --- */
-    --text-1: #F0F0F5;
-    --text-2: #B0B0C0;
-    --text-3: #6B6B82;
-    --text-4: #3D3D52;
+    --text-1: #FFFFFF;
+    --text-2: #E6EDF3;
+    --text-3: #7A8FAA;
+    --text-4: #4B5972;
 
-    /* --- Borders --- */
-    --border:       rgba(255, 255, 255, 0.07);
-    --border-light: rgba(255, 255, 255, 0.04);
-    --border-accent: rgba(255, 212, 59, 0.25);
+    /* --- Borders (Python blue at low alpha) --- */
+    --border:        rgba(75, 139, 200, 0.20);
+    --border-light:  rgba(75, 139, 200, 0.10);
+    --border-accent: rgba(255, 212, 59, 0.30);
 
     /* --- Shape & shadow --- */
     --radius:    8px;
     --radius-lg: 12px;
     --radius-xl: 16px;
-    --shadow:    0 0 0 1px var(--border), 0 8px 32px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 0 0 0 1px var(--border), 0 24px 64px rgba(0, 0, 0, 0.7);
+    --shadow:    0 0 0 1px var(--border-light), 0 8px 32px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 0 0 1px var(--border-light), 0 24px 64px rgba(0, 0, 0, 0.8);
 }
 
 *,
@@ -5244,3 +5244,41 @@ code[class*="language-"] {
     background: rgba(255, 212, 59, 0.3);
 }
 
+
+/* ==============================================
+   UI POLISH — v13 fixes
+   ============================================== */
+
+/* ── Sidebar full-height fix ── */
+.app {
+    height: 100vh;
+    overflow: hidden;
+}
+.sidebar {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.day-nav {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+/* ── Sidebar collapse icon — no rotation, just opacity toggle ── */
+.app.sidebar-collapsed .sidebar-collapse-topbar-btn {
+    transform: none;
+    opacity: 0.6;
+}
+.sidebar-collapse-topbar-btn .fa-sidebar {
+    font-size: 16px;
+}
+.sidebar-expand-btn .fa-sidebar {
+    font-size: 14px;
+}
+
+/* ── Remove old ◀ arrow rotation ── */
+.app.sidebar-collapsed .sidebar-collapse-topbar-btn {
+    transform: none;
+}

@@ -14,7 +14,8 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
         />
-        <link rel="stylesheet" href="style.css?v=12" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+        <link rel="stylesheet" href="style.css?v=13" />
         <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.32.7/src-min-noconflict/ace.js"></script>
         <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
@@ -423,7 +424,7 @@ average = total / len(scores
                 onclick="expandSidebar()"
                 title="Show sidebar"
             >
-                ▶
+                <i class="fa-regular fa-sidebar"></i>
             </button>
             <!-- Sidebar -->
             <aside class="sidebar" id="sidebar">
@@ -460,9 +461,9 @@ average = total / len(scores
                     <button
                         class="sidebar-collapse-topbar-btn"
                         onclick="toggleSidebarCollapse()"
-                        title="Collapse sidebar"
+                        title="Toggle sidebar"
                     >
-                        ◀
+                        <i class="fa-regular fa-sidebar"></i>
                     </button>
                     <button class="home-btn" onclick="goHome()">
                         ← Curriculum
