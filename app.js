@@ -294,7 +294,6 @@ function buildPreviewGrid() {
       <span class="preview-day-name">${day ? day.title : ""}</span>
     `;
     d.style.animationDelay = `${i * 28}ms`;
-    d.onclick = () => startLearning(i);
     grid.appendChild(d);
   }
 }
@@ -1144,34 +1143,36 @@ function initTypewriter() {
 }
 
 // ── Code window typing animation ──────────────
-const CODE_SEGMENTS = [
-  ["# 30 Days of Python — Day 10: Loops", "lc-comment"],
-  ["\n\n", null],
-  ["days = list(range(1, 31))", null],
-  ["\n", null],
-  ["completed = []", null],
-  ["\n", null],
-  ["for", "lc-keyword"],
-  [" day in days:\n", null],
-  ["    if day <= 10:\n", null],
-  ["        completed.append(day)\n", null],
-  ["\n", null],
-  ["print(\"Done: \" + str(len(completed)) + \"/30\")", null],
-  ["\n", null],
-  ["# Output: Done: 10/30", "lc-success"]
-];
+// ── Code window typing animation ──────────────
+function initCodeTyper() {
+  const pre = document.getElementById("heroCodePre");
+  if (!pre) return;
 
-let _codeTyperTimer = null;
-
-function startCodeTyper(pre) {
-  if (_codeTyperTimer) { clearTimeout(_codeTyperTimer); _codeTyperTimer = null; }
   pre.innerHTML = '<span class="demo-cursor"></span>';
+
+  const segments = [
+    ["# 30 Days of Python — Day 10: Loops", "lc-comment"],
+    ["\n\n", null],
+    ["days = list(range(1, 31))", null],
+    ["\n", null],
+    ["completed = []", null],
+    ["\n", null],
+    ["for", "lc-keyword"],
+    [" day in days:\n", null],
+    ["    if day <= 10:\n", null],
+    ["        completed.append(day)\n", null],
+    ["\n", null],
+    ["print(\"Done: \" + str(len(completed)) + \"/30\")", null],
+    ["\n", null],
+    ["# Output: Done: 10/30", "lc-success"]
+  ];
+
   let segIdx = 0, charIdx = 0;
 
   function typeNext() {
     const cursor = pre.querySelector(".demo-cursor");
-    if (!cursor || segIdx >= CODE_SEGMENTS.length) return;
-    const seg = CODE_SEGMENTS[segIdx];
+    if (!cursor || segIdx >= segments.length) return;
+    const seg = segments[segIdx];
     const text = seg[0];
     const cls = seg[1];
     if (charIdx < text.length) {
@@ -1186,40 +1187,15 @@ function startCodeTyper(pre) {
       }
       pre.insertBefore(node, cursor);
       charIdx++;
-      _codeTyperTimer = setTimeout(typeNext, ch === "\n" ? 80 : 32);
+      setTimeout(typeNext, ch === "\n" ? 80 : 32);
     } else {
       segIdx++;
       charIdx = 0;
-      _codeTyperTimer = setTimeout(typeNext, segIdx % 3 === 0 ? 120 : 20);
+      setTimeout(typeNext, segIdx % 3 === 0 ? 120 : 20);
     }
   }
 
-  _codeTyperTimer = setTimeout(typeNext, 400);
-}
-
-function initCodeTyper() {
-  const pre = document.getElementById("heroCodePre");
-  if (!pre) return;
-
-  // Start on load
-  startCodeTyper(pre);
-
-  // Replay every time the code window scrolls into view
-  const codeWindow = pre.closest(".landing-code-window") || pre.parentElement;
-  if (typeof IntersectionObserver !== "undefined" && codeWindow) {
-    let hasRunOnce = true; // already running from load
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (!hasRunOnce) {
-            startCodeTyper(pre);
-          }
-          hasRunOnce = false; // next time it enters view, replay
-        }
-      });
-    }, { threshold: 0.3 });
-    obs.observe(codeWindow);
-  }
+  setTimeout(typeNext, 800);
 }
 
 // ── Stagger curriculum grid entrance ──────────

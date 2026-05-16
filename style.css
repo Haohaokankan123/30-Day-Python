@@ -5282,3 +5282,32 @@ code[class*="language-"] {
 .app.sidebar-collapsed .sidebar-collapse-topbar-btn {
     transform: none;
 }
+
+/* ==============================================
+   UI POLISH v13b — curriculum grid hover + fixes
+   ============================================== */
+
+/* Curriculum grid cards — hover-only, not clickable */
+.preview-day {
+    cursor: default !important;
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.18s ease,
+                border-top-color 0.18s ease;
+}
+.preview-day:hover {
+    transform: translateY(-4px) scale(1.04);
+    border-top-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 212, 59, 0.15);
+    background: var(--bg-2);
+}
+.preview-day:hover .preview-day-emoji {
+    transform: scale(1.2);
+    display: inline-block;
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.preview-day.done:hover {
+    border-top-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(62, 207, 142, 0.2);
+}
