@@ -1,15 +1,106 @@
 /* =============================================
-   AI TUTOR — Google Gemini 2.0 Flash (free tier)
-   Uses server-sent events streaming
+   AI TUTOR — Claude Haiku 4.5 (Anthropic)
+   Direct browser → Anthropic Messages API
    ============================================= */
 
 const AITutor = (() => {
   let useCodeContext = false;
-  let history = [];          // {role:"user"|"model", parts:[{text}]}
+  // history: [{role: "user"|"assistant", content: string}]
+  let history = [];
   let currentAssistantEl = null;
   let isGenerating = false;
 
-  const GEMINI_MODEL = "gemini-2.5-flash";
+  const MODEL = "claude-haiku-4-5-20251001";
+
+  // ─── Tiny markdown renderer ───────────────────
+  // Converts response text to safe HTML.
+  // Handles: ```lang ... ``` fences, `inline`, **bold**, *italic*, paragraphs
+  function renderMarkdown(text) {
+    const lines = text.split("\n");
+    const out = [];
+    let inFence = false;
+    let fenceLang = "";
+    let fenceLines = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const fenceMatch = line.match(/^```(\w*)$/);
+
+      if (fenceMatch && !inFence) {
+        inFence = true;
+        fenceLang = fenceMatch[1] || "";
+        fenceLines = [];
+        continue;
+      }
+      if (line.trim() === "```" && inFence) {
+        const code = escHtml(fenceLines.join("\n"));
+        const lang = escHtml(fenceLang) || "code";
+        out.push(
+          `<pre class="tutor-code-block"><span class="tutor-code-lang">${lang}</span><code>${code}</code></pre>`
+        );
+        inFence = false;
+        fenceLang = "";
+        fenceLines = [];
+        continue;
+      }
+      if (inFence) {
+        fenceLines.push(line);
+        continue;
+      }
+
+      // Inline formatting on regular lines
+      let l = escHtml(line);
+      l = l.replace(/`([^`]+)`/g, '<code class="tutor-inline-code">$1</code>');
+      l = l.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+      l = l.replace(/\*(.+?)\*/g, "<em>$1</em>");
+      out.push(l);
+    }
+
+    // If fence never closed (mid-stream)
+    if (inFence && fenceLines.length) {
+      const code = escHtml(fenceLines.join("\n"));
+      const lang = escHtml(fenceLang) || "code";
+      out.push(
+        `<pre class="tutor-code-block"><span class="tutor-code-lang">${lang}</span><code>${code}</code></pre>`
+      );
+    }
+
+    return groupIntoParagraphs(out);
+  }
+
+  function escHtml(s) {
+    return s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function groupIntoParagraphs(lines) {
+    const result = [];
+    let para = [];
+
+    const flush = () => {
+      if (para.length) {
+        const joined = para.join("<br>");
+        if (joined.trim()) result.push(`<p>${joined}</p>`);
+        para = [];
+      }
+    };
+
+    for (const line of lines) {
+      if (line.startsWith("<pre")) {
+        flush();
+        result.push(line);
+      } else if (line.trim() === "") {
+        flush();
+      } else {
+        para.push(line);
+      }
+    }
+    flush();
+    return result.join("\n");
+  }
 
   // ─── DOM helpers ──────────────────────────────
   function setStatus(text) {
@@ -33,30 +124,33 @@ const AITutor = (() => {
     chatEl().appendChild(div);
     chatEl().scrollTop = chatEl().scrollHeight;
     currentAssistantEl = div;
+    currentAssistantEl._rawText = "";
   }
 
   function appendToken(text) {
     if (!currentAssistantEl) startAssistantBubble();
-    currentAssistantEl.textContent += text;
+    currentAssistantEl._rawText += text;
+    currentAssistantEl.innerHTML = renderMarkdown(currentAssistantEl._rawText);
     chatEl().scrollTop = chatEl().scrollHeight;
   }
 
   function finalizeAssistantBubble() {
     if (currentAssistantEl) {
-      const finalText = currentAssistantEl.textContent;
+      const finalText = currentAssistantEl._rawText || currentAssistantEl.textContent;
+      currentAssistantEl.innerHTML = renderMarkdown(finalText);
       currentAssistantEl.classList.remove("streaming");
-      history.push({ role: "model", parts: [{ text: finalText }] });
+      history.push({ role: "assistant", content: finalText });
       currentAssistantEl = null;
     }
   }
 
   // ─── API Key management ───────────────────────
   function getKey() {
-    return localStorage.getItem("gemini_api_key") || "";
+    return localStorage.getItem("anthropic_api_key") || "";
   }
 
   function saveKey(key) {
-    localStorage.setItem("gemini_api_key", key.trim());
+    localStorage.setItem("anthropic_api_key", key.trim());
   }
 
   function showKeyInput() {
@@ -83,7 +177,7 @@ const AITutor = (() => {
         input.placeholder = "That doesn't look right — try again";
         setTimeout(() => {
           input.style.borderColor = "";
-          input.placeholder = "Paste your Gemini API key…";
+          input.placeholder = "Paste your Anthropic API key…";
         }, 2500);
       }
       return;
@@ -94,24 +188,24 @@ const AITutor = (() => {
   }
 
   function clearKey() {
-    localStorage.removeItem("gemini_api_key");
+    localStorage.removeItem("anthropic_api_key");
     const input = document.getElementById("tutorApiKeyInput");
     if (input) input.value = "";
     showKeyInput();
   }
 
-  // ─── System instruction ───────────────────────
-  function systemInstruction() {
+  // ─── System prompt ────────────────────────────
+  function systemPrompt() {
     return `You are an expert Python tutor for the "30 Days of Python" beginner course. You help students learn Python from scratch.
 
-You know everything about Python including: variables, data types (int, float, str, bool, list, tuple, set, dict), operators, type casting, strings, lists, tuples, sets, dictionaries, conditionals (if/elif/else), loops (for/while/range/break/continue/pass), functions (def, return, parameters, default args, *args, **kwargs, scope, lambda), modules, list comprehension, higher-order functions (map/filter/reduce/lambda), exception handling, file handling, OOP (classes, objects, inheritance), and all standard Python concepts.
+You know everything about Python: variables, data types, operators, strings, lists, tuples, sets, dicts, conditionals, loops, functions, modules, list comprehension, higher-order functions, exception handling, file handling, OOP, and all standard library concepts.
 
 Rules:
-- Be clear, friendly, and encouraging for absolute beginners.
-- Keep answers concise — under 150 words unless the student asks for more detail.
+- Be clear and friendly for absolute beginners.
+- Keep answers concise — under 200 words unless the student asks for more detail.
 - Always show a short code example when explaining a concept.
-- Format code blocks with triple backticks and python label.
-- If the student shares their code, find bugs and explain the fix step by step.
+- Format code with triple backticks and the python label.
+- If the student shares their code, find bugs and explain the fix.
 - If asked about something unrelated to Python, politely redirect.`;
   }
 
@@ -127,7 +221,7 @@ Rules:
     const userText = ta.value.trim();
     if (!userText) return;
 
-    // Get code from editor if context active
+    // Attach editor code if context active
     let code = "";
     if (useCodeContext) {
       if (window.FloatingPlayground) code = (window.FloatingPlayground.getCode() || "").trim();
@@ -140,7 +234,7 @@ Rules:
       : userText;
 
     appendUserBubble(userText + (code ? "  📎" : ""));
-    history.push({ role: "user", parts: [{ text: fullPrompt }] });
+    history.push({ role: "user", content: fullPrompt });
     ta.value = "";
 
     isGenerating = true;
@@ -150,21 +244,24 @@ Rules:
 
     startAssistantBubble();
 
-    // Build Gemini request body — keep last 8 turns for context
-    const contents = history.slice(-8);
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:streamGenerateContent?alt=sse`;
+    // Keep last 20 messages (10 turns) for context window
+    const messages = history.slice(-20);
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": key,
+          "anthropic-version": "2023-06-01",
+          "anthropic-dangerous-direct-browser-access": "true",
+        },
         body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemInstruction() }] },
-          contents,
-          generationConfig: {
-            temperature: 0.4,
-            maxOutputTokens: 600,
-          },
+          model: MODEL,
+          max_tokens: 1024,
+          system: systemPrompt(),
+          messages,
+          stream: true,
         }),
       });
 
@@ -172,19 +269,27 @@ Rules:
         const err = await response.json().catch(() => ({}));
         const msg = (err && err.error && err.error.message) || ("HTTP " + response.status);
         const status = response.status;
-        console.error("Gemini error:", status, JSON.stringify(err));
 
-        if (status === 400 || status === 403 ||
-            msg.toLowerCase().includes("api key") ||
-            msg.toLowerCase().includes("invalid") ||
-            msg.toLowerCase().includes("permission")) {
+        // Remove empty streaming bubble
+        if (currentAssistantEl && !currentAssistantEl._rawText) {
+          chatEl().removeChild(currentAssistantEl);
+          currentAssistantEl = null;
+        } else {
           finalizeAssistantBubble();
+        }
+
+        if (status === 401 || msg.toLowerCase().includes("api key") || msg.toLowerCase().includes("invalid")) {
+          history.pop(); // remove user message we just pushed
           showKeyInput();
-          setStatus("API key issue — please re-enter your key.");
+          setStatus("Invalid API key — please re-enter.");
         } else if (status === 429) {
-          appendToken("⚠️ Rate limit reached. Wait 60 seconds and try again.");
+          appendToken("Rate limit reached. Wait a moment and try again.");
           finalizeAssistantBubble();
-          setStatus("Rate limited. Wait a moment.");
+          setStatus("Rate limited.");
+        } else if (msg.includes("credit")) {
+          appendToken("Your Anthropic account has run out of credits. Add credits at console.anthropic.com.");
+          finalizeAssistantBubble();
+          setStatus("No credits.");
         } else {
           appendToken(`Error (${status}): ${msg}`);
           finalizeAssistantBubble();
@@ -193,7 +298,7 @@ Rules:
         return;
       }
 
-      // Parse Gemini SSE stream
+      // Parse Anthropic SSE stream
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
@@ -204,6 +309,7 @@ Rules:
         buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split("\n");
         buffer = lines.pop();
+
         for (const line of lines) {
           const trimmed = line.trim();
           if (!trimmed.startsWith("data: ")) continue;
@@ -211,10 +317,10 @@ Rules:
           if (!jsonStr || jsonStr === "[DONE]") continue;
           try {
             const json = JSON.parse(jsonStr);
-            const text = json && json.candidates && json.candidates[0] &&
-              json.candidates[0].content && json.candidates[0].content.parts &&
-              json.candidates[0].content.parts[0] && json.candidates[0].content.parts[0].text;
-            if (text) appendToken(text);
+            // content_block_delta carries the streamed text
+            if (json.type === "content_block_delta" && json.delta && json.delta.text) {
+              appendToken(json.delta.text);
+            }
           } catch (_) {}
         }
       }
@@ -224,7 +330,7 @@ Rules:
     } catch (e) {
       appendToken("Network error: " + e.message);
       finalizeAssistantBubble();
-      setStatus("Error. Check your internet connection.");
+      setStatus("Network error. Check your connection.");
     } finally {
       isGenerating = false;
       if (btn) { btn.disabled = false; btn.textContent = "Send"; }
@@ -258,6 +364,13 @@ Rules:
     if (btn) btn.classList.toggle("active", useCodeContext);
   }
 
+  function clearHistory() {
+    history = [];
+    const chat = chatEl();
+    if (chat) chat.innerHTML = "";
+    setStatus("Chat cleared. Ask anything about Python!");
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     const ta = document.getElementById("tutorTextarea");
     if (ta) {
@@ -273,12 +386,13 @@ Rules:
     }
   });
 
-  return { toggle, toggleContext, send, submitKey, clearKey };
+  return { toggle, toggleContext, send, submitKey, clearKey, clearHistory };
 })();
 
 window.AITutor = AITutor;
-window.toggleTutor    = () => AITutor.toggle();
+window.toggleTutor        = () => AITutor.toggle();
 window.toggleTutorContext = () => AITutor.toggleContext();
 window.sendTutorMessage   = () => AITutor.send();
 window.submitTutorKey     = () => AITutor.submitKey();
 window.clearTutorKey      = () => AITutor.clearKey();
+window.clearTutorHistory  = () => AITutor.clearHistory();

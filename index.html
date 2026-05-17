@@ -15,7 +15,7 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
         />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-        <link rel="stylesheet" href="style.css?v=13" />
+        <link rel="stylesheet" href="style.css?v=14" />
         <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.32.7/src-min-noconflict/ace.js"></script>
         <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
@@ -146,7 +146,7 @@
                         <p class="landing-about-body">
                             So I built 30 Days of Python. 30 structured lessons,
                             a built-in code editor that runs real Python in your
-                            browser, and an AI tutor powered by Gemini that
+                            browser, and an AI tutor powered by Claude that
                             explains bugs and concepts in plain English. No
                             account. No credit card. No fluff.
                         </p>
@@ -253,7 +253,7 @@ average = total / len(scores
                                     AI Tutor
                                 </div>
                                 <div class="landing-demo-chat-sub">
-                                    Powered by Gemini
+                                    Powered by Claude
                                 </div>
                             </div>
                             <span class="landing-demo-online"></span>
@@ -629,6 +629,7 @@ average = total / len(scores
             <aside class="tutor-panel" id="tutorPanel" aria-hidden="true">
                 <header class="tutor-header">
                     <h3>AI Tutor</h3>
+                    <span class="tutor-model-badge">Claude Haiku 4.5</span>
                     <span style="flex: 1"></span>
                     <button
                         class="tutor-close"
@@ -646,26 +647,26 @@ average = total / len(scores
                 <!-- API Key setup screen (shown when no key saved) -->
                 <div class="tutor-key-setup" id="tutorKeySetup">
                     <div class="tutor-key-icon">✨</div>
-                    <h4>Enter your Gemini API Key</h4>
+                    <h4>Enter your Anthropic API Key</h4>
                     <p>
-                        Free, fast, and no credit card needed. Your key is saved
-                        only in <strong>your browser</strong>.
+                        Powered by <strong>Claude Haiku 4.5</strong>. Your key is saved
+                        only in <strong>your browser</strong> — never sent anywhere else.
                     </p>
                     <input
                         type="password"
                         id="tutorApiKeyInput"
                         class="tutor-key-input"
-                        placeholder="Paste your Gemini API key…"
+                        placeholder="Paste your Anthropic API key…"
                         autocomplete="off"
                     />
                     <button class="tutor-send-btn" onclick="submitTutorKey()">
                         Save Key &amp; Start
                     </button>
                     <a
-                        href="https://aistudio.google.com/app/apikey"
+                        href="https://console.anthropic.com/settings/keys"
                         target="_blank"
                         class="tutor-key-link"
-                        >Get a free API key from Google AI Studio →</a
+                        >Get an API key from Anthropic Console →</a
                     >
                 </div>
 
@@ -687,10 +688,17 @@ average = total / len(scores
                             </button>
                             <button
                                 class="tutor-key-change-btn"
+                                onclick="clearTutorHistory()"
+                                title="Clear chat history"
+                            >
+                                Clear chat
+                            </button>
+                            <button
+                                class="tutor-key-change-btn"
                                 onclick="clearTutorKey()"
                                 title="Change API key"
                             >
-                                🔑 Change key
+                                Change key
                             </button>
                         </div>
                         <textarea
