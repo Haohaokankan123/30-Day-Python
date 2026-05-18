@@ -15,7 +15,8 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
         />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-        <link rel="stylesheet" href="style.css?v=14" />
+        <link rel="stylesheet" href="style.css?v=15" />
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.32.7/src-min-noconflict/ace.js"></script>
         <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
@@ -182,7 +183,9 @@
                             <span class="landing-about-badge">Python</span>
                             <span class="landing-about-badge">AI Tutor</span>
                             <span class="landing-about-badge">Live Editor</span>
-                            <span class="landing-about-badge">Free Forever</span>
+                            <span class="landing-about-badge"
+                                >Free Forever</span
+                            >
                         </div>
                     </div>
                 </div>
@@ -496,6 +499,9 @@ average = total / len(scores
                                 <span id="topbarBadgeCount">0</span> badges
                             </button>
                         </div>
+                        <div class="header-account-wrap" id="headerAccountWrap">
+                            <button id="headerAccountBtn" class="header-account-btn" onclick="Auth.showModal()">Sign In</button>
+                        </div>
                         <button
                             class="topbar-icon-btn playground-topbar-btn"
                             id="playgroundTopbarBtn"
@@ -777,11 +783,37 @@ average = total / len(scores
             <div class="badge-popup-grid" id="badgePopupGrid"></div>
         </div>
 
+        <!-- Auth Modal -->
+        <div id="authModalOverlay" class="auth-modal-overlay hidden" onclick="Auth.hideModal()"></div>
+        <div id="authModal" class="auth-modal hidden">
+            <button class="auth-modal-close" onclick="Auth.hideModal()">✕</button>
+            <div class="auth-logo">30 Days of Python</div>
+            <h2 id="authModalTitle" class="auth-modal-title">Create your account</h2>
+            <p class="auth-modal-sub">Save your progress across all your devices.</p>
+            <button id="authGoogleBtn" class="auth-google-btn" onclick="Auth.signInGoogle()">
+                <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+                Continue with Google
+            </button>
+            <div class="auth-divider"><span>or</span></div>
+            <div class="auth-tabs">
+                <button id="authTabSignup" class="auth-tab active" onclick="Auth._switchTab('signup')">Sign Up</button>
+                <button id="authTabLogin" class="auth-tab" onclick="Auth._switchTab('login')">Log In</button>
+            </div>
+            <div id="authErrorMsg" class="auth-error hidden"></div>
+            <input id="authEmailInput" class="auth-input" type="email" placeholder="Email address" autocomplete="email" />
+            <input id="authPasswordInput" class="auth-input" type="password" placeholder="Password (min 8 characters)" autocomplete="current-password" />
+            <button id="authSubmitBtn" class="auth-submit-btn" onclick="Auth._submit()">Create Account</button>
+            <p class="auth-switch">Already have an account? <a id="authSwitchLink" href="#" onclick="Auth._switchTab('login'); return false;">Log in</a></p>
+            <p class="auth-skip"><a href="#" onclick="Auth.hideModal(); return false;">Continue without account →</a></p>
+        </div>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
         <script src="days-data.js"></script>
         <script src="app.js?v=12"></script>
         <script src="playground.js?v=12"></script>
         <script src="ai-tutor.js?v=12"></script>
+        <script src="auth.js?v=1"></script>
+        <script src="sync.js?v=1"></script>
     </body>
 </html>
