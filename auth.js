@@ -67,12 +67,16 @@ const Auth = (() => {
     const dd = document.createElement("div");
     dd.id = "accountDropdown";
     dd.className = "account-dropdown";
-    dd.innerHTML = `
-      <div class="account-dropdown-email">${_currentUser.email}</div>
-      <button class="account-dropdown-btn" id="ddSignOut">Sign out</button>
-    `;
+    const emailDiv = document.createElement("div");
+    emailDiv.className = "account-dropdown-email";
+    emailDiv.textContent = _currentUser.email || "";
+    const signOutBtn = document.createElement("button");
+    signOutBtn.className = "account-dropdown-btn";
+    signOutBtn.textContent = "Sign out";
+    signOutBtn.onclick = () => { dd.remove(); Auth.signOut(); };
+    dd.appendChild(emailDiv);
+    dd.appendChild(signOutBtn);
     wrap.appendChild(dd);
-    document.getElementById("ddSignOut").onclick = () => { dd.remove(); Auth.signOut(); };
     setTimeout(() => document.addEventListener("click", function remove() {
       dd.remove(); document.removeEventListener("click", remove);
     }), 0);

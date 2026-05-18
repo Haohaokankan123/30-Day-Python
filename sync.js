@@ -117,10 +117,10 @@
     const userId = uid();
     try {
       const [pR, bR, eR, qR] = await Promise.all([
-        client.from("user_progress").select("*").eq("user_id", userId).maybeSingle(),
-        client.from("user_badges").select("*").eq("user_id", userId),
-        client.from("user_exercises").select("*").eq("user_id", userId),
-        client.from("user_quiz_answers").select("*").eq("user_id", userId),
+        client.from("user_progress").select("xp,level,streak,last_active,completed_days,ai_days").eq("user_id", userId).maybeSingle(),
+        client.from("user_badges").select("badge_id").eq("user_id", userId),
+        client.from("user_exercises").select("exercise_key,code,status").eq("user_id", userId),
+        client.from("user_quiz_answers").select("quiz_key,answer_idx,correct").eq("user_id", userId),
       ]);
 
       // Merge progress
@@ -143,19 +143,29 @@
           union(lsArr(LS.BADGES), bR.data.map(r => r.badge_id))));
       }
 
-      // Cloud wins for exercises
+      // Cloud wins for exercises — prototype-safe, key allowlist enforced
       if (eR.data && eR.data.length) {
-        const local = lsObj(LS.EXERCISES);
-        for (const row of eR.data)
-          local[row.exercise_key] = { code: row.code || "", status: row.status || "incomplete" };
+        const local = Object.create(null);
+        const existing = lsObj(LS.EXERCISES);
+        Object.assign(local, existing);
+        for (const row of eR.data) {
+          const k = String(row.exercise_key || "");
+          if (!k || k === "__proto__" || k === "constructor" || k === "prototype") continue;
+          local[k] = { code: row.code || "", status: row.status || "incomplete" };
+        }
         localStorage.setItem(LS.EXERCISES, JSON.stringify(local));
       }
 
-      // Cloud wins for quiz
+      // Cloud wins for quiz — prototype-safe
       if (qR.data && qR.data.length) {
-        const local = lsObj(LS.QUIZ);
-        for (const row of qR.data)
-          local[row.quiz_key] = { answer_idx: row.answer_idx, correct: row.correct };
+        const local = Object.create(null);
+        const existing = lsObj(LS.QUIZ);
+        Object.assign(local, existing);
+        for (const row of qR.data) {
+          const k = String(row.quiz_key || "");
+          if (!k || k === "__proto__" || k === "constructor" || k === "prototype") continue;
+          local[k] = { answer_idx: row.answer_idx, correct: !!row.correct };
+        }
         localStorage.setItem(LS.QUIZ, JSON.stringify(local));
       }
 
