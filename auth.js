@@ -42,44 +42,21 @@ const Auth = (() => {
   }
 
   function _updateHeaderBtn() {
-    const btn = document.getElementById("headerAccountBtn");
-    if (!btn) return;
+    // Drive the new bottom-left avatar (UserAvatar in settings.js)
+    const wrap = document.getElementById("userAvatarWrap");
+    const letterEl = document.getElementById("userAvatarLetter");
+    const emailEl = document.getElementById("avatarPopupEmail");
+    const settingsEmailEl = document.getElementById("settingsEmail");
+
     if (_currentUser) {
       const letter = (_currentUser.email || "U")[0].toUpperCase();
-      btn.textContent = letter;
-      btn.classList.add("avatar");
-      btn.title = _currentUser.email;
-      btn.onclick = _toggleDropdown;
+      if (wrap) wrap.classList.remove("hidden");
+      if (letterEl) letterEl.textContent = letter;
+      if (emailEl) emailEl.textContent = _currentUser.email || "";
+      if (settingsEmailEl) settingsEmailEl.textContent = _currentUser.email || "";
     } else {
-      btn.textContent = "Sign In";
-      btn.classList.remove("avatar");
-      btn.title = "";
-      btn.onclick = () => Auth.showModal();
+      if (wrap) wrap.classList.add("hidden");
     }
-  }
-
-  function _toggleDropdown(e) {
-    e.stopPropagation();
-    const existing = document.getElementById("accountDropdown");
-    if (existing) { existing.remove(); return; }
-
-    const wrap = document.getElementById("headerAccountWrap");
-    const dd = document.createElement("div");
-    dd.id = "accountDropdown";
-    dd.className = "account-dropdown";
-    const emailDiv = document.createElement("div");
-    emailDiv.className = "account-dropdown-email";
-    emailDiv.textContent = _currentUser.email || "";
-    const signOutBtn = document.createElement("button");
-    signOutBtn.className = "account-dropdown-btn";
-    signOutBtn.textContent = "Sign out";
-    signOutBtn.onclick = () => { dd.remove(); Auth.signOut(); };
-    dd.appendChild(emailDiv);
-    dd.appendChild(signOutBtn);
-    wrap.appendChild(dd);
-    setTimeout(() => document.addEventListener("click", function remove() {
-      dd.remove(); document.removeEventListener("click", remove);
-    }), 0);
   }
 
   // ─── Modal open/close ─────────────────────

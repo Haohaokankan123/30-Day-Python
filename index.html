@@ -15,7 +15,18 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
         />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-        <link rel="stylesheet" href="style.css?v=15" />
+        <link rel="stylesheet" href="style.css?v=16" />
+        <script>
+        (function(){
+            var t=localStorage.getItem('py30_theme')||'dark';
+            var s=localStorage.getItem('py30_size')||'medium';
+            var f=localStorage.getItem('py30_font')||'dm-sans';
+            document.documentElement.setAttribute('data-theme',t);
+            document.documentElement.setAttribute('data-size',s);
+            var fonts={'inter':"'Inter',sans-serif",'system':"system-ui,sans-serif",'roboto':"'Roboto',sans-serif",'dm-sans':"'DM Sans','Inter',sans-serif"};
+            document.documentElement.style.setProperty('--font-body',fonts[f]||fonts['dm-sans']);
+        })();
+        </script>
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.32.7/src-min-noconflict/ace.js"></script>
         <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
@@ -506,9 +517,6 @@ average = total / len(scores
                                 <span id="topbarBadgeCount">0</span> badges
                             </button>
                         </div>
-                        <div class="header-account-wrap" id="headerAccountWrap">
-                            <button id="headerAccountBtn" class="header-account-btn" onclick="Auth.showModal()">Sign In</button>
-                        </div>
                         <button
                             class="topbar-icon-btn playground-topbar-btn"
                             id="playgroundTopbarBtn"
@@ -814,13 +822,160 @@ average = total / len(scores
             <p class="auth-skip"><a href="#" onclick="Auth.hideModal(); return false;">Continue without account →</a></p>
         </div>
 
+        <!-- User Avatar (bottom-left, shown when logged in) -->
+        <div id="userAvatarWrap" class="user-avatar-wrap hidden">
+            <button id="userAvatarBtn" class="user-avatar-btn" onclick="UserAvatar.toggle()">
+                <span id="userAvatarLetter">?</span>
+            </button>
+            <div id="userAvatarPopup" class="user-avatar-popup hidden">
+                <div class="avatar-popup-email" id="avatarPopupEmail"></div>
+                <div class="avatar-popup-divider"></div>
+                <div class="avatar-popup-lang-label">Language</div>
+                <select id="avatarLangSelect" class="avatar-lang-select" onchange="LangSwitcher.switch(this.value)">
+                    <option value="EN">🇬🇧 English</option>
+                    <option value="ZH">🇨🇳 Chinese</option>
+                    <option value="ES">🇪🇸 Spanish</option>
+                    <option value="AR">🇸🇦 Arabic</option>
+                    <option value="HI">🇮🇳 Hindi</option>
+                    <option value="PT">🇧🇷 Portuguese</option>
+                    <option value="FR">🇫🇷 French</option>
+                    <option value="RU">🇷🇺 Russian</option>
+                    <option value="JA">🇯🇵 Japanese</option>
+                    <option value="DE">🇩🇪 German</option>
+                </select>
+                <div id="deeplKeyRow" class="deepl-key-row hidden">
+                    <input id="deeplKeyInput" class="deepl-key-input" type="password" placeholder="Paste DeepL API key…" autocomplete="off" />
+                    <button class="deepl-save-btn" onclick="LangSwitcher.saveKey()">Save</button>
+                </div>
+                <div class="avatar-popup-divider"></div>
+                <button class="avatar-popup-btn" onclick="SettingsPanel.open(); UserAvatar.close()">⚙ Settings</button>
+                <button class="avatar-popup-btn avatar-popup-danger" onclick="Auth.signOut(); UserAvatar.close()">Sign Out</button>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settingsOverlay" class="settings-overlay hidden" onclick="SettingsPanel.close()"></div>
+        <div id="settingsModal" class="settings-modal hidden">
+            <div class="settings-sidebar">
+                <div class="settings-sidebar-title">Settings</div>
+                <button class="settings-nav-btn active" data-section="appearance" onclick="SettingsPanel.nav('appearance')">Appearance</button>
+                <button class="settings-nav-btn" data-section="accessibility" onclick="SettingsPanel.nav('accessibility')">Accessibility</button>
+                <button class="settings-nav-btn" data-section="editor" onclick="SettingsPanel.nav('editor')">Editor</button>
+                <button class="settings-nav-btn" data-section="notifications" onclick="SettingsPanel.nav('notifications')">Notifications</button>
+                <button class="settings-nav-btn" data-section="account" onclick="SettingsPanel.nav('account')">Account</button>
+                <button class="settings-close-btn" onclick="SettingsPanel.close()">✕ Close</button>
+            </div>
+            <div class="settings-content">
+                <!-- Appearance -->
+                <div id="settings-appearance" class="settings-section">
+                    <h2 class="settings-section-title">Appearance</h2>
+                    <div class="settings-row">
+                        <div class="settings-label">Theme</div>
+                        <div class="settings-picker">
+                            <button class="picker-btn" data-theme="dark" onclick="Settings.setTheme('dark')">Dark</button>
+                            <button class="picker-btn" data-theme="light" onclick="Settings.setTheme('light')">Light</button>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <div class="settings-label">Font</div>
+                        <div class="settings-picker">
+                            <button class="picker-btn" data-font="dm-sans" onclick="Settings.setFont('dm-sans')">DM Sans</button>
+                            <button class="picker-btn" data-font="inter" onclick="Settings.setFont('inter')">Inter</button>
+                            <button class="picker-btn" data-font="system" onclick="Settings.setFont('system')">System</button>
+                            <button class="picker-btn" data-font="roboto" onclick="Settings.setFont('roboto')">Roboto</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Accessibility -->
+                <div id="settings-accessibility" class="settings-section hidden">
+                    <h2 class="settings-section-title">Accessibility</h2>
+                    <div class="settings-row">
+                        <div class="settings-label">Text Size</div>
+                        <div class="settings-picker">
+                            <button class="picker-btn" data-size="small" onclick="Settings.setSize('small')">Small</button>
+                            <button class="picker-btn" data-size="medium" onclick="Settings.setSize('medium')">Medium</button>
+                            <button class="picker-btn" data-size="large" onclick="Settings.setSize('large')">Large</button>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <div class="settings-label">Reduce Animations</div>
+                        <label class="settings-toggle"><input type="checkbox" id="reduceMotionToggle" onchange="Settings.setReduceMotion(this.checked)"><span class="toggle-track"></span></label>
+                    </div>
+                </div>
+                <!-- Editor -->
+                <div id="settings-editor" class="settings-section hidden">
+                    <h2 class="settings-section-title">Editor</h2>
+                    <div class="settings-row">
+                        <div class="settings-label">Tab Size</div>
+                        <select class="settings-select" id="tabSizeSelect" onchange="Settings.setTabSize(this.value)">
+                            <option value="2">2 spaces</option>
+                            <option value="4" selected>4 spaces</option>
+                        </select>
+                    </div>
+                    <div class="settings-row">
+                        <div class="settings-label">Line Numbers</div>
+                        <label class="settings-toggle"><input type="checkbox" id="lineNumToggle" checked onchange="Settings.setLineNumbers(this.checked)"><span class="toggle-track"></span></label>
+                    </div>
+                    <div class="settings-row">
+                        <div class="settings-label">Editor Font Size</div>
+                        <select class="settings-select" id="editorFontSizeSelect" onchange="Settings.setEditorFontSize(this.value)">
+                            <option value="12">12px</option>
+                            <option value="14" selected>14px</option>
+                            <option value="16">16px</option>
+                            <option value="18">18px</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Notifications -->
+                <div id="settings-notifications" class="settings-section hidden">
+                    <h2 class="settings-section-title">Notifications</h2>
+                    <div class="settings-row">
+                        <div class="settings-label">Streak reminders</div>
+                        <label class="settings-toggle"><input type="checkbox" id="streakReminderToggle" onchange="Settings.setNotification('streak', this.checked)"><span class="toggle-track"></span></label>
+                    </div>
+                    <div class="settings-row">
+                        <div class="settings-label">Weekly tips</div>
+                        <label class="settings-toggle"><input type="checkbox" id="weeklyTipsToggle" onchange="Settings.setNotification('tips', this.checked)"><span class="toggle-track"></span></label>
+                    </div>
+                </div>
+                <!-- Account -->
+                <div id="settings-account" class="settings-section hidden">
+                    <h2 class="settings-section-title">Account</h2>
+                    <div class="settings-row">
+                        <div class="settings-label">Email</div>
+                        <span id="settingsEmail" class="settings-value"></span>
+                    </div>
+                    <div class="settings-row">
+                        <button class="settings-action-btn" onclick="Settings.sendPasswordReset()">Change Password</button>
+                        <p class="settings-hint">We'll send a reset link to your email.</p>
+                    </div>
+                    <div class="settings-danger-zone">
+                        <h3 class="settings-danger-title">Danger Zone</h3>
+                        <button class="settings-danger-btn" onclick="Settings.startDeleteAccount()">Delete Account</button>
+                        <p class="settings-hint">Permanently deletes your account and all progress. Cannot be undone.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Account Confirmation Modal -->
+        <div id="deleteConfirmOverlay" class="auth-modal-overlay hidden"></div>
+        <div id="deleteConfirmModal" class="auth-modal hidden">
+            <h2 id="deleteConfirmTitle" class="auth-modal-title">Delete Account</h2>
+            <p id="deleteConfirmMsg" class="auth-modal-sub"></p>
+            <input id="deleteConfirmInput" class="auth-input" type="text" placeholder="" autocomplete="off" />
+            <button id="deleteConfirmBtn" class="settings-danger-btn" onclick="Settings.confirmDeleteStep()">Confirm</button>
+            <button class="auth-submit-btn" style="background:var(--bg-2);color:var(--text-2);margin-top:4px" onclick="Settings.cancelDelete()">Cancel</button>
+        </div>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
         <script src="days-data.js"></script>
         <script src="app.js?v=12"></script>
         <script src="playground.js?v=12"></script>
         <script src="ai-tutor.js?v=12"></script>
-        <script src="auth.js?v=1"></script>
-        <script src="sync.js?v=1"></script>
+        <script src="auth.js?v=2"></script>
+        <script src="sync.js?v=2"></script>
+        <script src="settings.js?v=1"></script>
     </body>
 </html>
