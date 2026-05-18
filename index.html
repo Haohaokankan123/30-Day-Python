@@ -59,9 +59,10 @@
                         >About</a
                     >
                 </div>
-                <button class="landing-cta-btn" onclick="startLearning()">
-                    Start Free →
-                </button>
+                <div class="landing-nav-auth">
+                    <button class="landing-nav-login" onclick="Auth._switchTab('login'); Auth.showModal()">Log In</button>
+                    <button class="landing-nav-signup" onclick="Auth._switchTab('signup'); Auth.showModal()">Sign Up</button>
+                </div>
             </nav>
 
             <!-- Hero -->
@@ -79,9 +80,15 @@
                 <div class="landing-hero-btns hero-sub-fade">
                     <button
                         class="landing-btn-primary"
-                        onclick="startLearning()"
+                        onclick="Auth._switchTab('signup'); Auth.showModal()"
                     >
-                        Start Day 1 →
+                        Sign Up Free →
+                    </button>
+                    <button
+                        class="landing-btn-secondary"
+                        onclick="Auth._switchTab('login'); Auth.showModal()"
+                    >
+                        Log In
                     </button>
                     <button
                         class="landing-btn-secondary"
