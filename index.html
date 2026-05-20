@@ -665,33 +665,7 @@ average = total / len(scores
                     complete it.
                 </div>
 
-                <!-- API Key setup screen (shown when no key saved) -->
-                <div class="tutor-key-setup" id="tutorKeySetup">
-                    <div class="tutor-key-icon">✨</div>
-                    <h4>Enter your Anthropic API Key</h4>
-                    <p>
-                        Powered by <strong>Claude Haiku 4.5</strong>. Your key is saved
-                        only in <strong>your browser</strong> — never sent anywhere else.
-                    </p>
-                    <input
-                        type="password"
-                        id="tutorApiKeyInput"
-                        class="tutor-key-input"
-                        placeholder="Paste your Anthropic API key…"
-                        autocomplete="off"
-                    />
-                    <button class="tutor-send-btn" onclick="submitTutorKey()">
-                        Save Key &amp; Start
-                    </button>
-                    <a
-                        href="https://console.anthropic.com/settings/keys"
-                        target="_blank"
-                        class="tutor-key-link"
-                        >Get an API key from Anthropic Console →</a
-                    >
-                </div>
-
-                <!-- Chat area (shown after key is saved) -->
+                <!-- Chat area -->
                 <div class="tutor-chat-area" id="tutorChatArea">
                     <div class="tutor-status" id="tutorStatus">
                         Ready. Ask anything about Python!
@@ -713,13 +687,6 @@ average = total / len(scores
                                 title="Clear chat history"
                             >
                                 Clear chat
-                            </button>
-                            <button
-                                class="tutor-key-change-btn"
-                                onclick="clearTutorKey()"
-                                title="Change API key"
-                            >
-                                Change key
                             </button>
                         </div>
                         <textarea
