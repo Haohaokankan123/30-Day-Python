@@ -5466,6 +5466,12 @@ code[class*="language-"] {
 .auth-switch, .auth-skip { margin: 0; font-size: 13px; color: var(--text-3); text-align: center; }
 .auth-switch a, .auth-skip a { color: var(--accent); text-decoration: none; }
 .auth-switch a:hover, .auth-skip a:hover { text-decoration: underline; }
+.auth-forgot { margin: -4px 0 6px; font-size: 13px; text-align: right; }
+.auth-forgot a { color: var(--accent); text-decoration: none; }
+.auth-forgot a:hover { text-decoration: underline; }
+.auth-resend { margin: 4px 0 8px; font-size: 13px; text-align: center; }
+.auth-resend a { color: var(--accent); text-decoration: none; }
+.auth-resend a:hover { text-decoration: underline; }
 
 /* ─── HEADER ACCOUNT BUTTON ──────────────────── */
 .header-account-wrap { position: relative; }
