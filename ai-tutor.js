@@ -1,6 +1,6 @@
 /* =============================================
-   AI TUTOR — Claude Haiku 4.5 (Anthropic)
-   Direct browser → Anthropic Messages API
+   AI TUTOR — Groq llama-3.3-70b-versatile
+   Browser → /api/chat (Vercel serverless)
    ============================================= */
 
 const AITutor = (() => {
@@ -9,8 +9,6 @@ const AITutor = (() => {
   let history = [];
   let currentAssistantEl = null;
   let isGenerating = false;
-
-  const MODEL = "claude-haiku-4-5-20251001";
 
   // ─── Tiny markdown renderer ───────────────────
   // Converts response text to safe HTML.
@@ -144,20 +142,13 @@ const AITutor = (() => {
     }
   }
 
-  // ─── API Key management ───────────────────────
-  function getKey() {
-    return localStorage.getItem("anthropic_api_key") || "";
-  }
-
-  function saveKey(key) {
-    localStorage.setItem("anthropic_api_key", key.trim());
-  }
-
-  function showKeyInput() {
-    const setup = document.getElementById("tutorKeySetup");
-    const chat  = document.getElementById("tutorChatArea");
-    if (setup) setup.style.display = "flex";
-    if (chat)  chat.style.display  = "none";
+  // ─── Get current logged-in user ID ────────────
+  function getUserId() {
+    if (window.Auth && typeof window.Auth.user === "function") {
+      const u = window.Auth.user();
+      return u ? u.id : null;
+    }
+    return null;
   }
 
   function hideKeyInput() {
@@ -167,54 +158,9 @@ const AITutor = (() => {
     if (chat)  chat.style.display  = "flex";
   }
 
-  function submitKey() {
-    const input = document.getElementById("tutorApiKeyInput");
-    const key = (input ? input.value : "").trim();
-    if (key.length < 20) {
-      if (input) {
-        input.style.borderColor = "#ef4444";
-        input.value = "";
-        input.placeholder = "That doesn't look right — try again";
-        setTimeout(() => {
-          input.style.borderColor = "";
-          input.placeholder = "Paste your Anthropic API key…";
-        }, 2500);
-      }
-      return;
-    }
-    saveKey(key);
-    hideKeyInput();
-    setStatus("Ready! Ask me anything about Python.");
-  }
-
-  function clearKey() {
-    localStorage.removeItem("anthropic_api_key");
-    const input = document.getElementById("tutorApiKeyInput");
-    if (input) input.value = "";
-    showKeyInput();
-  }
-
-  // ─── System prompt ────────────────────────────
-  function systemPrompt() {
-    return `You are an expert Python tutor for the "30 Days of Python" beginner course. You help students learn Python from scratch.
-
-You know everything about Python: variables, data types, operators, strings, lists, tuples, sets, dicts, conditionals, loops, functions, modules, list comprehension, higher-order functions, exception handling, file handling, OOP, and all standard library concepts.
-
-Rules:
-- Be clear and friendly for absolute beginners.
-- Keep answers concise — under 200 words unless the student asks for more detail.
-- Always show a short code example when explaining a concept.
-- Format code with triple backticks and the python label.
-- If the student shares their code, find bugs and explain the fix.
-- If asked about something unrelated to Python, politely redirect.`;
-  }
-
   // ─── Send message ─────────────────────────────
   async function send() {
     if (isGenerating) return;
-
-    const key = getKey();
-    if (!key) { showKeyInput(); return; }
 
     const ta = document.getElementById("tutorTextarea");
     if (!ta) return;
@@ -246,31 +192,18 @@ Rules:
 
     // Keep last 20 messages (10 turns) for context window
     const messages = history.slice(-20);
+    const userId = getUserId();
 
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": key,
-          "anthropic-version": "2023-06-01",
-          "anthropic-dangerous-direct-browser-access": "true",
-        },
-        body: JSON.stringify({
-          model: MODEL,
-          max_tokens: 1024,
-          system: systemPrompt(),
-          messages,
-          stream: true,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages, userId }),
       });
 
       if (!response.ok) {
         const err = await response.json().catch(() => ({}));
-        const msg = (err && err.error && err.error.message) || ("HTTP " + response.status);
-        const status = response.status;
 
-        // Remove empty streaming bubble
         if (currentAssistantEl && !currentAssistantEl._rawText) {
           chatEl().removeChild(currentAssistantEl);
           currentAssistantEl = null;
@@ -278,27 +211,19 @@ Rules:
           finalizeAssistantBubble();
         }
 
-        if (status === 401 || msg.toLowerCase().includes("api key") || msg.toLowerCase().includes("invalid")) {
-          history.pop(); // remove user message we just pushed
-          showKeyInput();
-          setStatus("Invalid API key — please re-enter.");
-        } else if (status === 429) {
-          appendToken("Rate limit reached. Wait a moment and try again.");
+        if (response.status === 429) {
+          appendToken(err.message || "You've reached your 20 free messages for today. Come back tomorrow!");
           finalizeAssistantBubble();
-          setStatus("Rate limited.");
-        } else if (msg.includes("credit")) {
-          appendToken("Your Anthropic account has run out of credits. Add credits at console.anthropic.com.");
-          finalizeAssistantBubble();
-          setStatus("No credits.");
+          setStatus("Daily limit reached.");
         } else {
-          appendToken(`Error (${status}): ${msg}`);
+          appendToken(`Error: ${err.error || "Something went wrong. Try again."}`);
           finalizeAssistantBubble();
           setStatus("Error. Try again.");
         }
         return;
       }
 
-      // Parse Anthropic SSE stream
+      // Parse OpenAI-compatible SSE stream from Groq
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
@@ -317,10 +242,8 @@ Rules:
           if (!jsonStr || jsonStr === "[DONE]") continue;
           try {
             const json = JSON.parse(jsonStr);
-            // content_block_delta carries the streamed text
-            if (json.type === "content_block_delta" && json.delta && json.delta.text) {
-              appendToken(json.delta.text);
-            }
+            const token = json.choices?.[0]?.delta?.content;
+            if (token) appendToken(token);
           } catch (_) {}
         }
       }
@@ -346,14 +269,8 @@ Rules:
     panel.setAttribute("aria-hidden", isOpen ? "false" : "true");
     if (btn) btn.classList.toggle("active", isOpen);
     if (isOpen) {
-      if (getKey()) {
-        hideKeyInput();
-        setStatus("Ready. Ask anything about Python!");
-      } else {
-        showKeyInput();
-        const input = document.getElementById("tutorApiKeyInput");
-        if (input) input.value = "";
-      }
+      hideKeyInput();
+      setStatus("Ready. Ask anything about Python!");
     }
     if (typeof syncPanelPositions === "function") syncPanelPositions();
   }
@@ -378,21 +295,13 @@ Rules:
         if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
       });
     }
-    const ki = document.getElementById("tutorApiKeyInput");
-    if (ki) {
-      ki.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") submitKey();
-      });
-    }
   });
 
-  return { toggle, toggleContext, send, submitKey, clearKey, clearHistory };
+  return { toggle, toggleContext, send, clearHistory };
 })();
 
 window.AITutor = AITutor;
 window.toggleTutor        = () => AITutor.toggle();
 window.toggleTutorContext = () => AITutor.toggleContext();
 window.sendTutorMessage   = () => AITutor.send();
-window.submitTutorKey     = () => AITutor.submitKey();
-window.clearTutorKey      = () => AITutor.clearKey();
 window.clearTutorHistory  = () => AITutor.clearHistory();
