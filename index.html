@@ -782,11 +782,25 @@ average = total / len(scores
                 <button id="authTabLogin" class="auth-tab" onclick="Auth._switchTab('login')">Log In</button>
             </div>
             <div id="authErrorMsg" class="auth-error hidden"></div>
-            <input id="authEmailInput" class="auth-input" type="email" placeholder="Email address" autocomplete="email" />
-            <input id="authPasswordInput" class="auth-input" type="password" placeholder="Password (min 8 characters)" autocomplete="current-password" />
-            <button id="authSubmitBtn" class="auth-submit-btn" onclick="Auth._submit()">Create Account</button>
-            <p class="auth-switch">Already have an account? <a id="authSwitchLink" href="#" onclick="Auth._switchTab('login'); return false;">Log in</a></p>
-            <p class="auth-skip"><a href="#" onclick="Auth.hideModal(); return false;">Continue without account →</a></p>
+
+            <!-- Sign-up / Log-in view (default) -->
+            <div id="authLoginView">
+                <input id="authEmailInput" class="auth-input" type="email" placeholder="Email address" autocomplete="email" />
+                <input id="authPasswordInput" class="auth-input" type="password" placeholder="Password (min 8 characters)" autocomplete="current-password" />
+                <p id="authForgotLink" class="auth-forgot hidden"><a href="#" onclick="Auth.showForgotPassword(); return false;">Forgot password?</a></p>
+                <button id="authSubmitBtn" class="auth-submit-btn" onclick="Auth._submit()">Create Account</button>
+                <p id="authResendLink" class="auth-resend hidden"><a href="#" onclick="Auth._resendConfirmation(); return false;">Resend confirmation email</a></p>
+                <p class="auth-switch">Already have an account? <a id="authSwitchLink" href="#" onclick="Auth._switchTab('login'); return false;">Log in</a></p>
+                <p class="auth-skip"><a href="#" onclick="Auth.hideModal(); return false;">Continue without account →</a></p>
+            </div>
+
+            <!-- Forgot-password view (hidden by default) -->
+            <div id="authForgotView" class="hidden">
+                <p class="auth-modal-sub" style="margin-bottom:12px;">Enter your email and we'll send you a link to reset your password.</p>
+                <input id="authForgotEmailInput" class="auth-input" type="email" placeholder="Email address" autocomplete="email" />
+                <button id="authForgotSubmitBtn" class="auth-submit-btn" onclick="Auth._submitForgot()">Send reset link</button>
+                <p class="auth-switch"><a href="#" onclick="Auth._switchTab('login'); return false;">← Back to log in</a></p>
+            </div>
         </div>
 
         <!-- User Avatar (bottom-left, shown when logged in) -->

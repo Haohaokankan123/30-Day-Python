@@ -25,13 +25,23 @@ const Auth = (() => {
   function _showError(msg) {
     const el = document.getElementById("authErrorMsg");
     if (!el) return;
+    // Reset back to error styling (previous success message may have overridden)
+    el.style.background = "";
+    el.style.borderColor = "";
+    el.style.color = "";
     el.textContent = msg;
     el.classList.remove("hidden");
   }
 
   function _clearError() {
     const el = document.getElementById("authErrorMsg");
-    if (el) { el.textContent = ""; el.classList.add("hidden"); }
+    if (el) {
+      el.textContent = "";
+      el.classList.add("hidden");
+      el.style.background = "";
+      el.style.borderColor = "";
+      el.style.color = "";
+    }
   }
 
   function _setLoading(loading) {
@@ -74,16 +84,22 @@ const Auth = (() => {
     _clearError();
   }
 
-  // ─── Tab switch ───────────────────────────
+  // ─── View switch (signup / login / forgot) ───
+  // The modal has three states. Most of the time we toggle between
+  // 'signup' and 'login' via the tabs. 'forgot' is a separate view
+  // that hides the tabs and shows a single email field.
   function _switchTab(tab) {
     _currentTab = tab;
     _clearError();
+    _resetSignupLockUI();
+    _showLoginView();
+
     const signupTab = document.getElementById("authTabSignup");
     const loginTab  = document.getElementById("authTabLogin");
     const submitBtn = document.getElementById("authSubmitBtn");
     const title     = document.getElementById("authModalTitle");
-    const switchLink = document.getElementById("authSwitchLink");
-    const switchP    = document.querySelector(".auth-switch");
+    const switchP   = document.querySelector(".auth-switch");
+    const forgotLink = document.getElementById("authForgotLink");
 
     if (tab === "signup") {
       signupTab?.classList.add("active");
@@ -91,13 +107,49 @@ const Auth = (() => {
       if (submitBtn) submitBtn.textContent = "Create Account";
       if (title) title.textContent = "Create your account";
       if (switchP) switchP.innerHTML = 'Already have an account? <a id="authSwitchLink" href="#" onclick="Auth._switchTab(\'login\'); return false;">Log in</a>';
+      if (forgotLink) forgotLink.classList.add("hidden");
     } else {
       loginTab?.classList.add("active");
       signupTab?.classList.remove("active");
       if (submitBtn) submitBtn.textContent = "Log In";
       if (title) title.textContent = "Welcome back";
       if (switchP) switchP.innerHTML = 'Don\'t have an account? <a id="authSwitchLink" href="#" onclick="Auth._switchTab(\'signup\'); return false;">Sign up</a>';
+      if (forgotLink) forgotLink.classList.remove("hidden");
     }
+  }
+
+  // Show/hide the standard login view vs the forgot-password view
+  function _showLoginView() {
+    document.getElementById("authLoginView")?.classList.remove("hidden");
+    document.getElementById("authForgotView")?.classList.add("hidden");
+  }
+  function _showForgotView() {
+    document.getElementById("authLoginView")?.classList.add("hidden");
+    document.getElementById("authForgotView")?.classList.remove("hidden");
+    _clearError();
+    setTimeout(() => document.getElementById("authForgotEmailInput")?.focus(), 50);
+  }
+
+  // Reset the form back to enabled state (after a previous pending signup)
+  function _resetSignupLockUI() {
+    const em = document.getElementById("authEmailInput");
+    const pw = document.getElementById("authPasswordInput");
+    const btn = document.getElementById("authSubmitBtn");
+    const resend = document.getElementById("authResendLink");
+    if (em) em.disabled = false;
+    if (pw) pw.disabled = false;
+    if (btn) btn.disabled = false;
+    if (resend) resend.classList.add("hidden");
+  }
+
+  function _showSuccess(text) {
+    const errEl = document.getElementById("authErrorMsg");
+    if (!errEl) return;
+    errEl.style.background = "rgba(62,207,142,0.12)";
+    errEl.style.borderColor = "rgba(62,207,142,0.3)";
+    errEl.style.color = "#86efac";
+    errEl.textContent = text;
+    errEl.classList.remove("hidden");
   }
 
   // ─── Submit handler ───────────────────────
@@ -112,17 +164,29 @@ const Auth = (() => {
     _setLoading(true);
     try {
       if (_currentTab === "signup") {
-        const { error } = await _sb.auth.signUp({ email, password });
+        const { data, error } = await _sb.auth.signUp({ email, password });
         if (error) { _showError(error.message); return; }
-        _clearError();
-        const errEl = document.getElementById("authErrorMsg");
-        if (errEl) {
-          errEl.style.background = "rgba(62,207,142,0.12)";
-          errEl.style.borderColor = "rgba(62,207,142,0.3)";
-          errEl.style.color = "#86efac";
-          errEl.textContent = "Check your email to confirm your account!";
-          errEl.classList.remove("hidden");
+
+        // Supabase returns an empty `identities` array when the email already exists.
+        // This is the documented way to detect a duplicate signup without leaking which
+        // emails are registered.
+        const isDuplicate = Array.isArray(data?.user?.identities) && data.user.identities.length === 0;
+        if (isDuplicate) {
+          _showError("An account with that email already exists. Try logging in, or use Forgot Password.");
+          return;
         }
+
+        // Real new signup — show success, lock the form, expose Resend link
+        _pendingSignupEmail = email;
+        _showSuccess("Check your email to confirm your account! You won't be able to log in until you confirm.");
+        const em = document.getElementById("authEmailInput");
+        const pw = document.getElementById("authPasswordInput");
+        const btn = document.getElementById("authSubmitBtn");
+        const resend = document.getElementById("authResendLink");
+        if (em) em.disabled = true;
+        if (pw) pw.disabled = true;
+        if (btn) btn.disabled = true;
+        if (resend) resend.classList.remove("hidden");
       } else {
         const { data, error } = await _sb.auth.signInWithPassword({ email, password });
         if (error) { _showError(error.message); return; }
@@ -135,6 +199,59 @@ const Auth = (() => {
     } finally {
       _setLoading(false);
     }
+  }
+
+  // ─── Resend confirmation email ────────────
+  let _pendingSignupEmail = null;
+  async function _resendConfirmation() {
+    if (!_pendingSignupEmail) return;
+    const link = document.getElementById("authResendLink");
+    if (link) { link.textContent = "Sending…"; link.style.pointerEvents = "none"; }
+    try {
+      const { error } = await _sb.auth.resend({ type: "signup", email: _pendingSignupEmail });
+      if (error) {
+        _showError(error.message);
+      } else {
+        _showSuccess("Confirmation email sent again. Check your inbox.");
+      }
+    } catch (e) {
+      _showError(e.message || "Could not resend. Try again later.");
+    } finally {
+      if (link) { link.textContent = "Resend confirmation email"; link.style.pointerEvents = ""; }
+    }
+  }
+
+  // ─── Forgot password flow ─────────────────
+  function showForgotPassword() {
+    _clearError();
+    const title = document.getElementById("authModalTitle");
+    if (title) title.textContent = "Reset your password";
+    _showForgotView();
+  }
+
+  async function _submitForgot() {
+    _clearError();
+    const email = (document.getElementById("authForgotEmailInput")?.value || "").trim();
+    if (!email) { _showError("Please enter your email."); return; }
+
+    const btn = document.getElementById("authForgotSubmitBtn");
+    if (btn) { btn.disabled = true; btn.textContent = "Sending…"; }
+    try {
+      const { error } = await _sb.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + "/reset-password.html",
+      });
+      if (error) { _showError(error.message); return; }
+      _showSuccess("If that email is registered, we've sent a reset link. Check your inbox.");
+    } catch (e) {
+      _showError(e.message || "Something went wrong. Try again.");
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = "Send reset link"; }
+    }
+  }
+
+  // Used by reset-password.html
+  async function updatePassword(newPassword) {
+    return await _sb.auth.updateUser({ password: newPassword });
   }
 
   // ─── Public methods ───────────────────────
@@ -173,8 +290,11 @@ const Auth = (() => {
   function user() { return _currentUser; }
 
   // ─── Bootstrap ────────────────────────────
-  // Listen for auth state changes (handles OAuth redirect automatically)
+  // Listen for auth state changes (handles OAuth redirect automatically).
+  // PASSWORD_RECOVERY fires when the user lands from a reset email; reset-password.html
+  // reads this event itself, but on the main site we just ignore it (no UI here).
   _sb.auth.onAuthStateChange((event, session) => {
+    if (event === "PASSWORD_RECOVERY") return;
     const u = session?.user || null;
     _setUser(u);
     if (u && event === "SIGNED_IN" && window.Sync) {
@@ -193,9 +313,15 @@ const Auth = (() => {
     if (pw) pw.addEventListener("keydown", e => { if (e.key === "Enter") _submit(); });
     const em = document.getElementById("authEmailInput");
     if (em) em.addEventListener("keydown", e => { if (e.key === "Enter") _submit(); });
+    const fe = document.getElementById("authForgotEmailInput");
+    if (fe) fe.addEventListener("keydown", e => { if (e.key === "Enter") _submitForgot(); });
   });
 
-  return { user, signUp, signIn, signInGoogle, signOut, onChange, getSession, showModal, hideModal, _switchTab, _submit };
+  return {
+    user, signUp, signIn, signInGoogle, signOut, onChange, getSession,
+    showModal, hideModal, _switchTab, _submit,
+    showForgotPassword, _submitForgot, _resendConfirmation, updatePassword,
+  };
 })();
 
 window.Auth = Auth;
