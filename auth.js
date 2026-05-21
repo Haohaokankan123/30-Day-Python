@@ -167,10 +167,17 @@ const Auth = (() => {
         const { data, error } = await _sb.auth.signUp({ email, password });
         if (error) { _showError(error.message); return; }
 
-        // Supabase returns an empty `identities` array when the email already exists.
-        // This is the documented way to detect a duplicate signup without leaking which
-        // emails are registered.
-        const isDuplicate = Array.isArray(data?.user?.identities) && data.user.identities.length === 0;
+        // Detect duplicate signup. Supabase intentionally returns "success" either
+        // way (to avoid leaking which emails are registered), but the user object
+        // looks different. For a brand-new signup the user has one identity AND a
+        // `confirmation_sent_at` timestamp. For an email that's already confirmed,
+        // Supabase returns a stub user with no identities. For an unconfirmed
+        // duplicate, Supabase silently resends the confirmation email — we treat
+        // that as success and the user gets a fresh email.
+        const u = data?.user;
+        const identitiesEmpty = !u?.identities || u.identities.length === 0;
+        const looksLikeBrandNew = !!u?.confirmation_sent_at;
+        const isDuplicate = identitiesEmpty || !looksLikeBrandNew;
         if (isDuplicate) {
           _showError("An account with that email already exists. Try logging in, or use Forgot Password.");
           return;
