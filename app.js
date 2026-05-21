@@ -49,6 +49,19 @@ document.addEventListener("DOMContentLoaded", () => {
   initAiTutorHooks();
 });
 
+// When Pro state changes (login, refresh, after payment), re-render anything
+// that shows lock badges or the lock screen.
+window.addEventListener("pro:updated", () => {
+  buildPreviewGrid();
+  buildSidebar();
+  // If the user is currently on a locked day's lock screen, re-load that day —
+  // if they just paid, it will now render the real content.
+  const appVisible = !document.getElementById("app")?.classList.contains("hidden");
+  if (appVisible && state.currentDay >= 4) {
+    loadDay(state.currentDay);
+  }
+});
+
 // ─── PERSISTENCE ──────────────────────────────
 function loadState() {
   try {
@@ -282,16 +295,19 @@ function initAiTutorHooks() {
 function buildPreviewGrid() {
   const grid = document.getElementById("previewGrid");
   grid.innerHTML = "";
+  const locked = (i) => i >= 4 && window.Pro && !window.Pro.isPro();
   for (let i = 1; i <= 30; i++) {
     const day = DAYS[i - 1];
     const done = state.completed.has(i);
+    const isLocked = locked(i);
     const d = document.createElement("div");
-    d.className = "preview-day" + (done ? " done" : "");
+    d.className = "preview-day" + (done ? " done" : "") + (isLocked ? " locked" : "");
     d.title = day ? day.title : "";
     d.innerHTML = `
       <span class="preview-day-num">${done ? "✓ " : ""}${String(i).padStart(2, "0")}</span>
       <span class="preview-day-emoji">${day ? day.emoji : ""}</span>
       <span class="preview-day-name">${day ? day.title : ""}</span>
+      ${isLocked ? '<span class="preview-day-lock">🔒</span>' : ""}
     `;
     d.style.animationDelay = `${i * 28}ms`;
     grid.appendChild(d);
@@ -306,14 +322,18 @@ function buildSidebar() {
     const item = document.createElement("div");
     const done = state.completed.has(d.day);
     const active = d.day === state.currentDay;
+    const isLocked = d.day >= 4 && window.Pro && !window.Pro.isPro();
     item.className =
-      "day-nav-item" + (done ? " done" : "") + (active ? " active" : "");
+      "day-nav-item" +
+      (done ? " done" : "") +
+      (active ? " active" : "") +
+      (isLocked ? " locked" : "");
     item.dataset.day = d.day;
     item.innerHTML = `
       <span class="day-nav-num">${String(d.day).padStart(2, "0")}</span>
       <span class="day-nav-emoji">${d.emoji}</span>
       <span class="day-nav-title">${d.title}</span>
-      <span class="day-nav-check"></span>
+      <span class="day-nav-check">${isLocked ? "🔒" : ""}</span>
     `;
     item.onclick = () => {
       loadDay(d.day);
@@ -371,11 +391,27 @@ function loadDay(n) {
   const day = DAYS[n - 1];
   if (!day) return;
 
+  // Paywall: Days 4–30 require Pro. Render the lock screen instead of the lesson.
+  if (n >= 4 && window.Pro && !window.Pro.isPro()) {
+    document.querySelectorAll(".day-nav-item").forEach((el) => {
+      el.classList.toggle("active", +el.dataset.day === n);
+    });
+    const btn = document.getElementById("completeBtn");
+    if (btn) { btn.className = "complete-btn"; btn.textContent = "Mark Complete ✓"; btn.disabled = true; }
+    document.getElementById("prevBtn").disabled = n === 1;
+    document.getElementById("nextBtn").disabled = n >= DAYS.length;
+    document.getElementById("contentWrap").innerHTML = renderLockScreen();
+    buildDayDots(n);
+    document.getElementById("contentWrap").scrollTop = 0;
+    return;
+  }
+
   // topbarDay removed — progress shown in sidebar badge only
   const btn = document.getElementById("completeBtn");
   const done = state.completed.has(n);
   btn.className = "complete-btn" + (done ? " done" : "");
   btn.textContent = done ? "Completed ✓" : "Mark Complete ✓";
+  btn.disabled = false;
 
   document.querySelectorAll(".day-nav-item").forEach((el) => {
     el.classList.toggle("active", +el.dataset.day === n);
@@ -416,6 +452,25 @@ function buildDayDots(current) {
 }
 
 // ─── RENDER ───────────────────────────────────
+function renderLockScreen() {
+  return `
+    <div class="day-lock-screen">
+      <div class="day-lock-card">
+        <div class="day-lock-emoji">🔒</div>
+        <h1 class="day-lock-title">Unlock the full 30 Days of Python</h1>
+        <p class="day-lock-sub">Days 1–3 are free. Pay <strong>$15 once</strong> to unlock the remaining 27 days. Learn forever.</p>
+        <ul class="day-lock-bullets">
+          <li>✓ All 30 days of lessons</li>
+          <li>✓ Exercises and quizzes</li>
+          <li>✓ Unlimited access on any device</li>
+        </ul>
+        <button class="day-lock-cta" onclick="window.Pro && window.Pro.unlock()">Unlock for $15</button>
+        <p class="day-lock-note">Includes Apple Pay, Google Pay, and all major cards.</p>
+      </div>
+    </div>
+  `;
+}
+
 function renderDay(day) {
   return `
     <div class="day-hero">
