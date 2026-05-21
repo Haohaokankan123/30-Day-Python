@@ -2533,6 +2533,35 @@ button {
     right: 400px;
 }
 
+/* Drag-to-resize handle (left edge of each side panel) */
+.panel-resize-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    cursor: ew-resize;
+    background: transparent;
+    z-index: 10;
+    transition: background 0.15s;
+}
+.panel-resize-handle:hover,
+.panel-resize-handle.dragging {
+    background: rgba(252, 212, 77, 0.35);
+}
+/* While dragging, disable text selection and pointer events on iframes/editors */
+body.panel-resizing,
+body.panel-resizing * {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+body.panel-resizing { cursor: ew-resize !important; }
+
+/* Hide the resize handle on small screens — panels are full-width there */
+@media (max-width: 768px) {
+    .panel-resize-handle { display: none; }
+}
+
 /* Tutor button active state */
 .tutor-btn.active {
     background: rgba(255, 212, 59, 0.1);
