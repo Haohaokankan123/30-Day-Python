@@ -173,7 +173,7 @@ const Auth = (() => {
         // non-error response — Supabase sends the confirmation email (or silently
         // does nothing for duplicates) server-side either way.
         _pendingSignupEmail = email;
-        _showSuccess("Check your email to confirm your account! You won't be able to log in until you confirm.");
+        _showSuccess("Check your inbox! If this email is new, click the confirmation link to activate your account. If you already have an account, try logging in instead.");
         const em = document.getElementById("authEmailInput");
         const pw2 = document.getElementById("authPasswordInput");
         const btn2 = document.getElementById("authSubmitBtn");
