@@ -1,0 +1,8 @@
+{
+  "name": "30-days-of-python",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "stripe": "^17.0.0"
+  }
+}

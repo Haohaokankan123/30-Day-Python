@@ -5751,3 +5751,113 @@ body { font-family: var(--font-body); }
     font-family: var(--font-body); transition: background 0.15s; align-self: flex-start;
 }
 .settings-danger-btn:hover { background: rgba(239,68,68,0.25); }
+
+/* ─── PAYWALL — LOCK SCREEN ──────────────────── */
+.day-lock-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 40px 20px;
+}
+.day-lock-card {
+    max-width: 480px;
+    width: 100%;
+    background: var(--bg-2, #131a26);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 44px 40px;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+}
+.day-lock-emoji {
+    font-size: 48px;
+    margin-bottom: 16px;
+    line-height: 1;
+}
+.day-lock-title {
+    margin: 0 0 12px;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-1, #e5e7eb);
+    line-height: 1.2;
+}
+.day-lock-sub {
+    margin: 0 0 20px;
+    font-size: 15px;
+    color: var(--text-3, #94a3b8);
+    line-height: 1.5;
+}
+.day-lock-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px;
+    text-align: left;
+    display: inline-block;
+}
+.day-lock-bullets li {
+    font-size: 14px;
+    color: var(--text-2, #c4cad4);
+    padding: 4px 0;
+}
+.day-lock-cta {
+    display: block;
+    width: 100%;
+    padding: 14px 24px;
+    background: var(--accent, #fcd449);
+    color: #0d0d12;
+    font-size: 17px;
+    font-weight: 800;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    margin-bottom: 12px;
+}
+.day-lock-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+.day-lock-cta:active { transform: translateY(0); }
+.day-lock-note {
+    margin: 0;
+    font-size: 12px;
+    color: var(--text-3, #94a3b8);
+}
+
+/* ─── PAYWALL — LOCK BADGES ──────────────────── */
+.preview-day.locked {
+    opacity: 0.6;
+    position: relative;
+}
+.preview-day-lock {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    font-size: 11px;
+    line-height: 1;
+}
+.day-nav-item.locked {
+    opacity: 0.55;
+}
+
+/* ─── PAYWALL — SUCCESS TOAST ────────────────── */
+.pro-toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(62, 207, 142, 0.15);
+    border: 1px solid rgba(62, 207, 142, 0.35);
+    color: #86efac;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+}
+.pro-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
