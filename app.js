@@ -933,7 +933,92 @@ function syncPanelPositions() {
   if (!playground || !tutor) return;
   const bothOpen = playground.classList.contains("open") && tutor.classList.contains("open");
   playground.classList.toggle("both-open", bothOpen);
+  // When both panels open, the playground sits to the left of the tutor —
+  // keep its right offset in sync with the tutor's actual (possibly resized) width.
+  if (bothOpen) {
+    const tutorW = tutor.getBoundingClientRect().width;
+    playground.style.right = tutorW + "px";
+  } else {
+    playground.style.right = "";
+  }
 }
+
+// ─── PANEL DRAG-TO-RESIZE ─────────────────────
+// Lets users drag the left edge of the AI Tutor or Code Editor panels to make
+// them wider/narrower. Widths persist in localStorage.
+(function setupPanelResize() {
+  const MIN_WIDTH = 320;
+  const STORAGE = { tutorPanel: "panelWidth.tutor", floatingPlaygroundPanel: "panelWidth.editor" };
+
+  function maxWidth() { return Math.min(900, Math.round(window.innerWidth * 0.8)); }
+  function clamp(w) { return Math.max(MIN_WIDTH, Math.min(maxWidth(), w)); }
+
+  // Restore saved widths on load
+  function applySavedWidth(panelId) {
+    const el = document.getElementById(panelId);
+    if (!el) return;
+    const saved = parseInt(localStorage.getItem(STORAGE[panelId]) || "", 10);
+    if (saved > 0) el.style.width = clamp(saved) + "px";
+  }
+  applySavedWidth("tutorPanel");
+  applySavedWidth("floatingPlaygroundPanel");
+
+  let dragging = null;
+
+  function onPointerDown(e) {
+    const handle = e.target.closest(".panel-resize-handle");
+    if (!handle) return;
+    const targetId = handle.getAttribute("data-resize-target");
+    const panel = document.getElementById(targetId);
+    if (!panel) return;
+    e.preventDefault();
+    dragging = { panel, handle, targetId };
+    handle.classList.add("dragging");
+    document.body.classList.add("panel-resizing");
+    handle.setPointerCapture?.(e.pointerId);
+  }
+
+  function onPointerMove(e) {
+    if (!dragging) return;
+    // The panel is anchored to the right; dragging the left edge means width
+    // grows as the cursor moves leftward.
+    const newWidth = clamp(window.innerWidth - e.clientX);
+    dragging.panel.style.width = newWidth + "px";
+    syncPanelPositions();
+    // Ace editor needs an explicit resize call when its container width changes
+    if (dragging.targetId === "floatingPlaygroundPanel" && window.FloatingPlayground?.resize) {
+      window.FloatingPlayground.resize();
+    }
+  }
+
+  function onPointerUp(e) {
+    if (!dragging) return;
+    dragging.handle.classList.remove("dragging");
+    document.body.classList.remove("panel-resizing");
+    // Persist final width
+    const finalW = parseInt(dragging.panel.style.width, 10);
+    if (finalW > 0) localStorage.setItem(STORAGE[dragging.targetId], String(finalW));
+    dragging.handle.releasePointerCapture?.(e.pointerId);
+    dragging = null;
+  }
+
+  document.addEventListener("pointerdown", onPointerDown);
+  document.addEventListener("pointermove", onPointerMove);
+  document.addEventListener("pointerup", onPointerUp);
+  document.addEventListener("pointercancel", onPointerUp);
+
+  // Re-clamp on window resize so a saved width never exceeds the new viewport
+  window.addEventListener("resize", () => {
+    for (const id of Object.keys(STORAGE)) {
+      const el = document.getElementById(id);
+      if (!el || !el.style.width) continue;
+      const cur = parseInt(el.style.width, 10);
+      const clamped = clamp(cur);
+      if (clamped !== cur) el.style.width = clamped + "px";
+    }
+    syncPanelPositions();
+  });
+})();
 
 function toggleFloatingPlayground() {
   const panel = document.getElementById("floatingPlaygroundPanel");
@@ -1030,7 +1115,11 @@ const FloatingPlayground = (() => {
     }
   }
 
-  return { mount, run, getCode, clearOutput, reset };
+  function resize() {
+    if (editor) editor.resize();
+  }
+
+  return { mount, run, getCode, clearOutput, reset, resize };
 })();
 
 window.FloatingPlayground = FloatingPlayground;
