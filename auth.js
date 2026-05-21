@@ -167,36 +167,20 @@ const Auth = (() => {
         const { data, error } = await _sb.auth.signUp({ email, password });
         if (error) { _showError(error.message); return; }
 
-        // Detect duplicate signup. Supabase intentionally returns "success" either
-        // way (to avoid leaking which emails are registered), but the response differs:
-        //   - Brand-new signup: data.user exists with identities.length >= 1
-        //   - Already-confirmed duplicate: data.user exists with identities = []
-        //   - data.user is null: Supabase sent the email silently (treat as success)
-        // We ONLY check identities.length — confirmation_sent_at is unreliable and
-        // was causing false positives for brand-new accounts and re-registrations.
-        const u = data?.user;
-        if (u === null || u === undefined) {
-          // Supabase handled it silently (email sent or rate-limited) — show success
-          _pendingSignupEmail = email;
-          _showSuccess("Check your email to confirm your account! You won't be able to log in until you confirm.");
-          return;
-        }
-        const isDuplicate = Array.isArray(u.identities) && u.identities.length === 0;
-        if (isDuplicate) {
-          _showError("An account with that email already exists. Try logging in, or use Forgot Password.");
-          return;
-        }
-
-        // Real new signup — show success, lock the form, expose Resend link
+        // Supabase deliberately hides whether an email is already registered to
+        // prevent account enumeration. We must NOT show different messages based
+        // on whether the account exists. Always show "check your email" on any
+        // non-error response — Supabase sends the confirmation email (or silently
+        // does nothing for duplicates) server-side either way.
         _pendingSignupEmail = email;
         _showSuccess("Check your email to confirm your account! You won't be able to log in until you confirm.");
         const em = document.getElementById("authEmailInput");
-        const pw = document.getElementById("authPasswordInput");
-        const btn = document.getElementById("authSubmitBtn");
+        const pw2 = document.getElementById("authPasswordInput");
+        const btn2 = document.getElementById("authSubmitBtn");
         const resend = document.getElementById("authResendLink");
         if (em) em.disabled = true;
-        if (pw) pw.disabled = true;
-        if (btn) btn.disabled = true;
+        if (pw2) pw2.disabled = true;
+        if (btn2) btn2.disabled = true;
         if (resend) resend.classList.remove("hidden");
       } else {
         const { data, error } = await _sb.auth.signInWithPassword({ email, password });
