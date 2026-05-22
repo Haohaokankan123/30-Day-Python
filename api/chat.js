@@ -2,6 +2,7 @@
 // GROQ_API_KEY and SUPABASE_URL/SUPABASE_SERVICE_KEY live in Vercel env vars only
 
 const DAILY_LIMIT = 20;
+const OWNER_EMAIL = "haiou.chenho@gmail.com";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -14,14 +15,18 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "messages required" });
   }
 
-  // ── Usage check ────────────────────────────────────────────────
+  // ── Usage check (owner bypasses limit entirely) ─────────────────
   if (userId) {
-    const used = await getUsageCount(userId);
-    if (used >= DAILY_LIMIT) {
-      return res.status(429).json({
-        error: "limit_reached",
-        message: `You've used all ${DAILY_LIMIT} free messages for today. Come back tomorrow!`,
-      });
+    const userEmail = await getUserEmail(userId);
+    const isOwner = userEmail === OWNER_EMAIL;
+    if (!isOwner) {
+      const used = await getUsageCount(userId);
+      if (used >= DAILY_LIMIT) {
+        return res.status(429).json({
+          error: "limit_reached",
+          message: `You've used all ${DAILY_LIMIT} free messages for today. Come back tomorrow!`,
+        });
+      }
     }
   }
 
@@ -84,6 +89,19 @@ Rules:
 }
 
 // ── Supabase helpers ───────────────────────────────────────────────
+async function getUserEmail(userId) {
+  const url = `${process.env.SUPABASE_URL}/auth/v1/admin/users/${userId}`;
+  const r = await fetch(url, {
+    headers: {
+      apikey: process.env.SUPABASE_SERVICE_KEY,
+      Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+    },
+  });
+  if (!r.ok) return null;
+  const user = await r.json();
+  return user?.email || null;
+}
+
 async function getUsageCount(userId) {
   const today = new Date().toISOString().slice(0, 10);
   const url = `${process.env.SUPABASE_URL}/rest/v1/ai_usage?user_id=eq.${userId}&select=message_count,reset_date`;
