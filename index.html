@@ -769,7 +769,7 @@ average = total / len(scores
 
         <!-- Auth Modal -->
         <div id="authModalOverlay" class="auth-modal-overlay hidden" onclick="Auth.hideModal()"></div>
-        <div id="authModal" class="auth-modal hidden">
+        <div id="authModal" class="auth-modal hidden" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
             <button class="auth-modal-close" onclick="Auth.hideModal()">✕</button>
             <div class="auth-logo">30 Days of Python</div>
             <h2 id="authModalTitle" class="auth-modal-title">Create your account</h2>
@@ -838,7 +838,7 @@ average = total / len(scores
 
         <!-- Settings Modal -->
         <div id="settingsOverlay" class="settings-overlay hidden" onclick="SettingsPanel.close()"></div>
-        <div id="settingsModal" class="settings-modal hidden">
+        <div id="settingsModal" class="settings-modal hidden" role="dialog" aria-modal="true" aria-label="Settings">
             <div class="settings-sidebar">
                 <div class="settings-sidebar-title">Settings</div>
                 <button class="settings-nav-btn active" data-section="appearance" onclick="SettingsPanel.nav('appearance')">Appearance</button>
@@ -942,8 +942,8 @@ average = total / len(scores
         </div>
 
         <!-- Delete Account Confirmation Modal -->
-        <div id="deleteConfirmOverlay" class="auth-modal-overlay hidden"></div>
-        <div id="deleteConfirmModal" class="auth-modal hidden">
+        <div id="deleteConfirmOverlay" class="auth-modal-overlay delete-confirm-overlay hidden"></div>
+        <div id="deleteConfirmModal" class="auth-modal delete-confirm-modal hidden" role="dialog" aria-modal="true" aria-labelledby="deleteConfirmTitle">
             <h2 id="deleteConfirmTitle" class="auth-modal-title">Delete Account</h2>
             <p id="deleteConfirmMsg" class="auth-modal-sub"></p>
             <input id="deleteConfirmInput" class="auth-input" type="text" placeholder="" autocomplete="off" />

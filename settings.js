@@ -331,6 +331,22 @@ const Settings = (() => {
 
 window.Settings = Settings;
 
+// ─── Escape-key handler for Settings & Delete-Confirm modals ────
+// Delete-confirm sits ABOVE settings (z-index 4001 vs 3001), so when both
+// are open Escape should close the popup first, leaving Settings visible.
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  const deleteModal = document.getElementById("deleteConfirmModal");
+  if (deleteModal && !deleteModal.classList.contains("hidden")) {
+    Settings.cancelDelete();
+    return;
+  }
+  const settingsModal = document.getElementById("settingsModal");
+  if (settingsModal && !settingsModal.classList.contains("hidden")) {
+    SettingsPanel.close();
+  }
+});
+
 // ─── LangSwitcher (DeepL) ────────────────────
 const LangSwitcher = (() => {
   let _cache = {};          // { "ZH:elementId": translatedText }

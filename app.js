@@ -133,7 +133,7 @@ function checkLevel() {
   if (newLevel > state.level) {
     state.level = newLevel;
     const lvlData = LEVELS.find(l => l.level === newLevel);
-    showToast(`🎉 Level up! You're now a <strong>${lvlData.name}</strong>`);
+    showToast("🎉 Level up! You're now a ", lvlData.name);
   }
 }
 
@@ -173,7 +173,7 @@ function checkBadges() {
   for (const id of newBadges) {
     state.badges.add(id);
     const badge = BADGES.find(b => b.id === id);
-    if (badge) showToast(`${badge.emoji} Badge unlocked: <strong>${badge.name}</strong>`);
+    if (badge) showToast(`${badge.emoji} Badge unlocked: `, badge.name);
   }
 }
 
@@ -218,10 +218,19 @@ function renderTopbarStats() {
   }
 }
 
-function showToast(html) {
+// Build a toast safely. All inputs are inserted as text — no HTML injection.
+// Pass `prefix` (plain text), an optional `strong` segment (rendered bold),
+// and an optional `suffix` (plain text).
+function showToast(prefix, strong, suffix) {
   const toast = document.createElement("div");
   toast.className = "gamification-toast";
-  toast.innerHTML = html;
+  if (prefix) toast.appendChild(document.createTextNode(prefix));
+  if (strong) {
+    const s = document.createElement("strong");
+    s.textContent = strong;
+    toast.appendChild(s);
+  }
+  if (suffix) toast.appendChild(document.createTextNode(suffix));
   document.body.appendChild(toast);
   requestAnimationFrame(() => toast.classList.add("show"));
   setTimeout(() => {
@@ -472,6 +481,13 @@ function renderLockScreen() {
 }
 
 function renderDay(day) {
+  let safeLesson;
+  if (typeof DOMPurify !== "undefined") {
+    safeLesson = DOMPurify.sanitize(day.lesson);
+  } else {
+    console.error("DOMPurify missing — refusing to render unsanitized lesson HTML.");
+    safeLesson = "<p style='color:#fca5a5'>Lesson failed to load. Please refresh.</p>";
+  }
   return `
     <div class="day-hero">
       <div class="day-tag">Day ${day.day} &middot; ${day.emoji}</div>
@@ -485,7 +501,7 @@ function renderDay(day) {
       <button class="tab-btn" onclick="switchTab(this,'playground')">🎮 Playground</button>
       <div class="tab-indicator" id="tabIndicator"></div>
     </div>
-    <div id="panel-learn" class="tab-panel active">${typeof DOMPurify !== "undefined" ? DOMPurify.sanitize(day.lesson) : day.lesson}</div>
+    <div id="panel-learn" class="tab-panel active">${safeLesson}</div>
     <div id="panel-examples" class="tab-panel">${renderExamples(day.examples)}</div>
     <div id="panel-exercises" class="tab-panel">${renderExercisesTab(day)}</div>
     <div id="panel-playground" class="tab-panel">${renderPlayground(day)}</div>
@@ -852,7 +868,7 @@ function answerQuiz(btn, dayNum, qi, chosen, correct) {
     awardXP(15);
   } else if (!isCorrect && !alreadyAnswered) {
     awardXP(-10);
-    showToast("✗ Wrong answer: <strong>-10 XP</strong>");
+    showToast("✗ Wrong answer: ", "-10 XP");
     saveState();
   } else {
     saveState();
@@ -870,7 +886,7 @@ function revealQuizSolution(btn, dayNum, qi, correctAnswer) {
   if (!state.solutionUsed[key]) {
     state.solutionUsed[key] = true;
     awardXP(-30);
-    showToast("📖 Solution revealed: <strong>-30 XP</strong>");
+    showToast("📖 Solution revealed: ", "-30 XP");
   }
 
   // Disable all options and highlight correct answer

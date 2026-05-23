@@ -78,11 +78,20 @@
         return;
       }
       const { url } = await r.json();
-      if (url) {
-        window.location.href = url;
-      } else {
+      if (!url) {
         alert("Checkout URL missing from server response.");
+        return;
       }
+      let target;
+      try { target = new URL(url); } catch (_) {
+        alert("Invalid checkout URL.");
+        return;
+      }
+      if (!/(^|\.)stripe\.com$/.test(target.hostname)) {
+        alert("Invalid checkout URL.");
+        return;
+      }
+      window.location.href = url;
     } catch (e) {
       alert("Network error: " + e.message);
     }

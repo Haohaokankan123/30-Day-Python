@@ -101,19 +101,30 @@ const Auth = (() => {
     const switchP   = document.querySelector(".auth-switch");
     const forgotLink = document.getElementById("authForgotLink");
 
+    function _renderSwitchLink(prompt, linkText, targetTab) {
+      if (!switchP) return;
+      switchP.textContent = prompt + " ";
+      const a = document.createElement("a");
+      a.id = "authSwitchLink";
+      a.href = "#";
+      a.textContent = linkText;
+      a.addEventListener("click", (e) => { e.preventDefault(); _switchTab(targetTab); });
+      switchP.appendChild(a);
+    }
+
     if (tab === "signup") {
       signupTab?.classList.add("active");
       loginTab?.classList.remove("active");
       if (submitBtn) submitBtn.textContent = "Create Account";
       if (title) title.textContent = "Create your account";
-      if (switchP) switchP.innerHTML = 'Already have an account? <a id="authSwitchLink" href="#" onclick="Auth._switchTab(\'login\'); return false;">Log in</a>';
+      _renderSwitchLink("Already have an account?", "Log in", "login");
       if (forgotLink) forgotLink.classList.add("hidden");
     } else {
       loginTab?.classList.add("active");
       signupTab?.classList.remove("active");
       if (submitBtn) submitBtn.textContent = "Log In";
       if (title) title.textContent = "Welcome back";
-      if (switchP) switchP.innerHTML = 'Don\'t have an account? <a id="authSwitchLink" href="#" onclick="Auth._switchTab(\'signup\'); return false;">Sign up</a>';
+      _renderSwitchLink("Don't have an account?", "Sign up", "signup");
       if (forgotLink) forgotLink.classList.remove("hidden");
     }
   }

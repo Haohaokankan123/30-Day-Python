@@ -5652,6 +5652,10 @@ body { font-family: var(--font-body); }
     display: flex; z-index: 3001; overflow: hidden;
     box-shadow: 0 24px 80px rgba(0,0,0,0.8);
 }
+/* Delete-account confirm popup must sit ABOVE the settings modal,
+   since it's triggered from inside settings. */
+.delete-confirm-overlay { z-index: 4000; }
+.delete-confirm-modal   { z-index: 4001; }
 .settings-sidebar {
     width: 200px; background: var(--bg-0); padding: 20px 10px;
     display: flex; flex-direction: column; gap: 2px;
