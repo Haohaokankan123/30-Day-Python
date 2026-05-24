@@ -83,6 +83,58 @@ multi-line comment
       <div class="info-box">
         <strong>Try it:</strong> In the Python shell, type <code>type(3.14)</code> and press Enter. Python will tell you it's a <code>float</code>.
       </div>
+
+      <div class="section-divider"></div>
+      <h2>Number Systems</h2>
+      <p>Computers work in binary (base 2), but Python lets you write numbers in four different bases. Python automatically converts them all to regular integers when you use them:</p>
+      <table>
+        <thead><tr><th>Base</th><th>Name</th><th>Prefix</th><th>Example</th><th>Decimal Value</th></tr></thead>
+        <tbody>
+          <tr><td>2</td><td>Binary</td><td><code>0b</code></td><td><code>0b1010</code></td><td>10</td></tr>
+          <tr><td>8</td><td>Octal</td><td><code>0o</code></td><td><code>0o25</code></td><td>21</td></tr>
+          <tr><td>10</td><td>Decimal</td><td>(none)</td><td><code>255</code></td><td>255</td></tr>
+          <tr><td>16</td><td>Hexadecimal</td><td><code>0x</code></td><td><code>0xFF</code></td><td>255</td></tr>
+        </tbody>
+      </table>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">print(0b1010)    # 10  — binary
+print(0o25)      # 21  — octal
+print(0xFF)      # 255 — hexadecimal
+print(0b11111111)  # 255 — same as 0xFF in binary
+
+# Convert decimal to other bases
+print(bin(255))  # '0b11111111'
+print(oct(255))  # '0o377'
+print(hex(255))  # '0xff'</pre>
+      <div class="info-box">
+        <strong>Why does this matter?</strong> Binary and hex are used in systems programming, color codes (HTML uses hex like <code>#FF5733</code>), file permissions, and low-level data manipulation.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Integer Precision &amp; Scientific Notation</h2>
+      <p>Unlike many languages, Python integers have <strong>unlimited precision</strong> — they can be as large as your computer's memory allows. Python handles big numbers natively:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">big = 2 ** 100
+print(big)   # 1267650600228229401496703205376  — no overflow!
+
+# Use underscores to make big numbers readable (Python 3.6+)
+population = 8_000_000_000
+price = 1_000_000
+print(population)  # 8000000000</pre>
+      <p>Floats also support <strong>scientific notation</strong> using <code>e</code> (meaning "× 10 to the power of"):</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#86efac;overflow-x:auto">mass_of_electron = 9.11e-31   # 9.11 × 10⁻³¹ kilograms
+speed_of_light   = 3e8        # 3 × 10⁸ metres/second
+print(mass_of_electron)       # 9.11e-31
+print(speed_of_light)         # 300000000.0</pre>
+
+      <div class="section-divider"></div>
+      <h2>Complex Numbers</h2>
+      <p>Python has built-in support for <strong>complex numbers</strong> — numbers that have a real part and an imaginary part. Use <code>j</code> (not <em>i</em>) for the imaginary unit:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">z1 = 1 + 2j
+z2 = 3 + 4j
+print(z1 + z2)       # (4+6j)
+print(z1 * z2)       # (-5+10j)
+print(z1.real)       # 1.0  — real part
+print(z1.imag)       # 2.0  — imaginary part
+print(type(z1))      # &lt;class 'complex'&gt;</pre>
     </div>
   `,
 
@@ -128,6 +180,33 @@ print(type((1, 2)))       # <class 'tuple'>
 print(type({1, 2, 3}))   # <class 'set'>`,
       },
       {
+        title: "Number Systems & Big Integers",
+        desc: "Python supports binary, octal, and hexadecimal literals — and handles arbitrarily large integers natively.",
+        code: `# Number system literals
+print(0b1010)         # 10  — binary (base 2)
+print(0o25)           # 21  — octal  (base 8)
+print(0xFF)           # 255 — hex    (base 16)
+print(0b11111111)     # 255 — same as 0xFF
+
+# Convert decimal → other bases
+print(bin(10))        # '0b1010'
+print(oct(21))        # '0o25'
+print(hex(255))       # '0xff'
+
+# Unlimited integer precision
+print(2 ** 100)       # 1267650600228229401496703205376
+
+# Readable big numbers with underscores
+world_pop = 8_000_000_000
+print(world_pop)      # 8000000000
+
+# Scientific notation for floats
+electron = 9.11e-31
+light    = 3e8
+print(electron)       # 9.11e-31
+print(light)          # 300000000.0`,
+      },
+      {
         title: "Your First .py File",
         desc: "Real Python programs are saved in .py files. This is what helloworld.py looks like.",
         code: `# helloworld.py
@@ -158,17 +237,22 @@ print(type(True))`,
         "Use <code>print()</code> to display your name on screen.",
         'Write a comment that says "My first Python comment" and then print "I am learning Python!".',
         'Use <code>print(type(10))</code>, <code>print(type(3.14))</code>, and <code>print(type("hello"))</code> to check data types.',
+        "Print <code>0b1010</code>, <code>0o25</code>, and <code>0xFF</code>. What decimal values do you get?",
+        "Use <code>bin()</code>, <code>oct()</code>, and <code>hex()</code> to convert the number <code>100</code> to binary, octal, and hex.",
       ],
       level2: [
         "Create a file called <code>helloworld.py</code>. Print the result of every arithmetic operator: +, -, *, /, //, %, **.",
         "Print your full name, city, and country each on a separate line.",
         "Check the data types of: an integer, a float, a string, a boolean, a list, a tuple, a set, and a dictionary.",
         "Calculate and print: the area of a circle with radius 10 (use pi = 3.14). Formula: area = pi × r².",
+        "Calculate <code>2 ** 100</code> in Python. Does it give an error? What does this tell you about Python integers?",
+        "Write the speed of light (<code>299,792,458</code> m/s) using both scientific notation (<code>e</code>) and underscores for readability. Print both.",
       ],
       level3: [
         "Find the Euclidean distance between points (2, 2) and (6, 10). Formula: √((x2−x1)² + (y2−y1)²). Use Python math.",
         "Calculate how many seconds are in a year. Print the result with a label.",
         "Write a script that prints a formatted table of squares and cubes: for i from 1 to 5, print i, i², i³.",
+        "The HTML color <code>#1A2BFF</code> is made of three hex bytes: <code>0x1A</code>, <code>0x2B</code>, <code>0xFF</code>. Print each byte as a decimal. What are the R, G, B values?",
       ],
     },
 
@@ -258,10 +342,15 @@ print(type(True))`,
           <tr><td><code>abs()</code></td><td>Absolute value (removes negative sign)</td><td><code>abs(-7)</code> → 7</td></tr>
           <tr><td><code>sorted()</code></td><td>Return a sorted copy of a list</td><td><code>sorted([3,1,2])</code></td></tr>
           <tr><td><code>help()</code></td><td>Show documentation for anything</td><td><code>help(str)</code></td></tr>
+          <tr><td><code>dir()</code></td><td>List all attributes and methods of an object</td><td><code>dir(str)</code></td></tr>
+          <tr><td><code>id()</code></td><td>Return the memory address (unique identity) of an object</td><td><code>id(x)</code></td></tr>
+          <tr><td><code>isinstance()</code></td><td>Check if a value is an instance of a given type</td><td><code>isinstance(x, int)</code></td></tr>
+          <tr><td><code>round()</code></td><td>Round a number to N decimal places</td><td><code>round(3.7)</code> → 4</td></tr>
+          <tr><td><code>pow()</code></td><td>Raise a number to a power</td><td><code>pow(2, 8)</code> → 256</td></tr>
         </tbody>
       </table>
       <div class="info-box">
-        <strong>Tip:</strong> Run <code>help('keywords')</code> in the Python shell to see all reserved words you cannot use as variable names.
+        <strong>Tip:</strong> Run <code>help('keywords')</code> in the Python shell to see all reserved words you cannot use as variable names. Run <code>dir(str)</code> to see every string method available.
       </div>
 
       <div class="section-divider"></div>
@@ -313,11 +402,52 @@ print(first_name, last_name, country, age)</pre>
       </div>
 
       <div class="section-divider"></div>
+      <h2>Checking Types with isinstance()</h2>
+      <p><code>isinstance(value, type)</code> returns <code>True</code> if <code>value</code> is of that type, <code>False</code> otherwise. This is more <strong>reliable</strong> than using <code>type(x) == int</code> because it also works with inheritance:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">x = 10
+print(isinstance(x, int))    # True
+print(isinstance(x, float))  # False
+print(isinstance(x, str))    # False
+
+name = "Alice"
+print(isinstance(name, str)) # True
+
+# Check against multiple types at once using a tuple
+print(isinstance(x, (int, float)))   # True — x is an int, which is in the tuple
+print(isinstance(3.14, (int, float))) # True</pre>
+      <div class="info-box success">
+        <strong>isinstance() vs type():</strong> Use <code>isinstance(x, int)</code> when you want to check "is this an int?" in real code. Use <code>type(x)</code> when you want to <em>display</em> the type (like for debugging).
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Exploring Objects with dir() and id()</h2>
+      <p><code>dir(obj)</code> lists all the methods and attributes available on an object. <code>id(obj)</code> returns the unique memory address of an object:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># dir() — discover what you can do with an object
+print(dir(str))     # lists all string methods: upper, lower, split, etc.
+print(dir([]))      # lists all list methods: append, pop, sort, etc.
+
+# id() — every object has a unique identity in memory
+a = "hello"
+b = "hello"
+c = a
+print(id(a))        # some memory address, e.g. 140349823456
+print(id(b))        # may be same (Python caches small strings)
+print(id(c))        # same as a — c points to the same object</pre>
+
+      <div class="section-divider"></div>
       <h2>Getting User Input</h2>
-      <p>The <code>input()</code> function pauses your program and waits for the user to type something. It <strong>always returns a string</strong>, so convert it if you need a number:</p>
+      <p>The <code>input()</code> function pauses your program and waits for the user to type something. It <strong>always returns a string</strong> — even if the user types a number. You must cast it if you need arithmetic:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">name = input("What is your name? ")
-age  = int(input("How old are you? "))   # convert string to int
-print(f"Hello {name}, you are {age} years old.")</pre>
+age  = int(input("How old are you? "))   # cast string → int
+print(f"Hello {name}, you are {age} years old.")
+
+# Common pattern: get a number, do math
+radius = float(input("Enter circle radius: "))
+area = 3.14159 * radius ** 2
+print(f"Area = {area:.2f}")</pre>
+      <div class="info-box warning">
+        <strong>Always cast input() when you need a number.</strong> If a user types "25" it is the <em>string</em> "25", not the integer 25. Trying <code>"25" + 5</code> will raise a <code>TypeError</code>.
+      </div>
     </div>
   `,
 
@@ -406,6 +536,34 @@ pi = 3.14159
 area = pi * radius ** 2
 print(f'Hello {name}! Circle area: {area:.2f}')`,
       },
+      {
+        title: "isinstance(), dir(), and id()",
+        desc: "Discover object types, methods, and memory addresses.",
+        code: `# isinstance() — the right way to check types
+x = 42
+print(isinstance(x, int))             # True
+print(isinstance(x, float))           # False
+print(isinstance(x, (int, float)))    # True  — checks either type
+
+values = [10, 3.14, "hello", True, [1, 2]]
+for v in values:
+    print(f"{repr(v):12} → int:{isinstance(v, int)}  str:{isinstance(v, str)}")
+
+# dir() — list all methods available on a type
+string_methods = dir(str)
+print(len(string_methods))   # ~70 methods available on strings!
+# Some examples: upper, lower, split, join, replace, find ...
+
+# id() — every object has a unique identity (memory address)
+a = "python"
+b = "python"
+c = a
+print(id(a) == id(b))   # True  — Python caches short strings
+print(id(a) == id(c))   # True  — c points to the same object as a
+
+# help() — read the docs for anything
+# help(str.split)   # uncomment to see full docs for split()`,
+      },
     ],
 
     exercises: {
@@ -416,6 +574,8 @@ print(f'Hello {name}! Circle area: {area:.2f}')`,
         "Declare all 10 variables from exercises 2 and 3 in a <strong>single line</strong> using multiple assignment.",
         "Print the length of your first name using <code>len()</code>.",
         "Compare: does your first name have more characters than your last name? Print the result.",
+        "Use <code>isinstance()</code> to check if <code>age</code> is an <code>int</code>, and if <code>first_name</code> is a <code>str</code>. Print the results.",
+        "Run <code>dir(str)</code> in the Python shell. How many methods are listed? Can you find <code>upper</code> and <code>split</code> in the output?",
       ],
       level2: [
         "Use <code>type()</code> on every variable you declared (first_name, age, is_married, etc.). Print each type.",
@@ -423,10 +583,13 @@ print(f'Hello {name}! Circle area: {area:.2f}')`,
         "Calculate the <strong>area</strong> and <strong>circumference</strong> of a circle with radius 30 meters. (Area = π×r², Circumference = 2×π×r, use pi = 3.14). Print both results.",
         "Ask the user for their first name, last name, country, and age using <code>input()</code>. Print a formatted sentence with all 4 values.",
         'Run <code>help("keywords")</code> in Python shell. Write down 5 reserved words you cannot use as variable names.',
+        "Use <code>id()</code> to compare the memory addresses of two variables: <code>a = 'hello'</code> and <code>b = 'hello'</code>. Are they the same? What does that mean?",
+        "Ask the user to type a number with <code>input()</code>. Use <code>isinstance()</code> to confirm it is a <code>str</code> before casting. Print the type before and after casting to <code>int</code>.",
       ],
       level3: [
         "Write a program that asks for a radius and prints both the area and circumference of the circle, formatted to 2 decimal places.",
         "Write a program that takes two numbers from the user and prints: their sum, difference, product, division, floor division, modulus, and power.",
+        "Write a program that takes any value from the user, tries to cast it to <code>int</code>, and if that fails (raises an error), prints 'Not a valid integer'. (Hint: use <code>isinstance</code> and <code>str.isdigit()</code> to check first.)",
       ],
     },
 
@@ -482,7 +645,7 @@ print(f'Hello {name}! Circle area: {area:.2f}')`,
     emoji: "➕",
     title: "Operators",
     subtitle:
-      "Master arithmetic, comparison, logical, assignment, and identity operators — the tools Python uses to do calculations and make decisions.",
+      "Master arithmetic, comparison, logical, assignment, identity, and bitwise operators — the tools Python uses to do calculations and make decisions.",
     topics: [
       "Arithmetic",
       "Comparison",
@@ -490,6 +653,7 @@ print(f'Hello {name}! Circle area: {area:.2f}')`,
       "Assignment",
       "Boolean",
       "Identity",
+      "Bitwise",
     ],
 
     lesson: `
@@ -569,6 +733,39 @@ print(f'Hello {name}! Circle area: {area:.2f}')`,
           <tr><td><code>x //= 3</code></td><td><code>x = x // 3</code></td><td>Floor-divide x by 3</td></tr>
         </tbody>
       </table>
+
+      <div class="section-divider"></div>
+      <h2>Bitwise Operators</h2>
+      <p>Bitwise operators work directly on the <strong>binary (bit-level) representation</strong> of integers. Each bit is processed individually. These are used in systems programming, networking, encryption, and performance-critical code.</p>
+      <table>
+        <thead><tr><th>Operator</th><th>Name</th><th>Example</th><th>Result</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>&amp;</code></td><td>AND</td><td><code>5 &amp; 3</code></td><td>1</td><td>1 only where BOTH bits are 1</td></tr>
+          <tr><td><code>|</code></td><td>OR</td><td><code>5 | 3</code></td><td>7</td><td>1 where AT LEAST ONE bit is 1</td></tr>
+          <tr><td><code>^</code></td><td>XOR</td><td><code>5 ^ 3</code></td><td>6</td><td>1 where bits are DIFFERENT</td></tr>
+          <tr><td><code>~</code></td><td>NOT</td><td><code>~5</code></td><td>-6</td><td>Flips all bits (result = -(n+1))</td></tr>
+          <tr><td><code>&lt;&lt;</code></td><td>Left shift</td><td><code>5 &lt;&lt; 1</code></td><td>10</td><td>Shifts bits left (multiplies by 2)</td></tr>
+          <tr><td><code>&gt;&gt;</code></td><td>Right shift</td><td><code>5 &gt;&gt; 1</code></td><td>2</td><td>Shifts bits right (divides by 2)</td></tr>
+        </tbody>
+      </table>
+      <p>Here is how <code>5 &amp; 3</code> works at the bit level:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">  5 = 0101  (in binary)
+  3 = 0011  (in binary)
+  ---------
+AND = 0001  = 1   (only the last bit is 1 in BOTH)
+
+  5 = 0101
+  3 = 0011
+  ---------
+ OR = 0111  = 7   (any bit that is 1 in either number)
+
+  5 = 0101
+  3 = 0011
+  ---------
+XOR = 0110  = 6   (bits that differ)</pre>
+      <div class="info-box">
+        <strong>Practical use:</strong> Left shift (<code>&lt;&lt;</code>) is a fast way to multiply by powers of 2: <code>1 &lt;&lt; 4</code> = 16 (same as 2⁴). Right shift (<code>&gt;&gt;</code>) divides by powers of 2: <code>16 &gt;&gt; 2</code> = 4.
+      </div>
     </div>
   `,
 
@@ -641,6 +838,39 @@ print(1 is 1)                    # True
 print('A' in 'Asabeneh')         # True
 print('coding' in 'coding for all')  # True
 print('z' not in 'python')       # True`,
+      },
+      {
+        title: "Bitwise Operators",
+        desc: "Operate directly on the binary representation of integers.",
+        code: `# Basic bitwise operations
+a = 5   # binary: 0101
+b = 3   # binary: 0011
+
+print(a & b)   # 1   — AND:  0101 & 0011 = 0001
+print(a | b)   # 7   — OR:   0101 | 0011 = 0111
+print(a ^ b)   # 6   — XOR:  0101 ^ 0011 = 0110
+print(~a)      # -6  — NOT:  flips all bits, result = -(a+1)
+
+# Shift operators
+print(1 << 0)  # 1   — 1 * 2^0
+print(1 << 1)  # 2   — 1 * 2^1
+print(1 << 2)  # 4   — 1 * 2^2
+print(1 << 4)  # 16  — 1 * 2^4
+
+print(16 >> 1) # 8   — 16 / 2
+print(16 >> 2) # 4   — 16 / 4
+print(16 >> 4) # 1   — 16 / 16
+
+# Practical: check if a number is even using bitwise AND
+n = 42
+print(n & 1 == 0)  # True — last bit is 0, so it's even
+n = 7
+print(n & 1 == 0)  # False — last bit is 1, so it's odd
+
+# Binary representation
+print(bin(5))  # '0b101'
+print(bin(3))  # '0b11'
+print(bin(5 & 3))  # '0b1'`,
       },
       {
         title: "Real-World Operator Practice",
@@ -1395,11 +1625,102 @@ print('orange' in fruits)   # True
 print('apple' in fruits)    # False</pre>
 
       <div class="section-divider"></div>
+      <h2>Tuple Packing &amp; Unpacking</h2>
+      <p><strong>Packing</strong> means grouping multiple values into a tuple. <strong>Unpacking</strong> means assigning each tuple item to its own variable:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Packing — create a tuple without parentheses
+coordinates = 10, 20, 30   # same as (10, 20, 30)
+
+# Unpacking — assign each value to a variable
+x, y, z = coordinates
+print(x, y, z)   # 10 20 30
+
+# Swap two variables in ONE line (no temp variable needed!)
+a, b = 5, 10
+a, b = b, a
+print(a, b)   # 10 5</pre>
+      <div class="info-box success">
+        <strong>The swap trick:</strong> <code>a, b = b, a</code> is one of Python's most elegant features. It works because the right side is packed into a tuple first, then unpacked to the left.
+      </div>
+
+      <div class="section-divider"></div>
       <h2>Deleting a Tuple</h2>
       <p>You can't remove items from a tuple, but you can delete the entire tuple variable with <code>del</code>:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ('banana', 'orange', 'mango')
 del fruits
 # fruits no longer exists</pre>
+
+      <div class="section-divider"></div>
+      <h2>Tuple Packing and Unpacking</h2>
+      <p><strong>Packing</strong> means assigning multiple values into a single tuple. <strong>Unpacking</strong> means pulling those values back out into separate variables. Python handles this automatically:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Packing -- multiple values go into one tuple
+coordinates = 10, 20, 30   # no brackets needed!
+print(coordinates)         # (10, 20, 30)
+
+# Unpacking -- pull each value into its own variable
+x, y, z = coordinates
+print(x)   # 10
+print(y)   # 20
+print(z)   # 30
+
+# Use * to collect leftover items
+first, *rest = (1, 2, 3, 4, 5)
+print(first)   # 1
+print(rest)    # [2, 3, 4, 5]</pre>
+
+      <div class="section-divider"></div>
+      <h2>Swapping Variables with Tuples</h2>
+      <p>One of the most elegant Python tricks: swap two variables <em>without</em> a temporary variable, using tuple packing and unpacking:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">a = 10
+b = 20
+print(f"Before: a={a}, b={b}")
+
+a, b = b, a   # Python packs (b, a) into a tuple, then unpacks into (a, b)
+print(f"After:  a={a}, b={b}")
+# Before: a=10, b=20
+# After:  a=20, b=10</pre>
+      <div class="info-box success">
+        <strong>Why this works:</strong> Python evaluates the right side first (creating the tuple <code>(20, 10)</code>), then unpacks it into <code>a</code> and <code>b</code>. This is faster and cleaner than using a temp variable.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Why Tuples Are Faster Than Lists</h2>
+      <p>Tuples have a performance advantage over lists for two reasons:</p>
+      <ul>
+        <li><strong>Less memory</strong> -- tuples take less space because Python knows they will never grow.</li>
+        <li><strong>Faster iteration</strong> -- Python can optimize tuple access because the size is fixed at creation.</li>
+      </ul>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">import sys
+
+my_list  = [1, 2, 3, 4, 5]
+my_tuple = (1, 2, 3, 4, 5)
+
+print(sys.getsizeof(my_list))   # e.g. 120 bytes
+print(sys.getsizeof(my_tuple))  # e.g.  80 bytes  -- smaller!
+
+# Use tuples for constant data: days of week, GPS coords, RGB colors
+DAYS = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
+RED  = (255, 0, 0)</pre>
+
+      <div class="section-divider"></div>
+      <h2>Named Tuples</h2>
+      <p>A <strong>named tuple</strong> lets you access items by <em>name</em> as well as by index -- giving you the readability of a dictionary with the speed and immutability of a tuple. Import it from the <code>collections</code> module:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from collections import namedtuple
+
+# Define the structure: type name, then field names
+Point = namedtuple('Point', ['x', 'y'])
+p = Point(3, 7)
+
+print(p[0])   # 3   -- access by index
+print(p.x)    # 3   -- access by name!
+print(p.y)    # 7
+
+# Real-world example: student record
+Student = namedtuple('Student', ['name', 'age', 'grade'])
+alice = Student('Alice', 20, 'A')
+print(f"{alice.name} got an {alice.grade}")  # Alice got an A</pre>
+      <div class="info-box">
+        <strong>Named tuples are still immutable</strong> -- you get readable field names AND the safety of a tuple that cannot be accidentally changed.
+      </div>
     </div>
     `,
 
@@ -1470,6 +1791,45 @@ print('apple' in fruits)    # False
 first, second, third, fourth = fruits
 print(first)   # banana
 print(fourth)  # lemon`,
+      },
+      {
+        title: "Swapping Variables with Tuples",
+        desc: "Swap two values without a temp variable using tuple unpacking.",
+        code: `a = 'hello'
+b = 'world'
+print(f"Before: a={a}, b={b}")
+
+# Swap in one line using tuple unpacking
+a, b = b, a
+print(f"After:  a={a}, b={b}")
+# Before: a=hello, b=world
+# After:  a=world, b=hello
+
+# Works with numbers too
+x, y = 100, 200
+x, y = y, x
+print(x, y)  # 200 100`,
+      },
+      {
+        title: "Named Tuples from collections",
+        desc: "Access tuple items by name instead of index using namedtuple.",
+        code: `from collections import namedtuple
+
+# Create a named tuple type
+Point = namedtuple('Point', ['x', 'y'])
+p = Point(10, 20)
+
+print(p.x)    # 10  -- access by name
+print(p.y)    # 20
+print(p[0])   # 10  -- still works by index too
+
+# Student record example
+Student = namedtuple('Student', ['name', 'age', 'grade'])
+alice = Student('Alice', 20, 'A')
+bob   = Student('Bob', 22, 'B')
+
+for s in [alice, bob]:
+    print(f"{s.name} (age {s.age}): grade {s.grade}")`,
       },
     ],
 
@@ -1632,6 +1992,73 @@ print(whole.issuperset(evens))  # True  — whole contains all of evens
 
 odds = {1, 3, 5, 7, 9}
 print(evens.isdisjoint(odds))   # True  — no items in common</pre>
+
+      <div class="section-divider"></div>
+      <h2>Understanding Union, Intersection, Difference — Visually</h2>
+      <p>Think of two overlapping circles (a Venn diagram). Each operation picks a different part:</p>
+      <div class="cheatsheet-grid">
+        <div>
+          <strong>Union (A | B)</strong><br>
+          Everything in either circle — all items from both sets combined, duplicates removed.
+          <pre style="background:var(--bg-code);padding:12px 16px;border-radius:8px;margin:8px 0;font-family:'Fira Code',monospace;font-size:13px;color:#a5b4fc;overflow-x:auto">{1,2,3} | {3,4,5}
+# {1, 2, 3, 4, 5}</pre>
+        </div>
+        <div>
+          <strong>Intersection (A &amp; B)</strong><br>
+          Only the overlapping middle — items that appear in BOTH sets.
+          <pre style="background:var(--bg-code);padding:12px 16px;border-radius:8px;margin:8px 0;font-family:'Fira Code',monospace;font-size:13px;color:#a5b4fc;overflow-x:auto">{1,2,3} &amp; {3,4,5}
+# {3}</pre>
+        </div>
+        <div>
+          <strong>Difference (A - B)</strong><br>
+          Only the left circle — items in A that are NOT in B.
+          <pre style="background:var(--bg-code);padding:12px 16px;border-radius:8px;margin:8px 0;font-family:'Fira Code',monospace;font-size:13px;color:#a5b4fc;overflow-x:auto">{1,2,3} - {3,4,5}
+# {1, 2}</pre>
+        </div>
+        <div>
+          <strong>Symmetric Difference (A ^ B)</strong><br>
+          Both circles but NOT the overlap — items in either set but not shared.
+          <pre style="background:var(--bg-code);padding:12px 16px;border-radius:8px;margin:8px 0;font-family:'Fira Code',monospace;font-size:13px;color:#a5b4fc;overflow-x:auto">{1,2,3} ^ {3,4,5}
+# {1, 2, 4, 5}</pre>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Complete Set Methods Reference</h2>
+      <table>
+        <thead><tr><th>Method</th><th>What it does</th><th>Raises error?</th></tr></thead>
+        <tbody>
+          <tr><td><code>.add(x)</code></td><td>Add item <code>x</code> to the set</td><td>No</td></tr>
+          <tr><td><code>.remove(x)</code></td><td>Remove <code>x</code> — errors if missing</td><td>Yes (KeyError)</td></tr>
+          <tr><td><code>.discard(x)</code></td><td>Remove <code>x</code> — silent if missing</td><td>No</td></tr>
+          <tr><td><code>.pop()</code></td><td>Remove and return a random item</td><td>Yes if empty</td></tr>
+          <tr><td><code>.clear()</code></td><td>Remove all items</td><td>No</td></tr>
+          <tr><td><code>.union(B)</code> or <code>A|B</code></td><td>All items from A and B</td><td>No</td></tr>
+          <tr><td><code>.intersection(B)</code> or <code>A&amp;B</code></td><td>Items in both A and B</td><td>No</td></tr>
+          <tr><td><code>.difference(B)</code> or <code>A-B</code></td><td>Items in A but not in B</td><td>No</td></tr>
+          <tr><td><code>.symmetric_difference(B)</code> or <code>A^B</code></td><td>Items in either but not both</td><td>No</td></tr>
+          <tr><td><code>.issubset(B)</code></td><td>True if all A items are in B</td><td>No</td></tr>
+          <tr><td><code>.issuperset(B)</code></td><td>True if A contains all of B</td><td>No</td></tr>
+          <tr><td><code>.isdisjoint(B)</code></td><td>True if A and B share no items</td><td>No</td></tr>
+          <tr><td><code>.copy()</code></td><td>Return a shallow copy of the set</td><td>No</td></tr>
+        </tbody>
+      </table>
+
+      <div class="section-divider"></div>
+      <h2>Frozen Sets</h2>
+      <p>A <strong>frozen set</strong> is an <em>immutable</em> version of a set — you cannot add or remove items once it is created. Use <code>frozenset()</code> to create one:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fs = frozenset([1, 2, 3, 4, 5])
+print(fs)          # frozenset({1, 2, 3, 4, 5})
+
+# All set operations still work
+print(fs | {4, 5, 6})   # frozenset({1, 2, 3, 4, 5, 6})
+print(fs & {3, 4, 5})   # frozenset({3, 4, 5})
+
+# But you cannot modify it
+# fs.add(6)   # AttributeError: 'frozenset' object has no attribute 'add'</pre>
+      <div class="info-box">
+        <strong>When to use frozenset:</strong> Use a frozen set as a dictionary key (regular sets cannot be dict keys because they are mutable), or when you want to guarantee that a set of values never changes.
+      </div>
     </div>
     `,
 
@@ -1702,6 +2129,42 @@ odd_numbers   = {1, 3, 5, 7, 9}
 print(even_numbers.issubset(whole_numbers))    # True
 print(whole_numbers.issuperset(even_numbers))  # True
 print(even_numbers.isdisjoint(odd_numbers))    # True — no overlap`,
+      },
+      {
+        title: "Operator Shortcuts for Set Operations",
+        desc: "Use |, &, -, ^ operators instead of method names.",
+        code: `A = {1, 2, 3, 4}
+B = {3, 4, 5, 6}
+
+# All four operations with operators
+print("Union:              ", A | B)   # {1, 2, 3, 4, 5, 6}
+print("Intersection:       ", A & B)   # {3, 4}
+print("Difference (A - B): ", A - B)   # {1, 2}
+print("Sym. Difference:    ", A ^ B)   # {1, 2, 5, 6}
+
+# These are equivalent to the method calls:
+print(A.union(B) == A | B)              # True
+print(A.intersection(B) == A & B)      # True`,
+      },
+      {
+        title: "Frozen Sets — Immutable Sets",
+        desc: "Create a set that cannot be changed using frozenset().",
+        code: `# Regular set -- mutable
+regular = {1, 2, 3}
+regular.add(4)
+print(regular)   # {1, 2, 3, 4}
+
+# Frozen set -- immutable
+frozen = frozenset([1, 2, 3, 4, 5])
+print(frozen)    # frozenset({1, 2, 3, 4, 5})
+
+# Set operations still work
+print(frozen | {6, 7})   # frozenset({1, 2, 3, 4, 5, 6, 7})
+print(frozen & {3, 4})   # frozenset({3, 4})
+
+# Frozen sets can be used as dictionary keys (regular sets cannot!)
+lookup = {frozen: "my frozen set"}
+print(lookup[frozen])`,
       },
     ],
 
@@ -1962,6 +2425,60 @@ backup['Dave'] = 78
 print("Original:", scores)
 print("Backup:", backup)`,
       },
+      {
+        title: "Merging Dicts with | operator (Python 3.9+)",
+        desc: "Combine two dictionaries cleanly without modifying either original.",
+        code: `defaults = {'theme': 'dark', 'lang': 'en', 'font_size': 14}
+user_prefs = {'theme': 'light', 'font_size': 16}
+
+# Merge: user_prefs values override defaults where keys clash
+settings = defaults | user_prefs
+print(settings)
+# {'theme': 'light', 'lang': 'en', 'font_size': 16}
+
+# Both originals are unchanged
+print(defaults)
+print(user_prefs)
+
+# Update in place with |=
+defaults |= user_prefs
+print(defaults)`,
+      },
+      {
+        title: "Nested Dictionaries",
+        desc: "Store dictionaries inside dictionaries to represent structured data.",
+        code: `students = {
+    'alice': {'age': 20, 'grade': 'A', 'score': 95},
+    'bob':   {'age': 22, 'grade': 'B', 'score': 83},
+}
+
+# Access nested value
+print(students['alice']['grade'])   # A
+print(students['bob']['score'])     # 83
+
+# Loop and print a report
+for name, info in students.items():
+    print(f"{name.capitalize()}: grade={info['grade']}, score={info['score']}")`,
+      },
+      {
+        title: "Dictionary Comprehension",
+        desc: "Build a dictionary in one line using comprehension syntax.",
+        code: `words = ['apple', 'banana', 'cherry', 'date']
+
+# Map each word to its length
+lengths = {word: len(word) for word in words}
+print(lengths)
+# {'apple': 5, 'banana': 6, 'cherry': 6, 'date': 4}
+
+# Square numbers
+squares = {n: n**2 for n in range(6)}
+print(squares)
+
+# Filter: only scores above 80
+scores = {'Alice': 95, 'Bob': 72, 'Carol': 88, 'Dave': 60}
+high = {name: s for name, s in scores.items() if s > 80}
+print(high)   # {'Alice': 95, 'Carol': 88}`,
+      },
     ],
 
     exercises: {
@@ -1985,6 +2502,9 @@ print("Backup:", backup)`,
         "Build a nested dictionary for a school: it should contain at least 3 students, each with a name, grade, and list of subjects.",
         "Write a program that counts how many times each character appears in the string <code>'hello world'</code> using a dictionary.",
         "Given a list of words, build a dictionary that maps each word to its length: <code>{'apple': 5, 'cat': 3, ...}</code>.",
+        "Use a dictionary comprehension to build a dict of {number: square} for numbers 1-10.",
+        "Given two dicts <code>a = {'x': 1, 'y': 2}</code> and <code>b = {'y': 99, 'z': 3}</code>, merge them with <code>a | b</code> and explain which value wins for key <code>'y'</code>.",
+        "Build a nested dict representing a contacts book with at least 3 contacts, each having a <code>phone</code> and <code>email</code> field. Then write a loop that prints each contact's name and phone number.",
       ],
     },
 
@@ -2123,6 +2643,54 @@ print(label)
 
 # Or directly in print:
 print('Even') if a % 2 == 0 else print('Odd')</pre>
+
+      <div class="section-divider"></div>
+      <h2>The match / case Statement (Python 3.10+)</h2>
+      <p>Python 3.10 introduced <strong>structural pattern matching</strong> with the <code>match</code> statement. It is similar to a <code>switch</code> statement in other languages — it compares a value against multiple patterns and runs the first matching block:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">status_code = 404
+
+match status_code:
+    case 200:
+        print("OK -- request succeeded")
+    case 301 | 302:
+        print("Redirect")
+    case 404:
+        print("Not Found")
+    case 500:
+        print("Server Error")
+    case _:            # _ is the wildcard -- matches anything
+        print("Unknown status")</pre>
+
+      <p>You can also match on strings, which makes it great for command handling:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">command = "quit"
+
+match command:
+    case "go north" | "go south" | "go east" | "go west":
+        print("Moving...")
+    case "help":
+        print("Available commands: go, quit, inventory")
+    case "quit":
+        print("Goodbye!")
+    case _:
+        print(f"Unknown command: {command}")</pre>
+
+      <div class="info-box warning">
+        <strong>Python version check:</strong> <code>match</code> requires Python 3.10 or newer. Run <code>python --version</code> to check. If you are on an older version, use <code>if/elif/else</code> chains instead.
+      </div>
+
+      <p>Match also works with data structures and can unpack them (advanced usage):</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">point = (0, 5)
+
+match point:
+    case (0, 0):
+        print("Origin")
+    case (x, 0):
+        print(f"On x-axis at {x}")
+    case (0, y):
+        print(f"On y-axis at {y}")
+    case (x, y):
+        print(f"Point at ({x}, {y})")
+# Output: On y-axis at 5</pre>
     </div>
     `,
 
@@ -2229,6 +2797,9 @@ print(f"{month} is in {season}")`,
         "Given a <code>person</code> dictionary with <code>skills</code>, <code>country</code>, and <code>is_married</code> keys — write conditions to: check if Python is in skills, classify them as frontend/backend/fullstack developer, and print a message if they are married and live in Finland.",
         "Write a BMI calculator: BMI = weight / height². Then classify: Underweight (<18.5), Normal (18.5–24.9), Overweight (25–29.9), Obese (30+).",
         "Write a rock-paper-scissors game logic (no input needed — just hard-code player1 and player2 choices and print the winner).",
+        "Write a program that checks if a given string is a <strong>palindrome</strong> (reads the same forwards and backwards, ignoring case). Example: <code>'racecar'</code>, <code>'racecar'</code>.",
+        "Write a program that checks each character in a string and counts how many are digits, how many are letters, and how many are other characters. Use <code>str.isdigit()</code> and <code>str.isalpha()</code>.",
+        "Using <code>match/case</code> (Python 3.10+), write a day-of-week classifier: weekdays print 'Weekday', Saturday/Sunday print 'Weekend', anything else prints 'Invalid day'.",
       ],
     },
 
@@ -2360,6 +2931,34 @@ else:
       <p><code>pass</code> is a placeholder — it does nothing but prevents Python from complaining about an empty block:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">for i in range(5):
     pass   # placeholder — loop runs but does nothing yet</pre>
+
+      <div class="section-divider"></div>
+      <h2>enumerate() — Loop with Index</h2>
+      <p><code>enumerate()</code> adds a counter to any iterable. Instead of tracking a separate index variable, Python does it for you:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ['banana', 'orange', 'mango', 'lemon']
+
+# With enumerate — index and value together
+for i, fruit in enumerate(fruits):
+    print(i, fruit)         # 0 banana, 1 orange…
+
+# Start counting from 1 instead of 0
+for i, fruit in enumerate(fruits, 1):
+    print(f"{i}. {fruit}")  # 1. banana, 2. orange…</pre>
+
+      <div class="section-divider"></div>
+      <h2>zip() — Loop Over Two Lists at Once</h2>
+      <p><code>zip()</code> pairs up items from two (or more) lists so you can loop over them together:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ['banana', 'orange', 'mango']
+scores = [85, 92, 78]
+
+for fruit, score in zip(fruits, scores):
+    print(f"{fruit}: {score}")
+# banana: 85
+# orange: 92
+# mango: 78</pre>
+      <div class="info-box">
+        <strong>zip() stops at the shortest list.</strong> If one list has 3 items and another has 5, zip() only pairs the first 3 from each.
+      </div>
     </div>
     `,
 
@@ -2451,6 +3050,44 @@ for i in range(1, 4):
     for j in range(1, 4):
         print(f"{i}x{j}={i*j}", end="  ")
     print()   # newline after each row`,
+      },
+      {
+        title: "enumerate() and zip()",
+        desc: "Loop with index using enumerate(), and loop over multiple lists simultaneously using zip().",
+        code: `# enumerate() -- get index AND value together
+fruits = ['apple', 'banana', 'cherry']
+for i, fruit in enumerate(fruits, start=1):
+    print(f"{i}. {fruit}")
+# 1. apple
+# 2. banana
+# 3. cherry
+
+print("---")
+
+# zip() -- loop over two lists in parallel
+names  = ['Alice', 'Bob', 'Carol']
+scores = [95, 83, 91]
+for name, score in zip(names, scores):
+    print(f"{name}: {score}")`,
+      },
+      {
+        title: "while Loop with break and else",
+        desc: "Use while for unknown iteration counts, and else to detect if a search succeeded.",
+        code: `# Search using while + break + else
+items = ['pen', 'notebook', 'eraser', 'ruler']
+target = 'notebook'
+i = 0
+
+while i < len(items):
+    if items[i] == target:
+        print(f"Found '{target}' at index {i}")
+        break
+    i += 1
+else:
+    print(f"'{target}' was not found")
+
+# The else block only runs if no 'break' was hit
+# Try changing target to 'stapler' to see the else block run`,
       },
     ],
 
