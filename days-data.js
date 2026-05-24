@@ -1650,44 +1650,11 @@ del fruits
 # fruits no longer exists</pre>
 
       <div class="section-divider"></div>
-      <h2>Tuple Packing and Unpacking</h2>
-      <p><strong>Packing</strong> means assigning multiple values into a single tuple. <strong>Unpacking</strong> means pulling those values back out into separate variables. Python handles this automatically:</p>
-      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Packing -- multiple values go into one tuple
-coordinates = 10, 20, 30   # no brackets needed!
-print(coordinates)         # (10, 20, 30)
-
-# Unpacking -- pull each value into its own variable
-x, y, z = coordinates
-print(x)   # 10
-print(y)   # 20
-print(z)   # 30
-
-# Use * to collect leftover items
-first, *rest = (1, 2, 3, 4, 5)
-print(first)   # 1
-print(rest)    # [2, 3, 4, 5]</pre>
-
-      <div class="section-divider"></div>
-      <h2>Swapping Variables with Tuples</h2>
-      <p>One of the most elegant Python tricks: swap two variables <em>without</em> a temporary variable, using tuple packing and unpacking:</p>
-      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">a = 10
-b = 20
-print(f"Before: a={a}, b={b}")
-
-a, b = b, a   # Python packs (b, a) into a tuple, then unpacks into (a, b)
-print(f"After:  a={a}, b={b}")
-# Before: a=10, b=20
-# After:  a=20, b=10</pre>
-      <div class="info-box success">
-        <strong>Why this works:</strong> Python evaluates the right side first (creating the tuple <code>(20, 10)</code>), then unpacks it into <code>a</code> and <code>b</code>. This is faster and cleaner than using a temp variable.
-      </div>
-
-      <div class="section-divider"></div>
       <h2>Why Tuples Are Faster Than Lists</h2>
       <p>Tuples have a performance advantage over lists for two reasons:</p>
       <ul>
-        <li><strong>Less memory</strong> -- tuples take less space because Python knows they will never grow.</li>
-        <li><strong>Faster iteration</strong> -- Python can optimize tuple access because the size is fixed at creation.</li>
+        <li><strong>Less memory</strong> — tuples take less space because Python knows they will never grow.</li>
+        <li><strong>Faster iteration</strong> — Python can optimize tuple access because the size is fixed at creation.</li>
       </ul>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">import sys
 
@@ -2333,6 +2300,80 @@ safe_copy = original.copy()
 safe_copy['c'] = 3
 print(original)   # {'a': 1, 'b': 2}  ← unchanged
 print(safe_copy)  # {'a': 1, 'b': 2, 'c': 3}</pre>
+
+      <div class="section-divider"></div>
+      <h2>More Dictionary Methods</h2>
+      <h3><code>.update()</code> — Merge another dict in</h3>
+      <p>Updates the dictionary with key-value pairs from another dictionary. Existing keys are overwritten:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">person = {'name': 'Alice', 'age': 25}
+extra  = {'city': 'Boston', 'age': 26}  # age will be overwritten
+
+person.update(extra)
+print(person)  # {'name': 'Alice', 'age': 26, 'city': 'Boston'}</pre>
+
+      <h3><code>.setdefault()</code> — Get a key, or set it if missing</h3>
+      <p>Returns the value for a key if it exists. If the key doesn't exist, it inserts it with a default value and returns that:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">person = {'name': 'Alice', 'age': 25}
+
+# Key exists -- returns current value, does NOT change it
+val = person.setdefault('name', 'Unknown')
+print(val)     # Alice
+
+# Key missing -- inserts with default and returns it
+val = person.setdefault('email', 'no-email@example.com')
+print(val)     # no-email@example.com
+print(person)  # {'name': 'Alice', 'age': 25, 'email': 'no-email@example.com'}</pre>
+
+      <div class="section-divider"></div>
+      <h2>Merging Dictionaries (Python 3.9+)</h2>
+      <p>Python 3.9 introduced the <strong><code>|</code> merge operator</strong> for dictionaries — a clean way to combine two dicts without modifying either original:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">defaults = {'color': 'blue', 'size': 'medium', 'weight': 1.0}
+custom   = {'color': 'red', 'size': 'large'}
+
+# Merge: custom values override defaults where keys clash
+merged = defaults | custom
+print(merged)  # {'color': 'red', 'size': 'large', 'weight': 1.0}
+
+# Use |= to update in place (Python 3.9+)
+defaults |= custom
+print(defaults)  # {'color': 'red', 'size': 'large', 'weight': 1.0}</pre>
+
+      <div class="section-divider"></div>
+      <h2>Nested Dictionaries</h2>
+      <p>A dictionary can have another dictionary as a value. This is called a <strong>nested dictionary</strong> and is useful for structured data like student records:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">students = {
+    'alice': {'age': 20, 'grade': 'A', 'score': 95},
+    'bob':   {'age': 22, 'grade': 'B', 'score': 83},
+    'carol': {'age': 21, 'grade': 'A', 'score': 91},
+}
+
+# Access nested value with chained []
+print(students['alice']['grade'])   # A
+print(students['bob']['score'])     # 83
+
+# Loop over all students
+for name, info in students.items():
+    print(f"{name}: grade={info['grade']}, score={info['score']}")</pre>
+
+      <div class="section-divider"></div>
+      <h2>Dictionary Comprehension — Preview</h2>
+      <p>Just like list comprehensions, you can build a dictionary in one line using a <strong>dict comprehension</strong>:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Map each word to its length
+words = ['apple', 'banana', 'cherry']
+lengths = {word: len(word) for word in words}
+print(lengths)  # {'apple': 5, 'banana': 6, 'cherry': 6}
+
+# Square numbers: {0:0, 1:1, 2:4, 3:9, 4:16}
+squares = {n: n**2 for n in range(5)}
+print(squares)
+
+# Filter: only keep scores above 80
+scores = {'Alice': 95, 'Bob': 72, 'Carol': 88}
+high_scores = {name: s for name, s in scores.items() if s > 80}
+print(high_scores)  # {'Alice': 95, 'Carol': 88}</pre>
+      <div class="info-box success">
+        <strong>Pattern:</strong> <code>{key_expr: value_expr for item in iterable}</code> — same idea as a list comprehension, but produces a dict.
+      </div>
     </div>
     `,
 
@@ -2958,6 +2999,74 @@ for fruit, score in zip(fruits, scores):
 # mango: 78</pre>
       <div class="info-box">
         <strong>zip() stops at the shortest list.</strong> If one list has 3 items and another has 5, zip() only pairs the first 3 from each.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>The while Loop — In Depth</h2>
+      <p>The <code>while</code> loop is best when you don't know in advance how many iterations you need — you just want to keep going until a condition changes:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Common pattern: keep looping until a target is found
+found = False
+items = ['apple', 'banana', 'mango']
+i = 0
+while not found and i < len(items):
+    if items[i] == 'banana':
+        found = True
+    i += 1
+print(f"banana found: {found}")
+
+# Countdown with break
+n = 10
+while True:         # runs forever UNLESS we break
+    print(n)
+    n -= 1
+    if n == 0:
+        break
+print("Done!")</pre>
+      <div class="info-box warning">
+        <strong>Always update the condition variable!</strong> If nothing in the loop body changes the condition, the loop runs forever. Use a counter or <code>break</code> as an escape hatch.
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>Nested Loops — Multiplication Table</h2>
+      <p>A <strong>nested loop</strong> is a loop inside another loop. The inner loop runs completely for every single step of the outer loop. A classic example is a multiplication table:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># 5x5 multiplication table
+for i in range(1, 6):           # outer loop: rows 1-5
+    for j in range(1, 6):       # inner loop: columns 1-5
+        print(f"{i*j:3}", end="")  # :3 pads to 3 chars wide
+    print()                     # newline after each row</pre>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#86efac;overflow-x:auto"># Output:
+  1  2  3  4  5
+  2  4  6  8 10
+  3  6  9 12 15
+  4  8 12 16 20
+  5 10 15 20 25</pre>
+
+      <div class="section-divider"></div>
+      <h2>else Clause on Loops — The "Not Found" Pattern</h2>
+      <p>Python's loop <code>else</code> block runs only when the loop <em>completed without a <code>break</code></em>. This makes it perfect for "search and report if not found" patterns:</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">numbers = [3, 7, 12, 8, 19]
+target = 15
+
+for num in numbers:
+    if num == target:
+        print(f"Found {target}!")
+        break
+else:
+    # This runs ONLY if the loop finished without break
+    print(f"{target} was not in the list")
+# Output: 15 was not in the list
+
+# Same pattern with while
+i = 0
+while i < 5:
+    if numbers[i] == target:
+        print("Found it!")
+        break
+    i += 1
+else:
+    print("Searched all items — not found")</pre>
+      <div class="info-box">
+        <strong>Key rule:</strong> The <code>else</code> block is SKIPPED if the loop exits via <code>break</code>. It only runs when the loop exhausts all its iterations naturally.
       </div>
     </div>
     `,
