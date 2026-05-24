@@ -1052,14 +1052,46 @@ print(full)    # Asabeneh Yetayeh</pre>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">split()</div><div class="cheatsheet-desc">Split string into a list</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">join()</div><div class="cheatsheet-desc">Join list into a string</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">replace()</div><div class="cheatsheet-desc">Replace part of string</div></div>
-        <div class="cheatsheet-item"><div class="cheatsheet-syntax">find()</div><div class="cheatsheet-desc">Find first occurrence (returns index)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">find()</div><div class="cheatsheet-desc">Find first occurrence (returns index, -1 if not found)</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">rfind()</div><div class="cheatsheet-desc">Find <em>last</em> occurrence (searches from right)</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">count()</div><div class="cheatsheet-desc">Count occurrences of substring</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">startswith()</div><div class="cheatsheet-desc">Check if starts with text</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">endswith()</div><div class="cheatsheet-desc">Check if ends with text</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">isalpha()</div><div class="cheatsheet-desc">All letters? True/False</div></div>
-        <div class="cheatsheet-item"><div class="cheatsheet-syntax">isdigit()</div><div class="cheatsheet-desc">All digits? True/False</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">isdigit()</div><div class="cheatsheet-desc">All digits (0-9 only)? True/False</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">isnumeric()</div><div class="cheatsheet-desc">Numeric characters? Includes fractions like ½</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">isdecimal()</div><div class="cheatsheet-desc">Decimal digits only? Strictest of the three</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">isidentifier()</div><div class="cheatsheet-desc">Valid variable name? True/False</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">swapcase()</div><div class="cheatsheet-desc">Swap UPPER↔lower case</div></div>
+      </div>
+
+      <div class="section-divider"></div>
+      <h2>find() vs rfind()</h2>
+      <p><code>find()</code> searches from the <strong>left</strong> and returns the index of the <em>first</em> match. <code>rfind()</code> searches from the <strong>right</strong> and returns the index of the <em>last</em> match. Both return <code>-1</code> if nothing is found.</p>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">sentence = "because because because"
+print(sentence.find('because'))    # 0  — first occurrence
+print(sentence.rfind('because'))   # 16 — last occurrence</pre>
+
+      <div class="section-divider"></div>
+      <h2>isdigit() vs isnumeric() vs isdecimal()</h2>
+      <p>All three check whether a string represents a number, but they differ in what they accept:</p>
+      <table>
+        <thead><tr><th>Method</th><th>Accepts</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>isdecimal()</code></td><td>Only 0–9 digits</td><td><code>'123'.isdecimal()</code> → True, <code>'½'.isdecimal()</code> → False</td></tr>
+          <tr><td><code>isdigit()</code></td><td>Digits + superscripts (²)</td><td><code>'2'.isdigit()</code> → True, <code>'½'.isdigit()</code> → False</td></tr>
+          <tr><td><code>isnumeric()</code></td><td>Widest — digits, fractions, Roman numerals</td><td><code>'½'.isnumeric()</code> → True</td></tr>
+        </tbody>
+      </table>
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">print('123'.isdecimal())   # True
+print('123'.isdigit())     # True
+print('123'.isnumeric())   # True
+
+print('½'.isdecimal())     # False
+print('½'.isdigit())       # False
+print('½'.isnumeric())     # True  ← only isnumeric accepts fractions</pre>
+      <div class="info-box">
+        <strong>Rule of thumb:</strong> For user input validation (age, price), use <code>isdecimal()</code> — it only accepts plain 0-9 digits. Use <code>isnumeric()</code> when you need to accept a broader range of numeric Unicode characters.
       </div>
     </div>
   `,
@@ -1821,6 +1853,8 @@ for s in [alice, bob]:
         "Create a tuple of 10 numbers. Slice it into three parts: first third, middle third, last third. Print each.",
         "Write a program that takes a list with duplicate items, converts it to a tuple, and prints both the list and tuple lengths to show duplicates are preserved.",
         "Create a nested tuple like <code>((1,2),(3,4),(5,6))</code> and access the value <code>4</code> using double indexing.",
+        "Import <code>namedtuple</code> from <code>collections</code>. Create a <code>namedtuple</code> called <code>Point</code> with fields <code>x</code> and <code>y</code>. Create two points: <code>p1 = Point(1, 2)</code> and <code>p2 = Point(3, 4)</code>. Print each point and access their fields by name (e.g. <code>p1.x</code>).",
+        "Use <code>sys.getsizeof()</code> to compare the memory size of an equivalent list and tuple (same 5 numbers). Print which one uses less memory and by how many bytes.",
       ],
     },
 
@@ -2156,6 +2190,8 @@ print(lookup[frozen])`,
         "Given <code>age = [22, 19, 24, 25, 26, 24, 25, 24]</code> — convert to a set and compare lengths. Which is bigger and why?",
         "Write a program that finds the unique letters shared between the words <code>'python'</code> and <code>'dragon'</code> using set intersection.",
         "Given this sentence: <code>'I am a teacher and I love to inspire and teach people'</code> — use <code>split()</code> and <code>set()</code> to find how many unique words it contains.",
+        "Redo the union, intersection, difference, and symmetric difference from level 2 using <strong>operator shortcuts</strong> (<code>|</code>, <code>&amp;</code>, <code>-</code>, <code>^</code>) instead of method calls. Confirm the results are the same.",
+        "Create a <code>frozenset</code> from the list <code>[1, 2, 3, 4, 5]</code>. Try to add an item to it — observe the error. Then use the <code>|</code> operator to create a new frozenset that includes <code>{6, 7}</code> and print the result.",
       ],
     },
 
