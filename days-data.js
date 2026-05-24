@@ -251,7 +251,7 @@ print(type(True))`,
       level3: [
         "Find the Euclidean distance between points (2, 2) and (6, 10). Formula: √((x2−x1)² + (y2−y1)²). Use Python math.",
         "Calculate how many seconds are in a year. Print the result with a label.",
-        "Write a script that prints a formatted table of squares and cubes: for i from 1 to 5, print i, i², i³.",
+        "Calculate and print the square and cube of the numbers 1, 2, 3, 4, and 5 using separate <code>print()</code> statements. Format each line as: <code>1  1  1</code>, <code>2  4  8</code>, etc.",
         "The HTML color <code>#1A2BFF</code> is made of three hex bytes: <code>0x1A</code>, <code>0x2B</code>, <code>0xFF</code>. Print each byte as a decimal. What are the R, G, B values?",
       ],
     },
@@ -545,9 +545,12 @@ print(isinstance(x, int))             # True
 print(isinstance(x, float))           # False
 print(isinstance(x, (int, float)))    # True  — checks either type
 
-values = [10, 3.14, "hello", True, [1, 2]]
-for v in values:
-    print(f"{repr(v):12} → int:{isinstance(v, int)}  str:{isinstance(v, str)}")
+name = "Alice"
+print(isinstance(name, str))          # True
+print(isinstance(name, int))          # False
+
+# isinstance with a tuple of types
+print(isinstance(3.14, (int, float))) # True — float is in the tuple
 
 # dir() — list all methods available on a type
 string_methods = dir(str)
@@ -915,7 +918,7 @@ print(f'{n} is even: {n % 2 == 0}')  # True`,
         "Write a script that asks for years lived, then prints the total number of seconds in that person's life (assume 365 days/year, 24 hours/day, 3600 seconds/hour).",
       ],
       level3: [
-        'Write a script that checks whether a given number is even. Use modulus. Print "Even" or "Odd".',
+        "Use modulus to calculate <code>7 % 2</code> and <code>8 % 2</code>. Print the results. What does a remainder of 0 tell you about whether a number is even?",
         "Verify: does <code>7 // 3</code> give the same result as <code>int(2.7)</code>? Print the comparison.",
         'Check: does <code>type("10")</code> equal <code>type(10)</code>? What does this tell you?',
         "Find when y = x² + 6x + 9 equals zero. Test x = -3. What do you notice?",
@@ -1827,8 +1830,9 @@ Student = namedtuple('Student', ['name', 'age', 'grade'])
 alice = Student('Alice', 20, 'A')
 bob   = Student('Bob', 22, 'B')
 
-for s in [alice, bob]:
-    print(f"{s.name} (age {s.age}): grade {s.grade}")`,
+# Access fields by name — just like a regular object
+print(f"{alice.name} (age {alice.age}): grade {alice.grade}")
+print(f"{bob.name} (age {bob.age}): grade {bob.grade}")`,
       },
     ],
 
@@ -2387,29 +2391,10 @@ print(defaults)  # {'color': 'red', 'size': 'large', 'weight': 1.0}</pre>
 print(students['alice']['grade'])   # A
 print(students['bob']['score'])     # 83
 
-# Loop over all students
-for name, info in students.items():
-    print(f"{name}: grade={info['grade']}, score={info['score']}")</pre>
+# Access any student's data by name
+print(students['carol']['grade'])   # A
+print(students['carol']['score'])   # 91</pre>
 
-      <div class="section-divider"></div>
-      <h2>Dictionary Comprehension — Preview</h2>
-      <p>Just like list comprehensions, you can build a dictionary in one line using a <strong>dict comprehension</strong>:</p>
-      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Map each word to its length
-words = ['apple', 'banana', 'cherry']
-lengths = {word: len(word) for word in words}
-print(lengths)  # {'apple': 5, 'banana': 6, 'cherry': 6}
-
-# Square numbers: {0:0, 1:1, 2:4, 3:9, 4:16}
-squares = {n: n**2 for n in range(5)}
-print(squares)
-
-# Filter: only keep scores above 80
-scores = {'Alice': 95, 'Bob': 72, 'Carol': 88}
-high_scores = {name: s for name, s in scores.items() if s > 80}
-print(high_scores)  # {'Alice': 95, 'Carol': 88}</pre>
-      <div class="info-box success">
-        <strong>Pattern:</strong> <code>{key_expr: value_expr for item in iterable}</code> — same idea as a list comprehension, but produces a dict.
-      </div>
     </div>
     `,
 
@@ -2451,21 +2436,26 @@ print("Removed:", removed)
 print("After pop:", person)`,
       },
       {
-        title: "Iterating Over a Dictionary",
-        desc: "Loop through keys, values, or both using .items().",
+        title: "Keys, Values, and Items",
+        desc: "Extract all keys, values, or key-value pairs from a dictionary.",
         code: `student = {
     'name': 'Bob',
     'grade': 'A',
     'score': 95
 }
 
-# Loop over keys
-for key in student:
-    print(key)
+# Get all keys as a view
+print(student.keys())    # dict_keys(['name', 'grade', 'score'])
 
-# Loop over key-value pairs
-for key, value in student.items():
-    print(f"{key}: {value}")`,
+# Get all values as a view
+print(student.values())  # dict_values(['Bob', 'A', 95])
+
+# Get all key-value pairs as tuples
+print(student.items())   # dict_items([('name', 'Bob'), ...])
+
+# Convert to a plain list
+print(list(student.keys()))    # ['name', 'grade', 'score']
+print(list(student.values()))  # ['Bob', 'A', 95]`,
       },
       {
         title: "Checking Keys and Nested Dicts",
@@ -2527,34 +2517,37 @@ print(defaults)`,
         code: `students = {
     'alice': {'age': 20, 'grade': 'A', 'score': 95},
     'bob':   {'age': 22, 'grade': 'B', 'score': 83},
+    'carol': {'age': 21, 'grade': 'A', 'score': 91},
 }
 
-# Access nested value
-print(students['alice']['grade'])   # A
-print(students['bob']['score'])     # 83
+# Access any student's data by name
+print(students['alice']['grade'])    # A
+print(students['bob']['score'])      # 83
+print(students['carol']['age'])      # 21
 
-# Loop and print a report
-for name, info in students.items():
-    print(f"{name.capitalize()}: grade={info['grade']}, score={info['score']}")`,
+# Access using variables
+name = 'alice'
+print(students[name]['score'])       # 95
+
+# Add a new student
+students['dave'] = {'age': 23, 'grade': 'C', 'score': 74}
+print(students['dave'])`,
       },
       {
-        title: "Dictionary Comprehension",
-        desc: "Build a dictionary in one line using comprehension syntax.",
-        code: `words = ['apple', 'banana', 'cherry', 'date']
+        title: "setdefault() and update()",
+        desc: "Use setdefault() to set a key only if it is missing, and update() to merge another dict in.",
+        code: `settings = {'theme': 'dark', 'lang': 'en'}
 
-# Map each word to its length
-lengths = {word: len(word) for word in words}
-print(lengths)
-# {'apple': 5, 'banana': 6, 'cherry': 6, 'date': 4}
+# setdefault: sets key only if it does NOT already exist
+settings.setdefault('font_size', 14)   # adds font_size = 14
+settings.setdefault('theme', 'light')  # does NOT change theme (already set)
+print(settings)
+# {'theme': 'dark', 'lang': 'en', 'font_size': 14}
 
-# Square numbers
-squares = {n: n**2 for n in range(6)}
-print(squares)
-
-# Filter: only scores above 80
-scores = {'Alice': 95, 'Bob': 72, 'Carol': 88, 'Dave': 60}
-high = {name: s for name, s in scores.items() if s > 80}
-print(high)   # {'Alice': 95, 'Carol': 88}`,
+# update: merge another dict in (overwrites existing keys)
+settings.update({'lang': 'fr', 'font_size': 16})
+print(settings)
+# {'theme': 'dark', 'lang': 'fr', 'font_size': 16}`,
       },
     ],
 
@@ -2576,12 +2569,11 @@ print(high)   # {'Alice': 95, 'Carol': 88}`,
         "Clear the entire <code>dog</code> dictionary using <code>.clear()</code>.",
       ],
       level3: [
-        "Build a nested dictionary for a school: it should contain at least 3 students, each with a name, grade, and list of subjects.",
-        "Write a program that counts how many times each character appears in the string <code>'hello world'</code> using a dictionary.",
-        "Given a list of words, build a dictionary that maps each word to its length: <code>{'apple': 5, 'cat': 3, ...}</code>.",
-        "Use a dictionary comprehension to build a dict of {number: square} for numbers 1-10.",
-        "Given two dicts <code>a = {'x': 1, 'y': 2}</code> and <code>b = {'y': 99, 'z': 3}</code>, merge them with <code>a | b</code> and explain which value wins for key <code>'y'</code>.",
-        "Build a nested dict representing a contacts book with at least 3 contacts, each having a <code>phone</code> and <code>email</code> field. Then write a loop that prints each contact's name and phone number.",
+        "Build a nested dictionary for a school: it should contain at least 3 students, each with a name, grade, and list of subjects. Access and print the grade of each student directly by key.",
+        "Given two dicts <code>a = {'x': 1, 'y': 2}</code> and <code>b = {'y': 99, 'z': 3}</code>, merge them with <code>a | b</code> and print the result. Which value wins for key <code>'y'</code>? Try also with <code>b | a</code> — does the winner change?",
+        "Build a contacts book dictionary with at least 3 contacts, each having a <code>phone</code> and <code>email</code> field. Access and print each contact's phone number individually by key (e.g. <code>contacts['Alice']['phone']</code>).",
+        "Use <code>setdefault()</code> to safely add a <code>'city'</code> key to a dictionary only if it doesn't already exist. Then call it again with a different value — confirm the original is preserved.",
+        "Use <code>update()</code> to merge a dictionary of new values into an existing one. Verify which keys changed and which stayed the same by printing before and after.",
       ],
     },
 
@@ -2875,7 +2867,7 @@ print(f"{month} is in {season}")`,
         "Write a BMI calculator: BMI = weight / height². Then classify: Underweight (<18.5), Normal (18.5–24.9), Overweight (25–29.9), Obese (30+).",
         "Write a rock-paper-scissors game logic (no input needed — just hard-code player1 and player2 choices and print the winner).",
         "Write a program that checks if a given string is a <strong>palindrome</strong> (reads the same forwards and backwards, ignoring case). Example: <code>'racecar'</code>, <code>'racecar'</code>.",
-        "Write a program that checks each character in a string and counts how many are digits, how many are letters, and how many are other characters. Use <code>str.isdigit()</code> and <code>str.isalpha()</code>.",
+        "Given the string <code>'Python3.10'</code>, use <code>str.isdigit()</code> and <code>str.isalpha()</code> to check individual characters: is <code>'P'</code> a letter? Is <code>'3'</code> a digit? Is <code>'.'</code> either? Print each result.",
         "Using <code>match/case</code> (Python 3.10+), write a day-of-week classifier: weekdays print 'Weekday', Saturday/Sunday print 'Weekend', anything else prints 'Invalid day'.",
       ],
     },
