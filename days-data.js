@@ -1,11 +1,11 @@
 /* =============================================
-   30 DAYS OF PYTHON — CURRICULUM DATA (Days 1–11)
+   30 DAYS OF PYTHON: CURRICULUM DATA (Days 1–11)
    Source: Asabeneh Yetayeh's 30-Days-Of-Python
    ============================================= */
 
 const DAYS = [
   // ═══════════════════════════════════════════════
-  // DAY 1 — INTRODUCTION
+  // DAY 1: INTRODUCTION
   // ═══════════════════════════════════════════════
   {
     day: 1,
@@ -42,7 +42,7 @@ const DAYS = [
 
       <div class="section-divider"></div>
       <h2>The Python Shell</h2>
-      <p>Python is an interpreted language — it executes code <strong>line by line</strong>. You can use the interactive shell to run code instantly. Open your terminal and type <code>python3</code> to start the shell:</p>
+      <p>Python is an interpreted language; it executes code <strong>line by line</strong>. You can use the interactive shell to run code instantly. Open your terminal and type <code>python3</code> to start the shell:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#86efac;overflow-x:auto">&gt;&gt;&gt; print("Hello, World!")
 Hello, World!
 &gt;&gt;&gt; 2 + 3
@@ -97,14 +97,14 @@ print("Welcome to 30 Days of Python!")`,
       },
       {
         title: "Python as a Calculator",
-        desc: "Python can do math directly — integers, floats, and complex numbers.",
+        desc: "Python can do math directly; integers, floats, and complex numbers.",
         code: `# Arithmetic in Python
 print(2 + 3)      # 5
 print(10 - 4)     # 6
 print(3 * 7)      # 21
 print(10 / 3)     # 3.3333...  (always gives a float)
-print(10 // 3)    # 3          (floor division — drops the decimal)
-print(10 % 3)     # 1          (modulus — the remainder)
+print(10 // 3)    # 3          (floor division; drops the decimal)
+print(10 % 3)     # 1          (modulus; the remainder)
 print(2 ** 8)     # 256        (exponentiation: 2 to the power of 8)
 
 # Floats
@@ -204,7 +204,7 @@ print(type(True))`,
         opts: ["3.333", "3", "1", "0.333"],
         answer: 1,
         explain:
-          "// is floor division — it divides and drops the decimal, giving you the whole number result: 3.",
+          "// is floor division; it divides and drops the decimal, giving you the whole number result: 3.",
       },
       {
         q: "Which function do you use to find the data type of a value?",
@@ -224,7 +224,7 @@ print(type(True))`,
   },
 
   // ═══════════════════════════════════════════════
-  // DAY 2 — VARIABLES & BUILT-IN FUNCTIONS
+  // DAY 2: VARIABLES & BUILT-IN FUNCTIONS
   // ═══════════════════════════════════════════════
   {
     day: 2,
@@ -243,7 +243,7 @@ print(type(True))`,
     lesson: `
     <div class="lesson-section">
       <h2>Built-in Functions</h2>
-      <p>Python comes with many <strong>built-in functions</strong> that are always available — no import needed. These are tools Python gives you for free.</p>
+      <p>Python comes with many <strong>built-in functions</strong> that are always available; no import needed. These are tools Python gives you for free.</p>
       <table>
         <thead><tr><th>Function</th><th>What it does</th><th>Example</th></tr></thead>
         <tbody>
@@ -280,9 +280,9 @@ is_married = True    # stores a boolean</pre>
 
       <h3>Variable Naming Rules</h3>
       <ul>
-        <li>Must start with a <strong>letter</strong> or <strong>underscore</strong> — not a number</li>
+        <li>Must start with a <strong>letter</strong> or <strong>underscore</strong>; not a number</li>
         <li>Can only contain letters, numbers, and underscores</li>
-        <li>Case-sensitive — <code>Name</code> and <code>name</code> are different variables</li>
+        <li>Case-sensitive; <code>Name</code> and <code>name</code> are different variables</li>
         <li>Cannot be a Python reserved word like <code>if</code>, <code>for</code>, <code>True</code></li>
       </ul>
       <table>
@@ -295,12 +295,12 @@ is_married = True    # stores a boolean</pre>
         </tbody>
       </table>
       <div class="info-box success">
-        <strong>Convention:</strong> Python developers use <code>snake_case</code> — all lowercase with underscores between words: <code>first_name</code>, <code>user_age</code>, <code>is_active</code>.
+        <strong>Convention:</strong> Python developers use <code>snake_case</code>; all lowercase with underscores between words: <code>first_name</code>, <code>user_age</code>, <code>is_active</code>.
       </div>
 
       <div class="section-divider"></div>
       <h2>Declaring Multiple Variables</h2>
-      <p>You can assign multiple variables on one line — very handy for related data:</p>
+      <p>You can assign multiple variables on one line; very handy for related data:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#86efac;overflow-x:auto">first_name, last_name, country, age = 'Asabeneh', 'Yetayeh', 'Finland', 250
 print(first_name, last_name, country, age)</pre>
 
@@ -308,11 +308,11 @@ print(first_name, last_name, country, age)</pre>
       <h2>Data Types &amp; Type Casting</h2>
       <p><strong>Type casting</strong> means converting a value from one type to another. Python gives you conversion functions:</p>
       <ul>
-        <li><code>int(x)</code> — converts x to an integer (cuts off the decimal)</li>
-        <li><code>float(x)</code> — converts x to a float (adds .0)</li>
-        <li><code>str(x)</code> — converts x to a string (wraps in quotes)</li>
-        <li><code>list(x)</code> — converts x to a list (e.g. a string becomes a list of characters)</li>
-        <li><code>bool(x)</code> — converts x to True or False</li>
+        <li><code>int(x)</code>; converts x to an integer (cuts off the decimal)</li>
+        <li><code>float(x)</code>; converts x to a float (adds .0)</li>
+        <li><code>str(x)</code>; converts x to a string (wraps in quotes)</li>
+        <li><code>list(x)</code>; converts x to a list (e.g. a string becomes a list of characters)</li>
+        <li><code>bool(x)</code>; converts x to True or False</li>
       </ul>
       <div class="info-box warning">
         <strong>Watch out:</strong> <code>int("9.8")</code> raises an error! You must convert to float first: <code>int(float("9.8"))</code> gives 9.
@@ -334,7 +334,7 @@ print(isinstance(name, str)) # True</pre>
 
       <div class="section-divider"></div>
       <h2>Getting User Input</h2>
-      <p>The <code>input()</code> function pauses your program and waits for the user to type something. It <strong>always returns a string</strong> — even if the user types a number. You must cast it if you need arithmetic:</p>
+      <p>The <code>input()</code> function pauses your program and waits for the user to type something. It <strong>always returns a string</strong>; even if the user types a number. You must cast it if you need arithmetic:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">name = input("What is your name? ")
 age  = int(input("How old are you? "))   # cast string → int
 print(f"Hello {name}, you are {age} years old.")
@@ -380,7 +380,7 @@ print('Person info:', person_info)`,
         desc: "Practice the most common built-in functions.",
         code: `name = "Python Challenge"
 
-print(len(name))           # 16 — length of the string
+print(len(name))           # 16; length of the string
 print(type(name))          # <class 'str'>
 print(name.upper())        # PYTHON CHALLENGE
 print(name.lower())        # python challenge
@@ -414,7 +414,7 @@ name = 'Asabeneh'
 print(list(name))       # ['A', 's', 'a', 'b', 'e', 'n', 'e', 'h']
 
 # Be careful with string to int
-# int("9.8") would raise an ERROR — go through float first:
+# int("9.8") would raise an ERROR; go through float first:
 print(int(float("9.8"))) # 9`,
       },
       {
@@ -435,7 +435,7 @@ area = pi * radius ** 2
 print(f'Hello {name}! Circle area: {area:.2f}')`,
       },
       {
-        title: "isinstance() — check a value's type",
+        title: "isinstance(); check a value's type",
         desc: "Use isinstance() to check whether a value is of a given type.",
         code: `x = 42
 print(isinstance(x, int))    # True
@@ -471,7 +471,7 @@ print(isinstance(name, int)) # False`,
       level3: [
         "Write a program that asks for a radius and prints both the area and circumference of the circle, formatted to 2 decimal places.",
         "Write a program that takes two numbers from the user and prints: their sum, difference, product, division, floor division, modulus, and power.",
-        "Write a program that takes any value from the user, tries to cast it to <code>int</code>, and prints the result. Try entering a word — what happens?",
+        "Write a program that takes any value from the user, tries to cast it to <code>int</code>, and prints the result. Try entering a word; what happens?",
       ],
     },
 
@@ -520,14 +520,14 @@ print(isinstance(name, int)) # False`,
   },
 
   // ═══════════════════════════════════════════════
-  // DAY 3 — OPERATORS
+  // DAY 3: OPERATORS
   // ═══════════════════════════════════════════════
   {
     day: 3,
     emoji: "➕",
     title: "Operators",
     subtitle:
-      "Master arithmetic, comparison, logical, and assignment operators — the tools Python uses to do calculations and make decisions.",
+      "Master arithmetic, comparison, logical, and assignment operators; the tools Python uses to do calculations and make decisions.",
     topics: [
       "Arithmetic",
       "Comparison",
@@ -571,7 +571,7 @@ print(isinstance(name, int)) # False`,
         </tbody>
       </table>
       <div class="info-box warning">
-        <strong>Common mistake:</strong> Don't confuse <code>=</code> (assignment — stores a value) with <code>==</code> (comparison — checks equality).
+        <strong>Common mistake:</strong> Don't confuse <code>=</code> (assignment; stores a value) with <code>==</code> (comparison; checks equality).
       </div>
 
       <div class="section-divider"></div>
@@ -602,7 +602,7 @@ print(isinstance(name, int)) # False`,
       <table>
         <thead><tr><th>Operator</th><th>Same as</th><th>Example</th></tr></thead>
         <tbody>
-          <tr><td><code>x = 5</code></td><td>—</td><td>Assign 5 to x</td></tr>
+          <tr><td><code>x = 5</code></td><td>-</td><td>Assign 5 to x</td></tr>
           <tr><td><code>x += 3</code></td><td><code>x = x + 3</code></td><td>Add 3 to x</td></tr>
           <tr><td><code>x -= 2</code></td><td><code>x = x - 2</code></td><td>Subtract 2 from x</td></tr>
           <tr><td><code>x *= 4</code></td><td><code>x = x * 4</code></td><td>Multiply x by 4</td></tr>
@@ -646,7 +646,7 @@ print(f'Weight: {weight} N')  # 735.75 N`,
       },
       {
         title: "Comparison Operators",
-        desc: "Comparing values — these always return True or False.",
+        desc: "Comparing values; these always return True or False.",
         code: `print(3 > 2)     # True
 print(3 >= 2)    # True
 print(3 < 2)     # False
@@ -667,15 +667,15 @@ print(False == False)  # True`,
       {
         title: "Logical Operators",
         desc: "Combine conditions with and, or, not.",
-        code: `print(3 > 2 and 4 > 3)  # True  — both true
-print(3 > 2 and 4 < 3)  # False — second is false
-print(3 < 2 and 4 < 3)  # False — both false
+        code: `print(3 > 2 and 4 > 3)  # True ; both true
+print(3 > 2 and 4 < 3)  # False; second is false
+print(3 < 2 and 4 < 3)  # False; both false
 
-print(3 > 2 or 4 > 3)   # True  — both true
-print(3 > 2 or 4 < 3)   # True  — first is true
-print(3 < 2 or 4 < 3)   # False — both false
+print(3 > 2 or 4 > 3)   # True ; both true
+print(3 > 2 or 4 < 3)   # True ; first is true
+print(3 < 2 or 4 < 3)   # False; both false
 
-print(not 3 > 2)   # False — 3>2 is True, not True = False
+print(not 3 > 2)   # False; 3>2 is True, not True = False
 print(not True)    # False
 print(not False)   # True
 
@@ -740,7 +740,7 @@ print(f'{n} is even: {n % 2 == 0}')  # True`,
         opts: ["3", "0", "1", "3.33"],
         answer: 2,
         explain:
-          "% is the modulus operator — it returns the remainder of division. 10 ÷ 3 = 3 remainder 1.",
+          "% is the modulus operator; it returns the remainder of division. 10 ÷ 3 = 3 remainder 1.",
       },
       {
         q: "Which operator checks if two values are EQUAL?",
@@ -773,7 +773,7 @@ print(f'{n} is even: {n % 2 == 0}')  # True`,
   },
 
   // ═══════════════════════════════════════════════
-  // DAY 4 — STRINGS
+  // DAY 4: STRINGS
   // ═══════════════════════════════════════════════
   {
     day: 4,
@@ -795,7 +795,7 @@ print(f'{n} is even: {n % 2 == 0}')  # True`,
       <h2>Creating Strings</h2>
       <p>A string is any text wrapped in quotes. Python accepts single quotes, double quotes, or triple quotes:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">letter = 'P'                    # single character
-word   = "Hello"                 # double quotes — same result
+word   = "Hello"                 # double quotes; same result
 sentence = 'I love Python!'      # single quotes
 
 # Triple quotes: great for multi-line strings
@@ -816,9 +816,9 @@ print(full)    # Asabeneh Yetayeh</pre>
       <table>
         <thead><tr><th>Sequence</th><th>Meaning</th></tr></thead>
         <tbody>
-          <tr><td><code>\\n</code></td><td>New line — moves to the next line</td></tr>
-          <tr><td><code>\\t</code></td><td>Tab — inserts a horizontal tab</td></tr>
-          <tr><td><code>\\\\</code></td><td>Backslash — prints a literal \</td></tr>
+          <tr><td><code>\\n</code></td><td>New line; moves to the next line</td></tr>
+          <tr><td><code>\\t</code></td><td>Tab; inserts a horizontal tab</td></tr>
+          <tr><td><code>\\\\</code></td><td>Backslash; prints a literal \</td></tr>
           <tr><td><code>\\'</code></td><td>Single quote inside single-quoted string</td></tr>
           <tr><td><code>\\"</code></td><td>Double quote inside double-quoted string</td></tr>
         </tbody>
@@ -832,7 +832,7 @@ print(full)    # Asabeneh Yetayeh</pre>
         <tbody>
           <tr><td>Old % style</td><td><code>'Hello %s' % name</code></td><td>Legacy, avoid in new code</td></tr>
           <tr><td>.format()</td><td><code>'Hello {}'.format(name)</code></td><td>Works in Python 2 &amp; 3</td></tr>
-          <tr><td>f-string</td><td><code>f'Hello {name}'</code></td><td>✅ Recommended — fastest &amp; clearest</td></tr>
+          <tr><td>f-string</td><td><code>f'Hello {name}'</code></td><td>✅ Recommended; fastest &amp; clearest</td></tr>
         </tbody>
       </table>
       <div class="info-box success">
@@ -880,15 +880,15 @@ print(full)    # Asabeneh Yetayeh</pre>
         title: "String Indexing & Slicing",
         desc: "Access individual characters and extract substrings.",
         code: `language = 'Python'
-print(language[0])     # P  — first character
-print(language[-1])    # n  — last character
-print(language[-2])    # o  — second to last
+print(language[0])     # P ; first character
+print(language[-1])    # n ; last character
+print(language[-2])    # o ; second to last
 
 # Slicing: [start:stop:step]
-print(language[0:3])   # Pyt — index 0,1,2 (not 3)
-print(language[3:])    # hon — from index 3 to end
-print(language[:3])    # Pyt — from start up to (not including) 3
-print(language[::2])   # Pto — every other character
+print(language[0:3])   # Pyt; index 0,1,2 (not 3)
+print(language[3:])    # hon; from index 3 to end
+print(language[:3])    # Pyt; from start up to (not including) 3
+print(language[::2])   # Pto; every other character
 
 # Reverse a string using step -1
 print(language[::-1])  # nohtyP
@@ -898,7 +898,7 @@ print(greeting[::-1])  # !dlroW ,olleH`,
       },
       {
         title: "F-Strings & String Formatting",
-        desc: "The 3 ways to format strings — f-strings are the best.",
+        desc: "The 3 ways to format strings; f-strings are the best.",
         code: `first_name = 'Asabeneh'
 last_name = 'Yetayeh'
 language = 'Python'
@@ -1047,13 +1047,13 @@ print(bio)`,
         opts: ["1", "2", "3", "0"],
         answer: 1,
         explain:
-          'count() counts occurrences. "y" appears in "thirt**y**" and "da**y**s" — 2 times.',
+          'count() counts occurrences. "y" appears in "thirt**y**" and "da**y**s"; 2 times.',
       },
     ],
   },
 
   // ═══════════════════════════════════════════════
-  // DAY 5 — LISTS
+  // DAY 5: LISTS
   // ═══════════════════════════════════════════════
   {
     day: 5,
@@ -1073,7 +1073,7 @@ print(bio)`,
     lesson: `
     <div class="lesson-section">
       <h2>What is a List?</h2>
-      <p>A <strong>list</strong> is an ordered, <strong>mutable</strong> (changeable) collection of items. Lists can hold any data type — even other lists. They use square brackets <code>[]</code>:</p>
+      <p>A <strong>list</strong> is an ordered, <strong>mutable</strong> (changeable) collection of items. Lists can hold any data type; even other lists. They use square brackets <code>[]</code>:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">empty_list = []
 fruits = ['banana', 'orange', 'mango', 'lemon']
 numbers = [1, 2, 3, 4, 5]
@@ -1090,13 +1090,13 @@ mixed = [1, 'hello', True, 3.14, [1, 2]]  # any mix of types
 #            0          1        2        3      ← positive index
 #           -4         -3       -2       -1      ← negative index
 
-print(fruits[0])    # banana  — first item
-print(fruits[-1])   # lemon   — last item
-print(fruits[1:3])  # ['orange', 'mango']  — slicing</pre>
+print(fruits[0])    # banana ; first item
+print(fruits[-1])   # lemon  ; last item
+print(fruits[1:3])  # ['orange', 'mango'] ; slicing</pre>
 
       <div class="section-divider"></div>
       <h2>Modifying Lists</h2>
-      <p>Lists are mutable — you can change any item by index:</p>
+      <p>Lists are mutable; you can change any item by index:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">fruits[0] = 'avocado'   # Replace first item
 print(fruits)  # ['avocado', 'orange', 'mango', 'lemon']</pre>
 
@@ -1167,26 +1167,26 @@ print('apple' not in fruits)   # True`,
 fruits[0] = 'avocado'
 print(fruits)  # ['avocado', 'orange', 'mango', 'lemon']
 
-# append — adds to the END
+# append; adds to the END
 fruits.append('apple')
 print(fruits)  # ['avocado', 'orange', 'mango', 'lemon', 'apple']
 
-# insert — adds at a specific position
+# insert; adds at a specific position
 fruits.insert(2, 'grape')
 print(fruits)  # ['avocado', 'orange', 'grape', 'mango', 'lemon', 'apple']
 
-# remove — removes first occurrence of value
+# remove; removes first occurrence of value
 fruits.remove('avocado')
 print(fruits)  # ['orange', 'grape', 'mango', 'lemon', 'apple']
 
-# pop — removes by index (default: last item) and RETURNS it
+# pop; removes by index (default: last item) and RETURNS it
 last = fruits.pop()
 print(last)    # apple
 first = fruits.pop(0)
 print(first)   # orange
 print(fruits)  # ['grape', 'mango', 'lemon']
 
-# del — deletes without returning
+# del; deletes without returning
 del fruits[0]
 print(fruits)  # ['mango', 'lemon']`,
       },
@@ -1196,23 +1196,23 @@ print(fruits)  # ['mango', 'lemon']`,
         code: `fruits = ['banana', 'orange', 'mango', 'lemon', 'apple']
 numbers = [3, 1, 4, 1, 5, 9, 2, 6]
 
-# sort() — modifies original, returns None
+# sort(); modifies original, returns None
 fruits.sort()
 print(fruits)         # ['apple', 'banana', 'lemon', 'mango', 'orange']
 
 fruits.sort(reverse=True)
 print(fruits)         # ['orange', 'mango', 'lemon', 'banana', 'apple']
 
-# sorted() — returns NEW sorted list, original unchanged
+# sorted(); returns NEW sorted list, original unchanged
 nums_sorted = sorted(numbers)
 print(nums_sorted)    # [1, 1, 2, 3, 4, 5, 6, 9]
 print(numbers)        # [3, 1, 4, 1, 5, 9, 2, 6]  unchanged!
 
-# reverse() — reverses in place
+# reverse(); reverses in place
 fruits.reverse()
 print(fruits)         # ['apple', 'banana', 'lemon', 'mango', 'orange']
 
-# copy — creates INDEPENDENT copy (not just a reference)
+# copy; creates INDEPENDENT copy (not just a reference)
 fruits_copy = fruits.copy()
 fruits_copy.append('kiwi')
 print(fruits)         # original unchanged
@@ -1280,7 +1280,7 @@ print(sum(ages) / len(ages))  # average`,
       {
         q: "What is the difference between sort() and sorted()?",
         opts: [
-          "No difference — they do the same thing",
+          "No difference; they do the same thing",
           "sort() returns a new list; sorted() modifies original",
           "sort() modifies original and returns None; sorted() returns a new sorted list",
           "sorted() only works on numbers",
@@ -1324,25 +1324,25 @@ print(sum(ages) / len(ages))  # average`,
   },
 
   // ═══════════════════════════════════════════════
-  // DAY 6 — TUPLES
+  // DAY 6: TUPLES
   // ═══════════════════════════════════════════════
   {
     day: 6,
     emoji: "📦",
     title: "Tuples",
-    subtitle: "Learn about tuples — ordered, unchangeable collections — and how to create, access, slice, and use them.",
+    subtitle: "Learn about tuples; ordered, unchangeable collections; and how to create, access, slice, and use them.",
     topics: ["Creating Tuples", "Indexing", "Slicing", "Tuple Methods", "Unpacking", "Immutability"],
 
     lesson: `
     <div class="lesson-section">
       <h2>What is a Tuple?</h2>
-      <p>A <strong>tuple</strong> is an ordered collection of items, just like a list — but with one key difference: <strong>tuples cannot be changed after creation</strong>. This is called being <strong>immutable</strong>.</p>
+      <p>A <strong>tuple</strong> is an ordered collection of items, just like a list; but with one key difference: <strong>tuples cannot be changed after creation</strong>. This is called being <strong>immutable</strong>.</p>
       <p>Tuples are written with <strong>round brackets <code>()</code></strong>, and items are separated by commas.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ('banana', 'orange', 'mango', 'lemon')
 numbers = (1, 2, 3, 4, 5)
 mixed  = ('Alice', 25, True, 3.14)</pre>
       <div class="info-box success">
-        <strong>When to use a tuple vs a list?</strong> Use a tuple when your data should not change — like days of the week, GPS coordinates, or RGB color values. Use a list when your data will be modified.
+        <strong>When to use a tuple vs a list?</strong> Use a tuple when your data should not change; like days of the week, GPS coordinates, or RGB color values. Use a list when your data will be modified.
       </div>
 
       <div class="section-divider"></div>
@@ -1354,10 +1354,10 @@ empty = tuple()
 
 # Tuple with items
 fruits = ('banana', 'orange', 'mango', 'lemon')
-print(len(fruits))   # 4 — len() works on tuples just like lists</pre>
+print(len(fruits))   # 4; len() works on tuples just like lists</pre>
 
       <div class="section-divider"></div>
-      <h2>Accessing Items — Indexing</h2>
+      <h2>Accessing Items: Indexing</h2>
       <p>Tuples use <strong>zero-based indexing</strong>, exactly like lists. The first item is at index <code>0</code>.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ('banana', 'orange', 'mango', 'lemon')
 print(fruits[0])   # banana
@@ -1418,10 +1418,10 @@ print('apple' in fruits)    # False</pre>
       <div class="section-divider"></div>
       <h2>Tuple Packing &amp; Unpacking</h2>
       <p><strong>Packing</strong> means grouping multiple values into a tuple. <strong>Unpacking</strong> means assigning each tuple item to its own variable:</p>
-      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Packing — create a tuple without parentheses
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Packing; create a tuple without parentheses
 coordinates = 10, 20, 30   # same as (10, 20, 30)
 
-# Unpacking — assign each value to a variable
+# Unpacking; assign each value to a variable
 x, y, z = coordinates
 print(x, y, z)   # 10 20 30
 
@@ -1469,7 +1469,7 @@ print(fruits[-3:-1])  # ('orange', 'mango')`,
       },
       {
         title: "Modifying via List Conversion",
-        desc: "Tuples are immutable — to change one, convert to list, modify, convert back.",
+        desc: "Tuples are immutable; to change one, convert to list, modify, convert back.",
         code: `fruits = ('banana', 'orange', 'mango', 'lemon')
 print("Original:", fruits)
 
@@ -1486,10 +1486,10 @@ print("Modified:", fruits)
         desc: "The two methods available on tuples.",
         code: `fruits = ('banana', 'orange', 'mango', 'lemon', 'orange')
 
-# count() — how many times does 'orange' appear?
+# count(); how many times does 'orange' appear?
 print(fruits.count('orange'))  # 2
 
-# index() — at what position is 'mango'?
+# index(); at what position is 'mango'?
 print(fruits.index('mango'))   # 2
 
 # Joining tuples with +
@@ -1506,7 +1506,7 @@ print(food)`,
 print('orange' in fruits)   # True
 print('apple' in fruits)    # False
 
-# Unpacking — assign each item to a variable
+# Unpacking; assign each item to a variable
 first, second, third, fourth = fruits
 print(first)   # banana
 print(fourth)  # lemon`,
@@ -1592,13 +1592,13 @@ print(x, y)  # 200 100`,
   },
 
   // ═══════════════════════════════════════════════
-  // DAY 7 — SETS
+  // DAY 7: SETS
   // ═══════════════════════════════════════════════
   {
     day: 7,
     emoji: "🔵",
     title: "Sets",
-    subtitle: "Discover sets — unordered collections of unique items — and master set operations like union, intersection, and difference.",
+    subtitle: "Discover sets; unordered collections of unique items; and master set operations like union, intersection, and difference.",
     topics: ["Creating Sets", "Adding & Removing", "Set Operations", "Union", "Intersection", "Difference"],
 
     lesson: `
@@ -1606,9 +1606,9 @@ print(x, y)  # 200 100`,
       <h2>What is a Set?</h2>
       <p>A <strong>set</strong> is a collection of <strong>unordered, unique items</strong>. This means:</p>
       <ul>
-        <li><strong>No duplicates</strong> — adding the same item twice has no effect.</li>
-        <li><strong>No guaranteed order</strong> — you can't access items by index.</li>
-        <li><strong>Very fast membership checks</strong> — checking <code>x in my_set</code> is extremely quick.</li>
+        <li><strong>No duplicates</strong>; adding the same item twice has no effect.</li>
+        <li><strong>No guaranteed order</strong>; you can't access items by index.</li>
+        <li><strong>Very fast membership checks</strong>; checking <code>x in my_set</code> is extremely quick.</li>
       </ul>
       <p>Sets are written with <strong>curly brackets <code>{}</code></strong>:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = {'banana', 'orange', 'mango', 'lemon'}
@@ -1619,7 +1619,7 @@ numbers = {1, 2, 3, 4, 5}</pre>
 
       <div class="section-divider"></div>
       <h2>Creating Sets</h2>
-      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Empty set — must use set(), not {}
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Empty set; must use set(), not {}
 empty = set()
 
 # Set with items
@@ -1659,25 +1659,25 @@ print(fruits)</pre>
       <h2>Set Operations</h2>
       <p>Sets support <strong>mathematical operations</strong> you may remember from school:</p>
 
-      <h3>Union — combine all items from both sets</h3>
+      <h3>Union; combine all items from both sets</h3>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">A = {1, 2, 3, 4}
 B = {3, 4, 5, 6}
 print(A.union(B))   # {1, 2, 3, 4, 5, 6}
 print(A | B)        # same thing with | operator</pre>
 
-      <h3>Intersection — only items in BOTH sets</h3>
+      <h3>Intersection; only items in BOTH sets</h3>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">A = {1, 2, 3, 4}
 B = {3, 4, 5, 6}
 print(A.intersection(B))  # {3, 4}
 print(A & B)               # same thing</pre>
 
-      <h3>Difference — items in A but NOT in B</h3>
+      <h3>Difference; items in A but NOT in B</h3>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">A = {1, 2, 3, 4}
 B = {3, 4, 5, 6}
 print(A.difference(B))  # {1, 2}  ← in A but not B
 print(B.difference(A))  # {5, 6}  ← in B but not A</pre>
 
-      <h3>Symmetric Difference — items in either set, but NOT both</h3>
+      <h3>Symmetric Difference; items in either set, but NOT both</h3>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">A = {1, 2, 3, 4}
 B = {3, 4, 5, 6}
 print(A.symmetric_difference(B))  # {1, 2, 5, 6}</pre>
@@ -1687,37 +1687,37 @@ print(A.symmetric_difference(B))  # {1, 2, 5, 6}</pre>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">evens = {0, 2, 4, 6, 8, 10}
 whole = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
-print(evens.issubset(whole))    # True  — all evens are in whole
-print(whole.issuperset(evens))  # True  — whole contains all of evens
+print(evens.issubset(whole))    # True ; all evens are in whole
+print(whole.issuperset(evens))  # True ; whole contains all of evens
 
 odds = {1, 3, 5, 7, 9}
-print(evens.isdisjoint(odds))   # True  — no items in common</pre>
+print(evens.isdisjoint(odds))   # True ; no items in common</pre>
 
       <div class="section-divider"></div>
-      <h2>Understanding Union, Intersection, Difference — Visually</h2>
+      <h2>Understanding Union, Intersection, Difference: Visually</h2>
       <p>Think of two overlapping circles (a Venn diagram). Each operation picks a different part:</p>
       <div class="cheatsheet-grid">
         <div>
           <strong>Union (A | B)</strong><br>
-          Everything in either circle — all items from both sets combined, duplicates removed.
+          Everything in either circle; all items from both sets combined, duplicates removed.
           <pre style="background:var(--bg-code);padding:12px 16px;border-radius:8px;margin:8px 0;font-family:'Fira Code',monospace;font-size:13px;color:#a5b4fc;overflow-x:auto">{1,2,3} | {3,4,5}
 # {1, 2, 3, 4, 5}</pre>
         </div>
         <div>
           <strong>Intersection (A &amp; B)</strong><br>
-          Only the overlapping middle — items that appear in BOTH sets.
+          Only the overlapping middle; items that appear in BOTH sets.
           <pre style="background:var(--bg-code);padding:12px 16px;border-radius:8px;margin:8px 0;font-family:'Fira Code',monospace;font-size:13px;color:#a5b4fc;overflow-x:auto">{1,2,3} &amp; {3,4,5}
 # {3}</pre>
         </div>
         <div>
           <strong>Difference (A - B)</strong><br>
-          Only the left circle — items in A that are NOT in B.
+          Only the left circle; items in A that are NOT in B.
           <pre style="background:var(--bg-code);padding:12px 16px;border-radius:8px;margin:8px 0;font-family:'Fira Code',monospace;font-size:13px;color:#a5b4fc;overflow-x:auto">{1,2,3} - {3,4,5}
 # {1, 2}</pre>
         </div>
         <div>
           <strong>Symmetric Difference (A ^ B)</strong><br>
-          Both circles but NOT the overlap — items in either set but not shared.
+          Both circles but NOT the overlap; items in either set but not shared.
           <pre style="background:var(--bg-code);padding:12px 16px;border-radius:8px;margin:8px 0;font-family:'Fira Code',monospace;font-size:13px;color:#a5b4fc;overflow-x:auto">{1,2,3} ^ {3,4,5}
 # {1, 2, 4, 5}</pre>
         </div>
@@ -1729,8 +1729,8 @@ print(evens.isdisjoint(odds))   # True  — no items in common</pre>
         <thead><tr><th>Method</th><th>What it does</th><th>Raises error?</th></tr></thead>
         <tbody>
           <tr><td><code>.add(x)</code></td><td>Add item <code>x</code> to the set</td><td>No</td></tr>
-          <tr><td><code>.remove(x)</code></td><td>Remove <code>x</code> — errors if missing</td><td>Yes (KeyError)</td></tr>
-          <tr><td><code>.discard(x)</code></td><td>Remove <code>x</code> — silent if missing</td><td>No</td></tr>
+          <tr><td><code>.remove(x)</code></td><td>Remove <code>x</code>; errors if missing</td><td>Yes (KeyError)</td></tr>
+          <tr><td><code>.discard(x)</code></td><td>Remove <code>x</code>; silent if missing</td><td>No</td></tr>
           <tr><td><code>.pop()</code></td><td>Remove and return a random item</td><td>Yes if empty</td></tr>
           <tr><td><code>.clear()</code></td><td>Remove all items</td><td>No</td></tr>
           <tr><td><code>.union(B)</code> or <code>A|B</code></td><td>All items from A and B</td><td>No</td></tr>
@@ -1750,13 +1750,13 @@ print(evens.isdisjoint(odds))   # True  — no items in common</pre>
     examples: [
       {
         title: "Creating Sets and Removing Duplicates",
-        desc: "Sets automatically remove duplicate items — great for finding unique values.",
+        desc: "Sets automatically remove duplicate items; great for finding unique values.",
         code: `# Normal set
 fruits = {'banana', 'orange', 'mango', 'lemon'}
 print(fruits)
 print(len(fruits))  # 4
 
-# Convert list to set — duplicates removed!
+# Convert list to set; duplicates removed!
 ages = [22, 19, 24, 25, 26, 24, 25, 24]
 unique_ages = set(ages)
 print(unique_ages)
@@ -1781,11 +1781,11 @@ print("After removing:", companies)`,
         code: `python_skills = {'Python', 'Django', 'Flask'}
 js_skills = {'JavaScript', 'React', 'Node', 'Python'}
 
-# Union — all skills from both
+# Union; all skills from both
 all_skills = python_skills.union(js_skills)
 print("All skills:", all_skills)
 
-# Intersection — skills in BOTH
+# Intersection; skills in BOTH
 shared = python_skills.intersection(js_skills)
 print("Shared skills:", shared)`,
       },
@@ -1813,7 +1813,7 @@ odd_numbers   = {1, 3, 5, 7, 9}
 
 print(even_numbers.issubset(whole_numbers))    # True
 print(whole_numbers.issuperset(even_numbers))  # True
-print(even_numbers.isdisjoint(odd_numbers))    # True — no overlap`,
+print(even_numbers.isdisjoint(odd_numbers))    # True; no overlap`,
       },
       {
         title: "Operator Shortcuts for Set Operations",
@@ -1844,7 +1844,7 @@ print(A.intersection(B) == A & B)      # True`,
         "Explain in a comment: what is the difference between <code>remove()</code> and <code>discard()</code>?",
       ],
       level2: [
-        "Given <code>A = {19, 22, 24, 20, 25, 26}</code> and <code>B = {19, 22, 20, 25, 26, 24, 28, 27}</code> — find the union of A and B.",
+        "Given <code>A = {19, 22, 24, 20, 25, 26}</code> and <code>B = {19, 22, 20, 25, 26, 24, 28, 27}</code>; find the union of A and B.",
         "Find the intersection of A and B.",
         "Check if A is a subset of B using <code>issubset()</code>.",
         "Check if A and B are disjoint sets.",
@@ -1852,9 +1852,9 @@ print(A.intersection(B) == A & B)      # True`,
         "Delete both sets completely using <code>del</code>.",
       ],
       level3: [
-        "Given <code>age = [22, 19, 24, 25, 26, 24, 25, 24]</code> — convert to a set and compare lengths. Which is bigger and why?",
+        "Given <code>age = [22, 19, 24, 25, 26, 24, 25, 24]</code>; convert to a set and compare lengths. Which is bigger and why?",
         "Write a program that finds the unique letters shared between the words <code>'python'</code> and <code>'dragon'</code> using set intersection.",
-        "Given this sentence: <code>'I am a teacher and I love to inspire and teach people'</code> — use <code>split()</code> and <code>set()</code> to find how many unique words it contains.",
+        "Given this sentence: <code>'I am a teacher and I love to inspire and teach people'</code>; use <code>split()</code> and <code>set()</code> to find how many unique words it contains.",
         "Redo the union, intersection, difference, and symmetric difference from level 2 using <strong>operator shortcuts</strong> (<code>|</code>, <code>&amp;</code>, <code>-</code>, <code>^</code>) instead of method calls. Confirm the results are the same.",
 
       ],
@@ -1895,19 +1895,19 @@ print(A.intersection(B) == A & B)      # True`,
   },
 
   // ═══════════════════════════════════════════════
-  // DAY 8 — DICTIONARIES
+  // DAY 8: DICTIONARIES
   // ═══════════════════════════════════════════════
   {
     day: 8,
     emoji: "📖",
     title: "Dictionaries",
-    subtitle: "Master dictionaries — Python's key-value store — to label, organize, and look up data with ease.",
+    subtitle: "Master dictionaries: Python's key-value store; to label, organize, and look up data with ease.",
     topics: ["Creating Dicts", "Accessing Values", "Adding & Modifying", "Removing Items", "Keys & Values", "Nested Dicts"],
 
     lesson: `
     <div class="lesson-section">
       <h2>What is a Dictionary?</h2>
-      <p>A <strong>dictionary</strong> is a collection of <strong>key: value pairs</strong>. Instead of accessing items by a number (like lists do), you access them by a <strong>key</strong> — usually a descriptive string.</p>
+      <p>A <strong>dictionary</strong> is a collection of <strong>key: value pairs</strong>. Instead of accessing items by a number (like lists do), you access them by a <strong>key</strong>; usually a descriptive string.</p>
       <p>Dictionaries are written with <strong>curly brackets <code>{}</code></strong>, with each pair separated by a comma:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">person = {
     'name': 'Alice',
@@ -1924,7 +1924,7 @@ print(person['name'])  # Alice</pre>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Empty dictionary
 empty = {}
 
-# Dictionary with values — values can be ANY type
+# Dictionary with values; values can be ANY type
 person = {
     'first_name': 'Asabeneh',
     'last_name': 'Yetayeh',
@@ -1940,10 +1940,10 @@ print(len(person))  # 6</pre>
       <p>There are two ways to get a value from a dictionary:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">person = {'name': 'Alice', 'age': 25, 'city': 'NY'}
 
-# Method 1: square bracket — raises KeyError if key doesn't exist
+# Method 1: square bracket; raises KeyError if key doesn't exist
 print(person['name'])   # Alice
 
-# Method 2: .get() — returns None if key doesn't exist (safer)
+# Method 2: .get(); returns None if key doesn't exist (safer)
 print(person.get('age'))     # 25
 print(person.get('email'))   # None  ← no error!</pre>
       <div class="info-box">
@@ -2157,7 +2157,7 @@ print(students['dave'])`,
         "Add keys to <code>dog</code>: <code>name</code>, <code>color</code>, <code>breed</code>, <code>legs</code>, <code>age</code>.",
         "Create a <code>student</code> dictionary with keys: <code>first_name</code>, <code>last_name</code>, <code>age</code>, <code>country</code>, <code>skills</code> (a list).",
         "Print the length of your <code>student</code> dictionary.",
-        "Get the value of <code>skills</code> from <code>student</code> and check its data type — it should be a list.",
+        "Get the value of <code>skills</code> from <code>student</code> and check its data type; it should be a list.",
         "Use <code>'email' in student</code> to check whether the <code>email</code> key exists.",
       ],
       level2: [
@@ -2211,13 +2211,13 @@ print(students['dave'])`,
   },
 
   // ═══════════════════════════════════════════════
-  // DAY 9 — CONDITIONALS
+  // DAY 9: CONDITIONALS
   // ═══════════════════════════════════════════════
   {
     day: 9,
     emoji: "🔀",
     title: "Conditionals",
-    subtitle: "Teach your code to make decisions using if, elif, and else — the foundation of all program logic.",
+    subtitle: "Teach your code to make decisions using if, elif, and else; the foundation of all program logic.",
     topics: ["if Statement", "if/else", "elif", "Nested Conditions", "and / or", "Ternary Expression"],
 
     lesson: `
@@ -2352,13 +2352,13 @@ print(f"Score: {score} → Grade: {grade}")`,
         code: `age = 20
 has_id = True
 
-# AND — both must be true
+# AND; both must be true
 if age >= 18 and has_id:
     print('Access granted!')
 else:
     print('Access denied!')
 
-# OR — at least one must be true
+# OR; at least one must be true
 user = 'James'
 access_level = 3
 if user == 'admin' or access_level >= 4:
@@ -2409,15 +2409,15 @@ print(f"{month} is in {season}")`,
         "Write code that checks if a number is divisible by both 2 and 3 using <code>and</code>.",
       ],
       level2: [
-        "Given <code>fruits = ['banana', 'orange', 'mango', 'lemon']</code> — write code that checks if <code>'apple'</code> is in the list. If not, add it. If it is, print that it already exists.",
+        "Given <code>fruits = ['banana', 'orange', 'mango', 'lemon']</code>; write code that checks if <code>'apple'</code> is in the list. If not, add it. If it is, print that it already exists.",
         "Write a season detector: given a month name, print the correct season (Winter, Spring, Summer, Autumn).",
         "Write a program that checks if a year is a leap year. A leap year is divisible by 4, but not 100, unless also divisible by 400.",
         "Write a number comparison: given two numbers <code>a</code> and <code>b</code>, print which is bigger, or if they're equal.",
       ],
       level3: [
-        "Given a <code>person</code> dictionary with <code>skills</code>, <code>country</code>, and <code>is_married</code> keys — write conditions to: check if Python is in skills, classify them as frontend/backend/fullstack developer, and print a message if they are married and live in Finland.",
+        "Given a <code>person</code> dictionary with <code>skills</code>, <code>country</code>, and <code>is_married</code> keys; write conditions to: check if Python is in skills, classify them as frontend/backend/fullstack developer, and print a message if they are married and live in Finland.",
         "Write a BMI calculator: BMI = weight / height². Then classify: Underweight (<18.5), Normal (18.5–24.9), Overweight (25–29.9), Obese (30+).",
-        "Write a rock-paper-scissors game logic (no input needed — just hard-code player1 and player2 choices and print the winner).",
+        "Write a rock-paper-scissors game logic (no input needed; just hard-code player1 and player2 choices and print the winner).",
         "Write a program that checks if a given string is a <strong>palindrome</strong> (reads the same forwards and backwards, ignoring case). Example: <code>'racecar'</code>, <code>'racecar'</code>.",
 
 
@@ -2447,7 +2447,7 @@ print(f"{month} is in {season}")`,
         q: "What happens when Python finds the first true condition in an if/elif/else chain?",
         opts: ["It checks all conditions anyway", "It runs that block and skips the rest", "It raises an error", "It runs all matching blocks"],
         answer: 1,
-        explain: "Python checks conditions top-to-bottom and stops at the first True one — only that block executes.",
+        explain: "Python checks conditions top-to-bottom and stops at the first True one; only that block executes.",
       },
       {
         q: "What does indentation do in Python if/else blocks?",
@@ -2459,13 +2459,13 @@ print(f"{month} is in {season}")`,
   },
 
   // ═══════════════════════════════════════════════
-  // DAY 10 — LOOPS
+  // DAY 10: LOOPS
   // ═══════════════════════════════════════════════
   {
     day: 10,
     emoji: "🔁",
     title: "Loops",
-    subtitle: "Repeat code automatically with for and while loops — and control them with break, continue, and range().",
+    subtitle: "Repeat code automatically with for and while loops; and control them with break, continue, and range().",
     topics: ["while Loop", "for Loop", "range()", "break & continue", "Nested Loops", "for/else"],
 
     lesson: `
@@ -2486,7 +2486,7 @@ while count < 5:
 
       <div class="section-divider"></div>
       <h2>The for Loop</h2>
-      <p>A <strong>for loop</strong> iterates over a <strong>sequence</strong> (list, tuple, string, range, dict, set) — one item at a time.</p>
+      <p>A <strong>for loop</strong> iterates over a <strong>sequence</strong> (list, tuple, string, range, dict, set); one item at a time.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Looping over a list
 fruits = ['banana', 'orange', 'mango']
 for fruit in fruits:
@@ -2519,13 +2519,13 @@ for i in range(0, 11, 2):
 
       <div class="section-divider"></div>
       <h2>break and continue</h2>
-      <p><strong><code>break</code></strong> — exits the loop immediately:</p>
+      <p><strong><code>break</code></strong>; exits the loop immediately:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">for i in range(10):
     if i == 5:
         break         # stop when i reaches 5
     print(i)          # prints 0 1 2 3 4</pre>
 
-      <p><strong><code>continue</code></strong> — skips the current iteration and moves to the next:</p>
+      <p><strong><code>continue</code></strong>; skips the current iteration and moves to the next:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">for i in range(6):
     if i == 3:
         continue      # skip 3
@@ -2549,16 +2549,16 @@ else:
 
       <div class="section-divider"></div>
       <h2>pass</h2>
-      <p><code>pass</code> is a placeholder — it does nothing but prevents Python from complaining about an empty block:</p>
+      <p><code>pass</code> is a placeholder; it does nothing but prevents Python from complaining about an empty block:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">for i in range(5):
-    pass   # placeholder — loop runs but does nothing yet</pre>
+    pass   # placeholder; loop runs but does nothing yet</pre>
 
       <div class="section-divider"></div>
-      <h2>enumerate() — Loop with Index</h2>
+      <h2>enumerate(): Loop with Index</h2>
       <p><code>enumerate()</code> adds a counter to any iterable. Instead of tracking a separate index variable, Python does it for you:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ['banana', 'orange', 'mango', 'lemon']
 
-# With enumerate — index and value together
+# With enumerate; index and value together
 for i, fruit in enumerate(fruits):
     print(i, fruit)         # 0 banana, 1 orange…
 
@@ -2567,7 +2567,7 @@ for i, fruit in enumerate(fruits, 1):
     print(f"{i}. {fruit}")  # 1. banana, 2. orange…</pre>
 
       <div class="section-divider"></div>
-      <h2>zip() — Loop Over Two Lists at Once</h2>
+      <h2>zip(): Loop Over Two Lists at Once</h2>
       <p><code>zip()</code> pairs up items from two (or more) lists so you can loop over them together:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">fruits = ['banana', 'orange', 'mango']
 scores = [85, 92, 78]
@@ -2582,8 +2582,8 @@ for fruit, score in zip(fruits, scores):
       </div>
 
       <div class="section-divider"></div>
-      <h2>The while Loop — In Depth</h2>
-      <p>The <code>while</code> loop is best when you don't know in advance how many iterations you need — you just want to keep going until a condition changes:</p>
+      <h2>The while Loop: In Depth</h2>
+      <p>The <code>while</code> loop is best when you don't know in advance how many iterations you need; you just want to keep going until a condition changes:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># Common pattern: keep looping until a target is found
 found = False
 items = ['apple', 'banana', 'mango']
@@ -2607,7 +2607,7 @@ print("Done!")</pre>
       </div>
 
       <div class="section-divider"></div>
-      <h2>Nested Loops — Multiplication Table</h2>
+      <h2>Nested Loops: Multiplication Table</h2>
       <p>A <strong>nested loop</strong> is a loop inside another loop. The inner loop runs completely for every single step of the outer loop. A classic example is a multiplication table:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># 5x5 multiplication table
 for i in range(1, 6):           # outer loop: rows 1-5
@@ -2622,7 +2622,7 @@ for i in range(1, 6):           # outer loop: rows 1-5
   5 10 15 20 25</pre>
 
       <div class="section-divider"></div>
-      <h2>else Clause on Loops — The "Not Found" Pattern</h2>
+      <h2>else Clause on Loops: The "Not Found" Pattern</h2>
       <p>Python's loop <code>else</code> block runs only when the loop <em>completed without a <code>break</code></em>. This makes it perfect for "search and report if not found" patterns:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">numbers = [3, 7, 12, 8, 19]
 target = 15
@@ -2644,7 +2644,7 @@ while i < 5:
         break
     i += 1
 else:
-    print("Searched all items — not found")</pre>
+    print("Searched all items; not found")</pre>
       <div class="info-box">
         <strong>Key rule:</strong> The <code>else</code> block is SKIPPED if the loop exits via <code>break</code>. It only runs when the loop exhausts all its iterations naturally.
       </div>
@@ -2708,8 +2708,8 @@ for key, value in person.items():
       },
       {
         title: "break and continue",
-        desc: "Control loop flow — stop early or skip iterations.",
-        code: `# break — stop when we find 'mango'
+        desc: "Control loop flow; stop early or skip iterations.",
+        code: `# break; stop when we find 'mango'
 fruits = ['banana', 'orange', 'mango', 'lemon']
 for fruit in fruits:
     if fruit == 'mango':
@@ -2719,7 +2719,7 @@ for fruit in fruits:
 
 print("---")
 
-# continue — skip even numbers
+# continue; skip even numbers
 for i in range(10):
     if i % 2 == 0:
         continue
@@ -2838,13 +2838,13 @@ else:
   },
 
   // ═══════════════════════════════════════════════
-  // DAY 11 — FUNCTIONS
+  // DAY 11: FUNCTIONS
   // ═══════════════════════════════════════════════
   {
     day: 11,
     emoji: "⚙️",
     title: "Functions",
-    subtitle: "Write reusable blocks of code with functions — learn def, parameters, return values, default arguments, and *args.",
+    subtitle: "Write reusable blocks of code with functions; learn def, parameters, return values, default arguments, and *args.",
     topics: ["def & return", "Parameters", "Default Args", "*args **kwargs", "Scope", "Functions as Args"],
 
     lesson: `
@@ -2884,7 +2884,7 @@ print(greet('Bob'))        # → Bob, welcome!</pre>
 
 print(full_name('Asabeneh', 'Yetayeh'))
 
-# Keyword arguments — order doesn't matter
+# Keyword arguments; order doesn't matter
 print(full_name(last='Yetayeh', first='Asabeneh'))</pre>
 
       <div class="section-divider"></div>
@@ -2897,7 +2897,7 @@ print(greet())          # Hello, Guest!
 print(greet('Alice'))   # Hello, Alice!</pre>
 
       <div class="section-divider"></div>
-      <h2>*args — Arbitrary Number of Arguments</h2>
+      <h2>*args: Arbitrary Number of Arguments</h2>
       <p><strong><code>*args</code></strong> lets a function accept <em>any number</em> of positional arguments. They come in as a tuple.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def total(*nums):
     return sum(nums)
@@ -2906,7 +2906,7 @@ print(total(1, 2, 3))        # 6
 print(total(1, 2, 3, 4, 5))  # 15</pre>
 
       <div class="section-divider"></div>
-      <h2>**kwargs — Arbitrary Keyword Arguments</h2>
+      <h2>**kwargs: Arbitrary Keyword Arguments</h2>
       <p><strong><code>**kwargs</code></strong> lets a function accept any number of <em>named</em> arguments. They come in as a dictionary.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def show_info(**info):
     for key, value in info.items():
@@ -2916,7 +2916,7 @@ show_info(name='Alice', age=25, city='NY')</pre>
 
       <div class="section-divider"></div>
       <h2>Functions as Arguments</h2>
-      <p>In Python, functions are <strong>first-class objects</strong> — you can pass them as arguments to other functions:</p>
+      <p>In Python, functions are <strong>first-class objects</strong>; you can pass them as arguments to other functions:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def square(n):
     return n ** 2
 
@@ -2927,16 +2927,16 @@ print(apply(square, 4))   # 16</pre>
 
       <div class="section-divider"></div>
       <h2>Variable Scope</h2>
-      <p>Variables created <em>inside</em> a function are <strong>local</strong> — they only exist within that function. Variables created <em>outside</em> are <strong>global</strong>.</p>
+      <p>Variables created <em>inside</em> a function are <strong>local</strong>; they only exist within that function. Variables created <em>outside</em> are <strong>global</strong>.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">x = 10   # global
 
 def show():
-    y = 5  # local — only exists inside show()
+    y = 5  # local; only exists inside show()
     print(x)   # can read global
     print(y)
 
 show()
-# print(y)  ← would cause NameError — y doesn't exist outside</pre>
+# print(y)  ← would cause NameError; y doesn't exist outside</pre>
     </div>
     `,
 
@@ -2965,7 +2965,7 @@ print(square(7))   # 49`,
 
 print(calculate_age(2025, 1999))   # 26
 
-# Keyword arguments — order doesn't matter
+# Keyword arguments; order doesn't matter
 def weight(mass, gravity=9.81):
     return mass * gravity
 
@@ -2985,7 +2985,7 @@ print(greet('Alice'))               # Hello, Alice!
 print(greet('Carlos', 'Spanish'))   # Hola, Carlos!`,
       },
       {
-        title: "*args — Accept Any Number of Arguments",
+        title: "*args: Accept Any Number of Arguments",
         desc: "Use *args to pass as many values as you need.",
         code: `def sum_all(*numbers):
     total = 0
@@ -3079,9 +3079,9 @@ print(round(area_of_circle(5), 2))  # 78.54`,
       },
       {
         q: "What is the scope of a variable declared inside a function?",
-        opts: ["Global — visible everywhere", "Local — only inside that function", "Module — visible in the same file", "Permanent — exists until deleted"],
+        opts: ["Global; visible everywhere", "Local; only inside that function", "Module; visible in the same file", "Permanent; exists until deleted"],
         answer: 1,
-        explain: "Variables created inside a function are local — they only exist within that function and are destroyed when it returns.",
+        explain: "Variables created inside a function are local; they only exist within that function and are destroyed when it returns.",
       },
     ],
   },
@@ -3096,8 +3096,8 @@ print(round(area_of_circle(5), 2))  # 78.54`,
     lesson: `
     <div class="lesson-section">
       <h2>What is a Module?</h2>
-      <p>A <strong>module</strong> is just a Python file (<code>.py</code>) that contains code — functions, variables, or classes — that you can reuse in other files. Instead of rewriting the same logic everywhere, you write it once in a module and <strong>import</strong> it where you need it.</p>
-      <p>Python comes with a huge <strong>standard library</strong> — hundreds of built-in modules ready to use without installing anything.</p>
+      <p>A <strong>module</strong> is just a Python file (<code>.py</code>) that contains code; functions, variables, or classes; that you can reuse in other files. Instead of rewriting the same logic everywhere, you write it once in a module and <strong>import</strong> it where you need it.</p>
+      <p>Python comes with a huge <strong>standard library</strong>; hundreds of built-in modules ready to use without installing anything.</p>
 
       <div class="section-divider"></div>
       <h2>Importing a Whole Module</h2>
@@ -3110,7 +3110,7 @@ print(math.floor(2.9))  # 2</pre>
 
       <div class="section-divider"></div>
       <h2>Importing Specific Items</h2>
-      <p>If you only need one or two things from a module, use <strong><code>from ... import ...</code></strong>. Then you can use the name directly — no <code>module.</code> prefix needed:</p>
+      <p>If you only need one or two things from a module, use <strong><code>from ... import ...</code></strong>. Then you can use the name directly; no <code>module.</code> prefix needed:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from math import pi, sqrt
 
 print(pi)        # 3.141592653589793
@@ -3181,7 +3181,7 @@ print(math.ceil(3.2))         # 4
 print(math.log10(1000))       # 3.0`,
       },
       {
-        title: "Random Module — Numbers and Choices",
+        title: "Random Module: Numbers and Choices",
         desc: "Generate random numbers and pick from sequences.",
         code: `import random
 
@@ -3261,7 +3261,7 @@ print(user_id(6))      # 6-character ID`,
         q: "What is a module in Python?",
         opts: ["A class with one method", "A Python file you can import and reuse", "A built-in keyword", "A type of variable"],
         answer: 1,
-        explain: "A module is simply a Python file containing reusable code — functions, variables, or classes — that other files can import.",
+        explain: "A module is simply a Python file containing reusable code; functions, variables, or classes; that other files can import.",
       },
       {
         q: "Which statement imports only the sqrt function from math?",
@@ -3273,7 +3273,7 @@ print(user_id(6))      # 6-character ID`,
         q: "What does `import math as m` do?",
         opts: ["Renames the math module to m for use in this file", "Makes math global", "Imports only m from math", "Deletes math"],
         answer: 0,
-        explain: "The 'as' keyword gives the imported module a local alias — here, m — so you can write m.pi instead of math.pi.",
+        explain: "The 'as' keyword gives the imported module a local alias; here, m; so you can write m.pi instead of math.pi.",
       },
       {
         q: "What is the purpose of `if __name__ == '__main__':`?",
@@ -3300,7 +3300,7 @@ print(user_id(6))      # 6-character ID`,
     lesson: `
     <div class="lesson-section">
       <h2>What is a List Comprehension?</h2>
-      <p>A <strong>list comprehension</strong> builds a new list from an existing iterable in one expressive line. It does the work of a <code>for</code> loop + <code>append()</code> — but shorter and often faster.</p>
+      <p>A <strong>list comprehension</strong> builds a new list from an existing iterable in one expressive line. It does the work of a <code>for</code> loop + <code>append()</code>; but shorter and often faster.</p>
 
       <h3>The traditional way</h3>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">squares = []
@@ -3313,7 +3313,7 @@ print(squares)   # [1, 4, 9, 16, 25]</pre>
 print(squares)   # [1, 4, 9, 16, 25]</pre>
 
       <div class="info-box">
-        <strong>The pattern:</strong> <code>[expression for item in iterable]</code> — read left to right: "give me <em>expression</em> for each <em>item</em> in <em>iterable</em>."
+        <strong>The pattern:</strong> <code>[expression for item in iterable]</code>; read left to right: "give me <em>expression</em> for each <em>item</em> in <em>iterable</em>."
       </div>
 
       <div class="section-divider"></div>
@@ -3333,7 +3333,7 @@ print(evens)       # [2, 4, 6, 8, 10]</pre>
 print(labels)   # ['odd', 'even', 'odd', 'even', 'odd']</pre>
 
       <div class="section-divider"></div>
-      <h2>Nested Loops — Flattening</h2>
+      <h2>Nested Loops: Flattening</h2>
       <p>Flatten a 2D list into a 1D list with two <code>for</code> clauses:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 flat = [n for row in matrix for n in row]
@@ -3342,7 +3342,7 @@ print(flat)   # [1, 2, 3, 4, 5, 6, 7, 8, 9]</pre>
       <div class="section-divider"></div>
       <h2>Set and Dict Comprehensions</h2>
       <p>The same idea works for sets <code>{}</code> and dicts <code>{key: value}</code>:</p>
-      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># set comprehension — duplicates removed automatically
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto"># set comprehension; duplicates removed automatically
 unique = {n % 5 for n in range(20)}
 print(unique)   # {0, 1, 2, 3, 4}
 
@@ -3352,14 +3352,14 @@ print(squares)  # {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}</pre>
 
       <div class="section-divider"></div>
       <h2>Lambda Functions</h2>
-      <p>A <strong>lambda</strong> is a tiny anonymous function — one line, no <code>def</code>, no name (unless you assign it). Useful when you need a quick function to pass to something else.</p>
+      <p>A <strong>lambda</strong> is a tiny anonymous function; one line, no <code>def</code>, no name (unless you assign it). Useful when you need a quick function to pass to something else.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">add = lambda a, b: a + b
 print(add(3, 4))   # 7
 
 square = lambda n: n * n
 print(square(5))   # 25</pre>
       <div class="info-box">
-        <strong>Rule:</strong> <code>lambda parameters: expression</code> — only ONE expression allowed (no statements, no multiple lines). Use <code>def</code> for anything more complex.
+        <strong>Rule:</strong> <code>lambda parameters: expression</code>; only ONE expression allowed (no statements, no multiple lines). Use <code>def</code> for anything more complex.
       </div>
 
       <div class="section-divider"></div>
@@ -3407,13 +3407,13 @@ print(even_flat)  # [2, 4, 6, 8]`,
       {
         title: "Dict and Set Comprehensions",
         desc: "Same pattern, different container.",
-        code: `# Dict — word → length
+        code: `# Dict; word → length
 words = ["apple", "banana", "cherry", "date"]
 lengths = {w: len(w) for w in words}
 print(lengths)
 # {'apple': 5, 'banana': 6, 'cherry': 6, 'date': 4}
 
-# Set — first letters, no duplicates
+# Set; first letters, no duplicates
 letters = {w[0] for w in ['apple', 'avocado', 'banana', 'berry']}
 print(letters)   # {'a', 'b'}`,
       },
@@ -3444,7 +3444,7 @@ print(by_age)
         "Given <code>nums = [-3, -1, 0, 2, 4, -5, 6]</code>, use a comprehension to keep only positive numbers.",
         "Flatten <code>[[1,2],[3,4],[5,6]]</code> into <code>[1,2,3,4,5,6]</code> using a nested comprehension.",
         "Build a dict comprehension that maps each number from 1 to 5 to its factorial. (Hint: <code>math.factorial</code>.)",
-        "Use a comprehension to build <code>['odd' if n%2 else 'even' for n in range(10)]</code> — predict the output, then run it.",
+        "Use a comprehension to build <code>['odd' if n%2 else 'even' for n in range(10)]</code>; predict the output, then run it.",
         "Sort <code>[('Alice', 30), ('Bob', 25), ('Carol', 35)]</code> by age using <code>sorted()</code> and a <code>lambda</code>.",
         "Use a set comprehension to get all unique first letters of <code>['cat','car','dog','duck','eel']</code>.",
       ],
@@ -3467,25 +3467,25 @@ print(by_age)
         q: "Where does the if filter go in a list comprehension?",
         opts: ["At the beginning", "After the expression, before for", "At the end, after the for clause", "Inside the brackets only as if/else"],
         answer: 2,
-        explain: "Pattern: [expression for item in iterable if condition] — the filter goes last.",
+        explain: "Pattern: [expression for item in iterable if condition]; the filter goes last.",
       },
       {
         q: "What does `[n for row in matrix for n in row]` do?",
         opts: ["Counts items in matrix", "Sorts the matrix", "Flattens a 2D list into a 1D list", "Reverses each row"],
         answer: 2,
-        explain: "Two for clauses produce a nested loop — it walks each row, then each item, building a flat list.",
+        explain: "Two for clauses produce a nested loop; it walks each row, then each item, building a flat list.",
       },
       {
         q: "What is a lambda function?",
         opts: ["A function with no return value", "A small anonymous one-expression function", "A function that runs in parallel", "A function defined with def"],
         answer: 1,
-        explain: "Lambdas are tiny, anonymous functions limited to a single expression — useful where you need a quick function inline.",
+        explain: "Lambdas are tiny, anonymous functions limited to a single expression; useful where you need a quick function inline.",
       },
       {
         q: "What does `{n: n*n for n in range(1, 4)}` produce?",
         opts: ["[1, 4, 9]", "{1, 4, 9}", "{1: 1, 2: 4, 3: 9}", "(1, 4, 9)"],
         answer: 2,
-        explain: "Curly braces with a key:value expression make a dict comprehension — n maps to n*n for each n.",
+        explain: "Curly braces with a key:value expression make a dict comprehension; n maps to n*n for each n.",
       },
     ],
   },
@@ -3517,7 +3517,7 @@ print(apply(shout, "hi there"))   # HI THERE</pre>
       <div class="section-divider"></div>
       <h2>The Three Classics: map, filter, reduce</h2>
       <div class="cheatsheet-grid">
-        <div class="cheatsheet-item"><div class="cheatsheet-syntax">map(func, iterable)</div><div class="cheatsheet-desc">Apply func to every item — returns an iterator</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">map(func, iterable)</div><div class="cheatsheet-desc">Apply func to every item; returns an iterator</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">filter(func, iterable)</div><div class="cheatsheet-desc">Keep items where func returns True</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">reduce(func, iterable)</div><div class="cheatsheet-desc">Combine items pairwise into one value (from functools)</div></div>
       </div>
@@ -3533,7 +3533,7 @@ evens = list(filter(lambda n: n % 2 == 0, numbers))
 print(evens)   # [2, 4, 6, 8]</pre>
 
       <h3>reduce()</h3>
-      <p><code>reduce</code> isn't built-in — you import it from <code>functools</code>. It reduces a list to one value by combining pairs:</p>
+      <p><code>reduce</code> isn't built-in; you import it from <code>functools</code>. It reduces a list to one value by combining pairs:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from functools import reduce
 
 numbers = [1, 2, 3, 4, 5]
@@ -3546,7 +3546,7 @@ print(total)   # 15  (((1+2)+3)+4)+5</pre>
     examples: [
       {
         title: "Passing a Function as an Argument",
-        desc: "Functions are objects — you can pass them around.",
+        desc: "Functions are objects; you can pass them around.",
         code: `def square(n):
     return n * n
 
@@ -3572,7 +3572,7 @@ upper = list(map(str.upper, names))
 print(upper)     # ['ALICE', 'BOB', 'CAROL']`,
       },
       {
-        title: "filter() — Keep What Matches",
+        title: "filter(): Keep What Matches",
         desc: "Drop items that fail a test.",
         code: `numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -3584,7 +3584,7 @@ long_words = list(filter(lambda w: len(w) > 3, words))
 print(long_words)   # ['hello', 'greetings']`,
       },
       {
-        title: "reduce() — Collapse to One Value",
+        title: "reduce(): Collapse to One Value",
         desc: "Combine items pairwise.",
         code: `from functools import reduce
 
@@ -3645,7 +3645,7 @@ print(product)   # 120`,
         q: "Where is reduce() defined?",
         opts: ["Built-in (no import needed)", "In the math module", "In the functools module", "In the itertools module"],
         answer: 2,
-        explain: "Unlike map and filter, reduce was moved out of built-ins — you must import it: from functools import reduce.",
+        explain: "Unlike map and filter, reduce was moved out of built-ins; you must import it: from functools import reduce.",
       },
       {
         q: "What does `sorted(['banana','apple','kiwi'], key=lambda s: len(s))` return?",
@@ -3666,7 +3666,7 @@ print(product)   # 120`,
     lesson: `
     <div class="lesson-section">
       <h2>How to Read a Traceback</h2>
-      <p>When Python hits an error, it stops and prints a <strong>traceback</strong> — a report of what went wrong and where. Read it from <em>bottom to top</em>: the last line tells you the error type and message; the lines above show where it happened.</p>
+      <p>When Python hits an error, it stops and prints a <strong>traceback</strong>; a report of what went wrong and where. Read it from <em>bottom to top</em>: the last line tells you the error type and message; the lines above show where it happened.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">Traceback (most recent call last):
   File "main.py", line 3, in <module>
     print(x)
@@ -3676,11 +3676,11 @@ NameError: name 'x' is not defined</pre>
       </div>
 
       <div class="section-divider"></div>
-      <h2>The Big Ten — Errors You'll Actually See</h2>
+      <h2>The Big Ten: Errors You'll Actually See</h2>
 
       <h3>1. SyntaxError</h3>
       <p>You wrote something Python can't parse. Often a missing parenthesis, colon, or quote.</p>
-      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">print "Hello"        # SyntaxError — Python 3 needs parentheses
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">print "Hello"        # SyntaxError: Python 3 needs parentheses
 print("Hello")       # ✓</pre>
 
       <h3>2. NameError</h3>
@@ -3702,7 +3702,7 @@ print(user['age'])   # KeyError: 'age'
 print(user.get('age', 'unknown'))   # ✓ uses default</pre>
 
       <h3>5. TypeError</h3>
-      <p>You used an operation on the wrong type — like adding a number to a string.</p>
+      <p>You used an operation on the wrong type; like adding a number to a string.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">result = '4' + 4     # TypeError: can only concatenate str to str
 result = int('4') + 4   # ✓ 8</pre>
 
@@ -3714,7 +3714,7 @@ n = int('42')        # ✓ 42</pre>
       <h3>7. AttributeError</h3>
       <p>You called a method that doesn't exist on this object.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">numbers = [1, 2, 3]
-numbers.push(4)      # AttributeError — lists have no .push()
+numbers.push(4)      # AttributeError; lists have no .push()
 numbers.append(4)    # ✓</pre>
 
       <h3>8. ZeroDivisionError</h3>
@@ -3722,15 +3722,15 @@ numbers.append(4)    # ✓</pre>
 result = 10 / 2      # ✓ 5.0</pre>
 
       <h3>9. ImportError / ModuleNotFoundError</h3>
-      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">import maath        # ModuleNotFoundError — typo
+      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">import maath        # ModuleNotFoundError; typo
 import math         # ✓
 
-from math import sqrtt   # ImportError — name doesn't exist
+from math import sqrtt   # ImportError; name doesn't exist
 from math import sqrt    # ✓</pre>
 
       <h3>10. IndentationError</h3>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto">def greet():
-print("Hello")       # IndentationError — body not indented
+print("Hello")       # IndentationError; body not indented
 
 def greet():
     print("Hello")   # ✓</pre>
@@ -3744,7 +3744,7 @@ def greet():
 
     examples: [
       {
-        title: "NameError — Undefined Variable",
+        title: "NameError: Undefined Variable",
         desc: "Try running, then fix it.",
         code: `# This raises NameError
 # print(score)
@@ -3754,7 +3754,7 @@ score = 100
 print(score)   # ✓ 100`,
       },
       {
-        title: "TypeError — Mixing Types",
+        title: "TypeError: Mixing Types",
         desc: "Can't add a string and a number directly.",
         code: `age = '25'
 # total = age + 5         # TypeError
@@ -3778,7 +3778,7 @@ user = {'name': 'Alice', 'age': 30}
 print(user.get('email', 'no email'))   # ✓ default value`,
       },
       {
-        title: "ValueError — Bad Conversion",
+        title: "ValueError: Bad Conversion",
         desc: "int() on a non-numeric string fails.",
         code: `# n = int('hello')   # ValueError
 n = int('42')        # ✓ 42
@@ -3821,7 +3821,7 @@ print(safe_divide(10, 0))   # Can't divide by zero`,
         "Write a function that catches a <code>ValueError</code> when converting a string to <code>int</code> and returns <code>0</code> instead.",
         "Write code that produces a <code>KeyError</code>, then rewrite it using <code>.get()</code> with a default value.",
         "Write code that produces an <code>IndexError</code>, then rewrite it to check <code>len(lst)</code> first.",
-        "Write code that produces a <code>TypeError</code> by adding a string and a number — then fix it with proper conversion.",
+        "Write code that produces a <code>TypeError</code> by adding a string and a number; then fix it with proper conversion.",
         "Write a function <code>safe_divide(a, b)</code> that returns <code>None</code> when <code>b == 0</code>.",
       ],
       level3: [
@@ -3837,13 +3837,13 @@ print(safe_divide(10, 0))   # Can't divide by zero`,
         q: "What does `NameError: name 'x' is not defined` mean?",
         opts: ["x is the wrong type", "You used x before defining it", "x is read-only", "x is too big"],
         answer: 1,
-        explain: "NameError means Python looked up the name and didn't find it in any scope — it was never assigned.",
+        explain: "NameError means Python looked up the name and didn't find it in any scope; it was never assigned.",
       },
       {
         q: "Which error does `int('hello')` raise?",
         opts: ["TypeError", "ValueError", "SyntaxError", "NameError"],
         answer: 1,
-        explain: "The type (string) is correct for int(), but the value 'hello' can't be parsed as a number — that's a ValueError.",
+        explain: "The type (string) is correct for int(), but the value 'hello' can't be parsed as a number; that's a ValueError.",
       },
       {
         q: "Which error does `[1,2,3][10]` raise?",
@@ -3853,7 +3853,7 @@ print(safe_divide(10, 0))   # Can't divide by zero`,
       },
       {
         q: "How should you read a Python traceback?",
-        opts: ["Top to bottom", "Bottom to top — the error message is on the last line", "Only the first line matters", "Skip it and re-run"],
+        opts: ["Top to bottom", "Bottom to top; the error message is on the last line", "Only the first line matters", "Skip it and re-run"],
         answer: 1,
         explain: "Read tracebacks from the bottom up. The last line tells you the error type and message; the lines above trace the call path.",
       },
@@ -3876,7 +3876,7 @@ print(safe_divide(10, 0))   # Can't divide by zero`,
     lesson: `
     <div class="lesson-section">
       <h2>The <code>datetime</code> Module</h2>
-      <p>The <strong><code>datetime</code></strong> module gives you classes for working with dates and times. It's part of the standard library — no install needed.</p>
+      <p>The <strong><code>datetime</code></strong> module gives you classes for working with dates and times. It's part of the standard library; no install needed.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from datetime import datetime, date, time, timedelta
 
 now = datetime.now()
@@ -3906,7 +3906,7 @@ print(now.strftime("%A, %B %d, %Y"))       # Friday, May 15, 2026</pre>
 
       <div class="section-divider"></div>
       <h2>Parsing with <code>strptime</code></h2>
-      <p><strong><code>strptime</code></strong> ("string parse time") goes the other way — text to datetime. You give it the string AND the format code:</p>
+      <p><strong><code>strptime</code></strong> ("string parse time") goes the other way; text to datetime. You give it the string AND the format code:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from datetime import datetime
 
 text = "15 May, 2026"
@@ -3930,7 +3930,7 @@ print(t)                 # 14:30:00</pre>
 
       <div class="section-divider"></div>
       <h2>Time Differences with <code>timedelta</code></h2>
-      <p>Subtracting two dates gives a <strong><code>timedelta</code></strong> — a duration:</p>
+      <p>Subtracting two dates gives a <strong><code>timedelta</code></strong>; a duration:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from datetime import datetime, timedelta
 
 now = datetime.now()
@@ -4014,7 +4014,7 @@ days_old = (today - birthday).days
 print(f"You are {days_old} days old")`,
       },
       {
-        title: "timedelta — Adding and Subtracting Time",
+        title: "timedelta: Adding and Subtracting Time",
         desc: "Move dates forward or backward.",
         code: `from datetime import datetime, timedelta
 
@@ -4064,7 +4064,7 @@ print("2 days ago:    ", now - timedelta(days=2))`,
         q: "What does `strftime` do?",
         opts: ["Parses a string into a date", "Formats a datetime as a custom string", "Returns the current time", "Compares two dates"],
         answer: 1,
-        explain: "strftime = 'string format time' — turns a datetime into a custom-formatted string using % codes.",
+        explain: "strftime = 'string format time'; turns a datetime into a custom-formatted string using % codes.",
       },
       {
         q: "What format code prints the full weekday name?",
@@ -4076,7 +4076,7 @@ print("2 days ago:    ", now - timedelta(days=2))`,
         q: "What does subtracting two datetime objects return?",
         opts: ["A number of seconds", "A new datetime", "A timedelta", "A string"],
         answer: 2,
-        explain: "datetime - datetime gives a timedelta — a duration object with .days and .seconds attributes.",
+        explain: "datetime - datetime gives a timedelta; a duration object with .days and .seconds attributes.",
       },
       {
         q: "How do you get tomorrow's date from today?",
@@ -4097,7 +4097,7 @@ print("2 days ago:    ", now - timedelta(days=2))`,
     lesson: `
     <div class="lesson-section">
       <h2>Why Handle Exceptions?</h2>
-      <p>If your code might fail — bad user input, missing file, network error — you can <strong>catch</strong> the failure instead of letting your program crash. That's exception handling.</p>
+      <p>If your code might fail; bad user input, missing file, network error; you can <strong>catch</strong> the failure instead of letting your program crash. That's exception handling.</p>
 
       <div class="section-divider"></div>
       <h2>Basic try / except</h2>
@@ -4111,7 +4111,7 @@ except:
 print("Still running")</pre>
 
       <div class="info-box warning">
-        <strong>Avoid bare <code>except:</code></strong> — it catches everything, including bugs you didn't expect. Always catch a specific error type when you can.
+        <strong>Avoid bare <code>except:</code></strong>; it catches everything, including bugs you didn't expect. Always catch a specific error type when you can.
       </div>
 
       <div class="section-divider"></div>
@@ -4132,7 +4132,7 @@ except ZeroDivisionError:
 
       <div class="section-divider"></div>
       <h2>Capturing the Error: <code>except ... as e</code></h2>
-      <p>Use <code>as</code> to get the actual exception object — useful for logging or showing the message:</p>
+      <p>Use <code>as</code> to get the actual exception object; useful for logging or showing the message:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">try:
     n = int("hello")
 except ValueError as e:
@@ -4142,8 +4142,8 @@ except ValueError as e:
       <div class="section-divider"></div>
       <h2><code>else</code> and <code>finally</code></h2>
       <ul style="margin:8px 0 16px 24px;color:var(--text-2);line-height:1.8">
-        <li><strong><code>else</code></strong> — runs only if the <code>try</code> block succeeded (no exception)</li>
-        <li><strong><code>finally</code></strong> — runs no matter what, even if an exception was raised</li>
+        <li><strong><code>else</code></strong>; runs only if the <code>try</code> block succeeded (no exception)</li>
+        <li><strong><code>finally</code></strong>; runs no matter what, even if an exception was raised</li>
       </ul>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">try:
     n = int("42")
@@ -4156,7 +4156,7 @@ finally:
 
       <div class="section-divider"></div>
       <h2>Raising Your Own Exceptions</h2>
-      <p>Use <strong><code>raise</code></strong> to trigger an exception yourself — when bad input deserves a hard stop:</p>
+      <p>Use <strong><code>raise</code></strong> to trigger an exception yourself; when bad input deserves a hard stop:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def set_age(age):
     if age < 0:
         raise ValueError("Age cannot be negative")
@@ -4188,7 +4188,7 @@ print(set_age(25))   # 25
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">[^abc]</div><div class="cheatsheet-desc">Anything EXCEPT a, b, or c</div></div>
       </div>
 
-      <h3>Quantifiers — how many?</h3>
+      <h3>Quantifiers; how many?</h3>
       <div class="cheatsheet-grid">
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">*</div><div class="cheatsheet-desc">0 or more</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">+</div><div class="cheatsheet-desc">1 or more</div></div>
@@ -4197,7 +4197,7 @@ print(set_age(25))   # 25
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">{2,5}</div><div class="cheatsheet-desc">2 to 5</div></div>
       </div>
 
-      <h3>Anchors — where?</h3>
+      <h3>Anchors; where?</h3>
       <div class="cheatsheet-grid">
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">^</div><div class="cheatsheet-desc">Start of string</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">$</div><div class="cheatsheet-desc">End of string</div></div>
@@ -4252,7 +4252,7 @@ print(sum(totals))       # 22`,
 text = "hello world"
 
 m1 = re.match(r"world", text)
-print(m1)   # None — not at start
+print(m1)   # None; not at start
 
 m2 = re.search(r"world", text)
 print(m2)   # <re.Match object; ...>
@@ -4348,11 +4348,11 @@ if m:
         q: "What does `\\d` match?",
         opts: ["Any character", "Any digit (0–9)", "Whitespace", "A literal 'd'"],
         answer: 1,
-        explain: "\\d is shorthand for [0-9] — any single digit character.",
+        explain: "\\d is shorthand for [0-9]; any single digit character.",
       },
       {
         q: "Why use a raw string `r'...'` for regex patterns?",
-        opts: ["It's faster", "So Python doesn't interpret backslashes — your regex escapes survive", "Required for findall only", "It's case-sensitive"],
+        opts: ["It's faster", "So Python doesn't interpret backslashes; your regex escapes survive", "Required for findall only", "It's case-sensitive"],
         answer: 1,
         explain: "Raw strings prevent Python from processing \\n, \\t, \\d, etc., so the regex engine sees your pattern exactly as written.",
       },
@@ -4363,7 +4363,7 @@ if m:
     day: 19,
     emoji: "📂",
     title: "File Handling",
-    subtitle: "Read, write, and manage files. Work with text, JSON, and CSV — the building blocks of real data work.",
+    subtitle: "Read, write, and manage files. Work with text, JSON, and CSV; the building blocks of real data work.",
     topics: ["open() & modes", "with statement", "read & write", "JSON files", "CSV files", "Deleting files"],
 
     lesson: `
@@ -4371,17 +4371,17 @@ if m:
       <h2>Opening a File</h2>
       <p>Use the built-in <strong><code>open()</code></strong> function. It takes a filename and a <strong>mode</strong>:</p>
       <div class="cheatsheet-grid">
-        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'r'</div><div class="cheatsheet-desc">Read (default) — file must exist</div></div>
-        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'w'</div><div class="cheatsheet-desc">Write — overwrites or creates</div></div>
-        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'a'</div><div class="cheatsheet-desc">Append — adds to the end</div></div>
-        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'x'</div><div class="cheatsheet-desc">Create — fails if file exists</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'r'</div><div class="cheatsheet-desc">Read (default); file must exist</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'w'</div><div class="cheatsheet-desc">Write; overwrites or creates</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'a'</div><div class="cheatsheet-desc">Append; adds to the end</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">'x'</div><div class="cheatsheet-desc">Create; fails if file exists</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">'r+'</div><div class="cheatsheet-desc">Read AND write</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">'b'</div><div class="cheatsheet-desc">Binary mode (e.g. 'rb' for binary read)</div></div>
       </div>
 
       <div class="section-divider"></div>
       <h2>The <code>with</code> Statement (Always Use It)</h2>
-      <p>Files need to be closed when you're done. The <strong><code>with</code></strong> statement does this for you automatically — even if an error happens:</p>
+      <p>Files need to be closed when you're done. The <strong><code>with</code></strong> statement does this for you automatically; even if an error happens:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">with open("notes.txt", "r") as f:
     contents = f.read()
     print(contents)
@@ -4405,7 +4405,7 @@ if m:
 
       <div class="section-divider"></div>
       <h2>Writing Files</h2>
-      <p><code>"w"</code> opens for writing — it ERASES existing content. Use <code>"a"</code> to append.</p>
+      <p><code>"w"</code> opens for writing; it ERASES existing content. Use <code>"a"</code> to append.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">with open("notes.txt", "w") as f:
     f.write("Hello, world!\\n")
     f.write("Second line.\\n")
@@ -4431,10 +4431,10 @@ print(loaded["name"])   # Charles</pre>
       <div class="info-box">
         <strong>4 functions to remember:</strong>
         <ul style="margin-top:8px;padding-left:20px">
-          <li><code>json.dump(data, file)</code> — write to file</li>
-          <li><code>json.load(file)</code> — read from file</li>
-          <li><code>json.dumps(data)</code> — convert to JSON string</li>
-          <li><code>json.loads(text)</code> — parse JSON string</li>
+          <li><code>json.dump(data, file)</code>; write to file</li>
+          <li><code>json.load(file)</code>; read from file</li>
+          <li><code>json.dumps(data)</code>; convert to JSON string</li>
+          <li><code>json.loads(text)</code>; parse JSON string</li>
         </ul>
       </div>
 
@@ -4486,7 +4486,7 @@ for line in fake_file:
     print(line.strip())`,
       },
       {
-        title: "JSON — Dict to String and Back",
+        title: "JSON: Dict to String and Back",
         desc: "Use dumps/loads to convert without files.",
         code: `import json
 
@@ -4506,7 +4506,7 @@ print(parsed["name"])              # Charles
 print(parsed["hobbies"][0])        # python`,
       },
       {
-        title: "CSV — Build and Parse with StringIO",
+        title: "CSV: Build and Parse with StringIO",
         desc: "Write CSV rows to memory, then read them back.",
         code: `import csv
 import io
@@ -4556,7 +4556,7 @@ raw = '''
 
 data = json.loads(raw)
 for c in data["countries"]:
-    print(f"{c['name']:8s} — {c['population']:,}")`,
+    print(f"{c['name']:8s}; {c['population']:,}")`,
       },
     ],
 
@@ -4590,7 +4590,7 @@ for c in data["countries"]:
         q: "Why use `with open(...) as f:` instead of `f = open(...)`?",
         opts: ["Faster execution", "Automatically closes the file even if an error happens", "Works with all file types", "Saves disk space"],
         answer: 1,
-        explain: "The 'with' statement guarantees the file is closed when the block exits — even on exceptions — preventing resource leaks.",
+        explain: "The 'with' statement guarantees the file is closed when the block exits; even on exceptions; preventing resource leaks.",
       },
       {
         q: "What does mode 'w' do if the file already exists?",
@@ -4629,9 +4629,9 @@ for c in data["countries"]:
     lesson: `
     <div class="lesson-section">
       <h2>What is pip?</h2>
-      <p><strong>pip</strong> stands for <em>Preferred Installer Program</em>. It's Python's built-in tool for downloading and installing third-party packages from <strong>PyPI</strong> — the Python Package Index, a registry of over 400,000 packages.</p>
+      <p><strong>pip</strong> stands for <em>Preferred Installer Program</em>. It's Python's built-in tool for downloading and installing third-party packages from <strong>PyPI</strong>; the Python Package Index, a registry of over 400,000 packages.</p>
       <div class="info-box">
-        <strong>Run pip in your terminal</strong> — not inside Python itself. These are shell commands, not Python code.
+        <strong>Run pip in your terminal</strong>; not inside Python itself. These are shell commands, not Python code.
       </div>
 
       <div class="section-divider"></div>
@@ -4657,7 +4657,7 @@ pip install -r requirements.txt</pre>
 
       <div class="section-divider"></div>
       <h2>The requests Module</h2>
-      <p>One of the most popular third-party packages. It lets you fetch data from the web — APIs, web pages, JSON feeds — in a few lines.</p>
+      <p>One of the most popular third-party packages. It lets you fetch data from the web: APIs, web pages, JSON feeds; in a few lines.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import requests
 
 response = requests.get('https://api.github.com')
@@ -4724,7 +4724,7 @@ print("pip is a terminal tool, not a Python function.")`,
       },
       {
         title: "Simulating an API Response",
-        desc: "What requests.get().json() gives you — shown with a mock dict.",
+        desc: "What requests.get().json() gives you; shown with a mock dict.",
         code: `import json
 
 # This simulates what requests.get(url).json() returns
@@ -4787,7 +4787,7 @@ print(is_palindrome("racecar"))   # True`,
       {
         title: "requirements.txt Format",
         desc: "What a real requirements file looks like.",
-        code: `# This is what pip freeze produces — exact versions pinned
+        code: `# This is what pip freeze produces; exact versions pinned
 requirements = """
 requests==2.31.0
 numpy==1.26.4
@@ -4835,7 +4835,7 @@ for line in requirements.splitlines():
         q: "What does pip stand for?",
         opts: ["Python Install Package", "Preferred Installer Program", "Package Index Python", "Python Integration Program"],
         answer: 1,
-        explain: "pip stands for Preferred Installer Program — it's Python's official tool for installing packages from PyPI.",
+        explain: "pip stands for Preferred Installer Program; it's Python's official tool for installing packages from PyPI.",
       },
       {
         q: "Which command saves your installed packages to a file?",
@@ -4874,7 +4874,7 @@ for line in requirements.splitlines():
     lesson: `
     <div class="lesson-section">
       <h2>What is Object-Oriented Programming?</h2>
-      <p><strong>OOP</strong> is a way of organizing code around <strong>objects</strong> — bundles of data (attributes) and behavior (methods). A <strong>class</strong> is the blueprint; an <strong>object</strong> is what you create from it.</p>
+      <p><strong>OOP</strong> is a way of organizing code around <strong>objects</strong>; bundles of data (attributes) and behavior (methods). A <strong>class</strong> is the blueprint; an <strong>object</strong> is what you create from it.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">class Person:
     def __init__(self, name, age):
         self.name = name     # attribute
@@ -4950,7 +4950,7 @@ print(s.info())   # Carol, age 20 | ID: S001</pre>
 
       <div class="section-divider"></div>
       <h2>Modifying Attributes via Methods</h2>
-      <p>Encapsulate state changes inside methods — don't reach into objects and set attributes directly from outside:</p>
+      <p>Encapsulate state changes inside methods; don't reach into objects and set attributes directly from outside:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">class BankAccount:
     def __init__(self, owner, balance=0):
         self.owner = owner
@@ -4976,7 +4976,7 @@ print(acc)   # Alice: $1,300.00</pre>
 
     examples: [
       {
-        title: "Basic Class — Person",
+        title: "Basic Class: Person",
         desc: "Define a class, create objects, call methods.",
         code: `class Person:
     def __init__(self, first, last, age):
@@ -4998,7 +4998,7 @@ print(p2.describe())
 print(p1.full_name())`,
       },
       {
-        title: "Class with Mutable Default — Student",
+        title: "Class with Mutable Default: Student",
         desc: "Track changing state inside an object.",
         code: `class Student:
     def __init__(self, name):
@@ -5023,7 +5023,7 @@ s.add_score(78)
 print(s)`,
       },
       {
-        title: "Inheritance — Employee from Person",
+        title: "Inheritance: Employee from Person",
         desc: "Child class extends parent with extra attributes.",
         code: `class Person:
     def __init__(self, name, age):
@@ -5046,7 +5046,7 @@ e = Employee("Carol", 32, "Acme Corp", 95000)
 print(e.info())`,
       },
       {
-        title: "BankAccount — Encapsulation",
+        title: "BankAccount: Encapsulation",
         desc: "Control state through methods, not direct access.",
         code: `class BankAccount:
     def __init__(self, owner, balance=0):
@@ -5127,7 +5127,7 @@ print(f"Std:    {s.std():.2f}")`,
       ],
       level3: [
         "Build a <code>PersonAccount</code> class with <code>incomes</code> and <code>expenses</code> lists, and methods <code>total_income()</code>, <code>total_expense()</code>, and <code>account_balance()</code>.",
-        "Create a <code>Shape</code> base class and subclasses <code>Circle</code>, <code>Rectangle</code>, <code>Triangle</code> — each with <code>area()</code> and <code>perimeter()</code>.",
+        "Create a <code>Shape</code> base class and subclasses <code>Circle</code>, <code>Rectangle</code>, <code>Triangle</code>; each with <code>area()</code> and <code>perimeter()</code>.",
         "Build a class hierarchy: <code>Animal → Mammal → Dog</code> and <code>Animal → Bird → Parrot</code>. Each level adds attributes and overrides <code>speak()</code>.",
         "Create a <code>Stack</code> class backed by a list with <code>push()</code>, <code>pop()</code>, <code>peek()</code>, <code>is_empty()</code>, and <code>size()</code>.",
       ],
@@ -5138,7 +5138,7 @@ print(f"Std:    {s.std():.2f}")`,
         q: "What does `__init__` do?",
         opts: ["Destroys an object", "Runs automatically when a new object is created", "Imports a module", "Defines a class variable"],
         answer: 1,
-        explain: "__init__ is the constructor — it runs the moment you create an instance and sets up the object's initial attributes.",
+        explain: "__init__ is the constructor; it runs the moment you create an instance and sets up the object's initial attributes.",
       },
       {
         q: "What is `self` in a class method?",
@@ -5150,7 +5150,7 @@ print(f"Std:    {s.std():.2f}")`,
         q: "How do you make a class inherit from another?",
         opts: ["class Child extends Parent:", "class Child inherits Parent:", "class Child(Parent):", "child = Child(Parent)"],
         answer: 2,
-        explain: "Put the parent class name in parentheses: class Child(Parent): — this is Python's inheritance syntax.",
+        explain: "Put the parent class name in parentheses: class Child(Parent):; this is Python's inheritance syntax.",
       },
       {
         q: "What does `super().__init__()` do in a child class?",
@@ -5177,13 +5177,13 @@ print(f"Std:    {s.std():.2f}")`,
     lesson: `
     <div class="lesson-section">
       <h2>What is Web Scraping?</h2>
-      <p><strong>Web scraping</strong> is automatically extracting data from websites. You fetch the HTML of a page, then parse it to pull out the information you need — prices, headlines, scores, tables, anything.</p>
+      <p><strong>Web scraping</strong> is automatically extracting data from websites. You fetch the HTML of a page, then parse it to pull out the information you need; prices, headlines, scores, tables, anything.</p>
       <div class="info-box warning">
         <strong>Always check robots.txt first.</strong> Visit <code>site.com/robots.txt</code> to see what the site allows scrapers to access. Scraping without permission can violate terms of service.
       </div>
 
       <div class="section-divider"></div>
-      <h2>Step 1 — Fetch the Page with requests</h2>
+      <h2>Step 1: Fetch the Page with requests</h2>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import requests
 
 url = "https://example.com"
@@ -5193,7 +5193,7 @@ print(response.status_code)   # 200 = success
 print(response.text[:500])    # raw HTML of the page</pre>
 
       <div class="section-divider"></div>
-      <h2>Step 2 — Parse HTML with BeautifulSoup</h2>
+      <h2>Step 2: Parse HTML with BeautifulSoup</h2>
       <p><strong>BeautifulSoup</strong> turns raw HTML into a structured object you can navigate. Install it with <code>pip install beautifulsoup4</code>.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from bs4 import BeautifulSoup
 
@@ -5336,7 +5336,7 @@ for link in links:
     print(f"{text:12s} → {href}")`,
       },
       {
-        title: "Scraping Pipeline — Books (Concept)",
+        title: "Scraping Pipeline: Books (Concept)",
         desc: "The full pattern: fetch → parse → extract → store.",
         code: `# This shows the pattern without actually hitting the network
 # In real code you'd do: response = requests.get(url)
@@ -5433,7 +5433,7 @@ print("Tags:", [t.get_text() for t in tags])`,
       },
       {
         q: "Why do you use `class_` (with underscore) in BeautifulSoup instead of `class`?",
-        opts: ["It's faster", "class is a reserved keyword in Python — the underscore avoids the conflict", "class_ searches more tags", "It's case-insensitive"],
+        opts: ["It's faster", "class is a reserved keyword in Python; the underscore avoids the conflict", "class_ searches more tags", "It's case-insensitive"],
         answer: 1,
         explain: "class is a Python keyword (used to define classes), so BeautifulSoup uses class_ as the parameter name to avoid a syntax conflict.",
       },
@@ -5461,9 +5461,9 @@ print("Tags:", [t.get_text() for t in tags])`,
 
     lesson: `
     <div class="lesson-section">
-      <h2>The Problem — Why Virtual Environments?</h2>
+      <h2>The Problem: Why Virtual Environments?</h2>
       <p>Imagine Project A needs <code>flask==2.0</code> and Project B needs <code>flask==3.0</code>. If you install both globally, one will overwrite the other and one project will break.</p>
-      <p>A <strong>virtual environment</strong> is an isolated Python installation for each project — its own packages, its own versions, completely separate from everything else.</p>
+      <p>A <strong>virtual environment</strong> is an isolated Python installation for each project; its own packages, its own versions, completely separate from everything else.</p>
       <div class="info-box">
         <strong>Rule of thumb:</strong> Always use a virtual environment for every project. It takes 10 seconds to set up and saves hours of debugging version conflicts.
       </div>
@@ -5485,7 +5485,7 @@ python3 -m venv venv</pre>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">Windows (Git Bash)</div><div class="cheatsheet-desc">source venv/Scripts/activate</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">Deactivate (any OS)</div><div class="cheatsheet-desc">deactivate</div></div>
       </div>
-      <p>Once activated, your terminal prompt shows <code>(venv)</code> — everything you <code>pip install</code> now goes into that environment only.</p>
+      <p>Once activated, your terminal prompt shows <code>(venv)</code>; everything you <code>pip install</code> now goes into that environment only.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">(venv) $ pip install flask
 (venv) $ pip install requests
 (venv) $ pip freeze > requirements.txt
@@ -5519,7 +5519,7 @@ deactivate
 
       <div class="section-divider"></div>
       <h2>What to Add to .gitignore</h2>
-      <p>Never commit your <code>venv/</code> folder to git — it's huge and system-specific. Commit <code>requirements.txt</code> instead:</p>
+      <p>Never commit your <code>venv/</code> folder to git; it's huge and system-specific. Commit <code>requirements.txt</code> instead:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#94a3b8;overflow-x:auto"># .gitignore
 venv/
 __pycache__/
@@ -5540,7 +5540,7 @@ pipenv run python app.py # run without activating</pre>
     examples: [
       {
         title: "venv Workflow Reference",
-        desc: "Complete virtual environment setup — run in terminal.",
+        desc: "Complete virtual environment setup; run in terminal.",
         code: `# === Run these in your terminal (not Python) ===
 
 # Step 1: Create the environment
@@ -5562,7 +5562,7 @@ pipenv run python app.py # run without activating</pre>
 # deactivate
 
 print("Virtual environments keep projects clean and isolated!")
-print("One venv per project — always.")`,
+print("One venv per project; always.")`,
       },
       {
         title: "Checking Your Python Environment",
@@ -5587,7 +5587,7 @@ else:
     print("Consider creating a venv for your project!")`,
       },
       {
-        title: "requirements.txt — Read and Parse",
+        title: "requirements.txt: Read and Parse",
         desc: "Parse a requirements file programmatically.",
         code: `requirements_content = """
 flask==3.0.2
@@ -5642,7 +5642,7 @@ print(gitignore_content)`,
       },
       {
         title: "Simulating a Dependency Conflict",
-        desc: "Why venvs matter — version conflicts illustrated.",
+        desc: "Why venvs matter; version conflicts illustrated.",
         code: `# Illustrate why isolated environments matter
 
 project_a_needs = {"flask": "2.0.0", "requests": "2.25.0"}
@@ -5661,7 +5661,7 @@ for pkg, ver in project_b_needs.items():
     global_packages[pkg] = ver
 
 print()
-print("Project A now broken — it needed flask 2.0.0 but got", global_packages["flask"])
+print("Project A now broken; it needed flask 2.0.0 but got", global_packages["flask"])
 print()
 print("With virtual environments: each project keeps its own packages.")`,
       },
@@ -5670,7 +5670,7 @@ print("With virtual environments: each project keeps its own packages.")`,
     exercises: {
       level1: [
         "Create a virtual environment called <code>venv</code> in a new project folder.",
-        "Activate the virtual environment and run <code>pip list</code> — what packages are there?",
+        "Activate the virtual environment and run <code>pip list</code>; what packages are there?",
         "Install <code>requests</code> inside the venv and verify with <code>pip show requests</code>.",
         "Run <code>pip freeze > requirements.txt</code> and open the file to see the output.",
         "Deactivate the virtual environment.",
@@ -5697,7 +5697,7 @@ print("With virtual environments: each project keeps its own packages.")`,
         q: "Why do you use a virtual environment?",
         opts: ["To make Python run faster", "To isolate project dependencies so packages don't conflict between projects", "To access the internet", "To compile Python to bytecode"],
         answer: 1,
-        explain: "Virtual environments keep each project's packages isolated — Project A can use flask 2.0 while Project B uses flask 3.0 without conflicts.",
+        explain: "Virtual environments keep each project's packages isolated: Project A can use flask 2.0 while Project B uses flask 3.0 without conflicts.",
       },
       {
         q: "Which command creates a virtual environment called 'venv'?",
@@ -5713,7 +5713,7 @@ print("With virtual environments: each project keeps its own packages.")`,
       },
       {
         q: "Should you commit the venv/ folder to git?",
-        opts: ["Yes, always", "No — add it to .gitignore and commit requirements.txt instead", "Only on Windows", "Only if it's small"],
+        opts: ["Yes, always", "No; add it to .gitignore and commit requirements.txt instead", "Only on Windows", "Only if it's small"],
         answer: 1,
         explain: "The venv/ folder is large and system-specific. Commit requirements.txt so others can recreate the environment with pip install -r requirements.txt.",
       },
@@ -5746,12 +5746,12 @@ print(mode(data))      # 5
 print(stdev(data))     # 3.5</pre>
 
       <div class="section-divider"></div>
-      <h2>NumPy — Fast Array Computing</h2>
-      <p><strong>NumPy</strong> is the foundation of Python's data science ecosystem. It provides fast multi-dimensional arrays and math operations that work on entire arrays at once — no loops needed.</p>
+      <h2>NumPy: Fast Array Computing</h2>
+      <p><strong>NumPy</strong> is the foundation of Python's data science ecosystem. It provides fast multi-dimensional arrays and math operations that work on entire arrays at once; no loops needed.</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import numpy as np
 
 arr = np.array([1, 2, 3, 4, 5])
-print(arr * 2)        # [2 4 6 8 10] — no loop needed!
+print(arr * 2)        # [2 4 6 8 10]; no loop needed!
 print(arr ** 2)       # [1 4 9 16 25]
 print(arr.mean())     # 3.0
 print(arr.sum())      # 15</pre>
@@ -5776,7 +5776,7 @@ print(m.shape)   # (3, 3)
 print(m.dtype)   # int64
 print(m.size)    # 9
 
-# Slicing — same syntax as Python lists but works on 2D
+# Slicing; same syntax as Python lists but works on 2D
 print(m[0])       # first row: [1 2 3]
 print(m[:, 1])    # second column: [2 5 8]
 print(m[1:, 1:])  # bottom-right 2x2</pre>
@@ -5807,7 +5807,7 @@ print(A.T)                     # transpose</pre>
     examples: [
       {
         title: "statistics Module",
-        desc: "Built-in stats — no install needed.",
+        desc: "Built-in stats; no install needed.",
         code: `from statistics import mean, median, mode, stdev, variance
 
 scores = [85, 92, 78, 95, 88, 92, 76, 92, 100, 84]
@@ -5916,13 +5916,13 @@ print(np.random.randint(0, 10, (3, 3)))`,
         q: "What does `np.array([1,2,3]) * 2` produce?",
         opts: ["[[1,2,3],[1,2,3]]", "[1,2,3,1,2,3]", "[2,4,6]", "An error"],
         answer: 2,
-        explain: "NumPy applies the operation element-wise to the entire array — multiplying each element by 2 gives [2,4,6].",
+        explain: "NumPy applies the operation element-wise to the entire array; multiplying each element by 2 gives [2,4,6].",
       },
       {
         q: "What is the shape of np.zeros((3, 4))?",
         opts: ["(4, 3)", "(12,)", "(3, 4)", "(7,)"],
         answer: 2,
-        explain: "np.zeros((3, 4)) creates a 2D array with 3 rows and 4 columns — shape (3, 4).",
+        explain: "np.zeros((3, 4)) creates a 2D array with 3 rows and 4 columns; shape (3, 4).",
       },
       {
         q: "How do you get the second column of a 2D NumPy array m?",
@@ -5934,7 +5934,7 @@ print(np.random.randint(0, 10, (3, 3)))`,
         q: "Which module do you import for mean/median/mode without pip installing anything?",
         opts: ["numpy", "pandas", "statistics", "math"],
         answer: 2,
-        explain: "The statistics module is part of Python's standard library — no install needed.",
+        explain: "The statistics module is part of Python's standard library; no install needed.",
       },
       {
         q: "What does np.linspace(0, 1, 5) return?",
@@ -5959,7 +5959,7 @@ print(np.random.randint(0, 10, (3, 3)))`,
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import pandas as pd</pre>
 
       <div class="section-divider"></div>
-      <h2>Series — One Column</h2>
+      <h2>Series: One Column</h2>
       <p>A <code>Series</code> is like a labeled list. Each value has an <strong>index</strong>:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import pandas as pd
 
@@ -5974,8 +5974,8 @@ print(s['Alice'])   # 85
 print(s.mean())     # 87.5</pre>
 
       <div class="section-divider"></div>
-      <h2>DataFrame — A Table</h2>
-      <p>A <code>DataFrame</code> is a 2D table with labeled rows and columns — like an Excel sheet:</p>
+      <h2>DataFrame: A Table</h2>
+      <p>A <code>DataFrame</code> is a 2D table with labeled rows and columns; like an Excel sheet:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import pandas as pd
 
 data = {
@@ -6010,7 +6010,7 @@ print(df.shape)</pre>
 
       <div class="section-divider"></div>
       <h2>Boolean Filtering</h2>
-      <p>Filter rows using conditions — like SQL <code>WHERE</code>:</p>
+      <p>Filter rows using conditions; like SQL <code>WHERE</code>:</p>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import pandas as pd
 
 data = {'name':['Alice','Bob','Carol','Dave'], 'age':[30,25,35,28]}
@@ -6184,7 +6184,7 @@ print(df.nlargest(3, 'score')[['title','score']])`,
         q: "What does df.shape return?",
         opts: ["The column names", "A tuple of (number of rows, number of columns)", "The data types", "The index"],
         answer: 1,
-        explain: "df.shape returns a tuple (rows, columns) — e.g. (100, 5) for a 100-row, 5-column DataFrame.",
+        explain: "df.shape returns a tuple (rows, columns); e.g. (100, 5) for a 100-row, 5-column DataFrame.",
       },
       {
         q: "What does df.describe() show?",
@@ -6207,7 +6207,7 @@ print(df.nlargest(3, 'score')[['title','score']])`,
       <h2>What is Flask?</h2>
       <p><strong>Flask</strong> is a lightweight Python web framework. You write Python functions, decorate them with <code>@app.route()</code>, and Flask turns them into web pages. Install with <code>pip install flask</code>.</p>
       <div class="info-box">
-        <strong>Note:</strong> Flask runs as a local server — code in this day won't run in the browser playground. Run it in your terminal with <code>python app.py</code>.
+        <strong>Note:</strong> Flask runs as a local server; code in this day won't run in the browser playground. Run it in your terminal with <code>python app.py</code>.
       </div>
 
       <div class="section-divider"></div>
@@ -6289,8 +6289,8 @@ def form():
     examples: [
       {
         title: "Flask App Structure (Reference)",
-        desc: "A complete minimal Flask app — run in your terminal.",
-        code: `# app.py — run with: python app.py
+        desc: "A complete minimal Flask app; run in your terminal.",
+        code: `# app.py; run with: python app.py
 # Then open http://localhost:5000 in your browser
 
 from flask import Flask, render_template, request
@@ -6354,8 +6354,8 @@ print(template.format(
 routes = [
     ("@app.route('/')",           "home page"),
     ("@app.route('/about')",      "static about page"),
-    ("@app.route('/user/<name>')", "dynamic — name is a variable"),
-    ("@app.route('/post/<int:id>)","dynamic — id must be an integer"),
+    ("@app.route('/user/<name>')", "dynamic; name is a variable"),
+    ("@app.route('/post/<int:id>)","dynamic; id must be an integer"),
     ("@app.route('/form', methods=['GET','POST'])", "accepts both methods"),
 ]
 
@@ -6474,7 +6474,7 @@ print(render_page("Home", home_content))`,
         q: "What does `request.form['name']` access?",
         opts: ["A URL parameter", "Data submitted in an HTML form via POST", "A query string parameter", "A cookie"],
         answer: 1,
-        explain: "request.form accesses data submitted in an HTML form's POST body — the input field with name='name'.",
+        explain: "request.form accesses data submitted in an HTML form's POST body; the input field with name='name'.",
       },
     ],
   },
@@ -6483,13 +6483,13 @@ print(render_page("Home", home_content))`,
     day: 27,
     emoji: "🍃",
     title: "Python with MongoDB",
-    subtitle: "Store and query data in MongoDB — a NoSQL database. Learn CRUD operations with pymongo.",
+    subtitle: "Store and query data in MongoDB; a NoSQL database. Learn CRUD operations with pymongo.",
     topics: ["SQL vs NoSQL", "pymongo", "insert_one/many", "find & filter", "update & delete", "Collections"],
 
     lesson: `
     <div class="lesson-section">
       <h2>SQL vs NoSQL</h2>
-      <p>Traditional <strong>SQL databases</strong> store data in rigid tables with fixed columns. <strong>NoSQL databases</strong> like MongoDB store data as flexible JSON-like documents — no fixed schema required.</p>
+      <p>Traditional <strong>SQL databases</strong> store data in rigid tables with fixed columns. <strong>NoSQL databases</strong> like MongoDB store data as flexible JSON-like documents; no fixed schema required.</p>
       <div class="cheatsheet-grid">
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">SQL</div><div class="cheatsheet-desc">Tables, rows, fixed columns, strict schema</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">MongoDB</div><div class="cheatsheet-desc">Collections, documents (JSON), flexible schema</div></div>
@@ -6512,7 +6512,7 @@ collection = db["students"]</pre>
 
       <div class="section-divider"></div>
       <h2>CRUD Operations</h2>
-      <h3>Create — Insert</h3>
+      <h3>Create: Insert</h3>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">student = {"name": "Alice", "age": 20, "grade": "A"}
 result = collection.insert_one(student)
 print(result.inserted_id)   # the auto-generated _id
@@ -6523,7 +6523,7 @@ students = [
 ]
 collection.insert_many(students)</pre>
 
-      <h3>Read — Find</h3>
+      <h3>Read: Find</h3>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">for doc in collection.find():
     print(doc)
 
@@ -6555,7 +6555,7 @@ collection.drop()   # delete the whole collection</pre>
     examples: [
       {
         title: "Simulating MongoDB Documents",
-        desc: "MongoDB stores Python dicts as documents — practice with dicts.",
+        desc: "MongoDB stores Python dicts as documents; practice with dicts.",
         code: `# MongoDB documents are just Python dicts
 # This simulates a 'students' collection in memory
 
@@ -6566,12 +6566,12 @@ students = [
     {"_id": 4, "name": "Dave",  "age": 23, "grade": "C"},
 ]
 
-# find() — return all
+# find(); return all
 print("All students:")
 for s in students:
     print(f"  {s['name']} ({s['grade']})")
 
-# find_one() — filter
+# find_one(); filter
 alice = next((s for s in students if s['name'] == 'Alice'), None)
 print("\\nAlice:", alice)
 
@@ -6581,7 +6581,7 @@ print("\\nA students:", [s['name'] for s in a_grade])`,
       },
       {
         title: "CRUD Simulation",
-        desc: "Insert, find, update, delete — MongoDB style.",
+        desc: "Insert, find, update, delete: MongoDB style.",
         code: `# Simulating pymongo CRUD without a live connection
 
 class FakeCollection:
@@ -6736,7 +6736,7 @@ print("First name:", user_doc["name"]["first"])`,
         q: "What is a MongoDB collection?",
         opts: ["A SQL table with fixed columns", "A group of JSON-like documents (like a table but flexible)", "A Python list", "A database connection"],
         answer: 1,
-        explain: "A collection is MongoDB's equivalent of a table — it holds documents (JSON objects) that can have different fields.",
+        explain: "A collection is MongoDB's equivalent of a table; it holds documents (JSON objects) that can have different fields.",
       },
       {
         q: "Which pymongo method inserts one document?",
@@ -6748,7 +6748,7 @@ print("First name:", user_doc["name"]["first"])`,
         q: "What does collection.find({'grade': 'A'}) return?",
         opts: ["A single document", "A cursor (iterable) of all documents where grade equals 'A'", "True or False", "The count of matching documents"],
         answer: 1,
-        explain: "find() returns a cursor — an iterable of all matching documents. Use find_one() for a single result.",
+        explain: "find() returns a cursor; an iterable of all matching documents. Use find_one() for a single result.",
       },
       {
         q: "What does {'$set': {'age': 21}} do in update_one?",
@@ -6760,7 +6760,7 @@ print("First name:", user_doc["name"]["first"])`,
         q: "How is MongoDB different from a SQL database?",
         opts: ["MongoDB is slower", "MongoDB stores data in flexible JSON documents, not fixed-column tables", "MongoDB doesn't support queries", "MongoDB can only store text"],
         answer: 1,
-        explain: "MongoDB is NoSQL — documents can have different fields and nested structures. SQL requires a fixed schema (columns) for every row.",
+        explain: "MongoDB is NoSQL; documents can have different fields and nested structures. SQL requires a fixed schema (columns) for every row.",
       },
     ],
   },
@@ -6775,15 +6775,15 @@ print("First name:", user_doc["name"]["first"])`,
     lesson: `
     <div class="lesson-section">
       <h2>What is an API?</h2>
-      <p>An <strong>API</strong> (Application Programming Interface) is a defined way for programs to communicate. A <strong>Web API</strong> lets you send an HTTP request to a URL and get data back — usually JSON.</p>
+      <p>An <strong>API</strong> (Application Programming Interface) is a defined way for programs to communicate. A <strong>Web API</strong> lets you send an HTTP request to a URL and get data back; usually JSON.</p>
       <p>Think of it as a waiter: you (the client) tell the waiter (API) what you want, and it brings data from the kitchen (server) back to you.</p>
 
       <div class="section-divider"></div>
-      <h2>REST — How Web APIs Are Structured</h2>
+      <h2>REST: How Web APIs Are Structured</h2>
       <p>Most modern web APIs are <strong>RESTful</strong>. REST uses standard HTTP methods to perform operations:</p>
       <div class="cheatsheet-grid">
-        <div class="cheatsheet-item"><div class="cheatsheet-syntax">GET</div><div class="cheatsheet-desc">Retrieve data — read only, no side effects</div></div>
-        <div class="cheatsheet-item"><div class="cheatsheet-syntax">POST</div><div class="cheatsheet-desc">Create new data — sends a body</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">GET</div><div class="cheatsheet-desc">Retrieve data; read only, no side effects</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">POST</div><div class="cheatsheet-desc">Create new data; sends a body</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">PUT</div><div class="cheatsheet-desc">Replace/update an existing resource</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">DELETE</div><div class="cheatsheet-desc">Remove a resource</div></div>
       </div>
@@ -6814,7 +6814,7 @@ print(data['public_repos'])</pre>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">headers = {'Authorization': 'Bearer YOUR_API_KEY'}
 response = requests.get(url, headers=headers)
 
-# POST — send JSON body
+# POST; send JSON body
 payload = {'title': 'New Post', 'body': 'Content here'}
 response = requests.post(url, json=payload, headers=headers)
 print(response.status_code)   # 201 Created</pre>
@@ -6888,7 +6888,7 @@ data = json.loads(raw_json)
 print(f"Status: {data['status']}, Count: {data['count']}")
 print()
 for country in data['data']:
-    print(f"{country['name']:10s} ({country['capital']}) — {country['population']:,}")`,
+    print(f"{country['name']:10s} ({country['capital']}); {country['population']:,}")`,
       },
       {
         title: "Using the requests Library",
@@ -6921,7 +6921,7 @@ def safe_get(url):
         elif response.status_code == 404:
             print(f"Not found: {url}")
         elif response.status_code == 401:
-            print("Authentication required — check your API key")
+            print("Authentication required; check your API key")
         else:
             print(f"Error {response.status_code}: {response.text[:100]}")
     except requests.exceptions.Timeout:
@@ -6973,7 +6973,7 @@ for post in posts:
         "Fetch all posts from <code>https://jsonplaceholder.typicode.com/posts</code> and print the title of the first 5.",
         "Use query parameters to fetch only posts by <code>userId=2</code>.",
         "Write a function <code>get_post(id)</code> that fetches a single post by ID and returns the dict.",
-        "Handle the case where the API returns a 404 — print a friendly error message.",
+        "Handle the case where the API returns a 404; print a friendly error message.",
         "Fetch data from a real public API (e.g. <code>https://catfact.ninja/fact</code>) and print the result.",
         "Add a <code>timeout=5</code> parameter to your request and handle <code>requests.exceptions.Timeout</code>.",
       ],
@@ -6990,13 +6990,13 @@ for post in posts:
         q: "What does REST stand for in REST API?",
         opts: ["Really Easy Server Technology", "Representational State Transfer", "Remote Execution of Server Tasks", "Resource Endpoint Service Transfer"],
         answer: 1,
-        explain: "REST stands for Representational State Transfer — an architectural style for building web APIs using HTTP.",
+        explain: "REST stands for Representational State Transfer; an architectural style for building web APIs using HTTP.",
       },
       {
         q: "Which HTTP method retrieves data without changing anything?",
         opts: ["POST", "DELETE", "PUT", "GET"],
         answer: 3,
-        explain: "GET is read-only — it retrieves data without creating, modifying, or deleting anything on the server.",
+        explain: "GET is read-only; it retrieves data without creating, modifying, or deleting anything on the server.",
       },
       {
         q: "What does a 404 status code mean?",
@@ -7054,7 +7054,7 @@ def get_student(id):
     return jsonify(student), 200</pre>
 
       <div class="section-divider"></div>
-      <h2>Creating Resources — POST</h2>
+      <h2>Creating Resources: POST</h2>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">from flask import Flask, jsonify, request
 
 @app.route('/api/students', methods=['POST'])
@@ -7071,7 +7071,7 @@ def create_student():
     return jsonify(new_student), 201   # 201 = Created</pre>
 
       <div class="section-divider"></div>
-      <h2>Updating — PUT</h2>
+      <h2>Updating: PUT</h2>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">@app.route('/api/students/&lt;int:id&gt;', methods=['PUT'])
 def update_student(id):
     student = next((s for s in students if s['id'] == id), None)
@@ -7082,7 +7082,7 @@ def update_student(id):
     return jsonify(student), 200</pre>
 
       <div class="section-divider"></div>
-      <h2>Deleting — DELETE</h2>
+      <h2>Deleting: DELETE</h2>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">@app.route('/api/students/&lt;int:id&gt;', methods=['DELETE'])
 def delete_student(id):
     # Find the student first
@@ -7107,8 +7107,8 @@ def delete_student(id):
     examples: [
       {
         title: "Complete Student API",
-        desc: "Full CRUD API — run in your terminal with Flask.",
-        code: `# app.py — run with: python app.py
+        desc: "Full CRUD API; run in your terminal with Flask.",
+        code: `# app.py; run with: python app.py
 # Test with: curl http://localhost:5000/api/students
 
 from flask import Flask, jsonify, request
@@ -7175,7 +7175,7 @@ print(f"GET /posts → {r.status_code}")
 for p in r.json():
     print(f"  [{p['id']}] {p['title'][:40]}")
 
-# POST — create a new post
+# POST; create a new post
 new_post = {"title": "My Test Post", "body": "Hello API!", "userId": 1}
 r = requests.post(f"{BASE}/posts", json=new_post)
 print(f"\\nPOST /posts → {r.status_code}")
@@ -7290,14 +7290,14 @@ for data in test_cases:
 
     lesson: `
     <div class="lesson-section">
-      <h2>Congratulations — You Did It.</h2>
+      <h2>Congratulations: You Did It.</h2>
       <p>You just completed 30 days of structured Python learning. From <code>print("Hello, World!")</code> to building REST APIs, you've covered the entire core of the Python language and its ecosystem.</p>
       <div class="info-box">
         <strong>This is not the end.</strong> 30 Days of Python is the foundation. What you build on it is up to you.
       </div>
 
       <div class="section-divider"></div>
-      <h2>What You Learned — 30 Days in Review</h2>
+      <h2>What You Learned; 30 Days in Review</h2>
       <div class="cheatsheet-grid">
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">Days 1–3</div><div class="cheatsheet-desc">Data types, variables, operators, comments</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">Days 4–8</div><div class="cheatsheet-desc">Strings, Lists, Tuples, Sets, Dictionaries</div></div>
@@ -7334,17 +7334,17 @@ for data in test_cases:
       <div class="section-divider"></div>
       <h2>Keep Learning Resources</h2>
       <div class="cheatsheet-grid">
-        <div class="cheatsheet-item"><div class="cheatsheet-syntax">docs.python.org</div><div class="cheatsheet-desc">Official Python docs — the ground truth</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">docs.python.org</div><div class="cheatsheet-desc">Official Python docs; the ground truth</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">realpython.com</div><div class="cheatsheet-desc">In-depth tutorials for every Python topic</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">github.com/Asabeneh</div><div class="cheatsheet-desc">The original 30 Days of Python and more</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">kaggle.com</div><div class="cheatsheet-desc">Real datasets + Python notebooks to practice data science</div></div>
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">leetcode.com</div><div class="cheatsheet-desc">Coding challenges to sharpen your Python logic</div></div>
-        <div class="cheatsheet-item"><div class="cheatsheet-syntax">stackoverflow.com</div><div class="cheatsheet-desc">Search first — your question has probably been answered</div></div>
+        <div class="cheatsheet-item"><div class="cheatsheet-syntax">stackoverflow.com</div><div class="cheatsheet-desc">Search first; your question has probably been answered</div></div>
       </div>
 
       <div class="section-divider"></div>
       <h2>The Most Important Thing</h2>
-      <p><strong>Build things.</strong> Not tutorials, not courses, not exercises — real things you actually care about. That's when Python stops being something you're learning and becomes something you use.</p>
+      <p><strong>Build things.</strong> Not tutorials, not courses, not exercises; real things you actually care about. That's when Python stops being something you're learning and becomes something you use.</p>
       <p>The gap between "I finished 30 days" and "I'm a Python developer" is exactly one project.</p>
     </div>
     `,
@@ -7353,7 +7353,7 @@ for data in test_cases:
       {
         title: "Python Skills Self-Assessment",
         desc: "Test how much you remember across all 30 days.",
-        code: `# A quick skills quiz — try to answer each before running
+        code: `# A quick skills quiz; try to answer each before running
 
 skills = {
     "List comprehension: squares of 1-10": [n**2 for n in range(1, 11)],
@@ -7364,7 +7364,7 @@ skills = {
     "String methods chain": "  hello, world  ".strip().title().replace(",", ""),
 }
 
-print("30-Day Python — Quick Recap Test")
+print("30-Day Python: Quick Recap Test")
 print("=" * 40)
 for question, answer in skills.items():
     print(f"\\n{question}")
@@ -7421,15 +7421,15 @@ my_first_real_project/
 ├── venv/                      (Day 23)
 ├── app/
 │   ├── __init__.py            (Day 20)
-│   ├── models.py              (Day 21 — Classes)
-│   ├── routes.py              (Day 26 — Flask routes)
-│   └── api.py                 (Day 29 — JSON API)
+│   ├── models.py              (Day 21: Classes)
+│   ├── routes.py              (Day 26: Flask routes)
+│   └── api.py                 (Day 29: JSON API)
 ├── data/
-│   └── dataset.csv            (Day 25 — Pandas)
+│   └── dataset.csv            (Day 25: Pandas)
 ├── tests/
 │   └── test_models.py
 ├── requirements.txt           (Day 20)
-├── .env                       (API keys — never commit!)
+├── .env                       (API keys; never commit!)
 └── README.md
 """
 
@@ -7489,7 +7489,7 @@ for concept, syntax in cheatsheet.items():
     print(f"{concept:<14} → {syntax}")`,
       },
       {
-        title: "Next Steps — Build Something Real",
+        title: "Next Steps: Build Something Real",
         desc: "Ideas organized by what you want to specialize in.",
         code: `paths = {
     "Web Dev": [
@@ -7546,9 +7546,9 @@ for path, steps in paths.items():
       ],
       level3: [
         "Build a complete Flask REST API for a todo app: full CRUD, JSON responses, input validation, proper status codes.",
-        "Scrape a website, store the data in MongoDB, and expose it through a Flask API — a complete data pipeline.",
+        "Scrape a website, store the data in MongoDB, and expose it through a Flask API; a complete data pipeline.",
         "Build a CLI tool that takes a GitHub username and prints their repositories, sorted by stars.",
-        "Your final challenge: build something YOU want to use. Any domain, any complexity — just ship it.",
+        "Your final challenge: build something YOU want to use. Any domain, any complexity; just ship it.",
       ],
     },
 
@@ -7557,7 +7557,7 @@ for path, steps in paths.items():
         q: "Which Python data structure guarantees no duplicate values?",
         opts: ["list", "tuple", "dict", "set"],
         answer: 3,
-        explain: "Sets automatically remove duplicates — {1, 2, 2, 3} becomes {1, 2, 3}.",
+        explain: "Sets automatically remove duplicates; {1, 2, 2, 3} becomes {1, 2, 3}.",
       },
       {
         q: "What does `super().__init__()` do in a child class?",
@@ -7569,7 +7569,7 @@ for path, steps in paths.items():
         q: "What is the best way to open a file in Python?",
         opts: ["f = open('file.txt'); f.close()", "with open('file.txt') as f: ...", "file.open('file.txt')", "import file; file.read()"],
         answer: 1,
-        explain: "The with statement automatically closes the file when the block exits — even if an error occurs.",
+        explain: "The with statement automatically closes the file when the block exits; even if an error occurs.",
       },
       {
         q: "What is the correct HTTP status code for 'resource created successfully'?",
@@ -7588,7 +7588,7 @@ for path, steps in paths.items():
 
 ]; // end of DAYS array
 
-// No more placeholders needed — all 30 days are complete!
+// No more placeholders needed; all 30 days are complete!
 for (let d = 99; d <= 30; d++) {
   const topics = {
     20: {
@@ -7662,14 +7662,14 @@ for (let d = 99; d <= 30; d++) {
           <p style="color:var(--text-3);max-width:480px;margin:0 auto 24px;font-size:16px">${t.sub}</p>
           <div class="info-box" style="max-width:480px;margin:0 auto;text-align:left">
             <strong>Coming Soon</strong>
-            This lesson will be added in the next update. Days 1–11 are fully complete — practice those first!
+            This lesson will be added in the next update. Days 1–11 are fully complete; practice those first!
           </div>
         </div>
       </div>
     `,
     examples: [],
     exercises: {
-      level1: ["Check back soon — this day's exercises are coming!"],
+      level1: ["Check back soon; this day's exercises are coming!"],
       level2: [],
       level3: [],
     },

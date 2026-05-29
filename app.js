@@ -12,19 +12,99 @@ const LEVELS = [
   { level: 7, name: "Legend",     xp: 5000 },
 ];
 
-const BADGES = [
-  { id: "first_day",      name: "First Step",      emoji: "🐣", desc: "Complete Day 1" },
-  { id: "week_one",       name: "Week 1 Done",      emoji: "📅", desc: "Complete Days 1–7" },
-  { id: "halfway",        name: "Halfway There",    emoji: "🏁", desc: "Complete 15 days" },
-  { id: "all_done",       name: "Python Master",    emoji: "🏆", desc: "Complete all 30 days" },
-  { id: "streak_3",       name: "On a Roll",        emoji: "🔥", desc: "3-day streak" },
-  { id: "streak_7",       name: "Week Warrior",     emoji: "⚡", desc: "7-day streak" },
-  { id: "streak_30",      name: "Unstoppable",      emoji: "💎", desc: "30-day streak" },
-  { id: "xp_500",         name: "XP Grinder",       emoji: "💪", desc: "Earn 500 XP" },
-  { id: "xp_2000",        name: "XP Machine",       emoji: "🤖", desc: "Earn 2000 XP" },
-  { id: "exercises_all_1",name: "Day 1 Expert",     emoji: "⭐", desc: "All exercises in Day 1" },
-  { id: "quiz_ace",       name: "Quiz Ace",          emoji: "🧠", desc: "Answer 10 quizzes correctly" },
+const ACH_CATEGORIES = ["progress", "streaks", "xp", "mastery", "secret"];
+
+const ACHIEVEMENTS = [
+  // ── Progress (8) ──────────────────────────────────────────────────
+  { id:"first_day",     cat:"progress", icon:"🐣", name:"First Step",       desc:"Finish Day 1.",
+    check:c => c.completed.has(1) },
+  { id:"three_days",    cat:"progress", icon:"🌱", name:"Getting Going",    desc:"Finish 3 lessons.",
+    check:c => c.completedCount >= 3 },
+  { id:"week_one",      cat:"progress", icon:"📅", name:"First Week Done",  desc:"Finish Days 1 through 7.",
+    check:c => [1,2,3,4,5,6,7].every(d => c.completed.has(d)) },
+  { id:"ten_days",      cat:"progress", icon:"🔟", name:"Double Digits",    desc:"Finish 10 lessons.",
+    check:c => c.completedCount >= 10 },
+  { id:"halfway",       cat:"progress", icon:"🏁", name:"Halfway There",    desc:"Finish 15 lessons.",
+    check:c => c.completedCount >= 15 },
+  { id:"twenty",        cat:"progress", icon:"🚀", name:"Home Stretch",     desc:"Finish 20 lessons.",
+    check:c => c.completedCount >= 20 },
+  { id:"twentyfive",    cat:"progress", icon:"🧗", name:"Almost There",     desc:"Finish 25 lessons.",
+    check:c => c.completedCount >= 25 },
+  { id:"all_done",      cat:"progress", icon:"🏆", name:"Python Conquered", desc:"Finish all 30 lessons.",
+    check:c => c.completedCount >= 30 },
+
+  // ── Streaks (6) ───────────────────────────────────────────────────
+  { id:"streak_2",      cat:"streaks",  icon:"✌️",  name:"Back-to-Back",    desc:"Practice 2 days in a row.",
+    check:c => c.streak >= 2 },
+  { id:"streak_3",      cat:"streaks",  icon:"🔥", name:"On a Roll",        desc:"3-day streak.",
+    check:c => c.streak >= 3 },
+  { id:"streak_7",      cat:"streaks",  icon:"⚡", name:"Week Warrior",     desc:"7-day streak.",
+    check:c => c.streak >= 7 },
+  { id:"streak_14",     cat:"streaks",  icon:"🌟", name:"Two Weeks Strong", desc:"14-day streak.",
+    check:c => c.streak >= 14 },
+  { id:"streak_21",     cat:"streaks",  icon:"💫", name:"Habit Formed",     desc:"21-day streak.",
+    check:c => c.streak >= 21 },
+  { id:"streak_30",     cat:"streaks",  icon:"💎", name:"Unstoppable",      desc:"30-day streak.",
+    check:c => c.streak >= 30 },
+
+  // ── XP (7) ────────────────────────────────────────────────────────
+  { id:"xp_100",        cat:"xp", icon:"⭐", name:"First Hundred",  desc:"Earn 100 XP.",
+    check:c => c.xp >= 100 },
+  { id:"xp_500",        cat:"xp", icon:"💪", name:"XP Grinder",     desc:"Earn 500 XP.",
+    check:c => c.xp >= 500 },
+  { id:"xp_1000",       cat:"xp", icon:"🎯", name:"Four Figures",   desc:"Earn 1000 XP.",
+    check:c => c.xp >= 1000 },
+  { id:"xp_2000",       cat:"xp", icon:"🤖", name:"XP Machine",     desc:"Earn 2000 XP.",
+    check:c => c.xp >= 2000 },
+  { id:"xp_3500",       cat:"xp", icon:"👑", name:"XP Royalty",     desc:"Earn 3500 XP.",
+    check:c => c.xp >= 3500 },
+  { id:"xp_5000",       cat:"xp", icon:"🦾", name:"Legend Tier",    desc:"Earn 5000 XP.",
+    check:c => c.xp >= 5000 },
+  { id:"level_max",     cat:"xp", icon:"🌈", name:"Maxed Out",      desc:"Reach the highest level.",
+    check:c => state.level >= LEVELS.length },
+
+  // ── Mastery (8) ───────────────────────────────────────────────────
+  { id:"quiz_ace",      cat:"mastery", icon:"🧠", name:"Quiz Ace",        desc:"Answer 10 quiz questions correctly.",
+    check:c => c.correctQuizzes >= 10 },
+  { id:"quiz_scholar",  cat:"mastery", icon:"📚", name:"Quiz Scholar",    desc:"Answer 50 quiz questions correctly.",
+    check:c => c.correctQuizzes >= 50 },
+  { id:"perfect_1",     cat:"mastery", icon:"✅", name:"Flawless",        desc:"Finish a lesson with every quiz right and none wrong.",
+    check:c => c.perfectDays.size >= 1 },
+  { id:"perfect_5",     cat:"mastery", icon:"🎖️",  name:"Five Flawless",   desc:"Get 5 perfect lessons.",
+    check:c => c.perfectDays.size >= 5 },
+  { id:"exercises_all_1", cat:"mastery", icon:"📝", name:"Day 1 Expert",  desc:"Finish every Day 1 exercise.",
+    check:c => allDayExercisesDone(1, c) },
+  { id:"data_wrangler", cat:"mastery", icon:"🗃️",  name:"Data Wrangler",  desc:"Finish Days 5 through 8.",
+    check:c => [5,6,7,8].every(d => c.completed.has(d)) },
+  { id:"func_fluent",   cat:"mastery", icon:"⚙️",  name:"Function Fluent", desc:"Finish the functions lessons (Days 11, 13, 14).",
+    check:c => [11,13,14].every(d => c.completed.has(d)) },
+  { id:"web_ready",     cat:"mastery", icon:"🌐", name:"Web Ready",       desc:"Finish the web and API lessons (Days 26, 28, 29).",
+    check:c => [26,28,29].every(d => c.completed.has(d)) },
+
+  // ── Secret (8) — show as ??? until unlocked ───────────────────────
+  { id:"night_owl",     cat:"secret", secret:true, icon:"🦉", name:"Night Owl",
+    desc:"Finish a lesson after midnight.",        check:c => c.flags.nightOwl },
+  { id:"early_bird",    cat:"secret", secret:true, icon:"🐦", name:"Early Bird",
+    desc:"Finish a lesson before 6 in the morning.", check:c => c.flags.earlyBird },
+  { id:"comeback",      cat:"secret", secret:true, icon:"🔄", name:"Welcome Back",
+    desc:"Return after a 7+ day break.",           check:c => c.flags.comeback },
+  { id:"no_ai_week",    cat:"secret", secret:true, icon:"🧗", name:"Self-Reliant",
+    desc:"Finish 7 lessons without the AI tutor.", check:c => [...c.completed].filter(d => !c.aiUsedDays.has(d)).length >= 7 },
+  { id:"weekend",       cat:"secret", secret:true, icon:"🛋️", name:"Weekend Coder",
+    desc:"Practice on a Saturday or Sunday.",      check:c => c.flags.weekend },
+  { id:"two_in_a_day",  cat:"secret", secret:true, icon:"⚡", name:"Two in a Sitting",
+    desc:"Finish two lessons in the same day.",    check:c => c.flags.twoInADay },
+  { id:"perfectionist", cat:"secret", secret:true, icon:"💯", name:"Perfectionist",
+    desc:"Get 10 perfect lessons.",                check:c => c.perfectDays.size >= 10 },
+  { id:"completionist", cat:"secret", secret:true, icon:"🌟", name:"Completionist",
+    desc:"Unlock every other achievement.",        check:_c => {
+      const total = ACHIEVEMENTS.filter(a => !a.secret && a.id !== "completionist").length;
+      return ACHIEVEMENTS.filter(a => !a.secret && a.id !== "completionist" && state.achievements.has(a.id)).length >= total;
+    } },
 ];
+
+// Keep BADGES pointing at the same data for any code that still references it
+const BADGES = ACHIEVEMENTS;
 
 const state = {
   currentDay: 1,
@@ -35,7 +115,10 @@ const state = {
   level: 1,
   streak: 0,
   lastActiveDate: null,
-  badges: new Set(),
+  badges: new Set(),        // legacy key; same Set as achievements for back-compat
+  achievements: new Set(),  // canonical unlocked achievement ids
+  perfectDays: new Set(),   // days where all quizzes answered correctly
+  flags: {},                // sticky booleans: nightOwl, earlyBird, weekend, comeback, twoInADay
   aiUsedDays: new Set(),
   solutionUsed: {},
 };
@@ -85,8 +168,22 @@ function loadState() {
     if (sk !== null) state.streak = parseInt(sk, 10) || 0;
     const lad = localStorage.getItem("py30_last_active");
     if (lad) state.lastActiveDate = lad;
-    const bd = localStorage.getItem("py30_badges");
-    if (bd) state.badges = new Set(JSON.parse(bd));
+    // Load achievements; migrate from old py30_badges if no achievements key yet
+    const ach = localStorage.getItem("py30_achievements");
+    if (ach) {
+      state.achievements = new Set(JSON.parse(ach));
+    } else {
+      // Migrate: old badge ids are valid achievement ids; bring them forward
+      const bd = localStorage.getItem("py30_badges");
+      if (bd) state.achievements = new Set(JSON.parse(bd));
+    }
+    state.badges = state.achievements; // keep alias in sync
+
+    const pd = localStorage.getItem("py30_perfect_days");
+    if (pd) state.perfectDays = new Set(JSON.parse(pd));
+    const fl = localStorage.getItem("py30_flags");
+    if (fl) state.flags = JSON.parse(fl);
+
     const ai = localStorage.getItem("py30_ai_days");
     if (ai) state.aiUsedDays = new Set(JSON.parse(ai));
   } catch (_) {}
@@ -100,7 +197,10 @@ function saveState() {
   localStorage.setItem("py30_level", state.level);
   localStorage.setItem("py30_streak", state.streak);
   if (state.lastActiveDate) localStorage.setItem("py30_last_active", state.lastActiveDate);
-  localStorage.setItem("py30_badges", JSON.stringify([...state.badges]));
+  localStorage.setItem("py30_achievements", JSON.stringify([...state.achievements]));
+  localStorage.setItem("py30_badges", JSON.stringify([...state.achievements])); // keep old key for back-compat
+  localStorage.setItem("py30_perfect_days", JSON.stringify([...state.perfectDays]));
+  localStorage.setItem("py30_flags", JSON.stringify(state.flags));
   localStorage.setItem("py30_ai_days", JSON.stringify([...state.aiUsedDays]));
 }
 
@@ -119,6 +219,7 @@ function updateStreak() {
     if (diffDays === 1) {
       state.streak += 1;
     } else {
+      if (diffDays >= 7 && state.flags) state.flags.comeback = true;
       state.streak = 1;
     }
   }
@@ -133,49 +234,63 @@ function checkLevel() {
   if (newLevel > state.level) {
     state.level = newLevel;
     const lvlData = LEVELS.find(l => l.level === newLevel);
-    showToast("🎉 Level up! You're now a ", lvlData.name);
+    showLevelUpBanner(lvlData);
   }
 }
 
-function checkBadges() {
-  const newBadges = [];
+// ─── ACHIEVEMENT HELPERS ───────────────────────────────────────────────────
 
-  const completedCount = state.completed.size;
-  if (!state.badges.has("first_day") && state.completed.has(1)) newBadges.push("first_day");
-  if (!state.badges.has("week_one") && [1,2,3,4,5,6,7].every(d => state.completed.has(d))) newBadges.push("week_one");
-  if (!state.badges.has("halfway") && completedCount >= 15) newBadges.push("halfway");
-  if (!state.badges.has("all_done") && completedCount >= 30) newBadges.push("all_done");
+function allDayExercisesDone(dayNum, ctx) {
+  const day = typeof DAYS !== "undefined" ? DAYS.find(d => d.day === dayNum) : null;
+  if (!day) return false;
+  const saved = ctx.exercises["day_" + dayNum] || {};
+  const levels = ["level1", "level2", "level3"];
+  const allIds = levels.flatMap(key =>
+    (day.exercises[key] || []).map((_, i) => `${key}_${i}`)
+  );
+  return allIds.length > 0 && allIds.every(id => saved[id]);
+}
 
-  if (!state.badges.has("streak_3") && state.streak >= 3) newBadges.push("streak_3");
-  if (!state.badges.has("streak_7") && state.streak >= 7) newBadges.push("streak_7");
-  if (!state.badges.has("streak_30") && state.streak >= 30) newBadges.push("streak_30");
+function buildAchContext() {
+  const correctTotal = Object.values(state.quizAnswers)
+    .flatMap(day => Object.values(day))
+    .filter(a => a.correct).length;
+  return {
+    completed:     state.completed,
+    completedCount: state.completed.size,
+    xp:            state.xp,
+    streak:        state.streak,
+    correctQuizzes: correctTotal,
+    perfectDays:   state.perfectDays,
+    flags:         state.flags,
+    exercises:     state.exercises,
+    aiUsedDays:    state.aiUsedDays,
+  };
+}
 
-  if (!state.badges.has("xp_500") && state.xp >= 500) newBadges.push("xp_500");
-  if (!state.badges.has("xp_2000") && state.xp >= 2000) newBadges.push("xp_2000");
-
-  if (!state.badges.has("exercises_all_1")) {
-    const day1 = DAYS[0];
-    const saved = state.exercises["day_1"] || {};
-    const levels = ["level1", "level2", "level3"];
-    const allExercises = levels.flatMap(key =>
-      (day1.exercises[key] || []).map((_, i) => `${key}_${i}`)
-    );
-    if (allExercises.length > 0 && allExercises.every(id => saved[id])) newBadges.push("exercises_all_1");
+function checkAchievements() {
+  const ctx = buildAchContext();
+  const unlocked = [];
+  for (const a of ACHIEVEMENTS) {
+    if (state.achievements.has(a.id)) continue;
+    try {
+      if (a.check(ctx)) {
+        state.achievements.add(a.id);
+        state.badges = state.achievements; // keep alias
+        unlocked.push(a);
+      }
+    } catch (_) {}
   }
-
-  if (!state.badges.has("quiz_ace")) {
-    const correctTotal = Object.values(state.quizAnswers)
-      .flatMap(day => Object.values(day))
-      .filter(a => a.correct).length;
-    if (correctTotal >= 10) newBadges.push("quiz_ace");
-  }
-
-  for (const id of newBadges) {
-    state.badges.add(id);
-    const badge = BADGES.find(b => b.id === id);
-    if (badge) showToast(`${badge.emoji} Badge unlocked: `, badge.name);
+  if (unlocked.length) {
+    unlocked.forEach(a => enqueueAchievementPopup(a));
+    renderTopbarStats();
+    saveState();
+    if (window.Sync) window.Sync.push();
   }
 }
+
+// Legacy alias so any outside callers don't break
+function checkBadges() { checkAchievements(); }
 
 function awardXP(amount) {
   if (amount < 0) {
@@ -187,7 +302,7 @@ function awardXP(amount) {
   state.xp += amount;
   updateStreak();
   checkLevel();
-  checkBadges();
+  checkAchievements();
   renderTopbarStats();
   saveState();
 }
@@ -212,9 +327,10 @@ function renderTopbarStats() {
   if (elXpText) elXpText.textContent = nextLvl ? `${state.xp - xpForThis} / ${xpForNext - xpForThis} XP` : "MAX";
   if (elStreak) elStreak.textContent = state.streak;
   if (elBadges) {
+    const achCount = state.achievements ? state.achievements.size : state.badges.size;
     const countEl = elBadges.querySelector("#topbarBadgeCount");
-    if (countEl) countEl.textContent = state.badges.size;
-    else elBadges.textContent = `${state.badges.size} badges`;
+    if (countEl) countEl.textContent = achCount;
+    else elBadges.textContent = `${achCount} achievements`;
   }
 }
 
@@ -239,29 +355,7 @@ function showToast(prefix, strong, suffix) {
   }, 3000);
 }
 
-function openBadgePopup() {
-  const grid = document.getElementById("badgePopupGrid");
-  if (!grid) return;
-  grid.innerHTML = "";
-  for (const badge of BADGES) {
-    const earned = state.badges.has(badge.id);
-    const el = document.createElement("div");
-    el.className = "badge-card" + (earned ? " earned" : " locked");
-    el.innerHTML = `
-      <span class="badge-emoji">${badge.emoji}</span>
-      <span class="badge-name">${badge.name}</span>
-      <span class="badge-desc">${earned ? "Unlocked!" : badge.desc}</span>
-    `;
-    grid.appendChild(el);
-  }
-  document.getElementById("badgePopup").classList.remove("hidden");
-  document.getElementById("badgePopupOverlay").classList.remove("hidden");
-}
 
-function closeBadgePopup() {
-  document.getElementById("badgePopup").classList.add("hidden");
-  document.getElementById("badgePopupOverlay").classList.add("hidden");
-}
 
 function flagAiUsed() {
   if (state.aiUsedDays.has(state.currentDay)) return;
@@ -292,7 +386,7 @@ function initAiTutorHooks() {
           const used = state.aiUsedDays.has(state.currentDay);
           banner.classList.remove("hidden");
           banner.textContent = used
-            ? "⚠️ AI help used — this day will give 50 XP on completion."
+            ? "⚠️ AI help used; this day will give 50 XP on completion."
             : "⚠️ Asking the AI will reduce this day's XP to 50 when you complete it.";
         }
       }
@@ -670,7 +764,7 @@ function renderQuiz(questions, dayNum) {
         prev !== undefined
           ? `
       <div class="quiz-feedback ${prev.correct ? "correct" : "wrong"} show">
-        ${prev.correct ? "✓ Correct!" : `✗ Incorrect — The right answer is: <strong>${q.opts[q.answer]}</strong>`}
+        ${prev.correct ? "✓ Correct!" : `✗ Incorrect. The right answer is: <strong>${q.opts[q.answer]}</strong>`}
         ${q.explain ? `<br><span style="font-weight:400;opacity:0.85">${q.explain}</span>` : ""}
       </div>`
           : '<div class="quiz-feedback"></div>';
@@ -779,7 +873,30 @@ function toggleComplete() {
       return;
     }
     state.completed.add(n);
-    showCelebration(n);
+
+    // Track lightweight flags for secret achievements
+    const _now = new Date();
+    const _hour = _now.getHours();
+    const _dow = _now.getDay(); // 0 = Sunday, 6 = Saturday
+    if (_hour >= 0 && _hour < 5)  state.flags.nightOwl  = true;
+    if (_hour >= 5 && _hour < 6)  state.flags.earlyBird = true;
+    if (_dow === 0 || _dow === 6) state.flags.weekend   = true;
+
+    // Two-in-a-day: second completion on the same calendar date
+    const _today = `${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,'0')}-${String(_now.getDate()).padStart(2,'0')}`;
+    if (state.flags._lastCompletionDate === _today) {
+      state.flags.twoInADay = true;
+    }
+    state.flags._lastCompletionDate = _today;
+
+    // Perfect-day: all quizzes answered correctly for this day with zero wrong
+    const _qKey = "day_" + n;
+    const _dayAnswers = Object.values(state.quizAnswers[_qKey] || {});
+    if (_dayAnswers.length > 0 && _dayAnswers.every(a => a.correct)) {
+      state.perfectDays.add(n);
+    }
+
+    playCompletion(n);
     const xpForDay = state.aiUsedDays.has(n) ? 50 : 100;
     awardXP(xpForDay);
   }
@@ -798,23 +915,444 @@ function toggleComplete() {
   buildDayDots(n);
 }
 
-function showCelebration(n) {
-  const msgs = [
-    "You're building momentum. Keep going!",
-    "Great work! Python is getting clearer every day.",
-    "One more day conquered. You're unstoppable!",
-    "Consistency is the key to mastery. Well done!",
-    "You're writing real Python now. Be proud!",
-    "Every day you code, you get better. Keep it up!",
-  ];
-  document.getElementById("celebrationMsg").textContent =
-    `Day ${n} complete! ${msgs[n % msgs.length]}`;
-  document.getElementById("celebration").classList.remove("hidden");
+// ─── COMPLETION ANIMATION ENGINE ──────────────────────────────────────
+
+const DAY_CATEGORY = {
+  1:"foundations",2:"foundations",3:"foundations",4:"foundations",
+  5:"data",6:"data",7:"data",8:"data",
+  9:"foundations",10:"foundations",
+  11:"functions",12:"tools",13:"functions",14:"functions",
+  15:"foundations",16:"tools",17:"foundations",
+  19:"tools",20:"tools",21:"functions",
+  22:"web",23:"tools",24:"data",25:"data",
+  26:"web",27:"web",28:"web",29:"web",30:"foundations",
+};
+
+const CATEGORY_STYLE = {
+  foundations: { colors: ["#FFD43B","#4B8BBE","#FFFFFF"], style: "burst" },
+  data:        { colors: ["#3ECF8E","#4B8BBE","#FFD43B"], style: "fountain" },
+  functions:   { colors: ["#A78BFA","#FFD43B","#FFFFFF"], style: "spiral" },
+  tools:       { colors: ["#FFBD2E","#4B8BBE","#3ECF8E"], style: "sideCannons" },
+  web:         { colors: ["#4B8BBE","#3ECF8E","#FFD43B","#FFFFFF"], style: "fireworks" },
+};
+
+const COMPLETION_MSGS = [
+  "Day {n} done. Keep that momentum going.",
+  "Solid work on Day {n}. You're making real progress.",
+  "Day {n} in the books. Python is getting clearer.",
+  "Finished Day {n}. Consistency is how you get good.",
+  "Day {n} complete. You're writing real Python now.",
+  "Great job on Day {n}. Every day builds on the last.",
+];
+
+function getDayCategory(n) {
+  return DAY_CATEGORY[n] || "foundations";
+}
+
+function playCompletion(n) {
+  const reduceMotion = document.documentElement.classList.contains("reduce-motion");
+  const cat = getDayCategory(n);
+  const { colors, style } = CATEGORY_STYLE[cat];
+  const milestone = [1, 7, 15, 30].includes(n);
+  const msg = COMPLETION_MSGS[(n - 1) % COMPLETION_MSGS.length].replace("{n}", n);
+  showToast(msg, "", "");
+
+  // Hide the old celebration modal if visible
+  const cel = document.getElementById("celebration");
+  if (cel) cel.classList.add("hidden");
+
+  if (reduceMotion || typeof confetti !== "function") return;
+
+  if (milestone) {
+    runGrandFinale(colors);
+  } else {
+    runConfettiStyle(style, colors);
+  }
+}
+
+function runConfettiStyle(style, colors) {
+  const opts = { colors, disableForReducedMotion: true };
+  if (style === "burst") {
+    confetti({ ...opts, particleCount: 90, spread: 80, origin: { y: 0.55 }, startVelocity: 38 });
+  } else if (style === "fountain") {
+    let count = 0;
+    const interval = setInterval(() => {
+      confetti({ ...opts, particleCount: 12, spread: 55, origin: { x: 0.5, y: 0.75 }, startVelocity: 45, angle: 90 });
+      if (++count >= 7) clearInterval(interval);
+    }, 120);
+  } else if (style === "spiral") {
+    let angle = 60;
+    let count = 0;
+    const interval = setInterval(() => {
+      confetti({ ...opts, particleCount: 10, spread: 30, angle, origin: { x: 0.5, y: 0.6 }, startVelocity: 42 });
+      angle = angle === 60 ? 120 : 60;
+      if (++count >= 8) clearInterval(interval);
+    }, 100);
+  } else if (style === "sideCannons") {
+    confetti({ ...opts, particleCount: 60, spread: 55, angle: 60,  origin: { x: 0.0, y: 0.6 } });
+    confetti({ ...opts, particleCount: 60, spread: 55, angle: 120, origin: { x: 1.0, y: 0.6 } });
+  } else if (style === "fireworks") {
+    const positions = [{ x: 0.25, y: 0.35 }, { x: 0.75, y: 0.35 }, { x: 0.5, y: 0.25 }];
+    positions.forEach((pos, i) => {
+      setTimeout(() => {
+        confetti({ ...opts, particleCount: 55, spread: 70, origin: pos, startVelocity: 50, decay: 0.91 });
+      }, i * 200);
+    });
+  }
+}
+
+function runGrandFinale(colors) {
+  // Intensive version for milestone days (1, 7, 15, 30)
+  const gold = ["#FFD43B","#FFC300","#FFFFFF","#FFD43B"];
+  const mixed = [...colors, ...gold];
+  const opts = { colors: mixed, disableForReducedMotion: true, scalar: 1.1 };
+
+  // Three-burst pattern
+  setTimeout(() => confetti({ ...opts, particleCount: 120, spread: 100, origin: { y: 0.5 }, startVelocity: 50 }), 0);
+  setTimeout(() => {
+    confetti({ ...opts, particleCount: 80, spread: 60, angle: 55,  origin: { x: 0, y: 0.6 } });
+    confetti({ ...opts, particleCount: 80, spread: 60, angle: 125, origin: { x: 1, y: 0.6 } });
+  }, 300);
+  setTimeout(() => confetti({ ...opts, particleCount: 100, spread: 120, origin: { x: 0.5, y: 0.6 }, startVelocity: 40 }), 700);
 }
 
 function hideCelebration() {
-  document.getElementById("celebration").classList.add("hidden");
+  const cel = document.getElementById("celebration");
+  if (cel) cel.classList.add("hidden");
 }
+
+// ─── FULL-SCREEN ACHIEVEMENT POPUP SYSTEM ─────────────────────────────────
+
+const _achQueue = [];
+let _achPlaying = false;
+
+function enqueueAchievementPopup(ach) {
+  _achQueue.push(ach);
+  if (!_achPlaying) _drainAchQueue();
+}
+
+function _drainAchQueue() {
+  const ach = _achQueue.shift();
+  if (!ach) { _achPlaying = false; return; }
+  _achPlaying = true;
+  _playAchPopup(ach, () => _drainAchQueue());
+}
+
+function _achPopupHtml(ach) {
+  return `
+    <div class="ach-popup-bg"></div>
+    <div class="ach-popup-card">
+      <div class="ach-popup-shockwave"></div>
+      <div class="ach-popup-seal">${ach.icon}</div>
+      <div class="ach-popup-tag">Achievement Unlocked</div>
+      <div class="ach-popup-name">${ach.name}</div>
+      <div class="ach-popup-desc">${ach.desc}</div>
+      <div class="ach-popup-hint">Tap anywhere to continue</div>
+    </div>`;
+}
+
+function _playAchPopup(ach, done) {
+  const reduceMotion = document.documentElement.classList.contains("reduce-motion");
+  if (reduceMotion) {
+    showToast(ach.icon + " ", ach.name, " unlocked");
+    setTimeout(done, 0);
+    return;
+  }
+  const layer = document.getElementById("achPopupLayer");
+  if (!layer) { done(); return; }
+
+  layer.innerHTML = _achPopupHtml(ach);
+  layer.classList.remove("hidden");
+
+  // Small burst of confetti centered on the seal
+  requestAnimationFrame(() => {
+    layer.classList.add("playing");
+    if (typeof confetti === "function") {
+      confetti({
+        particleCount: 80,
+        spread: 60,
+        origin: { x: 0.5, y: 0.45 },
+        colors: ["#D4AF37","#FFD700","#FFFFFF","#F5F5DC"],
+        startVelocity: 42,
+        gravity: 0.85,
+        disableForReducedMotion: true,
+      });
+    }
+    playChime();
+  });
+
+  let dismissed = false;
+  const finish = () => {
+    if (dismissed) return;
+    dismissed = true;
+    layer.classList.remove("playing");
+    setTimeout(() => {
+      layer.classList.add("hidden");
+      layer.innerHTML = "";
+      done();
+    }, 350);
+  };
+
+  const timer = setTimeout(finish, 3200);
+  layer.addEventListener("click", () => { clearTimeout(timer); finish(); }, { once: true });
+}
+
+// ─── LEVEL-UP BANNER ──────────────────────────────────────────────────────
+
+function showLevelUpBanner(lvlData) {
+  const banner = document.getElementById("levelUpBanner");
+  if (!banner) return;
+  const reduceMotion = document.documentElement.classList.contains("reduce-motion");
+  if (reduceMotion) {
+    showToast("Level up! You're now a ", lvlData.name);
+    return;
+  }
+  banner.innerHTML = `
+    <span class="levelup-label">Level Up</span>
+    <span class="levelup-level">Level ${lvlData.level}</span>
+    <span class="levelup-name">${lvlData.name}</span>`;
+  banner.classList.remove("hidden");
+  requestAnimationFrame(() => banner.classList.add("show"));
+  setTimeout(() => {
+    banner.classList.remove("show");
+    setTimeout(() => banner.classList.add("hidden"), 400);
+  }, 2400);
+}
+
+// ─── AUDIO CHIME (Web Audio API) ──────────────────────────────────────────
+
+let _audioCtx = null;
+
+function playChime() {
+  const soundOn = localStorage.getItem("py30_sound") === "true";
+  if (!soundOn) return;
+  try {
+    if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = _audioCtx;
+    [[880, 0], [1100, 0.15], [1320, 0.30]].forEach(([freq, when]) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = "sine";
+      gain.gain.setValueAtTime(0, ctx.currentTime + when);
+      gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + when + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + when + 0.22);
+      osc.start(ctx.currentTime + when);
+      osc.stop(ctx.currentTime + when + 0.25);
+    });
+  } catch (_) {}
+}
+
+// ─── ACHIEVEMENT BOOK (3D FLIP-BOOK) ──────────────────────────────────────────
+
+const AchievementUI = (() => {
+  const CAT_LABELS = {
+    progress: "Progress",
+    streaks:  "Streaks",
+    xp:       "Experience",
+    mastery:  "Mastery",
+    secret:   "Secrets",
+  };
+
+  const CAT_ICONS = {
+    progress: "🗺️",
+    streaks:  "🔥",
+    xp:       "⭐",
+    mastery:  "🏅",
+    secret:   "🔮",
+  };
+
+  let _currentPage = 0; // 0 = cover
+  const PAGES = ["cover", ...ACH_CATEGORIES]; // cover + 5 category pages
+
+  function _prefersNoMotion() {
+    return document.documentElement.classList.contains("reduce-motion")
+      || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  function _isMobile() {
+    return window.innerWidth <= 640;
+  }
+
+  function _renderCoverPage() {
+    const earned = state.achievements ? state.achievements.size : 0;
+    const total  = ACHIEVEMENTS.filter(a => !a.secret).length;
+    return `
+      <div class="ach-page-inner cover-inner">
+        <div class="ach-cover-title">Achievement Book</div>
+        <div class="ach-cover-sub">30 Days of Python</div>
+        <div class="ach-cover-stats">
+          <span class="ach-cover-count">${earned}</span>
+          <span class="ach-cover-total"> / ${total} unlocked</span>
+        </div>
+        <div class="ach-cover-hint">Click &#8250; to browse</div>
+      </div>`;
+  }
+
+  function _renderCategoryPage(cat) {
+    const achievements = ACHIEVEMENTS.filter(a => a.cat === cat);
+    const cards = achievements.map(a => {
+      const unlocked = state.achievements && state.achievements.has(a.id);
+      if (!unlocked && a.secret) {
+        return `<div class="ach-card locked secret">
+          <div class="ach-card-icon">❓</div>
+          <div class="ach-card-name">???</div>
+          <div class="ach-card-desc">Hidden achievement</div>
+        </div>`;
+      }
+      return `<div class="ach-card ${unlocked ? "earned" : "locked"}">
+        <div class="ach-card-icon">${a.icon}</div>
+        <div class="ach-card-name">${a.name}</div>
+        <div class="ach-card-desc">${a.desc}</div>
+        ${unlocked ? '<div class="ach-card-check">✓</div>' : ''}
+      </div>`;
+    }).join("");
+
+    const earnedInCat = achievements.filter(a => state.achievements && state.achievements.has(a.id)).length;
+
+    return `
+      <div class="ach-page-inner">
+        <div class="ach-page-header">
+          <span class="ach-cat-icon">${CAT_ICONS[cat]}</span>
+          <span class="ach-cat-label">${CAT_LABELS[cat]}</span>
+          <span class="ach-cat-progress">${earnedInCat} / ${achievements.length}</span>
+        </div>
+        <div class="ach-cards-grid">${cards}</div>
+      </div>`;
+  }
+
+  function _renderPage(pageIdx) {
+    const key = PAGES[pageIdx];
+    if (key === "cover") return _renderCoverPage();
+    return _renderCategoryPage(key);
+  }
+
+  function _buildBook() {
+    const stage = document.getElementById("achBookStage");
+    if (!stage) return;
+
+    if (_prefersNoMotion() || _isMobile()) {
+      // Flat mode: one page shown at a time, no 3D
+      stage.dataset.flat = "true";
+      _renderFlat(stage);
+      return;
+    }
+
+    stage.innerHTML = "";
+    stage.dataset.flat = "";
+
+    // Create one DOM page leaf per page
+    PAGES.forEach((_, i) => {
+      const leaf = document.createElement("div");
+      leaf.className = "ach-page-leaf";
+      leaf.dataset.idx = i;
+      leaf.innerHTML = `
+        <div class="ach-page-front">${_renderPage(i)}</div>
+        <div class="ach-page-back">${i + 1 < PAGES.length ? _renderPage(i + 1) : ""}</div>`;
+      stage.appendChild(leaf);
+    });
+
+    _applyPageZIndexes();
+    _updateNavButtons();
+    _updateIndicator();
+  }
+
+  function _renderFlat(stage) {
+    stage.innerHTML = `<div class="ach-page-flat">${_renderPage(_currentPage)}</div>`;
+    _updateNavButtons();
+    _updateIndicator();
+  }
+
+  function _applyPageZIndexes() {
+    const leaves = document.querySelectorAll(".ach-page-leaf");
+    leaves.forEach((leaf, i) => {
+      if (i < _currentPage) {
+        leaf.classList.add("flipped");
+        leaf.style.zIndex = PAGES.length - i;
+      } else {
+        leaf.classList.remove("flipped");
+        leaf.style.zIndex = i + 1;
+      }
+    });
+  }
+
+  function _updateNavButtons() {
+    const prev = document.getElementById("achPrev");
+    const next = document.getElementById("achNext");
+    if (prev) prev.disabled = _currentPage === 0;
+    if (next) next.disabled = _currentPage >= PAGES.length - 1;
+  }
+
+  function _updateIndicator() {
+    const el = document.getElementById("achPageIndicator");
+    if (el) {
+      el.innerHTML = PAGES.map((_, i) =>
+        `<span class="ach-dot${i === _currentPage ? " active" : ""}"></span>`
+      ).join("");
+    }
+  }
+
+  function prev() {
+    if (_currentPage <= 0) return;
+    const stage = document.getElementById("achBookStage");
+    if (stage && stage.dataset.flat) {
+      _currentPage--;
+      _renderFlat(stage);
+      return;
+    }
+    _currentPage--;
+    _applyPageZIndexes();
+    _updateNavButtons();
+    _updateIndicator();
+  }
+
+  function next() {
+    if (_currentPage >= PAGES.length - 1) return;
+    const stage = document.getElementById("achBookStage");
+    if (stage && stage.dataset.flat) {
+      _currentPage++;
+      _renderFlat(stage);
+      return;
+    }
+    _currentPage++;
+    _applyPageZIndexes();
+    _updateNavButtons();
+    _updateIndicator();
+  }
+
+  function open() {
+    _currentPage = 0;
+    _buildBook();
+    const overlay = document.getElementById("achBookOverlay");
+    const book    = document.getElementById("achievementBook");
+    if (overlay) overlay.classList.remove("hidden");
+    if (book) {
+      book.classList.remove("hidden");
+      requestAnimationFrame(() => book.classList.add("open"));
+    }
+  }
+
+  function close() {
+    const book    = document.getElementById("achievementBook");
+    const overlay = document.getElementById("achBookOverlay");
+    if (book) {
+      book.classList.remove("open");
+      setTimeout(() => book.classList.add("hidden"), 350);
+    }
+    if (overlay) overlay.classList.add("hidden");
+  }
+
+  return { open, close, prev, next, _impl: "book3d" };
+})();
+
+function openAchievementBook()  { AchievementUI.open();  }
+function closeAchievementBook() { AchievementUI.close(); }
+
+// Remove old badge popup functions (replaced by book)
+function openBadgePopup()  { AchievementUI.open(); }
+function closeBadgePopup() { AchievementUI.close(); }
 
 // ─── EXERCISES ────────────────────────────────
 function toggleExercise(el, dayKey, id) {
@@ -1311,7 +1849,7 @@ function initCodeTyper() {
   pre.innerHTML = '<span class="demo-cursor"></span>';
 
   const segments = [
-    ["# 30 Days of Python — Day 10: Loops", "lc-comment"],
+    ["# 30 Days of Python: Day 10 Loops", "lc-comment"],
     ["\n\n", null],
     ["days = list(range(1, 31))", null],
     ["\n", null],
@@ -1399,7 +1937,7 @@ function initDemoSequence() {
   const messages = [
     { role: "user", text: "Why is my code getting a SyntaxError?", delay: 1800 },
     { role: "ai",   text: "I can see the issue! On line 6, the <code>for</code> loop is missing a colon at the end.", delay: 2800 },
-    { role: "ai",   text: "Change <code>for score in scores</code> to <code>for score in scores:</code> — Python requires the colon to open a block.", delay: 3800 },
+    { role: "ai",   text: "Change <code>for score in scores</code> to <code>for score in scores:</code>. Python requires the colon to open a block.", delay: 3800 },
     { role: "user", text: "Oh and what about line 9?", delay: 5000 },
     { role: "ai",   text: "Good catch! <code>len(scores</code> is missing the closing parenthesis. Fix it to <code>len(scores)</code> and you are good to go.", delay: 6200 }
   ];

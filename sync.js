@@ -5,15 +5,16 @@
 
 (function () {
   const LS = {
-    COMPLETED:   "py30_completed",
-    XP:          "py30_xp",
-    LEVEL:       "py30_level",
-    STREAK:      "py30_streak",
-    LAST_ACTIVE: "py30_last_active",
-    BADGES:      "py30_badges",
-    AI_DAYS:     "py30_ai_days",
-    EXERCISES:   "py30_exercises",
-    QUIZ:        "py30_quiz",
+    COMPLETED:    "py30_completed",
+    XP:           "py30_xp",
+    LEVEL:        "py30_level",
+    STREAK:       "py30_streak",
+    LAST_ACTIVE:  "py30_last_active",
+    BADGES:       "py30_badges",
+    ACHIEVEMENTS: "py30_achievements",
+    AI_DAYS:      "py30_ai_days",
+    EXERCISES:    "py30_exercises",
+    QUIZ:         "py30_quiz",
   };
 
   const DEBOUNCE_MS = 1500;

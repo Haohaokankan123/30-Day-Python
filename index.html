@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>30 Days of Python — Learn Python from Zero to Hero</title>
+        <title>30 Days of Python: Learn Python from Zero to Hero</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -90,10 +90,10 @@
                 </p>
                 <div class="landing-hero-btns hero-sub-fade">
                     <button
-                        class="landing-btn-primary"
-                        onclick="Auth._switchTab('signup'); Auth.showModal()"
+                        class="landing-btn-primary large"
+                        onclick="startLearning()"
                     >
-                        Sign Up Free →
+                        Get Started Free →
                     </button>
                     <button
                         class="landing-btn-secondary"
@@ -157,7 +157,7 @@
                             Most beginner Python resources fall into one of two
                             traps: they're either walls of text you passively
                             scroll through, or flashy courses locked behind a
-                            paywall. I wanted something different — a place
+                            paywall. I wanted something different; a place
                             where you actually <em>write</em> code from Day 1,
                             get instant feedback, and have an AI tutor on
                             standby when you're stuck.
@@ -183,8 +183,7 @@
                     </div>
                     <div class="landing-about-card">
                         <div class="landing-about-quote">
-                            "The best way to learn Python is to write Python —
-                            every single day."
+                            "The best way to learn Python is to write Python. Every single day."
                         </div>
                         <div class="landing-about-signature">
                             <div class="landing-about-avatar">C</div>
@@ -294,8 +293,7 @@ average = total / len(scores
                         <div class="landing-feat-icon">⌨️</div>
                         <h3>Live Code Editor</h3>
                         <p>
-                            Run real Python in your browser — no installs
-                            needed. Powered by Pyodide.
+                            Run real Python in your browser with no installs needed. Powered by Pyodide.
                         </p>
                     </div>
                     <div class="landing-feat-card">
@@ -333,9 +331,7 @@ average = total / len(scores
                         Write it.<br />Run it.<br />Get it.
                     </h2>
                     <p class="landing-feature-desc">
-                        Every lesson is real, runnable Python. No passive
-                        reading — you type, you execute, you understand by
-                        doing.
+                        Every lesson is real, runnable Python. No passive reading; you type, you execute, you understand by doing.
                     </p>
                 </div>
                 <div class="landing-feature-card-wrap">
@@ -445,7 +441,7 @@ average = total / len(scores
                 onclick="expandSidebar()"
                 title="Show sidebar"
             >
-                <i class="fa-regular fa-sidebar"></i>
+                <i class="fa-solid fa-bars"></i>
             </button>
             <!-- Sidebar -->
             <aside class="sidebar" id="sidebar">
@@ -484,7 +480,7 @@ average = total / len(scores
                         onclick="toggleSidebarCollapse()"
                         title="Toggle sidebar"
                     >
-                        <i class="fa-regular fa-sidebar"></i>
+                        <i class="fa-solid fa-bars"></i>
                     </button>
                     <button class="home-btn" onclick="goHome()">
                         ← Curriculum
@@ -512,9 +508,10 @@ average = total / len(scores
                             <button
                                 class="topbar-badges-btn"
                                 id="topbarBadges"
-                                onclick="openBadgePopup()"
+                                onclick="openAchievementBook()"
+                                title="Open achievement book"
                             >
-                                <span id="topbarBadgeCount">0</span> badges
+                                🏅 <span id="topbarBadgeCount">0</span>
                             </button>
                         </div>
                         <button
@@ -751,20 +748,20 @@ average = total / len(scores
             </div>
         </div>
 
-        <!-- Badge Popup -->
-        <div
-            class="badge-popup-overlay hidden"
-            id="badgePopupOverlay"
-            onclick="closeBadgePopup()"
-        ></div>
-        <div class="badge-popup hidden" id="badgePopup">
-            <div class="badge-popup-header">
-                <span>Your Badges</span>
-                <button class="badge-popup-close" onclick="closeBadgePopup()">
-                    ✕
-                </button>
+        <!-- Achievement Book -->
+        <div id="achBookOverlay" class="ach-overlay hidden" onclick="closeAchievementBook()"></div>
+        <div id="achievementBook" class="ach-book hidden" role="dialog" aria-modal="true" aria-label="Achievement Book">
+            <div class="ach-book-wrap">
+                <div class="ach-book-stage" id="achBookStage">
+                    <!-- Pages injected by JS -->
+                </div>
+                <div class="ach-book-nav">
+                    <button class="ach-nav-btn prev" id="achPrev" onclick="AchievementUI.prev()" aria-label="Previous page">&#8249;</button>
+                    <div class="ach-page-indicator" id="achPageIndicator"></div>
+                    <button class="ach-nav-btn next" id="achNext" onclick="AchievementUI.next()" aria-label="Next page">&#8250;</button>
+                </div>
             </div>
-            <div class="badge-popup-grid" id="badgePopupGrid"></div>
+            <button class="ach-close-btn" onclick="closeAchievementBook()" aria-label="Close achievement book">&#x2715;</button>
         </div>
 
         <!-- Auth Modal -->
@@ -884,6 +881,10 @@ average = total / len(scores
                         <div class="settings-label">Reduce Animations</div>
                         <label class="settings-toggle"><input type="checkbox" id="reduceMotionToggle" onchange="Settings.setReduceMotion(this.checked)"><span class="toggle-track"></span></label>
                     </div>
+                    <div class="settings-row">
+                        <div class="settings-label">Sound Effects</div>
+                        <label class="settings-toggle"><input type="checkbox" id="soundToggle" onchange="Settings.setSound(this.checked)"><span class="toggle-track"></span></label>
+                    </div>
                 </div>
                 <!-- Editor -->
                 <div id="settings-editor" class="settings-section hidden">
@@ -956,6 +957,7 @@ average = total / len(scores
         <script src="days-data.js"></script>
         <script src="app.js?v=12"></script>
         <script src="playground.js?v=12"></script>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
         <script src="ai-tutor.js?v=12"></script>
         <script src="auth.js?v=2"></script>
         <script src="sync.js?v=2"></script>
@@ -963,5 +965,11 @@ average = total / len(scores
         <script src="pro.js?v=1"></script>
         <!-- Pro toast notification -->
         <div id="proToastContainer"></div>
+
+        <!-- Full-screen achievement unlock cinematic -->
+        <div id="achPopupLayer" class="ach-popup-layer hidden" role="dialog" aria-modal="true" aria-live="assertive"></div>
+
+        <!-- Level-up center banner -->
+        <div id="levelUpBanner" class="levelup-banner hidden" aria-live="polite"></div>
     </body>
 </html>

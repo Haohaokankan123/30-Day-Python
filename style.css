@@ -3629,27 +3629,32 @@ body.panel-resizing { cursor: ew-resize !important; }
 /* ─── TOAST ──────────────────────────────────── */
 .gamification-toast {
     position: fixed;
-    top: 16px;
-    right: 16px;
-    background: #1f1f1f;
-    border: 1px solid rgba(252, 212, 77, 0.3);
-    border-radius: 10px;
-    padding: 12px 16px;
-    font-size: 13px;
-    color: #f0f0f0;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(16px);
+    background: var(--bg-1, #1f1f1f);
+    border: 1px solid var(--border-accent, rgba(252, 212, 77, 0.3));
+    border-radius: 32px;
+    padding: 11px 22px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-2, #f0f0f0);
     z-index: 2000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
     opacity: 0;
-    transform: translateY(-8px);
     transition:
-        opacity 0.3s ease,
-        transform 0.3s ease;
-    max-width: 280px;
+        opacity 0.28s ease,
+        transform 0.28s ease;
+    white-space: nowrap;
+    max-width: 420px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
 }
 
 .gamification-toast.show {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
 }
 
 /* ─── AI WARNING BANNER ──────────────────────── */
@@ -5565,27 +5570,401 @@ body { font-family: var(--font-body); }
     transition-duration: 0.01ms !important;
 }
 
-/* ─── LIGHT THEME ────────────────────────────── */
-[data-theme="light"] {
-    --bg-0:    #FFFFFF;
-    --bg-1:    #F4F4F5;
-    --bg-2:    #E4E4E7;
-    --bg-3:    #D4D4D8;
-    --bg-card: #FFFFFF;
-    --bg-code: #F1F5F9;
-    --accent:  #C8960A;
-    --accent-dark: #FFFFFF;
-    --accent-glow: rgba(200,150,10,0.2);
-    --text-1:  #0F172A;
-    --text-2:  #1E293B;
-    --text-3:  #64748B;
-    --text-4:  #94A3B8;
-    --border:        rgba(0,0,0,0.10);
-    --border-light:  rgba(0,0,0,0.06);
-    --border-accent: rgba(200,150,10,0.3);
-    --shadow:    0 0 0 1px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.12);
-    --shadow-lg: 0 0 0 1px rgba(0,0,0,0.08), 0 16px 48px rgba(0,0,0,0.2);
+/* ─── ACHIEVEMENT BOOK OVERLAY ──────────────────────── */
+.ach-overlay {
+    position: fixed; inset: 0; z-index: 7000;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
 }
+
+/* ─── ACHIEVEMENT BOOK ───────────────────────────────── */
+.ach-book {
+    /* Own parchment/leather/gold vars; intentionally no Python blue/yellow */
+    --book-paper:   #f3e8cf;
+    --book-paper-2: #ede0be;
+    --book-leather: #4a2c12;
+    --book-spine:   #3a220e;
+    --book-gold:    #d4af37;
+    --book-gold-2:  #f0c040;
+    --book-ink:     #2a1a0a;
+    --book-ink-2:   #5a3a18;
+    --book-shadow:  rgba(30, 12, 0, 0.55);
+
+    position: fixed;
+    inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 7500;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.94);
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(.2,.8,.2,1);
+}
+.ach-book.open {
+    pointer-events: all;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.ach-book-wrap {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 18px;
+}
+
+/* ── Stage: provides the 3D perspective context ────────────── */
+.ach-book-stage {
+    position: relative;
+    width: min(560px, 92vw);
+    height: min(420px, 72vh);
+    perspective: 2200px;
+    perspective-origin: 50% 40%;
+}
+
+/* ── Page leaves: actual 3D rotating elements ──────────────── */
+.ach-page-leaf {
+    position: absolute; inset: 0;
+    transform-style: preserve-3d;
+    transform-origin: left center;
+    transform: rotateY(0deg);
+    transition: transform 0.65s cubic-bezier(.25,.85,.25,1);
+    will-change: transform;
+    cursor: pointer;
+}
+.ach-page-leaf.flipped {
+    transform: rotateY(-180deg);
+}
+
+.ach-page-front,
+.ach-page-back {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    border-radius: 4px 12px 12px 4px;
+    background: var(--book-paper);
+    border: 1px solid rgba(160, 110, 50, 0.35);
+    box-shadow:
+        inset -2px 0 8px rgba(100, 60, 10, 0.10),
+        2px 4px 20px var(--book-shadow);
+    overflow: hidden;
+}
+.ach-page-back {
+    transform: rotateY(180deg);
+    border-radius: 12px 4px 4px 12px;
+    box-shadow:
+        inset 2px 0 8px rgba(100, 60, 10, 0.10),
+        -2px 4px 20px var(--book-shadow);
+}
+
+/* ── Page inner content ──────────────────────────────────── */
+.ach-page-inner {
+    padding: 24px 28px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    color: var(--book-ink);
+    font-family: 'Georgia', 'Times New Roman', serif;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(160,110,50,0.3) transparent;
+}
+
+/* ── Cover page ──────────────────────────────────────────── */
+.cover-inner {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    height: 100%;
+    background: linear-gradient(145deg, #e8d4a0, #d4b870, #c8a848);
+    border-radius: inherit;
+    gap: 10px;
+}
+.ach-cover-title {
+    font-size: 28px; font-weight: 700;
+    color: var(--book-spine);
+    letter-spacing: 0.02em;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.4);
+}
+.ach-cover-sub {
+    font-size: 14px; color: var(--book-ink-2); letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.ach-cover-stats {
+    margin-top: 12px;
+    background: rgba(42,26,10,0.08);
+    border: 1px solid rgba(160,110,50,0.3);
+    border-radius: 40px; padding: 8px 22px;
+}
+.ach-cover-count { font-size: 26px; font-weight: 800; color: var(--book-spine); }
+.ach-cover-total { font-size: 14px; color: var(--book-ink-2); }
+.ach-cover-hint  { font-size: 12px; color: rgba(42,26,10,0.45); margin-top: 8px; }
+
+/* ── Category page ───────────────────────────────────────── */
+.ach-page-header {
+    display: flex; align-items: center; gap: 8px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(160,110,50,0.25);
+    margin-bottom: 14px;
+}
+.ach-cat-icon  { font-size: 20px; }
+.ach-cat-label { font-size: 17px; font-weight: 700; flex: 1; color: var(--book-spine); }
+.ach-cat-progress { font-size: 12px; color: var(--book-ink-2); white-space: nowrap; }
+
+/* ── Achievement cards ───────────────────────────────────── */
+.ach-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.ach-card {
+    position: relative;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(160,110,50,0.2);
+    border-radius: 8px;
+    padding: 12px 10px 10px;
+    text-align: center;
+    transition: box-shadow 0.15s;
+}
+.ach-card.earned {
+    background: rgba(212,175,55,0.15);
+    border-color: rgba(212,175,55,0.45);
+    box-shadow: 0 0 0 1px rgba(212,175,55,0.2);
+}
+.ach-card.locked { opacity: 0.55; filter: grayscale(0.5); }
+.ach-card.secret.locked { opacity: 0.42; }
+
+.ach-card-icon  { font-size: 24px; line-height: 1.3; }
+.ach-card-name  { font-size: 11.5px; font-weight: 700; color: var(--book-spine); margin-top: 4px; line-height: 1.2; }
+.ach-card-desc  { font-size: 10px; color: var(--book-ink-2); margin-top: 3px; line-height: 1.35; }
+.ach-card-check {
+    position: absolute; top: 5px; right: 7px;
+    font-size: 11px; color: #1a8a56; font-weight: 700;
+}
+
+/* ── Navigation ──────────────────────────────────────────── */
+.ach-book-nav {
+    display: flex; align-items: center; gap: 12px;
+}
+.ach-nav-btn {
+    background: rgba(42,26,10,0.75);
+    color: var(--book-gold);
+    border: 1px solid rgba(212,175,55,0.4);
+    border-radius: 50%;
+    width: 38px; height: 38px;
+    font-size: 22px; line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    display: flex; align-items: center; justify-content: center;
+}
+.ach-nav-btn:hover:not(:disabled) { background: rgba(42,26,10,0.92); transform: scale(1.08); }
+.ach-nav-btn:disabled { opacity: 0.35; cursor: default; }
+
+.ach-page-indicator {
+    display: flex; gap: 6px; align-items: center;
+}
+.ach-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(212,175,55,0.3);
+    transition: background 0.2s, transform 0.2s;
+}
+.ach-dot.active {
+    background: var(--book-gold);
+    transform: scale(1.35);
+}
+
+/* ── Close button ────────────────────────────────────────── */
+.ach-close-btn {
+    position: fixed; top: 24px; right: 24px;
+    background: rgba(42,26,10,0.8);
+    color: var(--book-gold);
+    border: 1px solid rgba(212,175,55,0.35);
+    border-radius: 50%; width: 36px; height: 36px;
+    font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+    z-index: 7600;
+}
+.ach-close-btn:hover { background: rgba(42,26,10,0.96); }
+
+/* ── Flat mode (mobile + reduce-motion) ──────────────────── */
+.ach-page-flat {
+    width: min(560px, 92vw);
+    min-height: min(420px, 72vh);
+    background: var(--book-paper);
+    border: 1px solid rgba(160,110,50,0.35);
+    border-radius: 12px;
+    box-shadow: 2px 4px 20px var(--book-shadow);
+    overflow: hidden;
+}
+@media (max-width: 640px) {
+    .ach-book-stage { height: 65vh; }
+    .ach-cards-grid { grid-template-columns: 1fr; }
+    .ach-page-leaf  { border-radius: 12px; }
+    .ach-page-front, .ach-page-back { border-radius: 12px; }
+}
+
+/* ─── FULL-SCREEN ACHIEVEMENT POPUP ────────────────── */
+.ach-popup-layer {
+    position: fixed; inset: 0; z-index: 9000;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+}
+.ach-popup-layer.playing { pointer-events: all; }
+
+.ach-popup-bg {
+    position: absolute; inset: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.35s ease;
+}
+.ach-popup-layer.playing .ach-popup-bg { background: rgba(0, 0, 0, 0.72); }
+
+.ach-popup-card {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 10px;
+    background: linear-gradient(145deg, #2a1a0a, #3d2610);
+    border: 2px solid #D4AF37;
+    border-radius: 20px;
+    padding: 44px 52px 36px;
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15), 0 24px 80px rgba(0,0,0,0.7);
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.6) translateY(40px);
+    transition: opacity 0.4s cubic-bezier(.2,.8,.2,1), transform 0.4s cubic-bezier(.2,.8,.2,1);
+    max-width: 340px; width: 90%;
+}
+.ach-popup-layer.playing .ach-popup-card {
+    opacity: 1; transform: scale(1) translateY(0);
+}
+
+.ach-popup-shockwave {
+    position: absolute; inset: -2px;
+    border-radius: 22px;
+    border: 2px solid rgba(212, 175, 55, 0.8);
+    opacity: 0;
+}
+.ach-popup-layer.playing .ach-popup-shockwave {
+    animation: achShockwave 0.55s ease-out 0.35s forwards;
+}
+
+@keyframes achShockwave {
+    0%   { opacity: 0.9; transform: scale(1); }
+    100% { opacity: 0;   transform: scale(1.25); }
+}
+
+.ach-popup-seal {
+    font-size: 64px;
+    line-height: 1;
+    filter: drop-shadow(0 4px 12px rgba(212,175,55,0.5));
+    animation: achSealBounce 0.5s cubic-bezier(.2,.8,.2,1) 0.38s both;
+}
+@keyframes achSealBounce {
+    0%   { transform: scale(0.3); opacity: 0; }
+    70%  { transform: scale(1.18); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.ach-popup-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #D4AF37;
+}
+.ach-popup-name {
+    font-size: 26px; font-weight: 800; color: #F5E6C8;
+    line-height: 1.2;
+}
+.ach-popup-desc {
+    font-size: 14px; color: #C8B07A; line-height: 1.5; max-width: 240px;
+}
+.ach-popup-hint {
+    font-size: 11px; color: rgba(200, 176, 122, 0.5);
+    margin-top: 8px;
+}
+
+/* ─── LEVEL-UP BANNER ──────────────────────────────── */
+.levelup-banner {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.85);
+    background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+    border: 1px solid var(--border-accent);
+    border-radius: 16px;
+    padding: 20px 40px;
+    display: flex; align-items: center; gap: 14px;
+    z-index: 5000;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(.2,.8,.2,1);
+    pointer-events: none;
+}
+.levelup-banner.show {
+    opacity: 1; transform: translate(-50%, -50%) scale(1);
+}
+.levelup-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-3);
+}
+.levelup-level {
+    font-size: 28px; font-weight: 900; color: var(--accent);
+}
+.levelup-name {
+    font-size: 18px; font-weight: 700; color: var(--text-1);
+}
+
+/* ─── LIGHT THEME (blue-forward, warm surfaces) ── */
+[data-theme="light"] {
+    /* Warm off-white surfaces that layer clearly */
+    --bg-0:    #F4F6FA;
+    --bg-1:    #FBFCFE;
+    --bg-2:    #FFFFFF;
+    --bg-3:    #EAEEF5;
+    --bg-card: #FFFFFF;
+    --bg-code: #F2F5FA;
+
+    /* Python blue as primary accent; yellow as a sparing highlight */
+    --accent:       #2D6CA8;
+    --accent-dark:  #FFFFFF;
+    --accent-glow:  rgba(45, 108, 168, 0.22);
+    --accent-muted: rgba(45, 108, 168, 0.08);
+    --accent-2:     #E0A400;
+
+    /* Semantic colours tuned for light backgrounds */
+    --cyan:         #2D6CA8;
+    --cyan-glow:    rgba(45, 108, 168, 0.20);
+    --green:        #1A9E63;
+    --amber:        #C77800;
+    --red:          #D63B30;
+
+    /* Text: softer than pure black, WCAG AA on all surfaces */
+    --text-1:  #16203A;
+    --text-2:  #2B3852;
+    --text-3:  #5A6885;
+    --text-4:  #8A97B0;
+
+    --border:        rgba(22, 32, 58, 0.12);
+    --border-light:  rgba(22, 32, 58, 0.07);
+    --border-accent: rgba(45, 108, 168, 0.32);
+
+    --shadow:    0 1px 2px rgba(16, 24, 40, 0.06), 0 6px 18px rgba(16, 24, 40, 0.10);
+    --shadow-lg: 0 8px 24px rgba(16, 24, 40, 0.12), 0 24px 56px rgba(16, 24, 40, 0.14);
+}
+
+/* Buttons that sit on the accent: keep white text readable on blue */
+[data-theme="light"] .user-avatar-btn,
+[data-theme="light"] .deepl-save-btn { color: #FFFFFF; }
+
+/* Light-mode code syntax: readable on the warm code background */
+[data-theme="light"] pre[class*="language-"],
+[data-theme="light"] code[class*="language-"] { color: #2B3852; text-shadow: none; }
+[data-theme="light"] .token.comment,
+[data-theme="light"] .token.prolog { color: #6A7790; font-style: italic; }
+[data-theme="light"] .token.keyword,
+[data-theme="light"] .token.boolean { color: #1A6FB0; }
+[data-theme="light"] .token.string,
+[data-theme="light"] .token.char { color: #1A8A56; }
+[data-theme="light"] .token.number,
+[data-theme="light"] .token.constant { color: #B5651D; }
+[data-theme="light"] .token.function { color: #8A4FB8; }
+[data-theme="light"] .token.operator,
+[data-theme="light"] .token.punctuation { color: #4A5670; }
+
+/* Tutor messages in light mode */
 [data-theme="light"] .tutor-msg.assistant .tutor-code-block code { color: #374151; }
 [data-theme="light"] .tutor-msg.assistant .tutor-inline-code { color: #6D28D9; background: rgba(109,40,217,0.08); }
 

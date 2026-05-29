@@ -97,6 +97,10 @@ const SettingsPanel = (() => {
     const rmEl = document.getElementById("reduceMotionToggle");
     if (rmEl) rmEl.checked = reduceMotion;
 
+    const soundOn = localStorage.getItem("py30_sound") === "true";
+    const soundEl = document.getElementById("soundToggle");
+    if (soundEl) soundEl.checked = soundOn;
+
     // Notifications
     const streakReminder = localStorage.getItem("py30_notif_streak") !== "false";
     const weeklyTips = localStorage.getItem("py30_notif_tips") !== "false";
@@ -165,6 +169,10 @@ const Settings = (() => {
     document.documentElement.classList.toggle("reduce-motion", val);
   }
 
+  function setSound(val) {
+    localStorage.setItem("py30_sound", String(val));
+  }
+
   function setTabSize(val) {
     localStorage.setItem("py30_editor_tabsize", val);
     if (window.Playground && window.Playground.editor) {
@@ -222,7 +230,7 @@ const Settings = (() => {
   function startDeleteAccount() {
     _deleteStep = 1;
     _showDeleteModal(
-      "Delete Account — Step 1 of 3",
+      "Delete Account: Step 1 of 3",
       "This will permanently delete your account and all progress.",
       'Type DELETE to continue',
       "DELETE"
@@ -266,7 +274,7 @@ const Settings = (() => {
       _deleteStep = 2;
       const email = (window.Auth && window.Auth.user()) ? window.Auth.user().email : "";
       _showDeleteModal(
-        "Delete Account — Step 2 of 3",
+        "Delete Account: Step 2 of 3",
         "Type your email address to confirm you own this account.",
         "Your email address",
         email
@@ -274,7 +282,7 @@ const Settings = (() => {
     } else if (_deleteStep === 2) {
       _deleteStep = 3;
       _showDeleteModal(
-        "Delete Account — Step 3 of 3",
+        "Delete Account: Step 3 of 3",
         "Final confirmation. This CANNOT be undone. All XP, badges, and progress will be lost forever.",
         'Type GOODBYE to permanently delete',
         "GOODBYE"
@@ -322,7 +330,7 @@ const Settings = (() => {
   }
 
   return {
-    setTheme, setFont, setSize, setReduceMotion,
+    setTheme, setFont, setSize, setReduceMotion, setSound,
     setTabSize, setLineNumbers, setEditorFontSize, setNotification,
     sendPasswordReset, startDeleteAccount, confirmDeleteStep, cancelDelete,
     applyOnLoad,
