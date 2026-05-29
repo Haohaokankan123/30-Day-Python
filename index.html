@@ -648,6 +648,13 @@ average = total / len(scores
             <aside class="tutor-panel" id="tutorPanel" aria-hidden="true">
                 <div class="panel-resize-handle" data-resize-target="tutorPanel" title="Drag to resize"></div>
                 <header class="tutor-header">
+                    <button
+                        class="tutor-sidebar-toggle"
+                        id="tutorSidebarToggle"
+                        onclick="AITutor.toggleSidebar()"
+                        title="Chat history"
+                        aria-label="Toggle chat history sidebar"
+                    >☰</button>
                     <h3>AI Tutor</h3>
                     <span class="tutor-model-badge">Llama 3.3 70B</span>
                     <span style="flex: 1"></span>
@@ -664,42 +671,60 @@ average = total / len(scores
                     complete it.
                 </div>
 
-                <!-- Chat area -->
-                <div class="tutor-chat-area" id="tutorChatArea">
-                    <div class="tutor-status" id="tutorStatus">
-                        Ready. Ask anything about Python!
+                <!-- Body: sidebar + chat side by side -->
+                <div class="tutor-body" id="tutorBody">
+                    <!-- Chat history sidebar -->
+                    <div class="tutor-sidebar" id="tutorSidebar">
+                        <div class="tutor-sidebar-header">
+                            <span class="tutor-sidebar-label">Chats</span>
+                            <button
+                                class="tutor-new-chat-btn"
+                                onclick="AITutor.newChat()"
+                                title="New chat"
+                            >+ New</button>
+                        </div>
+                        <div class="tutor-session-list" id="tutorSessionList">
+                            <!-- sessions injected by JS -->
+                        </div>
                     </div>
-                    <div class="tutor-chat" id="tutorChat"></div>
-                    <div class="tutor-input">
-                        <div class="tutor-input-row">
+
+                    <!-- Chat area -->
+                    <div class="tutor-chat-area" id="tutorChatArea">
+                        <div class="tutor-status" id="tutorStatus">
+                            Ready. Ask anything about Python!
+                        </div>
+                        <div class="tutor-chat" id="tutorChat"></div>
+                        <div class="tutor-input">
+                            <div class="tutor-input-row">
+                                <button
+                                    class="tutor-context-btn"
+                                    id="tutorContextBtn"
+                                    onclick="toggleTutorContext()"
+                                    title="Attach your editor code"
+                                >
+                                    📎 Use my code
+                                </button>
+                                <button
+                                    class="tutor-key-change-btn"
+                                    onclick="AITutor.newChat()"
+                                    title="Start a new chat"
+                                >
+                                    New chat
+                                </button>
+                            </div>
+                            <textarea
+                                id="tutorTextarea"
+                                placeholder="Ask about Python…"
+                                rows="2"
+                            ></textarea>
                             <button
-                                class="tutor-context-btn"
-                                id="tutorContextBtn"
-                                onclick="toggleTutorContext()"
-                                title="Attach your editor code"
+                                id="tutorSendBtn"
+                                class="tutor-send-btn"
+                                onclick="sendTutorMessage()"
                             >
-                                📎 Use my code
-                            </button>
-                            <button
-                                class="tutor-key-change-btn"
-                                onclick="clearTutorHistory()"
-                                title="Clear chat history"
-                            >
-                                Clear chat
+                                Send
                             </button>
                         </div>
-                        <textarea
-                            id="tutorTextarea"
-                            placeholder="Ask about Python…"
-                            rows="2"
-                        ></textarea>
-                        <button
-                            id="tutorSendBtn"
-                            class="tutor-send-btn"
-                            onclick="sendTutorMessage()"
-                        >
-                            Send
-                        </button>
                     </div>
                 </div>
             </aside>
@@ -745,6 +770,69 @@ average = total / len(scores
                 >
                     Day <span id="progressPopupNextNum"></span> →
                 </button>
+            </div>
+        </div>
+
+        <!-- Cinematic Book Intro Overlay -->
+        <div id="achBookIntro" role="presentation" aria-hidden="true">
+            <div id="achIntroScene">
+                <!-- Ambient glow -->
+                <div id="achIntroGlow"></div>
+
+                <!-- The 3D closed tome -->
+                <div id="achIntroCover">
+                    <!-- Dark spine on left -->
+                    <div id="achIntroSpine"></div>
+
+                    <!-- Front leather cover -->
+                    <div id="achIntroCoverFront">
+                        <!-- Gold corner reinforcements -->
+                        <div class="intro-corner intro-corner-tl"></div>
+                        <div class="intro-corner intro-corner-bl"></div>
+                        <div class="intro-corner intro-corner-br"></div>
+
+                        <!-- Gold clasp on right edge -->
+                        <div id="achIntroClassp">
+                            <div class="clasp-band"></div>
+                            <div class="clasp-plate">
+                                <div class="clasp-keyhole"></div>
+                            </div>
+                        </div>
+
+                        <!-- Red bookmark ribbon -->
+                        <div id="achIntroRibbon"></div>
+                    </div>
+
+                    <!-- Page stack on right edge -->
+                    <div id="achIntroPageStack"></div>
+                    <!-- Page stack on bottom -->
+                    <div id="achIntroPageBottom"></div>
+
+                    <!-- The descending golden key -->
+                    <div id="achIntroKey">
+                        <svg class="intro-key-svg" viewBox="0 0 32 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="keyGold" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#f0d86a"/>
+                                    <stop offset="45%" stop-color="#c9a227"/>
+                                    <stop offset="100%" stop-color="#9a7415"/>
+                                </linearGradient>
+                                <filter id="keyGlow">
+                                    <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                                </filter>
+                            </defs>
+                            <!-- Key bow (ring) -->
+                            <circle cx="16" cy="11" r="9" stroke="url(#keyGold)" stroke-width="3.5" fill="none" filter="url(#keyGlow)"/>
+                            <circle cx="16" cy="11" r="4.5" fill="url(#keyGold)" opacity="0.5"/>
+                            <!-- Key shaft -->
+                            <rect x="14.5" y="18" width="3" height="28" rx="1.5" fill="url(#keyGold)" filter="url(#keyGlow)"/>
+                            <!-- Key bit teeth -->
+                            <rect x="17.5" y="36" width="6" height="2.5" rx="1" fill="url(#keyGold)"/>
+                            <rect x="17.5" y="42" width="4.5" height="2.5" rx="1" fill="url(#keyGold)"/>
+                        </svg>
+                    </div>
+                </div>
             </div>
         </div>
 

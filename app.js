@@ -1342,7 +1342,7 @@ const AchievementUI = (() => {
     _render(true);
   }
 
-  function open() {
+  function _openImmediate() {
     _currentSpread = 0;
     _render(false);
     const overlay = document.getElementById("achBookOverlay");
@@ -1354,6 +1354,9 @@ const AchievementUI = (() => {
     }
   }
 
+  // Keep open() as a public alias for direct callers
+  function open() { _openImmediate(); }
+
   function close() {
     const book    = document.getElementById("achievementBook");
     const overlay = document.getElementById("achBookOverlay");
@@ -1364,14 +1367,77 @@ const AchievementUI = (() => {
     if (overlay) overlay.classList.add("hidden");
   }
 
-  return { open, close, prev, next, _impl: "tome2page" };
+  return { open, _openImmediate, close, prev, next, _impl: "tome2page" };
 })();
 
-function openAchievementBook()  { AchievementUI.open();  }
+// ── Cinematic book intro controller ───────────────────────
+function playBookIntro(callback) {
+  const intro  = document.getElementById("achBookIntro");
+  const cover  = document.getElementById("achIntroCover");
+  const clasp  = document.getElementById("achIntroClassp");
+  const glow   = document.getElementById("achIntroGlow");
+
+  if (!intro || !cover) {
+    // Fallback: no intro DOM — just open immediately
+    if (callback) callback();
+    return;
+  }
+
+  // Reset state
+  cover.classList.remove("shaking", "flipping");
+  clasp.classList.remove("glowing");
+  glow.classList.remove("visible", "burst");
+  intro.classList.remove("fade-out");
+  intro.classList.add("active");
+
+  // Timeline (all ms):
+  // 0       — intro visible, book appears (CSS animation 0.2s → 0.9s)
+  // 1000    — key starts descending (CSS keyDescend at 1.0s delay, 1.6s duration → lands ~2.6s)
+  // 2650    — shake + clasp glow
+  // 3050    — cover begins flipping
+  // 4150    — fade out intro, call callback
+  // 4650    — remove active class
+
+  // Glow on after book appears
+  setTimeout(() => {
+    glow.classList.add("visible");
+  }, 600);
+
+  // Key lands → shake + clasp glow
+  setTimeout(() => {
+    cover.classList.add("shaking");
+    clasp.classList.add("glowing");
+    glow.classList.add("burst");
+    setTimeout(() => cover.classList.remove("shaking"), 350);
+  }, 2650);
+
+  // Cover flips open
+  setTimeout(() => {
+    cover.classList.add("flipping");
+  }, 3100);
+
+  // Crossfade into real book
+  setTimeout(() => {
+    intro.classList.add("fade-out");
+    if (callback) callback();
+  }, 4150);
+
+  // Clean up
+  setTimeout(() => {
+    intro.classList.remove("active", "fade-out");
+    cover.classList.remove("flipping");
+    clasp.classList.remove("glowing");
+    glow.classList.remove("visible", "burst");
+  }, 4700);
+}
+
+function openAchievementBook() {
+  playBookIntro(() => AchievementUI._openImmediate());
+}
 function closeAchievementBook() { AchievementUI.close(); }
 
 // Remove old badge popup functions (replaced by book)
-function openBadgePopup()  { AchievementUI.open(); }
+function openBadgePopup()  { playBookIntro(() => AchievementUI._openImmediate()); }
 function closeBadgePopup() { AchievementUI.close(); }
 
 // ─── EXERCISES ────────────────────────────────
