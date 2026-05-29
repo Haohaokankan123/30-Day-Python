@@ -3494,8 +3494,8 @@ print(by_age)
     day: 14,
     emoji: "🏗️",
     title: "Higher Order Functions",
-    subtitle: "Functions that take or return other functions. Master map, filter, reduce, and decorators.",
-    topics: ["Functions as values", "map()", "filter()", "reduce()", "Closures", "Decorators"],
+    subtitle: "Functions that take or return other functions. Master map, filter, reduce, and lambda.",
+    topics: ["Functions as values", "map()", "filter()", "reduce()", "Lambda", "sorted() key="],
 
     lesson: `
     <div class="lesson-section">
@@ -3540,37 +3540,6 @@ numbers = [1, 2, 3, 4, 5]
 total = reduce(lambda a, b: a + b, numbers)
 print(total)   # 15  (((1+2)+3)+4)+5</pre>
 
-      <div class="section-divider"></div>
-      <h2>Closures</h2>
-      <p>A <strong>closure</strong> is a function that "remembers" variables from the scope where it was created — even after that outer scope has finished.</p>
-      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def make_multiplier(n):
-    def multiply(x):
-        return x * n   # 'n' is remembered
-    return multiply
-
-double = make_multiplier(2)
-triple = make_multiplier(3)
-
-print(double(10))   # 20
-print(triple(10))   # 30</pre>
-
-      <div class="section-divider"></div>
-      <h2>Decorators</h2>
-      <p>A <strong>decorator</strong> is a function that wraps another function to add behavior — without changing its code. You apply it with <code>@decorator_name</code> above the <code>def</code>.</p>
-      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">def shouting(func):
-    def wrapper(text):
-        result = func(text)
-        return result.upper() + "!!!"
-    return wrapper
-
-@shouting
-def greet(name):
-    return f"hello {name}"
-
-print(greet("alice"))   # HELLO ALICE!!!</pre>
-      <div class="info-box">
-        <strong>What <code>@shouting</code> means:</strong> Python rewrites <code>greet = shouting(greet)</code>. Now whenever you call <code>greet()</code>, you're really calling the wrapper that the decorator returned.
-      </div>
     </div>
     `,
 
@@ -3631,26 +3600,7 @@ print(biggest)   # 9
 product = reduce(lambda a, b: a * b, [1, 2, 3, 4, 5])
 print(product)   # 120`,
       },
-      {
-        title: "A Simple Decorator",
-        desc: "Wrap a function to add behavior.",
-        code: `def timestamp(func):
-    def wrapper(*args, **kwargs):
-        print(f"[Running {func.__name__}...]")
-        result = func(*args, **kwargs)
-        print(f"[Done]")
-        return result
-    return wrapper
 
-@timestamp
-def greet(name):
-    return f"Hello, {name}!"
-
-print(greet("Alice"))
-# [Running greet...]
-# [Done]
-# Hello, Alice!`,
-      },
     ],
 
     exercises: {
@@ -3668,13 +3618,13 @@ print(greet("Alice"))
         "Use <code>filter()</code> to keep countries that start with the letter <code>'E'</code>.",
         "Use <code>reduce()</code> to sum all numbers in <code>[10, 20, 30, 40, 50]</code>.",
         "Use <code>reduce()</code> to concatenate <code>['Python', 'is', 'fun']</code> into the string <code>'Python is fun'</code>.",
-        "Write a closure <code>make_adder(n)</code> that returns a function adding <code>n</code> to its argument. Verify <code>make_adder(10)(5) == 15</code>.",
+
       ],
       level3: [
-        "Write a decorator <code>@uppercase</code> that converts the return value of any function it wraps to uppercase.",
         "Chain <code>map()</code> and <code>filter()</code>: take <code>[1,2,3,4,5,6,7,8,9,10]</code>, keep only even numbers, then square each one.",
-        "Write a decorator <code>@log_calls</code> that prints the function name and arguments before calling it.",
-        "Write a closure <code>counter()</code> that returns a function which, each time it's called, returns 1, 2, 3, ... in order.",
+        "Use <code>sorted()</code> with a <code>key=</code> lambda to sort <code>['banana','apple','kiwi','mango']</code> by string length.",
+        "Use <code>map()</code> and <code>lambda</code> to convert a list of temperatures in Celsius to Fahrenheit: <code>[0, 20, 30, 100]</code>.",
+        "Use <code>filter()</code> and <code>lambda</code> to keep only words longer than 5 characters from a list of 10 words.",
       ],
     },
 
@@ -3698,16 +3648,10 @@ print(greet("Alice"))
         explain: "Unlike map and filter, reduce was moved out of built-ins — you must import it: from functools import reduce.",
       },
       {
-        q: "What is a closure?",
-        opts: ["A function that closes a file", "A function that remembers variables from its enclosing scope", "A function with no return value", "A built-in Python function"],
+        q: "What does `sorted(['banana','apple','kiwi'], key=lambda s: len(s))` return?",
+        opts: ["['apple', 'banana', 'kiwi']", "['kiwi', 'apple', 'banana']", "['banana', 'apple', 'kiwi']", "['kiwi', 'banana', 'apple']"],
         answer: 1,
-        explain: "A closure is a function defined inside another function that 'captures' and remembers variables from the outer function's scope.",
-      },
-      {
-        q: "What does the @ symbol do above a function definition?",
-        opts: ["Comment line", "Applies a decorator to the function", "Marks it as private", "Imports a module"],
-        answer: 1,
-        explain: "@decorator above a def is syntactic sugar for `func = decorator(func)` — it wraps the function with the decorator.",
+        explain: "sorted with key=len sorts by string length: kiwi(4), apple(5), banana(6).",
       },
     ],
   },
@@ -4148,7 +4092,7 @@ print("2 days ago:    ", now - timedelta(days=2))`,
     emoji: "🛡️",
     title: "Exception Handling",
     subtitle: "Catch errors before they crash your program. Master try, except, else, finally, and raise.",
-    topics: ["try / except", "Multiple except", "except as e", "else & finally", "raise", "Custom exceptions"],
+    topics: ["try / except", "Multiple except", "except as e", "else & finally", "raise", "Common error types"],
 
     lesson: `
     <div class="lesson-section">
@@ -4221,183 +4165,7 @@ finally:
 print(set_age(25))   # 25
 # print(set_age(-3))   # ValueError: Age cannot be negative</pre>
 
-      <div class="section-divider"></div>
-      <h2>Custom Exception Classes</h2>
-      <p>Create your own exception by inheriting from <code>Exception</code>:</p>
-      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">class TooYoungError(Exception):
-    pass
-
-def check_age(age):
-    if age < 13:
-        raise TooYoungError(f"Age {age} is too young to join")
-    return "Welcome!"
-
-try:
-    print(check_age(10))
-except TooYoungError as e:
-    print(f"Sorry: {e}")
-# Sorry: Age 10 is too young to join</pre>
-    </div>
-    `,
-
-    examples: [
-      {
-        title: "Basic try / except",
-        desc: "Catch a bad conversion.",
-        code: `def safe_int(s):
-    try:
-        return int(s)
-    except ValueError:
-        return None
-
-print(safe_int('42'))     # 42
-print(safe_int('hello'))  # None
-print(safe_int('3.14'))   # None  (int() can't parse decimals)`,
-      },
-      {
-        title: "Multiple except Clauses",
-        desc: "Handle different error types differently.",
-        code: `def divide(a, b):
-    try:
-        return int(a) / int(b)
-    except ValueError:
-        return "One of those wasn't a number"
-    except ZeroDivisionError:
-        return "Can't divide by zero"
-
-print(divide('10', '2'))      # 5.0
-print(divide('hi', '2'))      # One of those wasn't a number
-print(divide('10', '0'))      # Can't divide by zero`,
-      },
-      {
-        title: "except ... as e — Getting the Message",
-        desc: "Capture the exception object.",
-        code: `try:
-    user = {'name': 'Alice'}
-    print(user['email'])
-except KeyError as e:
-    print(f"Missing key: {e}")
-# Missing key: 'email'
-
-try:
-    n = int('not-a-number')
-except ValueError as e:
-    print(f"Bad input — {e}")`,
-      },
-      {
-        title: "else and finally",
-        desc: "Run code only on success / always.",
-        code: `def parse_age(s):
-    try:
-        age = int(s)
-    except ValueError:
-        print("Bad input")
-    else:
-        print(f"Got age: {age}")
-    finally:
-        print("Done parsing")
-    print("---")
-
-parse_age('25')
-parse_age('hello')`,
-      },
-      {
-        title: "raise and Custom Exceptions",
-        desc: "Throw your own errors.",
-        code: `class NegativeNumberError(Exception):
-    pass
-
-def square_root(n):
-    if n < 0:
-        raise NegativeNumberError(f"Can't sqrt negative number: {n}")
-    return n ** 0.5
-
-try:
-    print(square_root(16))    # 4.0
-    print(square_root(-9))    # raises
-except NegativeNumberError as e:
-    print(f"Error: {e}")`,
-      },
-    ],
-
-    exercises: {
-      level1: [
-        "Wrap <code>int('hello')</code> in a <code>try/except ValueError</code> that prints <code>'bad input'</code>.",
-        "Wrap <code>10 / 0</code> in a <code>try/except ZeroDivisionError</code>.",
-        "Wrap a dictionary lookup that misses (<code>{'a': 1}['b']</code>) in a <code>try/except KeyError</code>.",
-        "Wrap a list lookup that's out of bounds in <code>try/except IndexError</code>.",
-        "Catch the error message with <code>except ValueError as e</code> and print it.",
-        "Use a <code>finally</code> block that prints <code>'cleanup'</code> regardless of what happens.",
-      ],
-      level2: [
-        "Write a function <code>safe_divide(a, b)</code> that uses <code>try/except ZeroDivisionError</code> and returns <code>None</code> on failure.",
-        "Write a function <code>parse_int(s)</code> that uses <code>try/except ValueError</code> and returns <code>0</code> if the string can't be converted.",
-        "Write a loop that asks for a list of values and converts each to <code>int</code>, skipping ones that fail.",
-        "Use <code>raise ValueError('...')</code> inside a function that rejects negative numbers.",
-        "Use both <code>else</code> and <code>finally</code> in one <code>try</code> block.",
-        "Catch two different error types in the same <code>try</code> block with two <code>except</code> clauses.",
-      ],
-      level3: [
-        "Create a custom exception class <code>InvalidEmailError</code> and a function that raises it if a string has no <code>'@'</code>.",
-        "Write a function <code>retry(func, attempts=3)</code> that calls <code>func</code> and retries up to <code>attempts</code> times on any exception.",
-        "Write a function <code>safe_get(d, *keys)</code> that navigates nested dicts and returns <code>None</code> if any key is missing.",
-        "Write a context-style function using <code>try/finally</code> that simulates opening and always closing a resource, even on error.",
-      ],
-    },
-
-    quiz: [
-      {
-        q: "What does the `try` block contain?",
-        opts: ["The error handler", "Code that might raise an exception", "Cleanup code", "Code that always runs"],
-        answer: 1,
-        explain: "Put potentially-failing code inside try. If an exception happens, control jumps to the matching except clause.",
-      },
-      {
-        q: "Why is `except:` (bare except) discouraged?",
-        opts: ["It's slower", "It catches every exception including ones you didn't anticipate (like KeyboardInterrupt)", "It's deprecated", "It causes infinite loops"],
-        answer: 1,
-        explain: "Bare except swallows ALL exceptions including bugs and system interrupts — catch specific types instead.",
-      },
-      {
-        q: "When does the `finally` block run?",
-        opts: ["Only when an exception is raised", "Only when no exception is raised", "Always — exception or not", "Only when else runs"],
-        answer: 2,
-        explain: "finally always runs, making it perfect for cleanup like closing files or releasing resources.",
-      },
-      {
-        q: "What does `raise ValueError('bad')` do?",
-        opts: ["Catches a ValueError", "Triggers a ValueError manually", "Defines a new exception class", "Prints 'bad'"],
-        answer: 1,
-        explain: "raise manually triggers an exception. The string is the error message attached to it.",
-      },
-      {
-        q: "How do you capture the exception object for inspection?",
-        opts: ["except ValueError: e", "except ValueError as e:", "except ValueError -> e:", "except e is ValueError:"],
-        answer: 1,
-        explain: "The 'as' keyword binds the exception object to a variable name you choose — typically `e`.",
-      },
-    ],
-  },
-
-  {
-    day: 18,
-    emoji: "🔍",
-    title: "Regular Expressions",
-    subtitle: "Find, match, and transform text patterns with the re module. Powerful pattern matching in one line.",
-    topics: ["re.match & re.search", "re.findall", "re.sub", "Character classes", "Quantifiers", "Groups"],
-
-    lesson: `
-    <div class="lesson-section">
-      <h2>What is a Regular Expression?</h2>
-      <p>A <strong>regular expression</strong> (regex) is a tiny pattern language for describing text. You can use it to find, match, replace, or split strings based on rules — instead of writing loops with <code>if</code>s.</p>
-      <p>In Python, regex lives in the <strong><code>re</code></strong> module.</p>
-      <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">import re
-
-text = "I have 3 apples and 12 oranges."
-numbers = re.findall(r"\\d+", text)
-print(numbers)   # ['3', '12']</pre>
-
-      <div class="section-divider"></div>
+<div class="section-divider"></div>
       <h2>The Main <code>re</code> Functions</h2>
       <div class="cheatsheet-grid">
         <div class="cheatsheet-item"><div class="cheatsheet-syntax">re.match(pattern, str)</div><div class="cheatsheet-desc">Match only at the START of the string</div></div>
@@ -6032,7 +5800,6 @@ A = np.array([[1, 2], [3, 4]])
 B = np.array([[5, 6], [7, 8]])
 
 print(np.dot(A, B))            # matrix multiplication
-print(np.linalg.det(A))        # determinant: -2.0
 print(A.T)                     # transpose</pre>
     </div>
     `,
@@ -6138,8 +5905,8 @@ print(np.random.randint(0, 10, (3, 3)))`,
       ],
       level3: [
         "Implement a <code>Statistics</code> class (no external libraries) with methods: <code>mean</code>, <code>median</code>, <code>mode</code>, <code>std</code>, <code>variance</code>, <code>percentile(p)</code>.",
-        "Use NumPy to solve a system of linear equations Ax = b using <code>np.linalg.solve()</code>.",
-        "Generate a 100×100 random matrix, compute its transpose, and verify that <code>A @ A.T</code> is symmetric.",
+        "Use NumPy to generate a 3×3 random integer matrix and compute the sum of each row using <code>.sum(axis=1)</code>.",
+        "Create a 4×4 identity matrix with <code>np.eye(4)</code>, multiply it by 5, and print the result.",
         "Simulate rolling two dice 10,000 times with NumPy and plot the frequency distribution of sums (describe what the histogram would look like).",
       ],
     },
@@ -6388,9 +6155,9 @@ print(df.nlargest(3, 'score')[['title','score']])`,
       ],
       level3: [
         "Read the Hacker News CSV, filter for titles containing <code>'python'</code> or <code>'Python'</code>, and display the top 10 by score.",
-        "Group a DataFrame by a category column and compute the mean of a numeric column per group using <code>.groupby()</code>.",
+        "Create a DataFrame from a list of dictionaries. Add a new column <code>passed</code> that is True if score >= 60.",
         "Read a CSV of countries, find the 10 most populated, and calculate the percentage of world population each represents.",
-        "Merge two DataFrames on a shared key column using <code>pd.merge()</code>.",
+        "Create a DataFrame of 5 students with columns <code>name</code>, <code>score</code>, and <code>grade</code>. Filter to keep only students with score > 70.",
       ],
     },
 
@@ -7318,11 +7085,11 @@ def update_student(id):
       <h2>Deleting — DELETE</h2>
       <pre style="background:var(--bg-code);padding:16px 20px;border-radius:10px;margin:12px 0;font-family:'Fira Code',monospace;font-size:14px;color:#a5b4fc;overflow-x:auto">@app.route('/api/students/&lt;int:id&gt;', methods=['DELETE'])
 def delete_student(id):
-    global students
-    before = len(students)
-    students = [s for s in students if s['id'] != id]
-    if len(students) == before:
+    # Find the student first
+    student = next((s for s in students if s['id'] == id), None)
+    if not student:
         return jsonify({"error": "Not found"}), 404
+    students.remove(student)
     return jsonify({"message": "Deleted"}), 200</pre>
 
       <div class="section-divider"></div>
@@ -7374,44 +7141,7 @@ if __name__ == '__main__':
 
 print("Full CRUD API ready at http://localhost:5000/api/students")`,
       },
-      {
-        title: "CRUD Logic Without Flask",
-        desc: "The in-memory CRUD logic that powers the API.",
-        code: `students = [
-    {"id": 1, "name": "Alice", "grade": "A"},
-    {"id": 2, "name": "Bob",   "grade": "B"},
-]
-_next_id = 3
 
-def create(name, grade="?"):
-    global _next_id
-    s = {"id": _next_id, "name": name, "grade": grade}
-    students.append(s)
-    _next_id += 1
-    return s
-
-def read_all():
-    return students
-
-def read_one(id):
-    return next((s for s in students if s['id'] == id), None)
-
-def update(id, **fields):
-    s = read_one(id)
-    if s: s.update(fields)
-    return s
-
-def delete(id):
-    global students
-    prev = len(students)
-    students = [s for s in students if s['id'] != id]
-    return len(students) < prev
-
-print(create("Carol", "A+"))
-print(update(1, grade="A+"))
-print(delete(2))
-print(read_all())`,
-      },
       {
         title: "Status Codes in API Design",
         desc: "Return the right code for each situation.",
