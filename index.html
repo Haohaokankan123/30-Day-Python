@@ -751,17 +751,39 @@ average = total / len(scores
         <!-- Achievement Book -->
         <div id="achBookOverlay" class="ach-overlay hidden" onclick="closeAchievementBook()"></div>
         <div id="achievementBook" class="ach-book hidden" role="dialog" aria-modal="true" aria-label="Achievement Book">
-            <div class="ach-book-wrap">
-                <div class="ach-book-stage" id="achBookStage">
-                    <!-- Pages injected by JS -->
+            <!-- Left page-turn arrow -->
+            <button class="ach-arrow ach-arrow-left" id="achPrev" onclick="AchievementUI.prev()" aria-label="Previous page">&#8249;</button>
+
+            <div class="ach-tome">
+                <!-- Leather cover back (decorative depth) -->
+                <div class="ach-cover-back"></div>
+                <!-- Page stack edge (shows book thickness) -->
+                <div class="ach-page-stack"></div>
+
+                <!-- Left page -->
+                <div class="ach-page ach-page-left" id="achPageLeft">
+                    <!-- content injected by JS -->
                 </div>
-                <div class="ach-book-nav">
-                    <button class="ach-nav-btn prev" id="achPrev" onclick="AchievementUI.prev()" aria-label="Previous page">&#8249;</button>
-                    <div class="ach-page-indicator" id="achPageIndicator"></div>
-                    <button class="ach-nav-btn next" id="achNext" onclick="AchievementUI.next()" aria-label="Next page">&#8250;</button>
+
+                <!-- Spine -->
+                <div class="ach-spine">
+                    <div class="ach-spine-title">Achievements</div>
                 </div>
+
+                <!-- Right page -->
+                <div class="ach-page ach-page-right" id="achPageRight">
+                    <!-- content injected by JS -->
+                </div>
+
+                <!-- Close button on top-right corner of book -->
+                <button class="ach-close-btn" onclick="closeAchievementBook()" aria-label="Close">&#x2715;</button>
             </div>
-            <button class="ach-close-btn" onclick="closeAchievementBook()" aria-label="Close achievement book">&#x2715;</button>
+
+            <!-- Right page-turn arrow -->
+            <button class="ach-arrow ach-arrow-right" id="achNext" onclick="AchievementUI.next()" aria-label="Next page">&#8250;</button>
+
+            <!-- Page indicator below tome -->
+            <div class="ach-page-indicator" id="achPageIndicator"></div>
         </div>
 
         <!-- Auth Modal -->

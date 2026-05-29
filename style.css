@@ -5573,90 +5573,150 @@ body { font-family: var(--font-body); }
 /* ─── ACHIEVEMENT BOOK OVERLAY ──────────────────────── */
 .ach-overlay {
     position: fixed; inset: 0; z-index: 7000;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(7px);
 }
 
-/* ─── ACHIEVEMENT BOOK ───────────────────────────────── */
+/* ─── ACHIEVEMENT BOOK WRAPPER (centered fullscreen) ─── */
 .ach-book {
-    /* Own parchment/leather/gold vars; intentionally no Python blue/yellow */
-    --book-paper:   #f3e8cf;
-    --book-paper-2: #ede0be;
-    --book-leather: #4a2c12;
-    --book-spine:   #3a220e;
-    --book-gold:    #d4af37;
-    --book-gold-2:  #f0c040;
-    --book-ink:     #2a1a0a;
-    --book-ink-2:   #5a3a18;
-    --book-shadow:  rgba(30, 12, 0, 0.55);
+    /* Own parchment/leather/gold vars — no Python blue/yellow */
+    --book-paper:    #f5ead4;
+    --book-paper-2:  #eedfc0;
+    --book-leather:  #3d1f08;
+    --book-leather2: #5c3012;
+    --book-spine-w:  30px;
+    --book-gold:     #c9a227;
+    --book-gold-2:   #e8c84a;
+    --book-ink:      #241508;
+    --book-ink-2:    #5c3a18;
+    --book-shadow:   rgba(20, 8, 0, 0.75);
 
-    position: fixed;
-    inset: 0;
-    display: flex; align-items: center; justify-content: center;
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 22px;
     z-index: 7500;
     pointer-events: none;
     opacity: 0;
-    transform: scale(0.94);
-    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(.2,.8,.2,1);
+    transform: scale(0.90) translateY(20px);
+    transition: opacity 0.4s ease, transform 0.42s cubic-bezier(.2,.85,.2,1);
 }
 .ach-book.open {
     pointer-events: all;
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateY(0);
 }
 
-.ach-book-wrap {
+/* ─── THE PHYSICAL TOME ──────────────────────────────── */
+.ach-tome {
     position: relative;
-    display: flex; flex-direction: column; align-items: center;
-    gap: 18px;
+    display: flex;
+    width: min(900px, 94vw);
+    height: min(560px, 76vh);
+    filter: drop-shadow(0 28px 70px rgba(0,0,0,0.90))
+            drop-shadow(0 10px 24px rgba(0,0,0,0.65));
 }
 
-/* ── Stage: provides the 3D perspective context ────────────── */
-.ach-book-stage {
-    position: relative;
-    width: min(560px, 92vw);
-    height: min(420px, 72vh);
-    perspective: 2200px;
-    perspective-origin: 50% 40%;
+/* ── Leather cover back — visible on left as book depth ── */
+.ach-cover-back {
+    position: absolute;
+    top: 8px; left: -12px; bottom: -8px;
+    width: 55%;
+    background:
+        repeating-linear-gradient(
+            88deg,
+            transparent 0px, rgba(255,255,255,0.018) 1px, transparent 2px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px, rgba(0,0,0,0.05) 4px, transparent 8px
+        ),
+        linear-gradient(160deg, #5c3012 0%, #3d1f08 45%, #28100a 100%);
+    border-radius: 5px 0 0 5px;
+    z-index: -1;
 }
 
-/* ── Page leaves: actual 3D rotating elements ──────────────── */
-.ach-page-leaf {
-    position: absolute; inset: 0;
-    transform-style: preserve-3d;
-    transform-origin: left center;
-    transform: rotateY(0deg);
-    transition: transform 0.65s cubic-bezier(.25,.85,.25,1);
-    will-change: transform;
-    cursor: pointer;
-}
-.ach-page-leaf.flipped {
-    transform: rotateY(-180deg);
+/* ── Stacked page edges on right — shows book thickness ── */
+.ach-page-stack {
+    position: absolute;
+    top: 4px; right: -8px; bottom: 4px;
+    width: 14px;
+    background: repeating-linear-gradient(
+        180deg,
+        #f5ead4 0px, #e8d5aa 1px, #f5ead4 2.5px
+    );
+    border-radius: 0 4px 4px 0;
+    box-shadow: 3px 0 8px rgba(0,0,0,0.4);
+    z-index: -1;
 }
 
-.ach-page-front,
-.ach-page-back {
-    position: absolute; inset: 0;
-    backface-visibility: hidden;
-    border-radius: 4px 12px 12px 4px;
-    background: var(--book-paper);
-    border: 1px solid rgba(160, 110, 50, 0.35);
-    box-shadow:
-        inset -2px 0 8px rgba(100, 60, 10, 0.10),
-        2px 4px 20px var(--book-shadow);
+/* ── Pages (left and right) ──────────────────────────── */
+.ach-page {
+    flex: 1;
+    height: 100%;
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"),
+        linear-gradient(175deg, #f8eedd 0%, #f0e2c4 55%, #edddc2 100%);
     overflow: hidden;
+    display: flex; flex-direction: column;
 }
-.ach-page-back {
-    transform: rotateY(180deg);
-    border-radius: 12px 4px 4px 12px;
+.ach-page-left {
+    border-radius: 5px 0 0 5px;
     box-shadow:
-        inset 2px 0 8px rgba(100, 60, 10, 0.10),
-        -2px 4px 20px var(--book-shadow);
+        inset -22px 0 34px rgba(55,22,4,0.24),
+        inset 3px 0 10px rgba(255,245,210,0.35);
+    border-left:   3px solid #c4a46a;
+    border-top:    2px solid #ceaf72;
+    border-bottom: 2px solid #b89858;
+}
+.ach-page-right {
+    border-radius: 0 10px 10px 0;
+    box-shadow:
+        inset 22px 0 34px rgba(55,22,4,0.24),
+        inset -3px 0 10px rgba(255,245,210,0.35);
+    border-right:  3px solid #c4a46a;
+    border-top:    2px solid #ceaf72;
+    border-bottom: 2px solid #b89858;
 }
 
-/* ── Page inner content ──────────────────────────────────── */
+/* ── Book spine ───────────────────────────────────────── */
+.ach-spine {
+    width: var(--book-spine-w);
+    height: 100%;
+    flex-shrink: 0;
+    background:
+        repeating-linear-gradient(
+            180deg,
+            rgba(255,255,255,0.025) 0px, rgba(0,0,0,0.07) 2px, rgba(255,255,255,0.01) 4px
+        ),
+        linear-gradient(180deg, #4e2c10 0%, #2e1508 50%, #3a1e08 100%);
+    display: flex; align-items: center; justify-content: center;
+    border-top:    2px solid var(--book-gold);
+    border-bottom: 2px solid var(--book-gold);
+    box-shadow:
+        inset 4px 0 12px rgba(0,0,0,0.55),
+        inset -4px 0 12px rgba(0,0,0,0.55),
+        inset 0 2px 8px rgba(200,165,40,0.22),
+        inset 0 -2px 8px rgba(200,165,40,0.22);
+}
+.ach-spine-title {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-family: 'Georgia', serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--book-gold);
+    opacity: 0.65;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+    user-select: none;
+}
+
+/* ── Page inner content ───────────────────────────────── */
 .ach-page-inner {
-    padding: 24px 28px;
+    padding: 28px 24px 20px;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -5664,140 +5724,207 @@ body { font-family: var(--font-body); }
     color: var(--book-ink);
     font-family: 'Georgia', 'Times New Roman', serif;
     scrollbar-width: thin;
-    scrollbar-color: rgba(160,110,50,0.3) transparent;
+    scrollbar-color: rgba(160,110,50,0.22) transparent;
 }
 
-/* ── Cover page ──────────────────────────────────────────── */
+/* ── Cover page ───────────────────────────────────────── */
 .cover-inner {
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     height: 100%;
-    background: linear-gradient(145deg, #e8d4a0, #d4b870, #c8a848);
+    gap: 14px;
+    background:
+        repeating-linear-gradient(
+            88deg,
+            transparent 0px, rgba(212,175,55,0.05) 1px, transparent 2px
+        ),
+        linear-gradient(155deg, #e8c870 0%, #c8a030 48%, #b08825 100%);
     border-radius: inherit;
-    gap: 10px;
+    position: relative;
+    overflow: hidden;
+}
+.cover-inner::before {
+    content: '';
+    position: absolute; inset: 16px;
+    border: 1px solid rgba(42,26,10,0.22);
+    border-radius: 4px; pointer-events: none;
+}
+.cover-inner::after {
+    content: '';
+    position: absolute; inset: 24px;
+    border: 1px solid rgba(42,26,10,0.10);
+    border-radius: 3px; pointer-events: none;
+}
+.ach-cover-emblem {
+    font-size: 54px; line-height: 1;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.38));
 }
 .ach-cover-title {
-    font-size: 28px; font-weight: 700;
-    color: var(--book-spine);
-    letter-spacing: 0.02em;
-    text-shadow: 0 1px 2px rgba(255,255,255,0.4);
+    font-size: 23px; font-weight: 700;
+    color: #241508;
+    letter-spacing: 0.04em;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.22), 0 -1px 0 rgba(0,0,0,0.12);
+    text-align: center; line-height: 1.25;
 }
 .ach-cover-sub {
-    font-size: 14px; color: var(--book-ink-2); letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: 10px; color: rgba(36,21,8,0.55);
+    letter-spacing: 0.16em; text-transform: uppercase;
 }
 .ach-cover-stats {
-    margin-top: 12px;
-    background: rgba(42,26,10,0.08);
-    border: 1px solid rgba(160,110,50,0.3);
-    border-radius: 40px; padding: 8px 22px;
+    background: rgba(36,21,8,0.1);
+    border: 1px solid rgba(36,21,8,0.18);
+    border-radius: 40px; padding: 8px 24px; text-align: center;
 }
-.ach-cover-count { font-size: 26px; font-weight: 800; color: var(--book-spine); }
-.ach-cover-total { font-size: 14px; color: var(--book-ink-2); }
-.ach-cover-hint  { font-size: 12px; color: rgba(42,26,10,0.45); margin-top: 8px; }
+.ach-cover-count { font-size: 28px; font-weight: 800; color: #241508; }
+.ach-cover-total { font-size: 13px; color: rgba(36,21,8,0.52); }
+.ach-cover-hint  { font-size: 11px; color: rgba(36,21,8,0.38); letter-spacing: 0.05em; }
 
-/* ── Category page ───────────────────────────────────────── */
+/* ── Category page header ─────────────────────────────── */
 .ach-page-header {
     display: flex; align-items: center; gap: 8px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid rgba(160,110,50,0.25);
-    margin-bottom: 14px;
+    padding-bottom: 13px;
+    border-bottom: 1px solid rgba(160,110,50,0.28);
+    margin-bottom: 13px;
 }
 .ach-cat-icon  { font-size: 20px; }
-.ach-cat-label { font-size: 17px; font-weight: 700; flex: 1; color: var(--book-spine); }
-.ach-cat-progress { font-size: 12px; color: var(--book-ink-2); white-space: nowrap; }
+.ach-cat-label {
+    font-size: 16px; font-weight: 700; flex: 1;
+    color: var(--book-ink); font-family: 'Georgia', serif;
+}
+.ach-cat-progress { font-size: 11px; color: var(--book-ink-2); white-space: nowrap; opacity: 0.7; }
 
-/* ── Achievement cards ───────────────────────────────────── */
+/* ── Achievement cards ────────────────────────────────── */
 .ach-cards-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 9px;
 }
 .ach-card {
     position: relative;
-    background: rgba(255,255,255,0.55);
+    background: rgba(255,248,225,0.72);
     border: 1px solid rgba(160,110,50,0.2);
-    border-radius: 8px;
-    padding: 12px 10px 10px;
+    border-radius: 7px;
+    padding: 12px 9px 10px;
     text-align: center;
-    transition: box-shadow 0.15s;
+    transition: box-shadow 0.15s, transform 0.12s;
 }
+.ach-card:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(80,40,5,0.13); }
 .ach-card.earned {
-    background: rgba(212,175,55,0.15);
-    border-color: rgba(212,175,55,0.45);
-    box-shadow: 0 0 0 1px rgba(212,175,55,0.2);
+    background: rgba(212,175,55,0.14);
+    border-color: rgba(175,138,40,0.42);
+    box-shadow: 0 0 0 1px rgba(212,175,55,0.16), inset 0 1px 0 rgba(255,240,175,0.4);
 }
-.ach-card.locked { opacity: 0.55; filter: grayscale(0.5); }
-.ach-card.secret.locked { opacity: 0.42; }
+.ach-card.locked  { opacity: 0.48; filter: grayscale(0.4); }
+.ach-card.secret.locked { opacity: 0.36; }
 
-.ach-card-icon  { font-size: 24px; line-height: 1.3; }
-.ach-card-name  { font-size: 11.5px; font-weight: 700; color: var(--book-spine); margin-top: 4px; line-height: 1.2; }
-.ach-card-desc  { font-size: 10px; color: var(--book-ink-2); margin-top: 3px; line-height: 1.35; }
+.ach-card-icon  { font-size: 22px; line-height: 1.3; }
+.ach-card-name  {
+    font-size: 11px; font-weight: 700; color: var(--book-ink);
+    margin-top: 4px; line-height: 1.2; font-family: 'Georgia', serif;
+}
+.ach-card-desc  { font-size: 9.5px; color: var(--book-ink-2); margin-top: 3px; line-height: 1.35; opacity: 0.8; }
 .ach-card-check {
-    position: absolute; top: 5px; right: 7px;
-    font-size: 11px; color: #1a8a56; font-weight: 700;
+    position: absolute; top: 5px; right: 6px;
+    font-size: 10px; color: #1a8a56; font-weight: 700;
 }
 
-/* ── Navigation ──────────────────────────────────────────── */
-.ach-book-nav {
-    display: flex; align-items: center; gap: 12px;
-}
-.ach-nav-btn {
-    background: rgba(42,26,10,0.75);
+/* ── Page-turn arrows (left/right of tome) ────────────── */
+.ach-arrow {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    width: 50px; height: 50px; border-radius: 50%;
+    background: rgba(25,10,2,0.84);
+    border: 1px solid rgba(201,162,39,0.48);
     color: var(--book-gold);
-    border: 1px solid rgba(212,175,55,0.4);
-    border-radius: 50%;
-    width: 38px; height: 38px;
-    font-size: 22px; line-height: 1;
+    font-size: 30px; line-height: 1;
     cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
     display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, transform 0.12s;
+    z-index: 7600;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.6);
 }
-.ach-nav-btn:hover:not(:disabled) { background: rgba(42,26,10,0.92); transform: scale(1.08); }
-.ach-nav-btn:disabled { opacity: 0.35; cursor: default; }
+.ach-arrow-left  { left: max(10px, calc(50% - min(450px, 47vw) - 58px)); }
+.ach-arrow-right { right: max(10px, calc(50% - min(450px, 47vw) - 58px)); }
+.ach-arrow:hover:not(:disabled) {
+    background: rgba(25,10,2,0.97);
+    transform: translateY(-50%) scale(1.1);
+}
+.ach-arrow:disabled { opacity: 0.25; cursor: default; }
 
+/* ── Page indicator dots ─────────────────────────────── */
 .ach-page-indicator {
-    display: flex; gap: 6px; align-items: center;
+    display: flex; gap: 9px; align-items: center;
 }
 .ach-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: rgba(212,175,55,0.3);
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(201,162,39,0.28);
+    border: 1px solid rgba(201,162,39,0.4);
     transition: background 0.2s, transform 0.2s;
+    cursor: pointer;
 }
 .ach-dot.active {
     background: var(--book-gold);
-    transform: scale(1.35);
+    transform: scale(1.45);
+    border-color: var(--book-gold-2);
 }
 
-/* ── Close button ────────────────────────────────────────── */
+/* ── Close button anchored to top-right of tome ──────── */
 .ach-close-btn {
-    position: fixed; top: 24px; right: 24px;
-    background: rgba(42,26,10,0.8);
+    position: absolute; top: -15px; right: -15px;
+    background: rgba(25,10,2,0.9);
     color: var(--book-gold);
-    border: 1px solid rgba(212,175,55,0.35);
-    border-radius: 50%; width: 36px; height: 36px;
-    font-size: 16px; cursor: pointer;
+    border: 1px solid rgba(201,162,39,0.42);
+    border-radius: 50%; width: 34px; height: 34px;
+    font-size: 15px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    transition: background 0.15s;
-    z-index: 7600;
+    transition: background 0.15s, transform 0.12s;
+    z-index: 7700;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.55);
 }
-.ach-close-btn:hover { background: rgba(42,26,10,0.96); }
+.ach-close-btn:hover { background: rgba(25,10,2,1); transform: scale(1.1); }
 
-/* ── Flat mode (mobile + reduce-motion) ──────────────────── */
-.ach-page-flat {
-    width: min(560px, 92vw);
-    min-height: min(420px, 72vh);
-    background: var(--book-paper);
-    border: 1px solid rgba(160,110,50,0.35);
-    border-radius: 12px;
-    box-shadow: 2px 4px 20px var(--book-shadow);
-    overflow: hidden;
+/* ── Page transition animation ───────────────────────── */
+@keyframes achSlideOut {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(-10px); }
 }
-@media (max-width: 640px) {
-    .ach-book-stage { height: 65vh; }
-    .ach-cards-grid { grid-template-columns: 1fr; }
-    .ach-page-leaf  { border-radius: 12px; }
-    .ach-page-front, .ach-page-back { border-radius: 12px; }
+@keyframes achSlideIn {
+    from { opacity: 0; transform: translateX(12px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+.ach-page.flipping-out { animation: achSlideOut 0.16s ease forwards; }
+.ach-page.flipping-in  { animation: achSlideIn  0.22s ease forwards; }
+
+/* ── Mobile: stack vertically ────────────────────────── */
+@media (max-width: 700px) {
+    .ach-tome {
+        flex-direction: column;
+        width: min(380px, 92vw);
+        height: min(560px, 82vh);
+        border-radius: 8px;
+    }
+    .ach-page-left  {
+        border-radius: 8px 8px 0 0;
+        box-shadow: inset 0 -16px 24px rgba(55,22,4,0.2);
+        border-left: 2px solid #c4a46a; border-right: none;
+    }
+    .ach-page-right {
+        border-radius: 0 0 8px 8px;
+        box-shadow: inset 0 16px 24px rgba(55,22,4,0.2);
+        border-right: 2px solid #c4a46a;
+    }
+    .ach-spine {
+        width: 100%; height: 14px; flex-shrink: 0;
+        border-top: 2px solid var(--book-gold);
+        border-bottom: 2px solid var(--book-gold);
+        border-left: none; border-right: none;
+    }
+    .ach-spine-title { writing-mode: initial; transform: none; font-size: 8px; }
+    .ach-cover-back { display: none; }
+    .ach-page-stack { display: none; }
+    .ach-arrow-left  { left: 6px;  width: 38px; height: 38px; font-size: 22px; }
+    .ach-arrow-right { right: 6px; width: 38px; height: 38px; font-size: 22px; }
+    .ach-cards-grid { grid-template-columns: 1fr 1fr; }
 }
 
 /* ─── FULL-SCREEN ACHIEVEMENT POPUP ────────────────── */

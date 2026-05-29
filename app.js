@@ -1145,7 +1145,7 @@ function playChime() {
   } catch (_) {}
 }
 
-// ─── ACHIEVEMENT BOOK (3D FLIP-BOOK) ──────────────────────────────────────────
+// ─── ACHIEVEMENT BOOK (TWO-PAGE TOME) ─────────────────────────────────────────
 
 const AchievementUI = (() => {
   const CAT_LABELS = {
@@ -1164,35 +1164,53 @@ const AchievementUI = (() => {
     secret:   "🔮",
   };
 
-  let _currentPage = 0; // 0 = cover
-  const PAGES = ["cover", ...ACH_CATEGORIES]; // cover + 5 category pages
+  // Pages: cover is a special spread; each category is its own spread
+  // Spread 0 = cover (left: decorative, right: cover content)
+  // Spreads 1–5 = one category each
+  let _currentSpread = 0;
+  const SPREADS = ["cover", ...ACH_CATEGORIES]; // 6 spreads total
 
-  function _prefersNoMotion() {
-    return document.documentElement.classList.contains("reduce-motion")
-      || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function _earned() {
+    return state.achievements ? state.achievements.size : 0;
   }
 
-  function _isMobile() {
-    return window.innerWidth <= 640;
+  function _renderCoverLeft() {
+    // Left page on cover spread: decorative title page
+    return `<div class="ach-page-inner cover-inner">
+      <div class="ach-cover-emblem">📜</div>
+      <div class="ach-cover-title">Achievement<br>Compendium</div>
+      <div class="ach-cover-sub">30 Days of Python</div>
+      <div class="ach-cover-stats">
+        <div class="ach-cover-count">${_earned()}</div>
+        <div class="ach-cover-total">of ${ACHIEVEMENTS.filter(a => !a.secret).length} unlocked</div>
+      </div>
+      <div class="ach-cover-hint">Press › to explore</div>
+    </div>`;
   }
 
-  function _renderCoverPage() {
-    const earned = state.achievements ? state.achievements.size : 0;
-    const total  = ACHIEVEMENTS.filter(a => !a.secret).length;
-    return `
-      <div class="ach-page-inner cover-inner">
-        <div class="ach-cover-title">Achievement Book</div>
-        <div class="ach-cover-sub">30 Days of Python</div>
-        <div class="ach-cover-stats">
-          <span class="ach-cover-count">${earned}</span>
-          <span class="ach-cover-total"> / ${total} unlocked</span>
-        </div>
-        <div class="ach-cover-hint">Click &#8250; to browse</div>
+  function _renderCoverRight() {
+    // Right page on cover spread: index / table of contents
+    const rows = ACH_CATEGORIES.map((cat, i) => {
+      const achs = ACHIEVEMENTS.filter(a => a.cat === cat);
+      const done = achs.filter(a => state.achievements && state.achievements.has(a.id)).length;
+      return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(160,110,50,0.18);">
+        <span style="font-size:18px;">${CAT_ICONS[cat]}</span>
+        <span style="flex:1;font-size:13px;font-weight:700;color:var(--book-ink);font-family:'Georgia',serif;">${CAT_LABELS[cat]}</span>
+        <span style="font-size:11px;color:var(--book-ink-2);opacity:0.7;">${done}/${achs.length}</span>
       </div>`;
+    }).join("");
+    return `<div class="ach-page-inner">
+      <div class="ach-page-header" style="margin-bottom:18px;">
+        <span class="ach-cat-icon">📖</span>
+        <span class="ach-cat-label">Contents</span>
+      </div>
+      ${rows}
+    </div>`;
   }
 
   function _renderCategoryPage(cat) {
     const achievements = ACHIEVEMENTS.filter(a => a.cat === cat);
+    const earnedInCat  = achievements.filter(a => state.achievements && state.achievements.has(a.id)).length;
     const cards = achievements.map(a => {
       const unlocked = state.achievements && state.achievements.has(a.id);
       if (!unlocked && a.secret) {
@@ -1209,122 +1227,124 @@ const AchievementUI = (() => {
         ${unlocked ? '<div class="ach-card-check">✓</div>' : ''}
       </div>`;
     }).join("");
-
-    const earnedInCat = achievements.filter(a => state.achievements && state.achievements.has(a.id)).length;
-
-    return `
-      <div class="ach-page-inner">
-        <div class="ach-page-header">
-          <span class="ach-cat-icon">${CAT_ICONS[cat]}</span>
-          <span class="ach-cat-label">${CAT_LABELS[cat]}</span>
-          <span class="ach-cat-progress">${earnedInCat} / ${achievements.length}</span>
-        </div>
-        <div class="ach-cards-grid">${cards}</div>
-      </div>`;
+    return `<div class="ach-page-inner">
+      <div class="ach-page-header">
+        <span class="ach-cat-icon">${CAT_ICONS[cat]}</span>
+        <span class="ach-cat-label">${CAT_LABELS[cat]}</span>
+        <span class="ach-cat-progress">${earnedInCat} / ${achievements.length}</span>
+      </div>
+      <div class="ach-cards-grid">${cards}</div>
+    </div>`;
   }
 
-  function _renderPage(pageIdx) {
-    const key = PAGES[pageIdx];
-    if (key === "cover") return _renderCoverPage();
-    return _renderCategoryPage(key);
+  function _getSpreadContent(spreadIdx) {
+    // Returns [leftHTML, rightHTML] for this spread
+    if (spreadIdx === 0) {
+      return [_renderCoverLeft(), _renderCoverRight()];
+    }
+    const cat = SPREADS[spreadIdx]; // category name
+    // Left page: category achievements
+    // Right page: next category or blank if last
+    const nextCat = SPREADS[spreadIdx + 1];
+    const rightHTML = nextCat
+      ? _renderCategoryPage(nextCat)
+      : `<div class="ach-page-inner" style="display:flex;align-items:center;justify-content:center;height:100%;opacity:0.25;">
+           <div style="text-align:center;font-family:'Georgia',serif;">
+             <div style="font-size:32px;">🔒</div>
+             <div style="font-size:12px;margin-top:8px;">End of record</div>
+           </div>
+         </div>`;
+    return [_renderCategoryPage(cat), rightHTML];
   }
 
-  function _buildBook() {
-    const stage = document.getElementById("achBookStage");
-    if (!stage) return;
+  function _setSpreadContent(leftHTML, rightHTML, animate) {
+    const left  = document.getElementById("achPageLeft");
+    const right = document.getElementById("achPageRight");
+    if (!left || !right) return;
 
-    if (_prefersNoMotion() || _isMobile()) {
-      // Flat mode: one page shown at a time, no 3D
-      stage.dataset.flat = "true";
-      _renderFlat(stage);
+    if (!animate) {
+      left.innerHTML  = leftHTML;
+      right.innerHTML = rightHTML;
       return;
     }
 
-    stage.innerHTML = "";
-    stage.dataset.flat = "";
-
-    // Create one DOM page leaf per page
-    PAGES.forEach((_, i) => {
-      const leaf = document.createElement("div");
-      leaf.className = "ach-page-leaf";
-      leaf.dataset.idx = i;
-      leaf.innerHTML = `
-        <div class="ach-page-front">${_renderPage(i)}</div>
-        <div class="ach-page-back">${i + 1 < PAGES.length ? _renderPage(i + 1) : ""}</div>`;
-      stage.appendChild(leaf);
-    });
-
-    _applyPageZIndexes();
-    _updateNavButtons();
-    _updateIndicator();
-  }
-
-  function _renderFlat(stage) {
-    stage.innerHTML = `<div class="ach-page-flat">${_renderPage(_currentPage)}</div>`;
-    _updateNavButtons();
-    _updateIndicator();
-  }
-
-  function _applyPageZIndexes() {
-    const leaves = document.querySelectorAll(".ach-page-leaf");
-    leaves.forEach((leaf, i) => {
-      if (i < _currentPage) {
-        leaf.classList.add("flipped");
-        leaf.style.zIndex = PAGES.length - i;
-      } else {
-        leaf.classList.remove("flipped");
-        leaf.style.zIndex = i + 1;
-      }
-    });
+    // Slide-out then slide-in
+    left.classList.add("flipping-out");
+    right.classList.add("flipping-out");
+    setTimeout(() => {
+      left.classList.remove("flipping-out");
+      right.classList.remove("flipping-out");
+      left.innerHTML  = leftHTML;
+      right.innerHTML = rightHTML;
+      left.classList.add("flipping-in");
+      right.classList.add("flipping-in");
+      setTimeout(() => {
+        left.classList.remove("flipping-in");
+        right.classList.remove("flipping-in");
+      }, 250);
+    }, 170);
   }
 
   function _updateNavButtons() {
-    const prev = document.getElementById("achPrev");
-    const next = document.getElementById("achNext");
-    if (prev) prev.disabled = _currentPage === 0;
-    if (next) next.disabled = _currentPage >= PAGES.length - 1;
+    const prevBtn = document.getElementById("achPrev");
+    const nextBtn = document.getElementById("achNext");
+    if (prevBtn) prevBtn.disabled = _currentSpread === 0;
+    // We show two cats per spread (except cover), so last spread = Math.ceil((SPREADS.length-1)/2)
+    const lastSpread = Math.ceil((SPREADS.length - 1) / 2);
+    if (nextBtn) nextBtn.disabled = _currentSpread >= lastSpread;
   }
 
   function _updateIndicator() {
     const el = document.getElementById("achPageIndicator");
-    if (el) {
-      el.innerHTML = PAGES.map((_, i) =>
-        `<span class="ach-dot${i === _currentPage ? " active" : ""}"></span>`
-      ).join("");
+    if (!el) return;
+    const lastSpread = Math.ceil((SPREADS.length - 1) / 2);
+    const total = lastSpread + 1; // including cover
+    el.innerHTML = Array.from({ length: total }, (_, i) =>
+      `<span class="ach-dot${i === _currentSpread ? " active" : ""}"></span>`
+    ).join("");
+  }
+
+  function _render(animate) {
+    // Compute which categories to show on this spread
+    // Spread 0 = cover; Spread n = categories at index (2n-1) and (2n)
+    let leftHTML, rightHTML;
+    if (_currentSpread === 0) {
+      [leftHTML, rightHTML] = [_renderCoverLeft(), _renderCoverRight()];
+    } else {
+      const leftCatIdx  = (_currentSpread - 1) * 2;
+      const rightCatIdx = leftCatIdx + 1;
+      const leftCat  = ACH_CATEGORIES[leftCatIdx];
+      const rightCat = ACH_CATEGORIES[rightCatIdx];
+      leftHTML  = leftCat  ? _renderCategoryPage(leftCat)  : "";
+      rightHTML = rightCat ? _renderCategoryPage(rightCat) :
+        `<div class="ach-page-inner" style="display:flex;align-items:center;justify-content:center;height:100%;opacity:0.22;">
+           <div style="text-align:center;font-family:'Georgia',serif;color:var(--book-ink);">
+             <div style="font-size:36px;">📜</div>
+             <div style="font-size:12px;margin-top:10px;">End of Record</div>
+           </div>
+         </div>`;
     }
+    _setSpreadContent(leftHTML, rightHTML, animate);
+    _updateNavButtons();
+    _updateIndicator();
   }
 
   function prev() {
-    if (_currentPage <= 0) return;
-    const stage = document.getElementById("achBookStage");
-    if (stage && stage.dataset.flat) {
-      _currentPage--;
-      _renderFlat(stage);
-      return;
-    }
-    _currentPage--;
-    _applyPageZIndexes();
-    _updateNavButtons();
-    _updateIndicator();
+    if (_currentSpread <= 0) return;
+    _currentSpread--;
+    _render(true);
   }
 
   function next() {
-    if (_currentPage >= PAGES.length - 1) return;
-    const stage = document.getElementById("achBookStage");
-    if (stage && stage.dataset.flat) {
-      _currentPage++;
-      _renderFlat(stage);
-      return;
-    }
-    _currentPage++;
-    _applyPageZIndexes();
-    _updateNavButtons();
-    _updateIndicator();
+    const lastSpread = Math.ceil((ACH_CATEGORIES.length) / 2);
+    if (_currentSpread >= lastSpread) return;
+    _currentSpread++;
+    _render(true);
   }
 
   function open() {
-    _currentPage = 0;
-    _buildBook();
+    _currentSpread = 0;
+    _render(false);
     const overlay = document.getElementById("achBookOverlay");
     const book    = document.getElementById("achievementBook");
     if (overlay) overlay.classList.remove("hidden");
@@ -1339,12 +1359,12 @@ const AchievementUI = (() => {
     const overlay = document.getElementById("achBookOverlay");
     if (book) {
       book.classList.remove("open");
-      setTimeout(() => book.classList.add("hidden"), 350);
+      setTimeout(() => book.classList.add("hidden"), 400);
     }
     if (overlay) overlay.classList.add("hidden");
   }
 
-  return { open, close, prev, next, _impl: "book3d" };
+  return { open, close, prev, next, _impl: "tome2page" };
 })();
 
 function openAchievementBook()  { AchievementUI.open();  }
