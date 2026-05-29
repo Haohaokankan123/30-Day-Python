@@ -779,7 +779,7 @@ function toggleComplete() {
       return;
     }
     state.completed.add(n);
-    showCelebration(n);
+    playCompletion(n);
     const xpForDay = state.aiUsedDays.has(n) ? 50 : 100;
     awardXP(xpForDay);
   }
@@ -798,22 +798,110 @@ function toggleComplete() {
   buildDayDots(n);
 }
 
-function showCelebration(n) {
-  const msgs = [
-    "You're building momentum. Keep going!",
-    "Great work! Python is getting clearer every day.",
-    "One more day conquered. You're unstoppable!",
-    "Consistency is the key to mastery. Well done!",
-    "You're writing real Python now. Be proud!",
-    "Every day you code, you get better. Keep it up!",
-  ];
-  document.getElementById("celebrationMsg").textContent =
-    `Day ${n} complete! ${msgs[n % msgs.length]}`;
-  document.getElementById("celebration").classList.remove("hidden");
+// ─── COMPLETION ANIMATION ENGINE ──────────────────────────────────────
+
+const DAY_CATEGORY = {
+  1:"foundations",2:"foundations",3:"foundations",4:"foundations",
+  5:"data",6:"data",7:"data",8:"data",
+  9:"foundations",10:"foundations",
+  11:"functions",12:"tools",13:"functions",14:"functions",
+  15:"foundations",16:"tools",17:"foundations",
+  19:"tools",20:"tools",21:"functions",
+  22:"web",23:"tools",24:"data",25:"data",
+  26:"web",27:"web",28:"web",29:"web",30:"foundations",
+};
+
+const CATEGORY_STYLE = {
+  foundations: { colors: ["#FFD43B","#4B8BBE","#FFFFFF"], style: "burst" },
+  data:        { colors: ["#3ECF8E","#4B8BBE","#FFD43B"], style: "fountain" },
+  functions:   { colors: ["#A78BFA","#FFD43B","#FFFFFF"], style: "spiral" },
+  tools:       { colors: ["#FFBD2E","#4B8BBE","#3ECF8E"], style: "sideCannons" },
+  web:         { colors: ["#4B8BBE","#3ECF8E","#FFD43B","#FFFFFF"], style: "fireworks" },
+};
+
+const COMPLETION_MSGS = [
+  "Day {n} done. Keep that momentum going.",
+  "Solid work on Day {n}. You're making real progress.",
+  "Day {n} in the books. Python is getting clearer.",
+  "Finished Day {n}. Consistency is how you get good.",
+  "Day {n} complete. You're writing real Python now.",
+  "Great job on Day {n}. Every day builds on the last.",
+];
+
+function getDayCategory(n) {
+  return DAY_CATEGORY[n] || "foundations";
+}
+
+function playCompletion(n) {
+  const reduceMotion = document.documentElement.classList.contains("reduce-motion");
+  const cat = getDayCategory(n);
+  const { colors, style } = CATEGORY_STYLE[cat];
+  const milestone = [1, 7, 15, 30].includes(n);
+  const msg = COMPLETION_MSGS[(n - 1) % COMPLETION_MSGS.length].replace("{n}", n);
+  showToast(msg, "", "");
+
+  // Hide the old celebration modal if visible
+  const cel = document.getElementById("celebration");
+  if (cel) cel.classList.add("hidden");
+
+  if (reduceMotion || typeof confetti !== "function") return;
+
+  if (milestone) {
+    runGrandFinale(colors);
+  } else {
+    runConfettiStyle(style, colors);
+  }
+}
+
+function runConfettiStyle(style, colors) {
+  const opts = { colors, disableForReducedMotion: true };
+  if (style === "burst") {
+    confetti({ ...opts, particleCount: 90, spread: 80, origin: { y: 0.55 }, startVelocity: 38 });
+  } else if (style === "fountain") {
+    let count = 0;
+    const interval = setInterval(() => {
+      confetti({ ...opts, particleCount: 12, spread: 55, origin: { x: 0.5, y: 0.75 }, startVelocity: 45, angle: 90 });
+      if (++count >= 7) clearInterval(interval);
+    }, 120);
+  } else if (style === "spiral") {
+    let angle = 60;
+    let count = 0;
+    const interval = setInterval(() => {
+      confetti({ ...opts, particleCount: 10, spread: 30, angle, origin: { x: 0.5, y: 0.6 }, startVelocity: 42 });
+      angle = angle === 60 ? 120 : 60;
+      if (++count >= 8) clearInterval(interval);
+    }, 100);
+  } else if (style === "sideCannons") {
+    confetti({ ...opts, particleCount: 60, spread: 55, angle: 60,  origin: { x: 0.0, y: 0.6 } });
+    confetti({ ...opts, particleCount: 60, spread: 55, angle: 120, origin: { x: 1.0, y: 0.6 } });
+  } else if (style === "fireworks") {
+    const positions = [{ x: 0.25, y: 0.35 }, { x: 0.75, y: 0.35 }, { x: 0.5, y: 0.25 }];
+    positions.forEach((pos, i) => {
+      setTimeout(() => {
+        confetti({ ...opts, particleCount: 55, spread: 70, origin: pos, startVelocity: 50, decay: 0.91 });
+      }, i * 200);
+    });
+  }
+}
+
+function runGrandFinale(colors) {
+  // Intensive version for milestone days (1, 7, 15, 30)
+  const gold = ["#FFD43B","#FFC300","#FFFFFF","#FFD43B"];
+  const mixed = [...colors, ...gold];
+  const opts = { colors: mixed, disableForReducedMotion: true, scalar: 1.1 };
+
+  // Three-burst pattern
+  setTimeout(() => confetti({ ...opts, particleCount: 120, spread: 100, origin: { y: 0.5 }, startVelocity: 50 }), 0);
+  setTimeout(() => {
+    confetti({ ...opts, particleCount: 80, spread: 60, angle: 55,  origin: { x: 0, y: 0.6 } });
+    confetti({ ...opts, particleCount: 80, spread: 60, angle: 125, origin: { x: 1, y: 0.6 } });
+  }, 300);
+  setTimeout(() => confetti({ ...opts, particleCount: 100, spread: 120, origin: { x: 0.5, y: 0.6 }, startVelocity: 40 }), 700);
 }
 
 function hideCelebration() {
-  document.getElementById("celebration").classList.add("hidden");
+  const cel = document.getElementById("celebration");
+  if (cel) cel.classList.add("hidden");
 }
 
 // ─── EXERCISES ────────────────────────────────
