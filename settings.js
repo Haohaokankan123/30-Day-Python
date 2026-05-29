@@ -222,7 +222,7 @@ const Settings = (() => {
   function startDeleteAccount() {
     _deleteStep = 1;
     _showDeleteModal(
-      "Delete Account — Step 1 of 3",
+      "Delete Account: Step 1 of 3",
       "This will permanently delete your account and all progress.",
       'Type DELETE to continue',
       "DELETE"
@@ -266,7 +266,7 @@ const Settings = (() => {
       _deleteStep = 2;
       const email = (window.Auth && window.Auth.user()) ? window.Auth.user().email : "";
       _showDeleteModal(
-        "Delete Account — Step 2 of 3",
+        "Delete Account: Step 2 of 3",
         "Type your email address to confirm you own this account.",
         "Your email address",
         email
@@ -274,7 +274,7 @@ const Settings = (() => {
     } else if (_deleteStep === 2) {
       _deleteStep = 3;
       _showDeleteModal(
-        "Delete Account — Step 3 of 3",
+        "Delete Account: Step 3 of 3",
         "Final confirmation. This CANNOT be undone. All XP, badges, and progress will be lost forever.",
         'Type GOODBYE to permanently delete',
         "GOODBYE"

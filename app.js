@@ -292,7 +292,7 @@ function initAiTutorHooks() {
           const used = state.aiUsedDays.has(state.currentDay);
           banner.classList.remove("hidden");
           banner.textContent = used
-            ? "⚠️ AI help used — this day will give 50 XP on completion."
+            ? "⚠️ AI help used; this day will give 50 XP on completion."
             : "⚠️ Asking the AI will reduce this day's XP to 50 when you complete it.";
         }
       }
@@ -670,7 +670,7 @@ function renderQuiz(questions, dayNum) {
         prev !== undefined
           ? `
       <div class="quiz-feedback ${prev.correct ? "correct" : "wrong"} show">
-        ${prev.correct ? "✓ Correct!" : `✗ Incorrect — The right answer is: <strong>${q.opts[q.answer]}</strong>`}
+        ${prev.correct ? "✓ Correct!" : `✗ Incorrect. The right answer is: <strong>${q.opts[q.answer]}</strong>`}
         ${q.explain ? `<br><span style="font-weight:400;opacity:0.85">${q.explain}</span>` : ""}
       </div>`
           : '<div class="quiz-feedback"></div>';
@@ -1311,7 +1311,7 @@ function initCodeTyper() {
   pre.innerHTML = '<span class="demo-cursor"></span>';
 
   const segments = [
-    ["# 30 Days of Python — Day 10: Loops", "lc-comment"],
+    ["# 30 Days of Python: Day 10 Loops", "lc-comment"],
     ["\n\n", null],
     ["days = list(range(1, 31))", null],
     ["\n", null],
@@ -1399,7 +1399,7 @@ function initDemoSequence() {
   const messages = [
     { role: "user", text: "Why is my code getting a SyntaxError?", delay: 1800 },
     { role: "ai",   text: "I can see the issue! On line 6, the <code>for</code> loop is missing a colon at the end.", delay: 2800 },
-    { role: "ai",   text: "Change <code>for score in scores</code> to <code>for score in scores:</code> — Python requires the colon to open a block.", delay: 3800 },
+    { role: "ai",   text: "Change <code>for score in scores</code> to <code>for score in scores:</code>. Python requires the colon to open a block.", delay: 3800 },
     { role: "user", text: "Oh and what about line 9?", delay: 5000 },
     { role: "ai",   text: "Good catch! <code>len(scores</code> is missing the closing parenthesis. Fix it to <code>len(scores)</code> and you are good to go.", delay: 6200 }
   ];
