@@ -508,9 +508,10 @@ average = total / len(scores
                             <button
                                 class="topbar-badges-btn"
                                 id="topbarBadges"
-                                onclick="openBadgePopup()"
+                                onclick="openAchievementBook()"
+                                title="Open achievement book"
                             >
-                                <span id="topbarBadgeCount">0</span> badges
+                                🏅 <span id="topbarBadgeCount">0</span>
                             </button>
                         </div>
                         <button
@@ -747,20 +748,20 @@ average = total / len(scores
             </div>
         </div>
 
-        <!-- Badge Popup -->
-        <div
-            class="badge-popup-overlay hidden"
-            id="badgePopupOverlay"
-            onclick="closeBadgePopup()"
-        ></div>
-        <div class="badge-popup hidden" id="badgePopup">
-            <div class="badge-popup-header">
-                <span>Your Badges</span>
-                <button class="badge-popup-close" onclick="closeBadgePopup()">
-                    ✕
-                </button>
+        <!-- Achievement Book -->
+        <div id="achBookOverlay" class="ach-overlay hidden" onclick="closeAchievementBook()"></div>
+        <div id="achievementBook" class="ach-book hidden" role="dialog" aria-modal="true" aria-label="Achievement Book">
+            <div class="ach-book-wrap">
+                <div class="ach-book-stage" id="achBookStage">
+                    <!-- Pages injected by JS -->
+                </div>
+                <div class="ach-book-nav">
+                    <button class="ach-nav-btn prev" id="achPrev" onclick="AchievementUI.prev()" aria-label="Previous page">&#8249;</button>
+                    <div class="ach-page-indicator" id="achPageIndicator"></div>
+                    <button class="ach-nav-btn next" id="achNext" onclick="AchievementUI.next()" aria-label="Next page">&#8250;</button>
+                </div>
             </div>
-            <div class="badge-popup-grid" id="badgePopupGrid"></div>
+            <button class="ach-close-btn" onclick="closeAchievementBook()" aria-label="Close achievement book">&#x2715;</button>
         </div>
 
         <!-- Auth Modal -->

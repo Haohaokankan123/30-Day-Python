@@ -5570,6 +5570,236 @@ body { font-family: var(--font-body); }
     transition-duration: 0.01ms !important;
 }
 
+/* ─── ACHIEVEMENT BOOK OVERLAY ──────────────────────── */
+.ach-overlay {
+    position: fixed; inset: 0; z-index: 7000;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+}
+
+/* ─── ACHIEVEMENT BOOK ───────────────────────────────── */
+.ach-book {
+    /* Own parchment/leather/gold vars; intentionally no Python blue/yellow */
+    --book-paper:   #f3e8cf;
+    --book-paper-2: #ede0be;
+    --book-leather: #4a2c12;
+    --book-spine:   #3a220e;
+    --book-gold:    #d4af37;
+    --book-gold-2:  #f0c040;
+    --book-ink:     #2a1a0a;
+    --book-ink-2:   #5a3a18;
+    --book-shadow:  rgba(30, 12, 0, 0.55);
+
+    position: fixed;
+    inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 7500;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.94);
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(.2,.8,.2,1);
+}
+.ach-book.open {
+    pointer-events: all;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.ach-book-wrap {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 18px;
+}
+
+/* ── Stage: provides the 3D perspective context ────────────── */
+.ach-book-stage {
+    position: relative;
+    width: min(560px, 92vw);
+    height: min(420px, 72vh);
+    perspective: 2200px;
+    perspective-origin: 50% 40%;
+}
+
+/* ── Page leaves: actual 3D rotating elements ──────────────── */
+.ach-page-leaf {
+    position: absolute; inset: 0;
+    transform-style: preserve-3d;
+    transform-origin: left center;
+    transform: rotateY(0deg);
+    transition: transform 0.65s cubic-bezier(.25,.85,.25,1);
+    will-change: transform;
+    cursor: pointer;
+}
+.ach-page-leaf.flipped {
+    transform: rotateY(-180deg);
+}
+
+.ach-page-front,
+.ach-page-back {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    border-radius: 4px 12px 12px 4px;
+    background: var(--book-paper);
+    border: 1px solid rgba(160, 110, 50, 0.35);
+    box-shadow:
+        inset -2px 0 8px rgba(100, 60, 10, 0.10),
+        2px 4px 20px var(--book-shadow);
+    overflow: hidden;
+}
+.ach-page-back {
+    transform: rotateY(180deg);
+    border-radius: 12px 4px 4px 12px;
+    box-shadow:
+        inset 2px 0 8px rgba(100, 60, 10, 0.10),
+        -2px 4px 20px var(--book-shadow);
+}
+
+/* ── Page inner content ──────────────────────────────────── */
+.ach-page-inner {
+    padding: 24px 28px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    color: var(--book-ink);
+    font-family: 'Georgia', 'Times New Roman', serif;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(160,110,50,0.3) transparent;
+}
+
+/* ── Cover page ──────────────────────────────────────────── */
+.cover-inner {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    height: 100%;
+    background: linear-gradient(145deg, #e8d4a0, #d4b870, #c8a848);
+    border-radius: inherit;
+    gap: 10px;
+}
+.ach-cover-title {
+    font-size: 28px; font-weight: 700;
+    color: var(--book-spine);
+    letter-spacing: 0.02em;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.4);
+}
+.ach-cover-sub {
+    font-size: 14px; color: var(--book-ink-2); letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.ach-cover-stats {
+    margin-top: 12px;
+    background: rgba(42,26,10,0.08);
+    border: 1px solid rgba(160,110,50,0.3);
+    border-radius: 40px; padding: 8px 22px;
+}
+.ach-cover-count { font-size: 26px; font-weight: 800; color: var(--book-spine); }
+.ach-cover-total { font-size: 14px; color: var(--book-ink-2); }
+.ach-cover-hint  { font-size: 12px; color: rgba(42,26,10,0.45); margin-top: 8px; }
+
+/* ── Category page ───────────────────────────────────────── */
+.ach-page-header {
+    display: flex; align-items: center; gap: 8px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(160,110,50,0.25);
+    margin-bottom: 14px;
+}
+.ach-cat-icon  { font-size: 20px; }
+.ach-cat-label { font-size: 17px; font-weight: 700; flex: 1; color: var(--book-spine); }
+.ach-cat-progress { font-size: 12px; color: var(--book-ink-2); white-space: nowrap; }
+
+/* ── Achievement cards ───────────────────────────────────── */
+.ach-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.ach-card {
+    position: relative;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(160,110,50,0.2);
+    border-radius: 8px;
+    padding: 12px 10px 10px;
+    text-align: center;
+    transition: box-shadow 0.15s;
+}
+.ach-card.earned {
+    background: rgba(212,175,55,0.15);
+    border-color: rgba(212,175,55,0.45);
+    box-shadow: 0 0 0 1px rgba(212,175,55,0.2);
+}
+.ach-card.locked { opacity: 0.55; filter: grayscale(0.5); }
+.ach-card.secret.locked { opacity: 0.42; }
+
+.ach-card-icon  { font-size: 24px; line-height: 1.3; }
+.ach-card-name  { font-size: 11.5px; font-weight: 700; color: var(--book-spine); margin-top: 4px; line-height: 1.2; }
+.ach-card-desc  { font-size: 10px; color: var(--book-ink-2); margin-top: 3px; line-height: 1.35; }
+.ach-card-check {
+    position: absolute; top: 5px; right: 7px;
+    font-size: 11px; color: #1a8a56; font-weight: 700;
+}
+
+/* ── Navigation ──────────────────────────────────────────── */
+.ach-book-nav {
+    display: flex; align-items: center; gap: 12px;
+}
+.ach-nav-btn {
+    background: rgba(42,26,10,0.75);
+    color: var(--book-gold);
+    border: 1px solid rgba(212,175,55,0.4);
+    border-radius: 50%;
+    width: 38px; height: 38px;
+    font-size: 22px; line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    display: flex; align-items: center; justify-content: center;
+}
+.ach-nav-btn:hover:not(:disabled) { background: rgba(42,26,10,0.92); transform: scale(1.08); }
+.ach-nav-btn:disabled { opacity: 0.35; cursor: default; }
+
+.ach-page-indicator {
+    display: flex; gap: 6px; align-items: center;
+}
+.ach-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(212,175,55,0.3);
+    transition: background 0.2s, transform 0.2s;
+}
+.ach-dot.active {
+    background: var(--book-gold);
+    transform: scale(1.35);
+}
+
+/* ── Close button ────────────────────────────────────────── */
+.ach-close-btn {
+    position: fixed; top: 24px; right: 24px;
+    background: rgba(42,26,10,0.8);
+    color: var(--book-gold);
+    border: 1px solid rgba(212,175,55,0.35);
+    border-radius: 50%; width: 36px; height: 36px;
+    font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+    z-index: 7600;
+}
+.ach-close-btn:hover { background: rgba(42,26,10,0.96); }
+
+/* ── Flat mode (mobile + reduce-motion) ──────────────────── */
+.ach-page-flat {
+    width: min(560px, 92vw);
+    min-height: min(420px, 72vh);
+    background: var(--book-paper);
+    border: 1px solid rgba(160,110,50,0.35);
+    border-radius: 12px;
+    box-shadow: 2px 4px 20px var(--book-shadow);
+    overflow: hidden;
+}
+@media (max-width: 640px) {
+    .ach-book-stage { height: 65vh; }
+    .ach-cards-grid { grid-template-columns: 1fr; }
+    .ach-page-leaf  { border-radius: 12px; }
+    .ach-page-front, .ach-page-back { border-radius: 12px; }
+}
+
 /* ─── FULL-SCREEN ACHIEVEMENT POPUP ────────────────── */
 .ach-popup-layer {
     position: fixed; inset: 0; z-index: 9000;

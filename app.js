@@ -355,29 +355,7 @@ function showToast(prefix, strong, suffix) {
   }, 3000);
 }
 
-function openBadgePopup() {
-  const grid = document.getElementById("badgePopupGrid");
-  if (!grid) return;
-  grid.innerHTML = "";
-  for (const badge of BADGES) {
-    const earned = state.badges.has(badge.id);
-    const el = document.createElement("div");
-    el.className = "badge-card" + (earned ? " earned" : " locked");
-    el.innerHTML = `
-      <span class="badge-emoji">${badge.emoji}</span>
-      <span class="badge-name">${badge.name}</span>
-      <span class="badge-desc">${earned ? "Unlocked!" : badge.desc}</span>
-    `;
-    grid.appendChild(el);
-  }
-  document.getElementById("badgePopup").classList.remove("hidden");
-  document.getElementById("badgePopupOverlay").classList.remove("hidden");
-}
 
-function closeBadgePopup() {
-  document.getElementById("badgePopup").classList.add("hidden");
-  document.getElementById("badgePopupOverlay").classList.add("hidden");
-}
 
 function flagAiUsed() {
   if (state.aiUsedDays.has(state.currentDay)) return;
@@ -1166,6 +1144,215 @@ function playChime() {
     });
   } catch (_) {}
 }
+
+// ─── ACHIEVEMENT BOOK (3D FLIP-BOOK) ──────────────────────────────────────────
+
+const AchievementUI = (() => {
+  const CAT_LABELS = {
+    progress: "Progress",
+    streaks:  "Streaks",
+    xp:       "Experience",
+    mastery:  "Mastery",
+    secret:   "Secrets",
+  };
+
+  const CAT_ICONS = {
+    progress: "🗺️",
+    streaks:  "🔥",
+    xp:       "⭐",
+    mastery:  "🏅",
+    secret:   "🔮",
+  };
+
+  let _currentPage = 0; // 0 = cover
+  const PAGES = ["cover", ...ACH_CATEGORIES]; // cover + 5 category pages
+
+  function _prefersNoMotion() {
+    return document.documentElement.classList.contains("reduce-motion")
+      || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  function _isMobile() {
+    return window.innerWidth <= 640;
+  }
+
+  function _renderCoverPage() {
+    const earned = state.achievements ? state.achievements.size : 0;
+    const total  = ACHIEVEMENTS.filter(a => !a.secret).length;
+    return `
+      <div class="ach-page-inner cover-inner">
+        <div class="ach-cover-title">Achievement Book</div>
+        <div class="ach-cover-sub">30 Days of Python</div>
+        <div class="ach-cover-stats">
+          <span class="ach-cover-count">${earned}</span>
+          <span class="ach-cover-total"> / ${total} unlocked</span>
+        </div>
+        <div class="ach-cover-hint">Click &#8250; to browse</div>
+      </div>`;
+  }
+
+  function _renderCategoryPage(cat) {
+    const achievements = ACHIEVEMENTS.filter(a => a.cat === cat);
+    const cards = achievements.map(a => {
+      const unlocked = state.achievements && state.achievements.has(a.id);
+      if (!unlocked && a.secret) {
+        return `<div class="ach-card locked secret">
+          <div class="ach-card-icon">❓</div>
+          <div class="ach-card-name">???</div>
+          <div class="ach-card-desc">Hidden achievement</div>
+        </div>`;
+      }
+      return `<div class="ach-card ${unlocked ? "earned" : "locked"}">
+        <div class="ach-card-icon">${a.icon}</div>
+        <div class="ach-card-name">${a.name}</div>
+        <div class="ach-card-desc">${a.desc}</div>
+        ${unlocked ? '<div class="ach-card-check">✓</div>' : ''}
+      </div>`;
+    }).join("");
+
+    const earnedInCat = achievements.filter(a => state.achievements && state.achievements.has(a.id)).length;
+
+    return `
+      <div class="ach-page-inner">
+        <div class="ach-page-header">
+          <span class="ach-cat-icon">${CAT_ICONS[cat]}</span>
+          <span class="ach-cat-label">${CAT_LABELS[cat]}</span>
+          <span class="ach-cat-progress">${earnedInCat} / ${achievements.length}</span>
+        </div>
+        <div class="ach-cards-grid">${cards}</div>
+      </div>`;
+  }
+
+  function _renderPage(pageIdx) {
+    const key = PAGES[pageIdx];
+    if (key === "cover") return _renderCoverPage();
+    return _renderCategoryPage(key);
+  }
+
+  function _buildBook() {
+    const stage = document.getElementById("achBookStage");
+    if (!stage) return;
+
+    if (_prefersNoMotion() || _isMobile()) {
+      // Flat mode: one page shown at a time, no 3D
+      stage.dataset.flat = "true";
+      _renderFlat(stage);
+      return;
+    }
+
+    stage.innerHTML = "";
+    stage.dataset.flat = "";
+
+    // Create one DOM page leaf per page
+    PAGES.forEach((_, i) => {
+      const leaf = document.createElement("div");
+      leaf.className = "ach-page-leaf";
+      leaf.dataset.idx = i;
+      leaf.innerHTML = `
+        <div class="ach-page-front">${_renderPage(i)}</div>
+        <div class="ach-page-back">${i + 1 < PAGES.length ? _renderPage(i + 1) : ""}</div>`;
+      stage.appendChild(leaf);
+    });
+
+    _applyPageZIndexes();
+    _updateNavButtons();
+    _updateIndicator();
+  }
+
+  function _renderFlat(stage) {
+    stage.innerHTML = `<div class="ach-page-flat">${_renderPage(_currentPage)}</div>`;
+    _updateNavButtons();
+    _updateIndicator();
+  }
+
+  function _applyPageZIndexes() {
+    const leaves = document.querySelectorAll(".ach-page-leaf");
+    leaves.forEach((leaf, i) => {
+      if (i < _currentPage) {
+        leaf.classList.add("flipped");
+        leaf.style.zIndex = PAGES.length - i;
+      } else {
+        leaf.classList.remove("flipped");
+        leaf.style.zIndex = i + 1;
+      }
+    });
+  }
+
+  function _updateNavButtons() {
+    const prev = document.getElementById("achPrev");
+    const next = document.getElementById("achNext");
+    if (prev) prev.disabled = _currentPage === 0;
+    if (next) next.disabled = _currentPage >= PAGES.length - 1;
+  }
+
+  function _updateIndicator() {
+    const el = document.getElementById("achPageIndicator");
+    if (el) {
+      el.innerHTML = PAGES.map((_, i) =>
+        `<span class="ach-dot${i === _currentPage ? " active" : ""}"></span>`
+      ).join("");
+    }
+  }
+
+  function prev() {
+    if (_currentPage <= 0) return;
+    const stage = document.getElementById("achBookStage");
+    if (stage && stage.dataset.flat) {
+      _currentPage--;
+      _renderFlat(stage);
+      return;
+    }
+    _currentPage--;
+    _applyPageZIndexes();
+    _updateNavButtons();
+    _updateIndicator();
+  }
+
+  function next() {
+    if (_currentPage >= PAGES.length - 1) return;
+    const stage = document.getElementById("achBookStage");
+    if (stage && stage.dataset.flat) {
+      _currentPage++;
+      _renderFlat(stage);
+      return;
+    }
+    _currentPage++;
+    _applyPageZIndexes();
+    _updateNavButtons();
+    _updateIndicator();
+  }
+
+  function open() {
+    _currentPage = 0;
+    _buildBook();
+    const overlay = document.getElementById("achBookOverlay");
+    const book    = document.getElementById("achievementBook");
+    if (overlay) overlay.classList.remove("hidden");
+    if (book) {
+      book.classList.remove("hidden");
+      requestAnimationFrame(() => book.classList.add("open"));
+    }
+  }
+
+  function close() {
+    const book    = document.getElementById("achievementBook");
+    const overlay = document.getElementById("achBookOverlay");
+    if (book) {
+      book.classList.remove("open");
+      setTimeout(() => book.classList.add("hidden"), 350);
+    }
+    if (overlay) overlay.classList.add("hidden");
+  }
+
+  return { open, close, prev, next, _impl: "book3d" };
+})();
+
+function openAchievementBook()  { AchievementUI.open();  }
+function closeAchievementBook() { AchievementUI.close(); }
+
+// Remove old badge popup functions (replaced by book)
+function openBadgePopup()  { AchievementUI.open(); }
+function closeBadgePopup() { AchievementUI.close(); }
 
 // ─── EXERCISES ────────────────────────────────
 function toggleExercise(el, dayKey, id) {
