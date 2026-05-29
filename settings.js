@@ -550,11 +550,5 @@ document.addEventListener("DOMContentLoaded", () => {
   Settings.applyOnLoad();
   LangSwitcher.applyOnLoad();
 
-  // Close settings with Escape key
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape") {
-      SettingsPanel.close();
-      Settings.cancelDelete();
-    }
-  });
+
 });
