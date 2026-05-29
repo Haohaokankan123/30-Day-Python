@@ -5570,6 +5570,113 @@ body { font-family: var(--font-body); }
     transition-duration: 0.01ms !important;
 }
 
+/* ─── FULL-SCREEN ACHIEVEMENT POPUP ────────────────── */
+.ach-popup-layer {
+    position: fixed; inset: 0; z-index: 9000;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+}
+.ach-popup-layer.playing { pointer-events: all; }
+
+.ach-popup-bg {
+    position: absolute; inset: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.35s ease;
+}
+.ach-popup-layer.playing .ach-popup-bg { background: rgba(0, 0, 0, 0.72); }
+
+.ach-popup-card {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 10px;
+    background: linear-gradient(145deg, #2a1a0a, #3d2610);
+    border: 2px solid #D4AF37;
+    border-radius: 20px;
+    padding: 44px 52px 36px;
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15), 0 24px 80px rgba(0,0,0,0.7);
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.6) translateY(40px);
+    transition: opacity 0.4s cubic-bezier(.2,.8,.2,1), transform 0.4s cubic-bezier(.2,.8,.2,1);
+    max-width: 340px; width: 90%;
+}
+.ach-popup-layer.playing .ach-popup-card {
+    opacity: 1; transform: scale(1) translateY(0);
+}
+
+.ach-popup-shockwave {
+    position: absolute; inset: -2px;
+    border-radius: 22px;
+    border: 2px solid rgba(212, 175, 55, 0.8);
+    opacity: 0;
+}
+.ach-popup-layer.playing .ach-popup-shockwave {
+    animation: achShockwave 0.55s ease-out 0.35s forwards;
+}
+
+@keyframes achShockwave {
+    0%   { opacity: 0.9; transform: scale(1); }
+    100% { opacity: 0;   transform: scale(1.25); }
+}
+
+.ach-popup-seal {
+    font-size: 64px;
+    line-height: 1;
+    filter: drop-shadow(0 4px 12px rgba(212,175,55,0.5));
+    animation: achSealBounce 0.5s cubic-bezier(.2,.8,.2,1) 0.38s both;
+}
+@keyframes achSealBounce {
+    0%   { transform: scale(0.3); opacity: 0; }
+    70%  { transform: scale(1.18); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.ach-popup-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #D4AF37;
+}
+.ach-popup-name {
+    font-size: 26px; font-weight: 800; color: #F5E6C8;
+    line-height: 1.2;
+}
+.ach-popup-desc {
+    font-size: 14px; color: #C8B07A; line-height: 1.5; max-width: 240px;
+}
+.ach-popup-hint {
+    font-size: 11px; color: rgba(200, 176, 122, 0.5);
+    margin-top: 8px;
+}
+
+/* ─── LEVEL-UP BANNER ──────────────────────────────── */
+.levelup-banner {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.85);
+    background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+    border: 1px solid var(--border-accent);
+    border-radius: 16px;
+    padding: 20px 40px;
+    display: flex; align-items: center; gap: 14px;
+    z-index: 5000;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(.2,.8,.2,1);
+    pointer-events: none;
+}
+.levelup-banner.show {
+    opacity: 1; transform: translate(-50%, -50%) scale(1);
+}
+.levelup-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-3);
+}
+.levelup-level {
+    font-size: 28px; font-weight: 900; color: var(--accent);
+}
+.levelup-name {
+    font-size: 18px; font-weight: 700; color: var(--text-1);
+}
+
 /* ─── LIGHT THEME (blue-forward, warm surfaces) ── */
 [data-theme="light"] {
     /* Warm off-white surfaces that layer clearly */

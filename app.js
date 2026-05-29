@@ -234,7 +234,7 @@ function checkLevel() {
   if (newLevel > state.level) {
     state.level = newLevel;
     const lvlData = LEVELS.find(l => l.level === newLevel);
-    showToast("🎉 Level up! You're now a ", lvlData.name);
+    showLevelUpBanner(lvlData);
   }
 }
 
@@ -1041,6 +1041,130 @@ function runGrandFinale(colors) {
 function hideCelebration() {
   const cel = document.getElementById("celebration");
   if (cel) cel.classList.add("hidden");
+}
+
+// ─── FULL-SCREEN ACHIEVEMENT POPUP SYSTEM ─────────────────────────────────
+
+const _achQueue = [];
+let _achPlaying = false;
+
+function enqueueAchievementPopup(ach) {
+  _achQueue.push(ach);
+  if (!_achPlaying) _drainAchQueue();
+}
+
+function _drainAchQueue() {
+  const ach = _achQueue.shift();
+  if (!ach) { _achPlaying = false; return; }
+  _achPlaying = true;
+  _playAchPopup(ach, () => _drainAchQueue());
+}
+
+function _achPopupHtml(ach) {
+  return `
+    <div class="ach-popup-bg"></div>
+    <div class="ach-popup-card">
+      <div class="ach-popup-shockwave"></div>
+      <div class="ach-popup-seal">${ach.icon}</div>
+      <div class="ach-popup-tag">Achievement Unlocked</div>
+      <div class="ach-popup-name">${ach.name}</div>
+      <div class="ach-popup-desc">${ach.desc}</div>
+      <div class="ach-popup-hint">Tap anywhere to continue</div>
+    </div>`;
+}
+
+function _playAchPopup(ach, done) {
+  const reduceMotion = document.documentElement.classList.contains("reduce-motion");
+  if (reduceMotion) {
+    showToast(ach.icon + " ", ach.name, " unlocked");
+    setTimeout(done, 0);
+    return;
+  }
+  const layer = document.getElementById("achPopupLayer");
+  if (!layer) { done(); return; }
+
+  layer.innerHTML = _achPopupHtml(ach);
+  layer.classList.remove("hidden");
+
+  // Small burst of confetti centered on the seal
+  requestAnimationFrame(() => {
+    layer.classList.add("playing");
+    if (typeof confetti === "function") {
+      confetti({
+        particleCount: 80,
+        spread: 60,
+        origin: { x: 0.5, y: 0.45 },
+        colors: ["#D4AF37","#FFD700","#FFFFFF","#F5F5DC"],
+        startVelocity: 42,
+        gravity: 0.85,
+        disableForReducedMotion: true,
+      });
+    }
+    playChime();
+  });
+
+  let dismissed = false;
+  const finish = () => {
+    if (dismissed) return;
+    dismissed = true;
+    layer.classList.remove("playing");
+    setTimeout(() => {
+      layer.classList.add("hidden");
+      layer.innerHTML = "";
+      done();
+    }, 350);
+  };
+
+  const timer = setTimeout(finish, 3200);
+  layer.addEventListener("click", () => { clearTimeout(timer); finish(); }, { once: true });
+}
+
+// ─── LEVEL-UP BANNER ──────────────────────────────────────────────────────
+
+function showLevelUpBanner(lvlData) {
+  const banner = document.getElementById("levelUpBanner");
+  if (!banner) return;
+  const reduceMotion = document.documentElement.classList.contains("reduce-motion");
+  if (reduceMotion) {
+    showToast("Level up! You're now a ", lvlData.name);
+    return;
+  }
+  banner.innerHTML = `
+    <span class="levelup-label">Level Up</span>
+    <span class="levelup-level">Level ${lvlData.level}</span>
+    <span class="levelup-name">${lvlData.name}</span>`;
+  banner.classList.remove("hidden");
+  requestAnimationFrame(() => banner.classList.add("show"));
+  setTimeout(() => {
+    banner.classList.remove("show");
+    setTimeout(() => banner.classList.add("hidden"), 400);
+  }, 2400);
+}
+
+// ─── AUDIO CHIME (Web Audio API) ──────────────────────────────────────────
+
+let _audioCtx = null;
+
+function playChime() {
+  const soundOn = localStorage.getItem("py30_sound") === "true";
+  if (!soundOn) return;
+  try {
+    if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = _audioCtx;
+    [[880, 0], [1100, 0.15], [1320, 0.30]].forEach(([freq, when]) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = "sine";
+      gain.gain.setValueAtTime(0, ctx.currentTime + when);
+      gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + when + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + when + 0.22);
+      osc.start(ctx.currentTime + when);
+      osc.stop(ctx.currentTime + when + 0.25);
+    });
+  } catch (_) {}
 }
 
 // ─── EXERCISES ────────────────────────────────
