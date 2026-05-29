@@ -97,6 +97,10 @@ const SettingsPanel = (() => {
     const rmEl = document.getElementById("reduceMotionToggle");
     if (rmEl) rmEl.checked = reduceMotion;
 
+    const soundOn = localStorage.getItem("py30_sound") === "true";
+    const soundEl = document.getElementById("soundToggle");
+    if (soundEl) soundEl.checked = soundOn;
+
     // Notifications
     const streakReminder = localStorage.getItem("py30_notif_streak") !== "false";
     const weeklyTips = localStorage.getItem("py30_notif_tips") !== "false";
@@ -163,6 +167,10 @@ const Settings = (() => {
   function setReduceMotion(val) {
     localStorage.setItem("py30_reduce_motion", String(val));
     document.documentElement.classList.toggle("reduce-motion", val);
+  }
+
+  function setSound(val) {
+    localStorage.setItem("py30_sound", String(val));
   }
 
   function setTabSize(val) {
@@ -322,7 +330,7 @@ const Settings = (() => {
   }
 
   return {
-    setTheme, setFont, setSize, setReduceMotion,
+    setTheme, setFont, setSize, setReduceMotion, setSound,
     setTabSize, setLineNumbers, setEditorFontSize, setNotification,
     sendPasswordReset, startDeleteAccount, confirmDeleteStep, cancelDelete,
     applyOnLoad,
