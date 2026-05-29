@@ -12,19 +12,99 @@ const LEVELS = [
   { level: 7, name: "Legend",     xp: 5000 },
 ];
 
-const BADGES = [
-  { id: "first_day",      name: "First Step",      emoji: "🐣", desc: "Complete Day 1" },
-  { id: "week_one",       name: "Week 1 Done",      emoji: "📅", desc: "Complete Days 1–7" },
-  { id: "halfway",        name: "Halfway There",    emoji: "🏁", desc: "Complete 15 days" },
-  { id: "all_done",       name: "Python Master",    emoji: "🏆", desc: "Complete all 30 days" },
-  { id: "streak_3",       name: "On a Roll",        emoji: "🔥", desc: "3-day streak" },
-  { id: "streak_7",       name: "Week Warrior",     emoji: "⚡", desc: "7-day streak" },
-  { id: "streak_30",      name: "Unstoppable",      emoji: "💎", desc: "30-day streak" },
-  { id: "xp_500",         name: "XP Grinder",       emoji: "💪", desc: "Earn 500 XP" },
-  { id: "xp_2000",        name: "XP Machine",       emoji: "🤖", desc: "Earn 2000 XP" },
-  { id: "exercises_all_1",name: "Day 1 Expert",     emoji: "⭐", desc: "All exercises in Day 1" },
-  { id: "quiz_ace",       name: "Quiz Ace",          emoji: "🧠", desc: "Answer 10 quizzes correctly" },
+const ACH_CATEGORIES = ["progress", "streaks", "xp", "mastery", "secret"];
+
+const ACHIEVEMENTS = [
+  // ── Progress (8) ──────────────────────────────────────────────────
+  { id:"first_day",     cat:"progress", icon:"🐣", name:"First Step",       desc:"Finish Day 1.",
+    check:c => c.completed.has(1) },
+  { id:"three_days",    cat:"progress", icon:"🌱", name:"Getting Going",    desc:"Finish 3 lessons.",
+    check:c => c.completedCount >= 3 },
+  { id:"week_one",      cat:"progress", icon:"📅", name:"First Week Done",  desc:"Finish Days 1 through 7.",
+    check:c => [1,2,3,4,5,6,7].every(d => c.completed.has(d)) },
+  { id:"ten_days",      cat:"progress", icon:"🔟", name:"Double Digits",    desc:"Finish 10 lessons.",
+    check:c => c.completedCount >= 10 },
+  { id:"halfway",       cat:"progress", icon:"🏁", name:"Halfway There",    desc:"Finish 15 lessons.",
+    check:c => c.completedCount >= 15 },
+  { id:"twenty",        cat:"progress", icon:"🚀", name:"Home Stretch",     desc:"Finish 20 lessons.",
+    check:c => c.completedCount >= 20 },
+  { id:"twentyfive",    cat:"progress", icon:"🧗", name:"Almost There",     desc:"Finish 25 lessons.",
+    check:c => c.completedCount >= 25 },
+  { id:"all_done",      cat:"progress", icon:"🏆", name:"Python Conquered", desc:"Finish all 30 lessons.",
+    check:c => c.completedCount >= 30 },
+
+  // ── Streaks (6) ───────────────────────────────────────────────────
+  { id:"streak_2",      cat:"streaks",  icon:"✌️",  name:"Back-to-Back",    desc:"Practice 2 days in a row.",
+    check:c => c.streak >= 2 },
+  { id:"streak_3",      cat:"streaks",  icon:"🔥", name:"On a Roll",        desc:"3-day streak.",
+    check:c => c.streak >= 3 },
+  { id:"streak_7",      cat:"streaks",  icon:"⚡", name:"Week Warrior",     desc:"7-day streak.",
+    check:c => c.streak >= 7 },
+  { id:"streak_14",     cat:"streaks",  icon:"🌟", name:"Two Weeks Strong", desc:"14-day streak.",
+    check:c => c.streak >= 14 },
+  { id:"streak_21",     cat:"streaks",  icon:"💫", name:"Habit Formed",     desc:"21-day streak.",
+    check:c => c.streak >= 21 },
+  { id:"streak_30",     cat:"streaks",  icon:"💎", name:"Unstoppable",      desc:"30-day streak.",
+    check:c => c.streak >= 30 },
+
+  // ── XP (7) ────────────────────────────────────────────────────────
+  { id:"xp_100",        cat:"xp", icon:"⭐", name:"First Hundred",  desc:"Earn 100 XP.",
+    check:c => c.xp >= 100 },
+  { id:"xp_500",        cat:"xp", icon:"💪", name:"XP Grinder",     desc:"Earn 500 XP.",
+    check:c => c.xp >= 500 },
+  { id:"xp_1000",       cat:"xp", icon:"🎯", name:"Four Figures",   desc:"Earn 1000 XP.",
+    check:c => c.xp >= 1000 },
+  { id:"xp_2000",       cat:"xp", icon:"🤖", name:"XP Machine",     desc:"Earn 2000 XP.",
+    check:c => c.xp >= 2000 },
+  { id:"xp_3500",       cat:"xp", icon:"👑", name:"XP Royalty",     desc:"Earn 3500 XP.",
+    check:c => c.xp >= 3500 },
+  { id:"xp_5000",       cat:"xp", icon:"🦾", name:"Legend Tier",    desc:"Earn 5000 XP.",
+    check:c => c.xp >= 5000 },
+  { id:"level_max",     cat:"xp", icon:"🌈", name:"Maxed Out",      desc:"Reach the highest level.",
+    check:c => state.level >= LEVELS.length },
+
+  // ── Mastery (8) ───────────────────────────────────────────────────
+  { id:"quiz_ace",      cat:"mastery", icon:"🧠", name:"Quiz Ace",        desc:"Answer 10 quiz questions correctly.",
+    check:c => c.correctQuizzes >= 10 },
+  { id:"quiz_scholar",  cat:"mastery", icon:"📚", name:"Quiz Scholar",    desc:"Answer 50 quiz questions correctly.",
+    check:c => c.correctQuizzes >= 50 },
+  { id:"perfect_1",     cat:"mastery", icon:"✅", name:"Flawless",        desc:"Finish a lesson with every quiz right and none wrong.",
+    check:c => c.perfectDays.size >= 1 },
+  { id:"perfect_5",     cat:"mastery", icon:"🎖️",  name:"Five Flawless",   desc:"Get 5 perfect lessons.",
+    check:c => c.perfectDays.size >= 5 },
+  { id:"exercises_all_1", cat:"mastery", icon:"📝", name:"Day 1 Expert",  desc:"Finish every Day 1 exercise.",
+    check:c => allDayExercisesDone(1, c) },
+  { id:"data_wrangler", cat:"mastery", icon:"🗃️",  name:"Data Wrangler",  desc:"Finish Days 5 through 8.",
+    check:c => [5,6,7,8].every(d => c.completed.has(d)) },
+  { id:"func_fluent",   cat:"mastery", icon:"⚙️",  name:"Function Fluent", desc:"Finish the functions lessons (Days 11, 13, 14).",
+    check:c => [11,13,14].every(d => c.completed.has(d)) },
+  { id:"web_ready",     cat:"mastery", icon:"🌐", name:"Web Ready",       desc:"Finish the web and API lessons (Days 26, 28, 29).",
+    check:c => [26,28,29].every(d => c.completed.has(d)) },
+
+  // ── Secret (8) — show as ??? until unlocked ───────────────────────
+  { id:"night_owl",     cat:"secret", secret:true, icon:"🦉", name:"Night Owl",
+    desc:"Finish a lesson after midnight.",        check:c => c.flags.nightOwl },
+  { id:"early_bird",    cat:"secret", secret:true, icon:"🐦", name:"Early Bird",
+    desc:"Finish a lesson before 6 in the morning.", check:c => c.flags.earlyBird },
+  { id:"comeback",      cat:"secret", secret:true, icon:"🔄", name:"Welcome Back",
+    desc:"Return after a 7+ day break.",           check:c => c.flags.comeback },
+  { id:"no_ai_week",    cat:"secret", secret:true, icon:"🧗", name:"Self-Reliant",
+    desc:"Finish 7 lessons without the AI tutor.", check:c => [...c.completed].filter(d => !c.aiUsedDays.has(d)).length >= 7 },
+  { id:"weekend",       cat:"secret", secret:true, icon:"🛋️", name:"Weekend Coder",
+    desc:"Practice on a Saturday or Sunday.",      check:c => c.flags.weekend },
+  { id:"two_in_a_day",  cat:"secret", secret:true, icon:"⚡", name:"Two in a Sitting",
+    desc:"Finish two lessons in the same day.",    check:c => c.flags.twoInADay },
+  { id:"perfectionist", cat:"secret", secret:true, icon:"💯", name:"Perfectionist",
+    desc:"Get 10 perfect lessons.",                check:c => c.perfectDays.size >= 10 },
+  { id:"completionist", cat:"secret", secret:true, icon:"🌟", name:"Completionist",
+    desc:"Unlock every other achievement.",        check:_c => {
+      const total = ACHIEVEMENTS.filter(a => !a.secret && a.id !== "completionist").length;
+      return ACHIEVEMENTS.filter(a => !a.secret && a.id !== "completionist" && state.achievements.has(a.id)).length >= total;
+    } },
 ];
+
+// Keep BADGES pointing at the same data for any code that still references it
+const BADGES = ACHIEVEMENTS;
 
 const state = {
   currentDay: 1,
@@ -35,7 +115,10 @@ const state = {
   level: 1,
   streak: 0,
   lastActiveDate: null,
-  badges: new Set(),
+  badges: new Set(),        // legacy key; same Set as achievements for back-compat
+  achievements: new Set(),  // canonical unlocked achievement ids
+  perfectDays: new Set(),   // days where all quizzes answered correctly
+  flags: {},                // sticky booleans: nightOwl, earlyBird, weekend, comeback, twoInADay
   aiUsedDays: new Set(),
   solutionUsed: {},
 };
@@ -85,8 +168,22 @@ function loadState() {
     if (sk !== null) state.streak = parseInt(sk, 10) || 0;
     const lad = localStorage.getItem("py30_last_active");
     if (lad) state.lastActiveDate = lad;
-    const bd = localStorage.getItem("py30_badges");
-    if (bd) state.badges = new Set(JSON.parse(bd));
+    // Load achievements; migrate from old py30_badges if no achievements key yet
+    const ach = localStorage.getItem("py30_achievements");
+    if (ach) {
+      state.achievements = new Set(JSON.parse(ach));
+    } else {
+      // Migrate: old badge ids are valid achievement ids; bring them forward
+      const bd = localStorage.getItem("py30_badges");
+      if (bd) state.achievements = new Set(JSON.parse(bd));
+    }
+    state.badges = state.achievements; // keep alias in sync
+
+    const pd = localStorage.getItem("py30_perfect_days");
+    if (pd) state.perfectDays = new Set(JSON.parse(pd));
+    const fl = localStorage.getItem("py30_flags");
+    if (fl) state.flags = JSON.parse(fl);
+
     const ai = localStorage.getItem("py30_ai_days");
     if (ai) state.aiUsedDays = new Set(JSON.parse(ai));
   } catch (_) {}
@@ -100,7 +197,10 @@ function saveState() {
   localStorage.setItem("py30_level", state.level);
   localStorage.setItem("py30_streak", state.streak);
   if (state.lastActiveDate) localStorage.setItem("py30_last_active", state.lastActiveDate);
-  localStorage.setItem("py30_badges", JSON.stringify([...state.badges]));
+  localStorage.setItem("py30_achievements", JSON.stringify([...state.achievements]));
+  localStorage.setItem("py30_badges", JSON.stringify([...state.achievements])); // keep old key for back-compat
+  localStorage.setItem("py30_perfect_days", JSON.stringify([...state.perfectDays]));
+  localStorage.setItem("py30_flags", JSON.stringify(state.flags));
   localStorage.setItem("py30_ai_days", JSON.stringify([...state.aiUsedDays]));
 }
 
@@ -119,6 +219,7 @@ function updateStreak() {
     if (diffDays === 1) {
       state.streak += 1;
     } else {
+      if (diffDays >= 7 && state.flags) state.flags.comeback = true;
       state.streak = 1;
     }
   }
@@ -137,45 +238,59 @@ function checkLevel() {
   }
 }
 
-function checkBadges() {
-  const newBadges = [];
+// ─── ACHIEVEMENT HELPERS ───────────────────────────────────────────────────
 
-  const completedCount = state.completed.size;
-  if (!state.badges.has("first_day") && state.completed.has(1)) newBadges.push("first_day");
-  if (!state.badges.has("week_one") && [1,2,3,4,5,6,7].every(d => state.completed.has(d))) newBadges.push("week_one");
-  if (!state.badges.has("halfway") && completedCount >= 15) newBadges.push("halfway");
-  if (!state.badges.has("all_done") && completedCount >= 30) newBadges.push("all_done");
+function allDayExercisesDone(dayNum, ctx) {
+  const day = typeof DAYS !== "undefined" ? DAYS.find(d => d.day === dayNum) : null;
+  if (!day) return false;
+  const saved = ctx.exercises["day_" + dayNum] || {};
+  const levels = ["level1", "level2", "level3"];
+  const allIds = levels.flatMap(key =>
+    (day.exercises[key] || []).map((_, i) => `${key}_${i}`)
+  );
+  return allIds.length > 0 && allIds.every(id => saved[id]);
+}
 
-  if (!state.badges.has("streak_3") && state.streak >= 3) newBadges.push("streak_3");
-  if (!state.badges.has("streak_7") && state.streak >= 7) newBadges.push("streak_7");
-  if (!state.badges.has("streak_30") && state.streak >= 30) newBadges.push("streak_30");
+function buildAchContext() {
+  const correctTotal = Object.values(state.quizAnswers)
+    .flatMap(day => Object.values(day))
+    .filter(a => a.correct).length;
+  return {
+    completed:     state.completed,
+    completedCount: state.completed.size,
+    xp:            state.xp,
+    streak:        state.streak,
+    correctQuizzes: correctTotal,
+    perfectDays:   state.perfectDays,
+    flags:         state.flags,
+    exercises:     state.exercises,
+    aiUsedDays:    state.aiUsedDays,
+  };
+}
 
-  if (!state.badges.has("xp_500") && state.xp >= 500) newBadges.push("xp_500");
-  if (!state.badges.has("xp_2000") && state.xp >= 2000) newBadges.push("xp_2000");
-
-  if (!state.badges.has("exercises_all_1")) {
-    const day1 = DAYS[0];
-    const saved = state.exercises["day_1"] || {};
-    const levels = ["level1", "level2", "level3"];
-    const allExercises = levels.flatMap(key =>
-      (day1.exercises[key] || []).map((_, i) => `${key}_${i}`)
-    );
-    if (allExercises.length > 0 && allExercises.every(id => saved[id])) newBadges.push("exercises_all_1");
+function checkAchievements() {
+  const ctx = buildAchContext();
+  const unlocked = [];
+  for (const a of ACHIEVEMENTS) {
+    if (state.achievements.has(a.id)) continue;
+    try {
+      if (a.check(ctx)) {
+        state.achievements.add(a.id);
+        state.badges = state.achievements; // keep alias
+        unlocked.push(a);
+      }
+    } catch (_) {}
   }
-
-  if (!state.badges.has("quiz_ace")) {
-    const correctTotal = Object.values(state.quizAnswers)
-      .flatMap(day => Object.values(day))
-      .filter(a => a.correct).length;
-    if (correctTotal >= 10) newBadges.push("quiz_ace");
-  }
-
-  for (const id of newBadges) {
-    state.badges.add(id);
-    const badge = BADGES.find(b => b.id === id);
-    if (badge) showToast(`${badge.emoji} Badge unlocked: `, badge.name);
+  if (unlocked.length) {
+    unlocked.forEach(a => enqueueAchievementPopup(a));
+    renderTopbarStats();
+    saveState();
+    if (window.Sync) window.Sync.push();
   }
 }
+
+// Legacy alias so any outside callers don't break
+function checkBadges() { checkAchievements(); }
 
 function awardXP(amount) {
   if (amount < 0) {
@@ -187,7 +302,7 @@ function awardXP(amount) {
   state.xp += amount;
   updateStreak();
   checkLevel();
-  checkBadges();
+  checkAchievements();
   renderTopbarStats();
   saveState();
 }
@@ -212,9 +327,10 @@ function renderTopbarStats() {
   if (elXpText) elXpText.textContent = nextLvl ? `${state.xp - xpForThis} / ${xpForNext - xpForThis} XP` : "MAX";
   if (elStreak) elStreak.textContent = state.streak;
   if (elBadges) {
+    const achCount = state.achievements ? state.achievements.size : state.badges.size;
     const countEl = elBadges.querySelector("#topbarBadgeCount");
-    if (countEl) countEl.textContent = state.badges.size;
-    else elBadges.textContent = `${state.badges.size} badges`;
+    if (countEl) countEl.textContent = achCount;
+    else elBadges.textContent = `${achCount} achievements`;
   }
 }
 
@@ -779,6 +895,29 @@ function toggleComplete() {
       return;
     }
     state.completed.add(n);
+
+    // Track lightweight flags for secret achievements
+    const _now = new Date();
+    const _hour = _now.getHours();
+    const _dow = _now.getDay(); // 0 = Sunday, 6 = Saturday
+    if (_hour >= 0 && _hour < 5)  state.flags.nightOwl  = true;
+    if (_hour >= 5 && _hour < 6)  state.flags.earlyBird = true;
+    if (_dow === 0 || _dow === 6) state.flags.weekend   = true;
+
+    // Two-in-a-day: second completion on the same calendar date
+    const _today = `${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,'0')}-${String(_now.getDate()).padStart(2,'0')}`;
+    if (state.flags._lastCompletionDate === _today) {
+      state.flags.twoInADay = true;
+    }
+    state.flags._lastCompletionDate = _today;
+
+    // Perfect-day: all quizzes answered correctly for this day with zero wrong
+    const _qKey = "day_" + n;
+    const _dayAnswers = Object.values(state.quizAnswers[_qKey] || {});
+    if (_dayAnswers.length > 0 && _dayAnswers.every(a => a.correct)) {
+      state.perfectDays.add(n);
+    }
+
     playCompletion(n);
     const xpForDay = state.aiUsedDays.has(n) ? 50 : 100;
     awardXP(xpForDay);
