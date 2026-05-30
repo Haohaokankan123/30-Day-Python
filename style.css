@@ -6272,14 +6272,11 @@ body { font-family: var(--font-body); }
    Needs translateY of: 240 - (-80) - 84 = 236px to land on hole.
    ──────────────────────────────────────────────────────── */
 #achIntroKey {
-    /* Key approaches the keyhole horizontally from the right.
-       Keyhole is at scene 50% vertical, right edge of cover.
-       Key is 120px tall, 56px wide. Rotated 90deg CW so teeth point left.
-       After rotation, key "height" becomes width = 120px, "width" becomes height = 56px.
-       Position center of key at the keyhole: top=50%, right just off-screen. */
+    /* Measured via getBoundingClientRect: landing = translateX(-58px) translateY(0) rotate(90deg)
+       puts key center exactly on keyhole center (both at scene-relative x=294, y=0). */
     position: absolute;
-    top: calc(50% - 28px);        /* center the rotated key on the keyhole height */
-    right: calc(50% - min(300px, 41vw) - 80px);  /* start near the clasp horizontally */
+    top: calc(50% - 28px);
+    right: calc(50% - min(300px, 41vw) - 80px);
     width: 56px;
     height: 120px;
     transform-origin: center center;
@@ -6288,27 +6285,27 @@ body { font-family: var(--font-body); }
     animation: keyApproach 0.7s cubic-bezier(.3,0,.2,1) 0.3s forwards;
 }
 
-/* Phase 1: key flies in from the right, teeth first, slides into the keyhole */
+/* Phase 1: key flies in from right (teeth first), lands perfectly on keyhole.
+   translateX/Y BEFORE rotate so translations work in screen space. */
 @keyframes keyApproach {
-    0%   { opacity: 0; transform: rotate(90deg) translateX(220px) scale(1.1); }
+    0%   { opacity: 0; transform: translateX(160px) translateY(0) rotate(90deg) scale(1.1); }
     15%  { opacity: 1; }
-    60%  { transform: rotate(90deg) translateX(14px) scale(1); }
-    78%  { transform: rotate(90deg) translateX(4px)  scale(1); }
-    /* push into hole — slight extra slide + tiny shrink */
-    88%  { transform: rotate(90deg) translateX(-2px) scale(0.96); }
-    95%  { transform: rotate(90deg) translateX(1px)  scale(0.97); }
-    100% { opacity: 1; transform: rotate(90deg) translateX(0px)  scale(0.97); }
+    60%  { transform: translateX(-42px) translateY(0) rotate(90deg) scale(1); }
+    78%  { transform: translateX(-52px) translateY(0) rotate(90deg) scale(1); }
+    88%  { transform: translateX(-62px) translateY(0) rotate(90deg) scale(0.96); }
+    95%  { transform: translateX(-55px) translateY(0) rotate(90deg) scale(0.97); }
+    100% { opacity: 1; transform: translateX(-58px) translateY(0) rotate(90deg) scale(0.97); }
 }
 
-/* Phase 2: key turns 90° clockwise in the lock (teeth go from left → down),
-   shrinking into the hole with 3D depth, fading to 0 */
+/* Phase 2: key turns 90° clockwise in the lock, sinking 3D, fading to 0.
+   Keep translateX(-58px) translateY(0) as base so key stays on keyhole during turn. */
 @keyframes keyTurn {
-    0%   { transform: rotate(90deg)  translateX(0px)  scaleX(0.97) scaleY(0.97) translateZ(0px);   opacity: 1; }
-    25%  { transform: rotate(135deg) translateX(-2px) scaleX(0.88) scaleY(0.88) translateZ(-8px);  opacity: 1; }
-    50%  { transform: rotate(180deg) translateX(-4px) scaleX(0.72) scaleY(0.72) translateZ(-20px); opacity: 1; }
-    70%  { transform: rotate(200deg) translateX(-6px) scaleX(0.52) scaleY(0.52) translateZ(-32px); opacity: 0.8; }
-    85%  { transform: rotate(210deg) translateX(-8px) scaleX(0.35) scaleY(0.35) translateZ(-44px); opacity: 0.4; }
-    100% { transform: rotate(215deg) translateX(-10px) scaleX(0.15) scaleY(0.15) translateZ(-58px); opacity: 0; }
+    0%   { transform: translateX(-58px) translateY(0)  rotate(90deg)  scale(0.97) translateZ(0);    opacity: 1; }
+    25%  { transform: translateX(-58px) translateY(0)  rotate(135deg) scale(0.88) translateZ(-8px); opacity: 1; }
+    50%  { transform: translateX(-58px) translateY(0)  rotate(180deg) scale(0.72) translateZ(-20px); opacity: 1; }
+    70%  { transform: translateX(-58px) translateY(0)  rotate(200deg) scale(0.52) translateZ(-32px); opacity: 0.8; }
+    85%  { transform: translateX(-58px) translateY(0)  rotate(210deg) scale(0.35) translateZ(-44px); opacity: 0.4; }
+    100% { transform: translateX(-58px) translateY(0)  rotate(215deg) scale(0.15) translateZ(-58px); opacity: 0; }
 }
 #achIntroKey.turning {
     animation: keyTurn 0.7s cubic-bezier(.4,0,.15,1) forwards;
