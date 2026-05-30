@@ -1413,7 +1413,7 @@ function playBookIntro(callback) {
       // Teeth = left edge of rotated key. We want teeth to enter hole:
       // Set key top/left so that when translateX=0, key center is 100px RIGHT of hole
       // (so teeth left-edge is at holeCX). Then animation slides it left to insert.
-      key.style.top  = (holeCY - 48) + "px";   // center key height on keyhole
+      key.style.top  = (holeCY - 100) + "px";  // center rotated key on keyhole (accounts for rotation offset)
       key.style.left = (holeCX - 96) + "px";   // teeth start 200px right, center 100px right
     }
     key.style.animation = "none";
