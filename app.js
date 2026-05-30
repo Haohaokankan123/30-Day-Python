@@ -1405,7 +1405,7 @@ function playBookIntro(callback) {
   if (key) {
     key.style.animation = "none";
     key.style.opacity   = "0";
-    key.style.transform = "translateY(-320px) rotate(45deg) scale(1.1)";
+    key.style.transform = "rotate(90deg) translateX(220px) scale(1.1)";
     key.offsetHeight; // force reflow
     key.style.animation = "";
     key.style.transform = "";
