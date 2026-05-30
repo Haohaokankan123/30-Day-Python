@@ -1401,34 +1401,43 @@ function playBookIntro(callback) {
   intro.classList.remove("fade-out");
   if (key) key.classList.remove("turning", "animating");
 
-  // Position key using measured keyhole viewport coords, then trigger animation via class
+  // Reset key — keep hidden until overlay is visible and keyhole is measurable
   if (key) {
     key.classList.remove("animating", "turning");
-    // Measure keyhole position NOW (intro overlay is active, cover is visible)
-    const keyhole = document.querySelector(".clasp-keyhole");
-    if (keyhole) {
-      const hr = keyhole.getBoundingClientRect();
-      const holeCX = hr.left + hr.width / 2;
-      const holeCY = hr.top  + hr.height / 2;
-      key.style.top  = (holeCY - 100) + "px";
-      key.style.left = (holeCX - 96)  + "px";
-    }
-    // Reset inline styles from any previous run
-    key.style.opacity   = "";
+    key.style.opacity = "";
     key.style.transform = "";
     key.style.animation = "";
-    // Trigger reflow so removing .animating is registered before re-adding
-    key.offsetHeight;
-    // Add .animating to show key and start animation
-    key.classList.add("animating");
   }
 
-  // Also reset cover appear animation
+  // Reset cover appear animation
   cover.style.animation = "none";
   cover.offsetHeight;
   cover.style.animation = "";
 
+  // Show overlay FIRST so the cover and clasp render at their true viewport positions
   intro.classList.add("active");
+
+  // After one animation frame, measure keyhole (now in DOM at final position) and start key
+  // Wait for cover appear animation (0.35s) to finish before measuring keyhole position
+  setTimeout(() => {
+    if (key) {
+      const keyhole = document.querySelector(".clasp-keyhole");
+      if (keyhole) {
+        const hr     = keyhole.getBoundingClientRect();
+        const holeCX = hr.left + hr.width  / 2;
+        const holeCY = hr.top  + hr.height / 2;
+        // CSS left = holeCX → at translateX(0), left (teeth) edge is at holeCX.
+        // translateX(-30px) → teeth 30px inside the lock.
+        // Key comes from right → start translateX(+400px), land at translateX(-30px).
+        key.style.top  = (holeCY - 100) + "px";
+        key.style.left = holeCX + "px";
+        key.style.setProperty("--key-tx-start", "400px");
+        key.style.setProperty("--key-tx-land",  "-30px");
+      }
+      key.offsetHeight;
+      key.classList.add("animating");
+    }
+  }, 380); // after cover appear animation (0.35s)
 
   // Ambient glow builds
   setTimeout(() => glow.classList.add("visible"), 200);
