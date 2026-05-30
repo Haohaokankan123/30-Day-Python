@@ -6288,25 +6288,27 @@ body { font-family: var(--font-body); }
     animation: keyDescend 0.7s cubic-bezier(.3,0,.2,1) 0.3s forwards;
 }
 
-/* Phase 1: key falls from above, spins to upright, inserts into keyhole */
+/* Phase 1: key falls from above, spins to upright, inserts into keyhole.
+   Key is 120px tall, top anchored at scene 50%. Tip is 120px below anchor.
+   Keyhole is at scene 50%. So tip needs translateY = -120px to land on hole. */
 @keyframes keyDescend {
-    0%   { opacity: 0; transform: translateY(-200px) rotate(45deg) scale(1.1); }
+    0%   { opacity: 0; transform: translateY(-320px) rotate(45deg) scale(1.1); }
     15%  { opacity: 1; }
-    55%  { transform: translateY(50px) rotate(6deg) scale(1); }
-    78%  { transform: translateY(62px) rotate(0deg) scale(1); }
-    88%  { transform: translateY(68px) rotate(0deg) scale(0.93); }
-    95%  { transform: translateY(65px) rotate(0deg) scale(0.95); }
-    100% { opacity: 1; transform: translateY(66px) rotate(0deg) scale(0.95); }
+    55%  { transform: translateY(-130px) rotate(6deg) scale(1); }
+    78%  { transform: translateY(-118px) rotate(0deg) scale(1); }
+    88%  { transform: translateY(-112px) rotate(0deg) scale(0.93); }
+    95%  { transform: translateY(-115px) rotate(0deg) scale(0.95); }
+    100% { opacity: 1; transform: translateY(-114px) rotate(0deg) scale(0.95); }
 }
 
 /* Phase 2: key turns a full 360° in the lock while sinking in 3D (JS adds .turning) */
 @keyframes keyTurn {
-    0%   { transform: translateY(66px)  rotate(0deg)   scaleX(0.95) scaleY(0.95)  translateZ(0px);   opacity: 1; }
-    25%  { transform: translateY(68px)  rotate(90deg)  scaleX(0.85) scaleY(0.90)  translateZ(-8px);  opacity: 1; }
-    50%  { transform: translateY(70px)  rotate(180deg) scaleX(0.70) scaleY(0.82)  translateZ(-18px); opacity: 1; }
-    70%  { transform: translateY(72px)  rotate(270deg) scaleX(0.55) scaleY(0.72)  translateZ(-28px); opacity: 0.85; }
-    85%  { transform: translateY(74px)  rotate(340deg) scaleX(0.40) scaleY(0.58)  translateZ(-40px); opacity: 0.5; }
-    100% { transform: translateY(76px)  rotate(360deg) scaleX(0.20) scaleY(0.35)  translateZ(-55px); opacity: 0; }
+    0%   { transform: translateY(-114px) rotate(0deg)   scaleX(0.95) scaleY(0.95)  translateZ(0px);   opacity: 1; }
+    25%  { transform: translateY(-112px) rotate(90deg)  scaleX(0.85) scaleY(0.90)  translateZ(-8px);  opacity: 1; }
+    50%  { transform: translateY(-110px) rotate(180deg) scaleX(0.70) scaleY(0.82)  translateZ(-18px); opacity: 1; }
+    70%  { transform: translateY(-108px) rotate(270deg) scaleX(0.55) scaleY(0.72)  translateZ(-28px); opacity: 0.85; }
+    85%  { transform: translateY(-106px) rotate(340deg) scaleX(0.40) scaleY(0.58)  translateZ(-40px); opacity: 0.5; }
+    100% { transform: translateY(-104px) rotate(360deg) scaleX(0.20) scaleY(0.35)  translateZ(-55px); opacity: 0; }
 }
 #achIntroKey.turning {
     animation: keyTurn 0.7s cubic-bezier(.4,0,.15,1) forwards;
