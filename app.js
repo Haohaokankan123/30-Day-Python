@@ -1399,29 +1399,28 @@ function playBookIntro(callback) {
   clasp.classList.remove("glowing");
   glow.classList.remove("visible", "burst");
   intro.classList.remove("fade-out");
-  if (key) key.classList.remove("turning");
+  if (key) key.classList.remove("turning", "animating");
 
-  // Position key using measured keyhole viewport coords so it's pixel-perfect
-  // regardless of scroll or viewport size. Key is position:fixed.
+  // Position key using measured keyhole viewport coords, then trigger animation via class
   if (key) {
+    key.classList.remove("animating", "turning");
+    // Measure keyhole position NOW (intro overlay is active, cover is visible)
     const keyhole = document.querySelector(".clasp-keyhole");
     if (keyhole) {
       const hr = keyhole.getBoundingClientRect();
       const holeCX = hr.left + hr.width / 2;
       const holeCY = hr.top  + hr.height / 2;
-      // Key is 96px wide, 200px tall. Rotated 90deg: visually 200px wide, 96px tall.
-      // Teeth = left edge of rotated key. We want teeth to enter hole:
-      // Set key top/left so that when translateX=0, key center is 100px RIGHT of hole
-      // (so teeth left-edge is at holeCX). Then animation slides it left to insert.
-      key.style.top  = (holeCY - 100) + "px";  // center rotated key on keyhole (accounts for rotation offset)
-      key.style.left = (holeCX - 96) + "px";   // teeth start 200px right, center 100px right
+      key.style.top  = (holeCY - 100) + "px";
+      key.style.left = (holeCX - 96)  + "px";
     }
-    key.style.animation = "none";
-    key.style.opacity   = "0";
-    key.style.transform = "translateX(400px) translateY(0) rotate(90deg) scale(1.1)";
-    key.offsetHeight;
-    key.style.animation = "";
+    // Reset inline styles from any previous run
+    key.style.opacity   = "";
     key.style.transform = "";
+    key.style.animation = "";
+    // Trigger reflow so removing .animating is registered before re-adding
+    key.offsetHeight;
+    // Add .animating to show key and start animation
+    key.classList.add("animating");
   }
 
   // Also reset cover appear animation
@@ -1465,10 +1464,10 @@ function playBookIntro(callback) {
     clasp.classList.remove("glowing");
     glow.classList.remove("visible", "burst");
     if (key) {
-      key.classList.remove("turning");
-      key.style.animation = "none";
-      key.style.opacity   = "0";
-      key.style.transform = "translateX(400px) translateY(0) rotate(90deg) scale(1.1)";
+      key.classList.remove("turning", "animating");
+      key.style.animation = "";
+      key.style.opacity   = "";
+      key.style.transform = "";
     }
   }, 2700);
 }

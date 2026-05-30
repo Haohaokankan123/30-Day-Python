@@ -6273,19 +6273,21 @@ body { font-family: var(--font-body); }
    Needs translateY of: 240 - (-80) - 84 = 236px to land on hole.
    ──────────────────────────────────────────────────────── */
 #achIntroKey {
-    /* Fixed positioning puts key outside ALL stacking contexts — always on top.
-       Keyhole is at viewport center + scene offset. Measured: keyhole at viewport ~50%,
-       right side of cover. JS sets exact position via inline style at animation start. */
     position: fixed;
     width: 96px;
     height: 200px;
     transform-origin: center center;
+    /* Hidden by default — JS sets display:block + exact position before animating */
+    display: none;
     opacity: 0;
-    z-index: 8500;  /* above achBookIntro overlay (8000) */
-    animation: keyApproach 0.7s cubic-bezier(.3,0,.2,1) 0.3s forwards;
-    /* Default placement — JS overrides with exact measured coords */
+    z-index: 8500;
     top: 50vh;
     left: 50vw;
+}
+/* Only animate when JS adds the .animating class */
+#achIntroKey.animating {
+    display: block;
+    animation: keyApproach 0.7s cubic-bezier(.3,0,.2,1) 0.3s forwards;
 }
 /* When turning: keep same z-index — key fades to opacity 0 naturally */
 #achIntroKey.turning {
@@ -6315,7 +6317,7 @@ body { font-family: var(--font-body); }
     85%  { transform: translateX(206px) translateY(0) rotate(210deg) scale(0.28) translateZ(-48px); opacity: 0.3; }
     100% { transform: translateX(206px) translateY(0) rotate(215deg) scale(0.10) translateZ(-60px); opacity: 0; }
 }
-#achIntroKey.turning {
+#achIntroKey.animating.turning {
     animation: keyTurn 0.7s cubic-bezier(.4,0,.15,1) forwards;
 }
 
