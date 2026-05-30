@@ -1378,57 +1378,81 @@ function playBookIntro(callback) {
   const glow   = document.getElementById("achIntroGlow");
 
   if (!intro || !cover) {
-    // Fallback: no intro DOM — just open immediately
     if (callback) callback();
     return;
   }
 
-  // Reset state
+  // Timeline (all ms):
+  // 0    — overlay in, book slams in (CSS: 0.35s appear)
+  // 200  — ambient glow fades in
+  // 300  — key descends+spins (0.7s → lands+inserts at ~1000ms)
+  // 1050 — key TURNS 90deg in lock (0.45s)
+  // 1500 — CLUNK: shake + massive glow burst
+  // 1700 — cover explodes open
+  // 2200 — crossfade into real book + callback
+  // 2600 — cleanup
+
+  const key = document.getElementById("achIntroKey");
+
+  // Reset all state
   cover.classList.remove("shaking", "flipping");
   clasp.classList.remove("glowing");
   glow.classList.remove("visible", "burst");
   intro.classList.remove("fade-out");
+  if (key) key.classList.remove("turning");
+
+  // Force-reset the key animation: remove it, trigger reflow, re-add
+  if (key) {
+    key.style.animation = "none";
+    key.style.opacity   = "0";
+    key.style.transform = "translateY(-120px) rotate(45deg)";
+    key.offsetHeight; // force reflow
+    key.style.animation = "";
+    key.style.transform = "";
+  }
+
+  // Also reset cover appear animation
+  cover.style.animation = "none";
+  cover.offsetHeight;
+  cover.style.animation = "";
+
   intro.classList.add("active");
 
-  // Timeline (all ms):
-  // 0       — intro visible, book appears (CSS animation 0.2s → 0.9s)
-  // 1000    — key starts descending (CSS keyDescend at 1.0s delay, 1.6s duration → lands ~2.6s)
-  // 2650    — shake + clasp glow
-  // 3050    — cover begins flipping
-  // 4150    — fade out intro, call callback
-  // 4650    — remove active class
+  // Ambient glow builds
+  setTimeout(() => glow.classList.add("visible"), 200);
 
-  // Glow on after book appears
+  // Key has fully inserted — now TURN it in the lock
   setTimeout(() => {
-    glow.classList.add("visible");
-  }, 600);
+    if (key) key.classList.add("turning");
+  }, 1050);
 
-  // Key lands → shake + clasp glow
+  // Key turned — CLUNK: shake + glow burst
   setTimeout(() => {
     cover.classList.add("shaking");
     clasp.classList.add("glowing");
     glow.classList.add("burst");
-    setTimeout(() => cover.classList.remove("shaking"), 350);
-  }, 2650);
+    setTimeout(() => cover.classList.remove("shaking"), 300);
+  }, 1500);
 
-  // Cover flips open
+  // Cover explodes open
   setTimeout(() => {
     cover.classList.add("flipping");
-  }, 3100);
+  }, 1700);
 
   // Crossfade into real book
   setTimeout(() => {
     intro.classList.add("fade-out");
     if (callback) callback();
-  }, 4150);
+  }, 2200);
 
-  // Clean up
+  // Cleanup
   setTimeout(() => {
     intro.classList.remove("active", "fade-out");
     cover.classList.remove("flipping");
     clasp.classList.remove("glowing");
     glow.classList.remove("visible", "burst");
-  }, 4700);
+    if (key) key.classList.remove("turning");
+  }, 2700);
 }
 
 function openAchievementBook() {
