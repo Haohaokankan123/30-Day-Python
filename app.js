@@ -1418,7 +1418,7 @@ function playBookIntro(callback) {
     }
     key.style.animation = "none";
     key.style.opacity   = "0";
-    key.style.transform = "translateX(300px) translateY(0) rotate(90deg) scale(1.1)";
+    key.style.transform = "translateX(400px) translateY(0) rotate(90deg) scale(1.1)";
     key.offsetHeight;
     key.style.animation = "";
     key.style.transform = "";
@@ -1458,13 +1458,18 @@ function playBookIntro(callback) {
     if (callback) callback();
   }, 2250);
 
-  // Cleanup
+  // Cleanup — explicitly hide key so it never bleeds onto other pages
   setTimeout(() => {
     intro.classList.remove("active", "fade-out");
     cover.classList.remove("flipping");
     clasp.classList.remove("glowing");
     glow.classList.remove("visible", "burst");
-    if (key) key.classList.remove("turning");
+    if (key) {
+      key.classList.remove("turning");
+      key.style.animation = "none";
+      key.style.opacity   = "0";
+      key.style.transform = "translateX(400px) translateY(0) rotate(90deg) scale(1.1)";
+    }
   }, 2700);
 }
 

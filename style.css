@@ -6297,23 +6297,23 @@ body { font-family: var(--font-body); }
    At translateX(0): teeth (left edge) = holeCX - 96. To put teeth at holeCX: +96px.
    Push 30px past: +126px landing. Start 300px to the right. */
 @keyframes keyApproach {
-    0%   { opacity: 0; transform: translateX(300px) translateY(0) rotate(90deg) scale(1.1); }
+    0%   { opacity: 0; transform: translateX(400px) translateY(0) rotate(90deg) scale(1.1); }
     15%  { opacity: 1; }
-    60%  { transform: translateX(140px) translateY(0) rotate(90deg) scale(1); }
-    78%  { transform: translateX(130px) translateY(0) rotate(90deg) scale(1); }
-    88%  { transform: translateX(118px) translateY(0) rotate(90deg) scale(0.96); }
-    95%  { transform: translateX(128px) translateY(0) rotate(90deg) scale(0.97); }
-    100% { opacity: 1; transform: translateX(126px) translateY(0) rotate(90deg) scale(0.97); }
+    60%  { transform: translateX(220px) translateY(0) rotate(90deg) scale(1); }
+    78%  { transform: translateX(210px) translateY(0) rotate(90deg) scale(1); }
+    88%  { transform: translateX(198px) translateY(0) rotate(90deg) scale(0.95); }
+    95%  { transform: translateX(208px) translateY(0) rotate(90deg) scale(0.96); }
+    100% { opacity: 1; transform: translateX(206px) translateY(0) rotate(90deg) scale(0.96); }
 }
 
 /* Phase 2: key turns 90° clockwise, shrinks/sinks, fades to 0. */
 @keyframes keyTurn {
-    0%   { transform: translateX(126px) translateY(0) rotate(90deg)  scale(0.97) translateZ(0);    opacity: 1; }
-    25%  { transform: translateX(126px) translateY(0) rotate(135deg) scale(0.88) translateZ(-8px); opacity: 1; }
-    50%  { transform: translateX(126px) translateY(0) rotate(180deg) scale(0.72) translateZ(-20px); opacity: 1; }
-    70%  { transform: translateX(126px) translateY(0) rotate(200deg) scale(0.52) translateZ(-32px); opacity: 0.8; }
-    85%  { transform: translateX(126px) translateY(0) rotate(210deg) scale(0.35) translateZ(-44px); opacity: 0.4; }
-    100% { transform: translateX(126px) translateY(0) rotate(215deg) scale(0.15) translateZ(-58px); opacity: 0; }
+    0%   { transform: translateX(206px) translateY(0) rotate(90deg)  scale(0.96) translateZ(0);     opacity: 1; }
+    25%  { transform: translateX(206px) translateY(0) rotate(135deg) scale(0.85) translateZ(-10px); opacity: 1; }
+    50%  { transform: translateX(206px) translateY(0) rotate(180deg) scale(0.68) translateZ(-22px); opacity: 1; }
+    70%  { transform: translateX(206px) translateY(0) rotate(200deg) scale(0.48) translateZ(-35px); opacity: 0.7; }
+    85%  { transform: translateX(206px) translateY(0) rotate(210deg) scale(0.28) translateZ(-48px); opacity: 0.3; }
+    100% { transform: translateX(206px) translateY(0) rotate(215deg) scale(0.10) translateZ(-60px); opacity: 0; }
 }
 #achIntroKey.turning {
     animation: keyTurn 0.7s cubic-bezier(.4,0,.15,1) forwards;
