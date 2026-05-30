@@ -1401,12 +1401,25 @@ function playBookIntro(callback) {
   intro.classList.remove("fade-out");
   if (key) key.classList.remove("turning");
 
-  // Force-reset the key animation: remove it, trigger reflow, re-add
+  // Position key using measured keyhole viewport coords so it's pixel-perfect
+  // regardless of scroll or viewport size. Key is position:fixed.
   if (key) {
+    const keyhole = document.querySelector(".clasp-keyhole");
+    if (keyhole) {
+      const hr = keyhole.getBoundingClientRect();
+      const holeCX = hr.left + hr.width / 2;
+      const holeCY = hr.top  + hr.height / 2;
+      // Key is 96px wide, 200px tall. Rotated 90deg: visually 200px wide, 96px tall.
+      // Teeth = left edge of rotated key. We want teeth to enter hole:
+      // Set key top/left so that when translateX=0, key center is 100px RIGHT of hole
+      // (so teeth left-edge is at holeCX). Then animation slides it left to insert.
+      key.style.top  = (holeCY - 48) + "px";   // center key height on keyhole
+      key.style.left = (holeCX - 96) + "px";   // teeth start 200px right, center 100px right
+    }
     key.style.animation = "none";
     key.style.opacity   = "0";
-    key.style.transform = "translateX(300px) translateY(-52px) rotate(90deg) scale(1.1)";
-    key.offsetHeight; // force reflow
+    key.style.transform = "translateX(300px) translateY(0) rotate(90deg) scale(1.1)";
+    key.offsetHeight;
     key.style.animation = "";
     key.style.transform = "";
   }
