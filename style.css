@@ -6033,6 +6033,7 @@ body { font-family: var(--font-body); }
     width: min(860px, 94vw);
     height: min(620px, 88vh);
     perspective: 2000px;
+    transform-style: preserve-3d;
     display: flex; align-items: center; justify-content: center;
 }
 
@@ -6271,41 +6272,44 @@ body { font-family: var(--font-body); }
    Needs translateY of: 240 - (-80) - 84 = 236px to land on hole.
    ──────────────────────────────────────────────────────── */
 #achIntroKey {
+    /* Positioned in scene coords. Cover is centered; clasp is at right edge of cover.
+       Cover width = min(600px,82vw), so half = min(300px,41vw).
+       Clasp right = -18px beyond cover right edge.
+       Key is 56px wide, so center it on the clasp: right = 50% - half-cover - 18px - 28px */
     position: absolute;
-    top: -80px;
-    right: -12px;
+    top: 50%;
+    right: calc(50% - min(300px, 41vw) - 46px);
     width: 56px;
     height: 120px;
     transform-origin: center 72%;
     opacity: 0;
-    z-index: 10;
+    z-index: 20;
     /* animation driven entirely by JS reset+replay — no CSS delay here */
     animation: keyDescend 0.7s cubic-bezier(.3,0,.2,1) 0.3s forwards;
 }
 
-/* Phase 1: key falls, aligns, and slides INTO the keyhole (shrinks slightly) */
+/* Phase 1: key falls from above, spins to upright, inserts into keyhole */
 @keyframes keyDescend {
-    0%   { opacity: 0; transform: translateY(-120px) rotate(45deg) scale(1.1); }
+    0%   { opacity: 0; transform: translateY(-200px) rotate(45deg) scale(1.1); }
     15%  { opacity: 1; }
-    55%  { transform: translateY(192px) rotate(6deg) scale(1); }
-    /* slow to a stop right at the hole, straighten up */
-    78%  { transform: translateY(208px) rotate(0deg) scale(1); }
-    /* push into hole: move 6px further in + shrink bow slightly */
-    88%  { transform: translateY(214px) rotate(0deg) scale(0.93); }
-    95%  { transform: translateY(211px) rotate(0deg) scale(0.95); }
-    100% { opacity: 1; transform: translateY(213px) rotate(0deg) scale(0.95); }
+    55%  { transform: translateY(50px) rotate(6deg) scale(1); }
+    78%  { transform: translateY(62px) rotate(0deg) scale(1); }
+    88%  { transform: translateY(68px) rotate(0deg) scale(0.93); }
+    95%  { transform: translateY(65px) rotate(0deg) scale(0.95); }
+    100% { opacity: 1; transform: translateY(66px) rotate(0deg) scale(0.95); }
 }
 
-/* Phase 2: key turns in the lock (JS adds .turning class) */
+/* Phase 2: key turns a full 360° in the lock while sinking in 3D (JS adds .turning) */
 @keyframes keyTurn {
-    0%   { transform: translateY(213px) rotate(0deg)   scale(0.95); }
-    30%  { transform: translateY(215px) rotate(45deg)  scale(0.92); }
-    65%  { transform: translateY(215px) rotate(85deg)  scale(0.90); }
-    80%  { transform: translateY(215px) rotate(82deg)  scale(0.90); }
-    100% { transform: translateY(215px) rotate(85deg)  scale(0.90); }
+    0%   { transform: translateY(66px)  rotate(0deg)   scaleX(0.95) scaleY(0.95)  translateZ(0px);   opacity: 1; }
+    25%  { transform: translateY(68px)  rotate(90deg)  scaleX(0.85) scaleY(0.90)  translateZ(-8px);  opacity: 1; }
+    50%  { transform: translateY(70px)  rotate(180deg) scaleX(0.70) scaleY(0.82)  translateZ(-18px); opacity: 1; }
+    70%  { transform: translateY(72px)  rotate(270deg) scaleX(0.55) scaleY(0.72)  translateZ(-28px); opacity: 0.85; }
+    85%  { transform: translateY(74px)  rotate(340deg) scaleX(0.40) scaleY(0.58)  translateZ(-40px); opacity: 0.5; }
+    100% { transform: translateY(76px)  rotate(360deg) scaleX(0.20) scaleY(0.35)  translateZ(-55px); opacity: 0; }
 }
 #achIntroKey.turning {
-    animation: keyTurn 0.45s cubic-bezier(.4,0,.2,1) forwards;
+    animation: keyTurn 0.7s cubic-bezier(.4,0,.15,1) forwards;
 }
 
 /* shake when key hits — more violent */

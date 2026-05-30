@@ -1385,12 +1385,12 @@ function playBookIntro(callback) {
   // Timeline (all ms):
   // 0    — overlay in, book slams in (CSS: 0.35s appear)
   // 200  — ambient glow fades in
-  // 300  — key descends+spins (0.7s → lands+inserts at ~1000ms)
-  // 1050 — key TURNS 90deg in lock (0.45s)
-  // 1500 — CLUNK: shake + massive glow burst
-  // 1700 — cover explodes open
-  // 2200 — crossfade into real book + callback
-  // 2600 — cleanup
+  // 300  — key descends (0.7s → lands+inserts at ~1000ms)
+  // 1050 — key turns full 360° sinking into lock (0.7s), fades to 0 by end
+  // 1500 — CLUNK midpoint: shake + glow burst (key still partially visible)
+  // 1750 — key fully gone → cover explodes open
+  // 2250 — crossfade into real book + callback
+  // 2700 — cleanup
 
   const key = document.getElementById("achIntroKey");
 
@@ -1405,7 +1405,7 @@ function playBookIntro(callback) {
   if (key) {
     key.style.animation = "none";
     key.style.opacity   = "0";
-    key.style.transform = "translateY(-120px) rotate(45deg)";
+    key.style.transform = "translateY(-200px) rotate(45deg) scale(1.1)";
     key.offsetHeight; // force reflow
     key.style.animation = "";
     key.style.transform = "";
@@ -1421,12 +1421,12 @@ function playBookIntro(callback) {
   // Ambient glow builds
   setTimeout(() => glow.classList.add("visible"), 200);
 
-  // Key has fully inserted — now TURN it in the lock
+  // Key fully inserted — spin 360° sinking into the lock (fades to invisible by end)
   setTimeout(() => {
     if (key) key.classList.add("turning");
   }, 1050);
 
-  // Key turned — CLUNK: shake + glow burst
+  // Midpoint of spin — CLUNK: shake + glow burst (key still partially visible)
   setTimeout(() => {
     cover.classList.add("shaking");
     clasp.classList.add("glowing");
@@ -1434,16 +1434,16 @@ function playBookIntro(callback) {
     setTimeout(() => cover.classList.remove("shaking"), 300);
   }, 1500);
 
-  // Cover explodes open
+  // Key fully gone → cover explodes open
   setTimeout(() => {
     cover.classList.add("flipping");
-  }, 1700);
+  }, 1750);
 
   // Crossfade into real book
   setTimeout(() => {
     intro.classList.add("fade-out");
     if (callback) callback();
-  }, 2200);
+  }, 2250);
 
   // Cleanup
   setTimeout(() => {
