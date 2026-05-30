@@ -6045,6 +6045,7 @@ body { font-family: var(--font-body); }
     transform-style: preserve-3d;
     transform: rotateY(-22deg) rotateX(6deg);
     animation: introBookAppear 0.35s cubic-bezier(.15,.85,.2,1) 0s both;
+    z-index: 5;
 }
 
 @keyframes introBookAppear {
@@ -6280,8 +6281,12 @@ body { font-family: var(--font-body); }
     height: 200px;
     transform-origin: center center;
     opacity: 0;
-    z-index: 20;
+    z-index: 10;  /* in front of cover (z-index:5) during approach */
     animation: keyApproach 0.7s cubic-bezier(.3,0,.2,1) 0.3s forwards;
+}
+/* When turning: drop BEHIND the cover so it sinks visually into the lock */
+#achIntroKey.turning {
+    z-index: 4;
 }
 
 /* Phase 1: key flies in from right (teeth first), lands pixel-perfect on keyhole.
