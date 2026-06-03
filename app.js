@@ -2173,3 +2173,34 @@ function progressPopupNavigate(dir) {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeProgressPopup();
 });
+
+// ── Scroll-reveal IntersectionObserver ──
+(function() {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  function initReveal() {
+    document.querySelectorAll('.reveal').forEach(el => {
+      if (!el.classList.contains('visible')) io.observe(el);
+    });
+  }
+
+  // Run on load and when landing page becomes visible
+  document.addEventListener('DOMContentLoaded', initReveal);
+  // Re-run when showLanding() is called
+  const origShowLanding = window.showLanding;
+  if (typeof origShowLanding === 'function') {
+    window.showLanding = function() {
+      origShowLanding.apply(this, arguments);
+      setTimeout(initReveal, 50);
+    };
+  }
+  // Also just run now in case DOM is already ready
+  if (document.readyState !== 'loading') initReveal();
+})();
