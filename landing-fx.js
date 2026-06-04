@@ -147,6 +147,9 @@
         .toArray(g.sel)
         .filter((el) => !el.classList.contains("visible"));
       if (!items.length) return;
+      // Claim ownership: app.js's .reveal observer skips [data-gsap-managed],
+      // so GSAP is the SOLE animator of these elements — no double-fire / jank.
+      items.forEach((el) => el.setAttribute("data-gsap-managed", ""));
       const tw = window.gsap.from(items, {
         opacity: 0,
         y: g.y,
