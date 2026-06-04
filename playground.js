@@ -44,7 +44,7 @@ const Playground = (() => {
 
     editor = ace.edit(mountEl, {
       mode: "ace/mode/python",
-      theme: "ace/theme/tomorrow_night",
+      theme: "ace/theme/tomorrow_night_eighties",
       fontSize: 14,
       showPrintMargin: false,
       tabSize: 4,

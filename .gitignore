@@ -1,6 +1,12 @@
 # Debug screenshots and scratch files — local only
 .debug-screenshots/
 scratch/
+# Root-level debug/verification screenshots (local only)
+*.png
+*.jpeg
+
+# Dependencies — never commit
+node_modules/
 
 # Environment variables — never commit secrets
 .env

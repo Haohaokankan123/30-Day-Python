@@ -3,6 +3,12 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Never let the browser serve a stale index.html. This guarantees that
+             every ?v= cache-bust on the scripts/styles below is always honored,
+             so updated lesson data can never be masked by an old cached HTML. -->
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
         <title>30 Days of Python: Learn Python from Zero to Hero</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,7 +21,7 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
         />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-        <link rel="stylesheet" href="style.css?v=16" />
+        <link rel="stylesheet" href="style.css?v=35" />
         <script>
         (function(){
             var t=localStorage.getItem('py30_theme')||'dark';
@@ -33,8 +39,34 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
     </head>
     <body>
+        <!-- Liquid-glass SVG distortion filter (progressive enhancement for .liquid-glass-btn) -->
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+            <filter id="liquidGlass" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.012 0.012" numOctaves="1" seed="7" result="noise" />
+                <feGaussianBlur in="noise" stdDeviation="1.5" result="blurNoise" />
+                <feDisplacementMap in="SourceGraphic" in2="blurNoise" scale="22" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+        </svg>
+
+        <!-- Phase 5: Branded view-transition wipe panel (sits above everything) -->
+        <div id="lf-view-wipe" aria-hidden="true" style="display:none">
+            <span class="lf-wipe-mark">30 Days of Python</span>
+        </div>
+
+        <!-- Phase 4: Preloader — JS builds interior DOM for cinematic animation -->
+        <div id="lf-preloader" role="status" aria-label="Loading" style="display:none"></div>
+
         <!-- LANDING PAGE -->
         <div id="landing" class="landing-page">
+            <!-- WebGL shader background (behind all content; static-gradient
+                 fallback on mobile/low-end/reduced-motion via .has-shader) -->
+            <canvas id="heroShaderCanvas" class="hero-shader-canvas" aria-hidden="true"></canvas>
+            <!-- Phase 9: Scroll progress bar -->
+            <div id="lf-scroll-progress" aria-hidden="true">
+                <div id="lf-scroll-progress-fill"></div>
+            </div>
+            <!-- Phase 9: Scroll-driven bg color layer (dark→light→dark) -->
+            <div id="lf-bg-color-layer" aria-hidden="true"></div>
             <!-- Navbar -->
             <nav class="landing-nav">
                 <span class="landing-logo">30 Days of Python</span>
@@ -47,7 +79,7 @@
                                 .scrollIntoView({ behavior: 'smooth' });
                             return false;
                         "
-                        >Curriculum</a
+                        data-letterroll>Curriculum</a
                     >
                     <a
                         href="#landing-features"
@@ -57,7 +89,7 @@
                                 .scrollIntoView({ behavior: 'smooth' });
                             return false;
                         "
-                        >Features</a
+                        data-letterroll>Features</a
                     >
                     <a
                         href="#landing-about"
@@ -67,80 +99,116 @@
                                 .scrollIntoView({ behavior: 'smooth' });
                             return false;
                         "
-                        >About</a
+                        data-letterroll>About</a
                     >
                 </div>
                 <div class="landing-nav-auth">
-                    <button class="landing-nav-login" onclick="Auth._switchTab('login'); Auth.showModal()">Log In</button>
-                    <button class="landing-nav-signup" onclick="Auth._switchTab('signup'); Auth.showModal()">Sign Up</button>
+                    <button class="music-toggle-btn liquid-glass-btn" onclick="window.Music && window.Music.toggle()" aria-label="Toggle focus music" aria-pressed="false" title="Toggle focus music"><i class="fa-solid fa-volume-high"></i></button>
+                    <button class="landing-nav-login liquid-glass-btn" onclick="Auth._switchTab('login'); Auth.showModal()">Log In</button>
+                    <button class="landing-nav-signup liquid-glass-btn" onclick="Auth._switchTab('signup'); Auth.showModal()">Sign Up</button>
                 </div>
             </nav>
 
             <!-- Hero -->
             <div class="landing-hero reveal">
-                <p class="landing-eyebrow">
-                    MASTERY &nbsp;·&nbsp; 30 LESSONS &nbsp;·&nbsp; FOR BEGINNERS
-                </p>
-                <h1 class="landing-title" id="heroTitle"></h1>
-                <h1 class="landing-title accent" id="heroTitle2"></h1>
-                <p class="landing-subtitle hero-sub-fade">
-                    The most structured way to learn Python from zero to
-                    fluent.<br />No prerequisites. No fluff. Just you and the
-                    code.
-                </p>
-                <div class="landing-hero-btns hero-sub-fade">
-                    <button
-                        class="landing-btn-primary large"
-                        onclick="startLearning()"
-                    >
-                        Get Started Free →
-                    </button>
-                    <button
-                        class="landing-btn-secondary"
-                        onclick="Auth._switchTab('login'); Auth.showModal()"
-                    >
-                        Log In
-                    </button>
-                    <button
-                        class="landing-btn-secondary"
-                        onclick="
-                            document
-                                .getElementById('landing-curriculum')
-                                .scrollIntoView({ behavior: 'smooth' })
-                        "
-                    >
-                        View Curriculum
-                    </button>
+                <!-- Phase 7: Three.js 3D canvas — absolute inside hero, right side only -->
+                <canvas id="hero3DCanvas" class="hero-3d-canvas" aria-hidden="true"></canvas>
+                <!-- Static fallback shown when 3D can't run -->
+                <div id="hero3DFallback" class="hero-3d-fallback" aria-hidden="true" style="display:none">
+                    <span class="h3f-symbol" style="color:#6366f1">{}</span>
+                    <span class="h3f-symbol" style="color:#8b5cf6">[]</span>
+                    <span class="h3f-symbol" style="color:#06b6d4">()</span>
+                    <span class="h3f-symbol" style="color:#818cf8">def</span>
+                    <span class="h3f-symbol" style="color:#a78bfa">λ</span>
                 </div>
-                <!-- Animated code window -->
-                <div class="landing-code-window hero-sub-fade">
-                    <div class="landing-code-titlebar">
-                        <span class="lc-dot dot-red"></span
-                        ><span class="lc-dot dot-yellow"></span
-                        ><span class="lc-dot dot-green"></span>
-                        <span class="landing-code-filename"
-                            >day_10_loops.py</span
+                <!-- LEFT col: text + CTAs -->
+                <div class="landing-hero-left">
+                    <p class="landing-eyebrow">
+                        MASTERY &nbsp;·&nbsp; 30 LESSONS &nbsp;·&nbsp; FOR BEGINNERS
+                    </p>
+                    <h1 class="landing-title" id="heroTitle"></h1>
+                    <h1 class="landing-title accent" id="heroTitle2"></h1>
+                    <p class="landing-subtitle hero-sub-fade">
+                        The most structured way to learn Python from zero to
+                        fluent.<br />No prerequisites. No fluff. Just you and the
+                        code.
+                    </p>
+                    <div class="landing-hero-btns hero-sub-fade">
+                        <button
+                            class="landing-btn-primary large liquid-glass-btn"
+                            onclick="startLearning()"
                         >
+                            Get Started Free →
+                        </button>
+                        <button
+                            class="landing-btn-secondary liquid-glass-btn"
+                            onclick="Auth._switchTab('login'); Auth.showModal()"
+                        >
+                            Log In
+                        </button>
+                        <button
+                            class="landing-btn-secondary liquid-glass-btn"
+                            onclick="
+                                document
+                                    .getElementById('landing-curriculum')
+                                    .scrollIntoView({ behavior: 'smooth' })
+                            "
+                        >
+                            View Curriculum
+                        </button>
                     </div>
-                    <pre class="landing-code-body" id="heroCodePre"></pre>
+                </div>
+                <!-- RIGHT col: animated code window — 3D objects float behind it -->
+                <div class="landing-hero-right hero-sub-fade">
+                    <div class="landing-code-window">
+                        <div class="landing-code-titlebar">
+                            <span class="lc-dot dot-red"></span
+                            ><span class="lc-dot dot-yellow"></span
+                            ><span class="lc-dot dot-green"></span>
+                            <span class="landing-code-filename"
+                                >day_10_loops.py</span
+                            >
+                        </div>
+                        <pre class="landing-code-body" id="heroCodePre"></pre>
+                    </div>
                 </div>
             </div>
 
             <!-- Stats bar -->
-            <div class="landing-stats-bar reveal">
+            <div class="landing-stats-bar reveal" data-gsap-managed>
                 <div class="landing-stat">
-                    <span class="landing-stat-num">30</span>
+                    <span class="landing-stat-num" data-count="30">30</span>
                     <span class="landing-stat-label">Lessons</span>
                 </div>
                 <div class="landing-stat-divider"></div>
                 <div class="landing-stat">
-                    <span class="landing-stat-num">300+</span>
+                    <span class="landing-stat-num" data-count="300+">300+</span>
                     <span class="landing-stat-label">Code Examples</span>
                 </div>
                 <div class="landing-stat-divider"></div>
                 <div class="landing-stat">
-                    <span class="landing-stat-num">100%</span>
+                    <span class="landing-stat-num" data-count="100%">100%</span>
                     <span class="landing-stat-label">Free Forever</span>
+                </div>
+            </div>
+
+            <!-- Phase 4: Marquee band -->
+            <div class="lf-marquee-outer" aria-hidden="true">
+                <div class="lf-marquee">
+                    <div class="lf-marquee-track">
+                        <span>30 DAYS</span><span class="lf-marquee-dot">·</span>
+                        <span>LEARN PYTHON</span><span class="lf-marquee-dot">·</span>
+                        <span>BUILD</span><span class="lf-marquee-dot">·</span>
+                        <span>RUN</span><span class="lf-marquee-dot">·</span>
+                        <span>MASTER</span><span class="lf-marquee-dot">·</span>
+                        <span>AI TUTOR</span><span class="lf-marquee-dot">·</span>
+                        <span>FREE FOREVER</span><span class="lf-marquee-dot">·</span>
+                        <span>30 DAYS</span><span class="lf-marquee-dot">·</span>
+                        <span>LEARN PYTHON</span><span class="lf-marquee-dot">·</span>
+                        <span>BUILD</span><span class="lf-marquee-dot">·</span>
+                        <span>RUN</span><span class="lf-marquee-dot">·</span>
+                        <span>MASTER</span><span class="lf-marquee-dot">·</span>
+                    </div>
                 </div>
             </div>
 
@@ -149,7 +217,7 @@
                 <div class="landing-about-inner">
                     <div class="landing-about-text">
                         <p class="landing-eyebrow">Why I built this</p>
-                        <h2 class="landing-about-title">
+                        <h2 class="landing-about-title" data-mask-reveal>
                             Learning Python shouldn't<br />feel like reading a
                             textbook.
                         </h2>
@@ -173,13 +241,6 @@
                             If you're a complete beginner, this is the
                             environment I wish I had when I started.
                         </p>
-                        <button
-                            class="landing-btn-primary"
-                            onclick="startLearning()"
-                            style="margin-top: 12px"
-                        >
-                            Start for free →
-                        </button>
                     </div>
                     <div class="landing-about-card">
                         <div class="landing-about-quote">
@@ -208,12 +269,70 @@
                 </div>
             </div>
 
+            <!-- ── Lusion Connector: Curved SVG scroll-drawn line ── -->
+            <div class="lf-connector-wrap" aria-hidden="true">
+                <svg class="lf-connector-svg" viewBox="0 0 1200 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="connGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#6366f1" stop-opacity="0"/>
+                            <stop offset="30%" stop-color="#8b5cf6" stop-opacity="0.9"/>
+                            <stop offset="65%" stop-color="#06b6d4" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+                        </linearGradient>
+                        <filter id="connGlow">
+                            <feGaussianBlur stdDeviation="3" result="blur"/>
+                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                    </defs>
+                    <!-- Main undulating path — sweeps right, dips, sweeps left, coils -->
+                    <path class="lf-connector-path"
+                        d="M 100,0
+                           C 900,80  1100,180  600,260
+                           C 100,340  -50,440   400,520
+                           C 850,600  1150,680  700,780
+                           C 350,860  100,880   600,900"
+                        fill="none"
+                        stroke="url(#connGrad)"
+                        stroke-width="4"
+                        filter="url(#connGlow)"
+                    />
+                    <!-- Glow duplicate — wider, lower opacity -->
+                    <path class="lf-connector-path-glow"
+                        d="M 100,0
+                           C 900,80  1100,180  600,260
+                           C 100,340  -50,440   400,520
+                           C 850,600  1150,680  700,780
+                           C 350,860  100,880   600,900"
+                        fill="none"
+                        stroke="url(#connGrad)"
+                        stroke-width="20"
+                        opacity="0.15"
+                    />
+                    <!-- Orbit dots along the path -->
+                    <circle class="lf-conn-dot" r="5" fill="#8b5cf6"/>
+                    <circle class="lf-conn-dot lf-conn-dot-2" r="3.5" fill="#06b6d4"/>
+                    <circle class="lf-conn-dot lf-conn-dot-3" r="4" fill="#a78bfa"/>
+                </svg>
+                <div class="lf-connector-label lf-conn-label-1">
+                    <span class="lf-conn-label-num">01</span>
+                    <span class="lf-conn-label-text">Live Editor</span>
+                </div>
+                <div class="lf-connector-label lf-conn-label-2">
+                    <span class="lf-conn-label-num">02</span>
+                    <span class="lf-conn-label-text">AI Tutor</span>
+                </div>
+                <div class="lf-connector-label lf-conn-label-3">
+                    <span class="lf-conn-label-num">03</span>
+                    <span class="lf-conn-label-text">30 Lessons</span>
+                </div>
+            </div>
+
             <!-- Features showcase -->
             <div class="landing-features-section reveal" id="landing-features">
                 <p class="landing-eyebrow" style="text-align: center">
                     What makes this different
                 </p>
-                <h2 class="landing-section-title">
+                <h2 class="landing-section-title" data-mask-reveal>
                     Built-in tools. Right in your browser.
                 </h2>
                 <p class="landing-section-desc">
@@ -250,7 +369,7 @@ average = total / len(scores
 <span class="lc-comment"># SyntaxError: invalid syntax</span></pre>
                         <div class="landing-demo-run-row">
                             <button
-                                class="landing-demo-run-btn"
+                                class="landing-demo-run-btn liquid-glass-btn"
                                 id="demoRunBtn"
                                 onclick="runDemoCode()"
                             >
@@ -288,17 +407,17 @@ average = total / len(scores
                 </div>
 
                 <!-- Feature cards row -->
-                <div class="landing-feature-cards reveal">
+                <div class="landing-feature-cards reveal" data-gsap-managed>
                     <div class="landing-feat-card">
                         <div class="landing-feat-icon">⌨️</div>
-                        <h3>Live Code Editor</h3>
+                        <h3 data-letterroll>Live Code Editor</h3>
                         <p>
                             Run real Python in your browser with no installs needed. Powered by Pyodide.
                         </p>
                     </div>
                     <div class="landing-feat-card">
                         <div class="landing-feat-icon">✦</div>
-                        <h3>AI Tutor</h3>
+                        <h3 data-letterroll>AI Tutor</h3>
                         <p>
                             Stuck on a bug? Ask the AI Tutor. It reads your code
                             and explains the fix in plain English.
@@ -306,7 +425,7 @@ average = total / len(scores
                     </div>
                     <div class="landing-feat-card">
                         <div class="landing-feat-icon">◈</div>
-                        <h3>Exercises + Quizzes</h3>
+                        <h3 data-letterroll>Exercises + Quizzes</h3>
                         <p>
                             Every day includes hands-on exercises and a quiz to
                             lock in what you learned.
@@ -314,7 +433,7 @@ average = total / len(scores
                     </div>
                     <div class="landing-feat-card">
                         <div class="landing-feat-icon">↗</div>
-                        <h3>Track Progress</h3>
+                        <h3 data-letterroll>Track Progress</h3>
                         <p>
                             Your progress is saved automatically. Pick up
                             exactly where you left off.
@@ -402,7 +521,7 @@ average = total / len(scores
                 <p class="landing-eyebrow" style="text-align: center">
                     Every day, a new skill.
                 </p>
-                <h2 class="landing-section-title">
+                <h2 class="landing-section-title" data-mask-reveal>
                     30 lessons. One clear path.
                 </h2>
                 <p class="landing-section-desc">
@@ -411,20 +530,22 @@ average = total / len(scores
                 <div class="preview-grid" id="previewGrid"></div>
             </div>
 
-            <!-- CTA section -->
-            <div class="landing-cta-section reveal">
-                <h2 class="landing-cta-title">
-                    Start for free. No account required.
-                </h2>
-                <p class="landing-cta-desc">
-                    Open Day 1 and write your first Python program in minutes.
-                </p>
-                <button
-                    class="landing-btn-primary large"
-                    onclick="startLearning()"
-                >
-                    Begin Day 1 →
-                </button>
+            <!-- ── Lusion Fullscreen Zoom: Abstract 3D Scene ── -->
+            <div class="lf-zoom-section" id="lfZoomSection">
+                <div class="lf-zoom-stage">
+                    <div class="lf-zoom-inner" id="lfZoomInner">
+                        <canvas class="lf-zoom-canvas" id="lfZoomCanvas" aria-hidden="true"></canvas>
+                        <div class="lf-zoom-overlay">
+                            <p class="lf-zoom-eyebrow">Python in motion</p>
+                            <h2 class="lf-zoom-title">Write code.<br/>Watch it <em>come alive.</em></h2>
+                            <p class="lf-zoom-desc">Every lesson builds something real. Real code, real results, real understanding.</p>
+                        </div>
+                        <div class="lf-zoom-corner lf-zoom-corner-tl">+</div>
+                        <div class="lf-zoom-corner lf-zoom-corner-tr">+</div>
+                        <div class="lf-zoom-corner lf-zoom-corner-bl">+</div>
+                        <div class="lf-zoom-corner lf-zoom-corner-br">+</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Footer -->
@@ -436,6 +557,8 @@ average = total / len(scores
 
         <!-- MAIN APP -->
         <div id="app" class="app hidden">
+            <canvas id="lessonSky" class="lesson-sky-canvas" aria-hidden="true"></canvas>
+            <canvas id="lessonFX3D" class="lesson-fx-canvas" aria-hidden="true"></canvas>
             <button
                 class="sidebar-expand-btn"
                 onclick="expandSidebar()"
@@ -515,7 +638,16 @@ average = total / len(scores
                             </button>
                         </div>
                         <button
-                            class="topbar-icon-btn playground-topbar-btn"
+                            class="music-toggle-btn liquid-glass-btn topbar-music-btn"
+                            onclick="window.Music && window.Music.toggle()"
+                            aria-label="Toggle focus music"
+                            aria-pressed="false"
+                            title="Toggle focus music"
+                        >
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                        <button
+                            class="topbar-icon-btn playground-topbar-btn liquid-glass-btn"
                             id="playgroundTopbarBtn"
                             onclick="toggleFloatingPlayground()"
                             title="Open code editor"
@@ -523,7 +655,7 @@ average = total / len(scores
                             Editor
                         </button>
                         <button
-                            class="tutor-btn"
+                            class="tutor-btn liquid-glass-btn"
                             id="tutorBtn"
                             onclick="toggleTutor()"
                             title="Open AI Tutor"
@@ -531,7 +663,7 @@ average = total / len(scores
                             AI Tutor
                         </button>
                         <button
-                            class="topbar-progress-btn"
+                            class="topbar-progress-btn liquid-glass-btn"
                             id="topbarProgressBtn"
                             onclick="openProgressPopup()"
                             title="View your progress"
@@ -540,7 +672,7 @@ average = total / len(scores
                             <span id="topbarProgressText">0 / 30 complete</span>
                         </button>
                         <button
-                            class="complete-btn"
+                            class="complete-btn liquid-glass-btn"
                             id="completeBtn"
                             onclick="toggleComplete()"
                         >
@@ -612,19 +744,19 @@ average = total / len(scores
                     ></div>
                     <div class="playground-actions" style="padding: 8px 14px">
                         <button
-                            class="run-btn"
+                            class="run-btn liquid-glass-btn"
                             onclick="FloatingPlayground.run()"
                         >
                             ▶ Run
                         </button>
                         <button
-                            class="run-btn ghost"
+                            class="run-btn ghost liquid-glass-btn"
                             onclick="FloatingPlayground.clearOutput()"
                         >
                             Clear
                         </button>
                         <button
-                            class="run-btn ghost"
+                            class="run-btn ghost liquid-glass-btn"
                             onclick="FloatingPlayground.reset()"
                         >
                             ↺ Reset
@@ -654,7 +786,7 @@ average = total / len(scores
                         onclick="AITutor.toggleSidebar()"
                         title="Chat history"
                         aria-label="Toggle chat history sidebar"
-                    ><i class="fa-solid fa-clock-rotate-left"></i></button>
+                    ><i class="fa-solid fa-rectangle-list"></i></button>
                     <h3>AI Tutor</h3>
                     <span class="tutor-model-badge">Llama 3.3 70B</span>
                     <span style="flex: 1"></span>
@@ -690,40 +822,69 @@ average = total / len(scores
 
                     <!-- Chat area -->
                     <div class="tutor-chat-area" id="tutorChatArea">
+                        <canvas id="tutorFX3D" class="panel-fx-canvas" aria-hidden="true"></canvas>
                         <div class="tutor-status" id="tutorStatus">
                             Ready. Ask anything about Python!
                         </div>
                         <div class="tutor-chat" id="tutorChat"></div>
                         <div class="tutor-input">
-                            <div class="tutor-input-row">
-                                <button
-                                    class="tutor-context-btn"
-                                    id="tutorContextBtn"
-                                    onclick="toggleTutorContext()"
-                                    title="Attach your editor code"
-                                >
-                                    📎 Use my code
-                                </button>
-                                <button
-                                    class="tutor-key-change-btn"
-                                    onclick="AITutor.newChat()"
-                                    title="Start a new chat"
-                                >
-                                    New chat
-                                </button>
+                            <!-- Quick-prompt chips -->
+                            <div class="tutor-chips" id="tutorChips">
+                                <button class="tutor-chip" data-prompt="Explain this error to me" data-usecode="1">⚠️ Explain error</button>
+                                <button class="tutor-chip" data-prompt="Give me a hint, but don't show the full answer">💡 Give hint</button>
+                                <button class="tutor-chip" data-prompt="Review my code and tell me what to improve" data-usecode="1">🔍 Review my code</button>
+                                <button class="tutor-chip" data-prompt="Quiz me on what this lesson covered">🎯 Quiz me</button>
                             </div>
-                            <textarea
-                                id="tutorTextarea"
-                                placeholder="Ask about Python…"
-                                rows="2"
-                            ></textarea>
-                            <button
-                                id="tutorSendBtn"
-                                class="tutor-send-btn"
-                                onclick="sendTutorMessage()"
-                            >
-                                Send
-                            </button>
+                            <!-- Frosted glass input card -->
+                            <div class="tutor-input-card">
+                                <textarea
+                                    id="tutorTextarea"
+                                    placeholder="Ask your tutor anything…"
+                                    rows="1"
+                                ></textarea>
+                                <div class="tutor-input-toolbar">
+                                    <div class="tutor-input-tools">
+                                        <button
+                                            class="tutor-tool-btn"
+                                            id="tutorContextBtn"
+                                            onclick="toggleTutorContext()"
+                                            title="Attach your editor code"
+                                            aria-label="Attach your editor code"
+                                        >
+                                            <i class="fa-solid fa-paperclip"></i>
+                                        </button>
+                                        <button
+                                            class="tutor-tool-btn"
+                                            id="tutorImageBtn"
+                                            onclick="document.getElementById('tutorImageInput').click()"
+                                            title="Attach a screenshot"
+                                            aria-label="Attach a screenshot"
+                                        >
+                                            <i class="fa-regular fa-image"></i>
+                                        </button>
+                                        <input type="file" id="tutorImageInput" accept="image/*" hidden />
+                                        <button
+                                            class="tutor-tool-btn tutor-think-btn"
+                                            id="tutorThinkBtn"
+                                            onclick="AITutor.toggleThink()"
+                                            title="Think mode — deeper step-by-step explanation"
+                                            aria-label="Toggle think mode"
+                                        >
+                                            <i class="fa-solid fa-brain"></i><span>Think</span>
+                                        </button>
+                                    </div>
+                                    <button
+                                        id="tutorSendBtn"
+                                        class="tutor-send-btn"
+                                        onclick="sendTutorMessage()"
+                                        title="Send"
+                                        aria-label="Send message"
+                                    >
+                                        <i class="fa-solid fa-arrow-up tutor-send-icon"></i>
+                                        <span class="tutor-send-spinner"></span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -904,7 +1065,7 @@ average = total / len(scores
                 <input id="authEmailInput" class="auth-input" type="email" placeholder="Email address" autocomplete="email" />
                 <input id="authPasswordInput" class="auth-input" type="password" placeholder="Password (min 8 characters)" autocomplete="current-password" />
                 <p id="authForgotLink" class="auth-forgot hidden"><a href="#" onclick="Auth.showForgotPassword(); return false;">Forgot password?</a></p>
-                <button id="authSubmitBtn" class="auth-submit-btn" onclick="Auth._submit()">Create Account</button>
+                <button id="authSubmitBtn" class="auth-submit-btn liquid-glass-btn" onclick="Auth._submit()">Create Account</button>
                 <p id="authResendLink" class="auth-resend hidden"><a href="#" onclick="Auth._resendConfirmation(); return false;">Resend confirmation email</a></p>
                 <p class="auth-switch">Already have an account? <a id="authSwitchLink" href="#" onclick="Auth._switchTab('login'); return false;">Log in</a></p>
                 <p class="auth-skip"><a href="#" onclick="Auth.hideModal(); return false;">Continue without account →</a></p>
@@ -1069,19 +1230,39 @@ average = total / len(scores
             <button class="auth-submit-btn" style="background:var(--bg-2);color:var(--text-2);margin-top:4px" onclick="Settings.cancelDelete()">Cancel</button>
         </div>
 
+        <!-- Focus background music (file optional; music.js is null/err-safe) -->
+        <audio id="focusMusic" loop preload="none" src="focus-beats.mp3"></audio>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-        <script src="days-data.js"></script>
-        <script src="app.js?v=12"></script>
-        <script src="playground.js?v=12"></script>
+        <script src="days-data.js?v=3"></script>
+        <script src="app.js?v=18"></script>
+        <script src="playground.js?v=14"></script>
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-        <script src="ai-tutor.js?v=12"></script>
+        <script src="ai-tutor.js?v=13"></script>
         <script src="auth.js?v=2"></script>
         <script src="sync.js?v=2"></script>
         <script src="settings.js?v=1"></script>
         <script src="pro.js?v=1"></script>
+        <!-- Lusion-class landing effects: GSAP + ScrollTrigger + Lenis (pinned) -->
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+        <!-- Phase 7: Three.js (r152 — last version with UMD global bundle) -->
+        <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+        <script src="landing-3d.js?v=5"></script>
+        <!-- Faint 3D ambiance inside editor / tutor / lesson panels -->
+        <script src="panel-3d.js?v=2"></script>
+        <script src="lesson-sky.js?v=1"></script>
+        <!-- Focus background music toggle -->
+        <script src="music.js?v=1"></script>
+        <script src="landing-fx.js?v=16"></script>
         <!-- Pro toast notification -->
         <div id="proToastContainer"></div>
+
+        <!-- Custom cursor elements (Phase 3) — hidden until JS adds .cursor-active -->
+        <div class="cursor-dot" aria-hidden="true"></div>
+        <div class="cursor-ring" aria-hidden="true"></div>
 
         <!-- Full-screen achievement unlock cinematic -->
         <div id="achPopupLayer" class="ach-popup-layer hidden" role="dialog" aria-modal="true" aria-live="assertive"></div>

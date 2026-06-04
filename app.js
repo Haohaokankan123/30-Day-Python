@@ -146,6 +146,23 @@ window.addEventListener("pro:updated", () => {
 });
 
 // ─── PERSISTENCE ──────────────────────────────
+// Parse a "day_N" -> {...} localStorage map defensively. Returns a clean plain
+// object: anything that isn't a real object (corrupt JSON, a string, an array,
+// null) becomes {}, and any per-day value that isn't an object is dropped. This
+// is the permanent guard against the corrupt-saved-data blank-screen bug.
+function sanitizeDayMap(raw) {
+  if (!raw) return {};
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch (_) { return {}; }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
+  const clean = {};
+  for (const key of Object.keys(parsed)) {
+    const v = parsed[key];
+    if (v && typeof v === "object" && !Array.isArray(v)) clean[key] = v;
+  }
+  return clean;
+}
+
 function loadState() {
   try {
     const c = localStorage.getItem("py30_completed");
@@ -153,10 +170,13 @@ function loadState() {
       const parsed = JSON.parse(c);
       if (Array.isArray(parsed)) state.completed = new Set(parsed);
     }
-    const e = localStorage.getItem("py30_exercises");
-    if (e) state.exercises = JSON.parse(e);
-    const q = localStorage.getItem("py30_quiz");
-    if (q) state.quizAnswers = JSON.parse(q);
+    // exercises / quizAnswers MUST be plain objects keyed by "day_N".
+    // A corrupt value here (non-object, or a day entry that isn't an object)
+    // used to throw inside renderDay() and blank the lesson — but only for the
+    // days that had saved data (the early days you actually worked on), which
+    // is exactly the "days 1/2/3 are blank, 4+ are fine" bug. Coerce + repair.
+    state.exercises = sanitizeDayMap(localStorage.getItem("py30_exercises"));
+    state.quizAnswers = sanitizeDayMap(localStorage.getItem("py30_quiz"));
     const xp = localStorage.getItem("py30_xp");
     if (xp !== null) state.xp = parseInt(xp, 10) || 0;
     const lv = localStorage.getItem("py30_level");
@@ -253,8 +273,9 @@ function allDayExercisesDone(dayNum, ctx) {
 
 function buildAchContext() {
   const correctTotal = Object.values(state.quizAnswers)
+    .filter(day => day && typeof day === "object")
     .flatMap(day => Object.values(day))
-    .filter(a => a.correct).length;
+    .filter(a => a && a.correct).length;
   return {
     completed:     state.completed,
     completedCount: state.completed.size,
@@ -390,6 +411,12 @@ function initAiTutorHooks() {
             : "⚠️ Asking the AI will reduce this day's XP to 50 when you complete it.";
         }
       }
+      // Faint 3D ambiance behind the tutor — mirror the panel's open state
+      if (window.PanelFX && window.PanelFX.tutor) {
+        const tp = document.getElementById("tutorPanel");
+        if (tp && tp.classList.contains("open")) window.PanelFX.tutor.start();
+        else window.PanelFX.tutor.stop();
+      }
     };
   }
 }
@@ -468,11 +495,33 @@ function startLearning(dayNum = 1) {
   document.getElementById("landing").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
   loadDay(dayNum);
+  // Faint starfield + drifting code behind the lesson page.
+  // Defer to the next frame: #app was just un-hidden this tick, so the
+  // lessonFX3D canvas has no layout size yet and canRun() would bail.
+  // Two rAFs guarantee the browser has laid the canvas out before start().
+  if (window.PanelFX && window.PanelFX.lesson) {
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        window.PanelFX.lesson.start();
+        // Faint stars + meteor shower + subtle moon behind the lesson view.
+        // Started in the same deferred frame so #lessonSky is laid out first.
+        if (window.LessonSky) window.LessonSky.start();
+      })
+    );
+  }
 }
 
 function goHome() {
   document.getElementById("app").classList.add("hidden");
   document.getElementById("landing").classList.remove("hidden");
+  // Leaving the lesson view — stop every panel scene so nothing keeps rendering
+  if (window.PanelFX) {
+    if (window.PanelFX.lesson) window.PanelFX.lesson.stop();
+    if (window.PanelFX.editor) window.PanelFX.editor.stop();
+    if (window.PanelFX.tutor) window.PanelFX.tutor.stop();
+  }
+  // Stop the lesson sky canvas (meteors/stars/moon) when leaving the lesson.
+  if (window.LessonSky) window.LessonSky.stop();
   buildPreviewGrid();
   // Re-trigger scroll reveals for sections now visible
   setTimeout(() => {
@@ -527,7 +576,24 @@ function loadDay(n) {
     document.getElementById("contentWrap").innerHTML = `<div style="padding:60px;text-align:center;opacity:0.6"><h2>Coming Soon</h2><p>This lesson is still being written. Check back soon!</p></div>`;
     return;
   }
-  document.getElementById("contentWrap").innerHTML = renderDay(day);
+  // Crash-proof render: if anything inside renderDay() throws (e.g. unexpected
+  // saved data), show a recovery card instead of a silent blank screen — and
+  // log the real error so it can be diagnosed. This is the safety net behind
+  // the sanitizeDayMap() repair above.
+  try {
+    document.getElementById("contentWrap").innerHTML = renderDay(day);
+  } catch (err) {
+    console.error("renderDay failed for day " + n + ":", err);
+    document.getElementById("contentWrap").innerHTML =
+      `<div style="padding:60px;text-align:center;max-width:560px;margin:0 auto">
+         <h2 style="color:#fca5a5">This lesson hit a snag</h2>
+         <p style="opacity:0.75;line-height:1.6">Some saved progress data for this day looks corrupted. Click below to clear just the saved exercise/quiz progress (your completed days stay) and reload.</p>
+         <button onclick="(function(){try{localStorage.removeItem('py30_exercises');localStorage.removeItem('py30_quiz');}catch(e){}location.reload();})()"
+           style="margin-top:16px;padding:12px 22px;border-radius:12px;border:1px solid rgba(129,140,248,0.4);background:rgba(99,102,241,0.18);color:#e0e7ff;font-weight:600;cursor:pointer">
+           Reset saved progress &amp; reload
+         </button>
+       </div>`;
+  }
 
   setTimeout(() => {
     if (window.Prism) Prism.highlightAll();
@@ -721,7 +787,10 @@ function renderQuiz(questions, dayNum) {
   const qKey = `day_${dayNum}`;
   const saved = state.quizAnswers[qKey] || {};
   const answered = Object.keys(saved).length;
-  const correct = Object.values(saved).filter((v) => v.correct).length;
+  // Guard against a null/corrupt saved answer — reading .correct on null was
+  // the exact crash ("Cannot read properties of null (reading 'correct')")
+  // that blanked the lesson on days where a quiz had been answered.
+  const correct = Object.values(saved).filter((v) => v && v.correct).length;
   const pct =
     questions.length > 0 ? Math.round((correct / questions.length) * 100) : 0;
 
@@ -742,7 +811,11 @@ function renderQuiz(questions, dayNum) {
 
   const questionsHtml = questions
     .map((q, qi) => {
-      const prev = saved[qi];
+      // Normalize a null/corrupt saved answer to undefined so the
+      // `prev !== undefined` checks below treat it as "not answered yet"
+      // instead of crashing on prev.correct / prev.chosen.
+      const _raw = saved[qi];
+      const prev = (_raw && typeof _raw === "object") ? _raw : undefined;
       const letters = ["A", "B", "C", "D"];
       const opts = q.opts
         .map((opt, oi) => {
@@ -891,7 +964,7 @@ function toggleComplete() {
 
     // Perfect-day: all quizzes answered correctly for this day with zero wrong
     const _qKey = "day_" + n;
-    const _dayAnswers = Object.values(state.quizAnswers[_qKey] || {});
+    const _dayAnswers = Object.values(state.quizAnswers[_qKey] || {}).filter(a => a && typeof a === "object");
     if (_dayAnswers.length > 0 && _dayAnswers.every(a => a.correct)) {
       state.perfectDays.add(n);
     }
@@ -1590,7 +1663,7 @@ function updateQuizScore(dayNum, total) {
   const qKey = `day_${dayNum}`;
   const saved = state.quizAnswers[qKey] || {};
   const answered = Object.keys(saved).length;
-  const correct = Object.values(saved).filter((v) => v.correct).length;
+  const correct = Object.values(saved).filter((v) => v && v.correct).length;
   const pct = Math.round((correct / total) * 100);
 
   let scoreBar = document.querySelector(".quiz-score-bar");
@@ -1773,6 +1846,11 @@ function toggleFloatingPlayground() {
   panel.setAttribute("aria-hidden", isOpen ? "false" : "true");
   btn.classList.toggle("active", isOpen);
   if (isOpen) FloatingPlayground.mount();
+  // Faint 3D ambiance behind the editor — only runs while the panel is open
+  if (window.PanelFX && window.PanelFX.editor) {
+    if (isOpen) window.PanelFX.editor.start();
+    else window.PanelFX.editor.stop();
+  }
   syncPanelPositions();
 }
 
@@ -1808,7 +1886,7 @@ const FloatingPlayground = (() => {
     if (!mountEl || editor) return;
     editor = ace.edit(mountEl, {
       mode: "ace/mode/python",
-      theme: "ace/theme/tomorrow_night",
+      theme: "ace/theme/tomorrow_night_eighties",
       fontSize: 13,
       showPrintMargin: false,
       tabSize: 4,
@@ -1901,6 +1979,9 @@ function initScrollReveal() {
   if (typeof IntersectionObserver !== "undefined") {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
+        // GSAP (landing-fx.js) drives reveals for containers it manages —
+        // skip them here so the CSS .visible transition doesn't double-fire.
+        if (entry.target.hasAttribute("data-gsap-managed")) return;
         if (entry.isIntersecting) entry.target.classList.add("visible");
       });
     }, { threshold: 0.1 });
@@ -1925,14 +2006,31 @@ function initScrollReveal() {
     setTimeout(initDemoSequence, 1800);
   }
 
-  // Hard fallback at 2.5s — guarantees nothing stays hidden
+  // Hard fallback at 2.5s — guarantees nothing stays hidden.
+  // Exclude [data-gsap-managed] so GSAP's stagger isn't clobbered mid-flight.
   setTimeout(() => {
-    document.querySelectorAll(".reveal:not(.visible)").forEach((el) => el.classList.add("visible"));
+    document.querySelectorAll(".reveal:not(.visible):not([data-gsap-managed])").forEach((el) => el.classList.add("visible"));
     document.querySelectorAll(".hero-sub-fade:not(.visible)").forEach((el) => el.classList.add("visible"));
   }, 2500);
 }
 
 // ── Typewriter: hero titles ────────────────────
+// ── Landing-fx timer tracking ──────────────────
+// Typewriter + code-typer use nested setTimeouts. Track them so leaving the
+// landing view (startLearning/goHome) can cancel callbacks that would otherwise
+// mutate hidden DOM after navigation. landing-fx.js calls cancelLandingTimers().
+window._landingFxTimers = window._landingFxTimers || [];
+function lfTimer(fn, ms) {
+  const id = setTimeout(fn, ms);
+  window._landingFxTimers.push(id);
+  return id;
+}
+function cancelLandingTimers() {
+  window._landingFxTimers.forEach(clearTimeout);
+  window._landingFxTimers.length = 0;
+}
+window.cancelLandingTimers = cancelLandingTimers;
+
 function initTypewriter() {
   const line1El = document.getElementById("heroTitle");
   const line2El = document.getElementById("heroTitle2");
@@ -1950,11 +2048,11 @@ function initTypewriter() {
       const cur = line1El.querySelector(".typewriter-cursor");
       if (cur) line1El.insertBefore(document.createTextNode(line1[i]), cur);
       i++;
-      setTimeout(typeLine1, 55);
+      lfTimer(typeLine1, 55);
     } else {
       const cur = line1El.querySelector(".typewriter-cursor");
       if (cur) cur.parentNode.removeChild(cur);
-      setTimeout(startLine2, 180);
+      lfTimer(startLine2, 180);
     }
   }
 
@@ -1967,13 +2065,13 @@ function initTypewriter() {
         const cur = line2El.querySelector(".typewriter-cursor");
         if (cur) line2El.insertBefore(document.createTextNode(line2[j]), cur);
         j++;
-        setTimeout(typeLine2, 65);
+        lfTimer(typeLine2, 65);
       }
     }
     typeLine2();
   }
 
-  setTimeout(typeLine1, 300);
+  lfTimer(typeLine1, 300);
 }
 
 // ── Code window typing animation ──────────────
@@ -2021,15 +2119,21 @@ function initCodeTyper() {
       }
       pre.insertBefore(node, cursor);
       charIdx++;
-      setTimeout(typeNext, ch === "\n" ? 80 : 32);
+      lfTimer(typeNext, ch === "\n" ? 80 : 32);
     } else {
       segIdx++;
       charIdx = 0;
-      setTimeout(typeNext, segIdx % 3 === 0 ? 120 : 20);
+      if (segIdx >= segments.length) {
+        // Code window finished typing → its height is now final.
+        // Tell ScrollTrigger to recompute trigger start/end against real layout.
+        if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+        return;
+      }
+      lfTimer(typeNext, segIdx % 3 === 0 ? 120 : 20);
     }
   }
 
-  setTimeout(typeNext, 800);
+  lfTimer(typeNext, 800);
 }
 
 // ── Stagger curriculum grid entrance ──────────
@@ -2174,33 +2278,7 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeProgressPopup();
 });
 
-// ── Scroll-reveal IntersectionObserver ──
-(function() {
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-  function initReveal() {
-    document.querySelectorAll('.reveal').forEach(el => {
-      if (!el.classList.contains('visible')) io.observe(el);
-    });
-  }
-
-  // Run on load and when landing page becomes visible
-  document.addEventListener('DOMContentLoaded', initReveal);
-  // Re-run when showLanding() is called
-  const origShowLanding = window.showLanding;
-  if (typeof origShowLanding === 'function') {
-    window.showLanding = function() {
-      origShowLanding.apply(this, arguments);
-      setTimeout(initReveal, 50);
-    };
-  }
-  // Also just run now in case DOM is already ready
-  if (document.readyState !== 'loading') initReveal();
-})();
+// (Removed duplicate scroll-reveal IntersectionObserver. initScrollReveal()
+//  above is now the single source of truth for the .reveal/.visible system;
+//  GSAP in landing-fx.js owns only [data-gsap-managed] children. Two observers
+//  with mismatched thresholds on the same nodes caused double-fire.)
