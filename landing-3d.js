@@ -146,11 +146,12 @@
       const mesh = new THREE.Mesh(geo, mat);
       scene.add(mesh);
 
-      // Distribute in a wide cloud across right half, full vertical spread
+      // Distribute in a wide cloud, biased toward CENTER-LEFT so the cluster
+      // clears the code window on the right (Charles: no 3D under/near it).
       const col = i % 4;
       const row = Math.floor(i / 4);
 
-      const baseX = 0.2 + col * 0.9 + (i % 2) * 0.15;
+      const baseX = -0.5 + col * 0.8 + (i % 2) * 0.15;
       const baseY = 1.8 - row * 1.5 + (i % 3) * 0.25;
 
       return {
@@ -247,7 +248,7 @@
       camera.position.x = mouseX * 0.45;
       camera.position.y = -mouseY * 0.32;
       camera.position.z = 8 - Math.abs(mouseX) * 0.3;
-      camera.lookAt(2.0 + mouseX * 0.3, mouseY * 0.15, 0);
+      camera.lookAt(0.8 + mouseX * 0.3, mouseY * 0.15, 0);
 
       // Animate objects
       objects.forEach((o) => {
