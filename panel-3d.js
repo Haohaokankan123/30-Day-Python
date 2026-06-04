@@ -33,7 +33,13 @@
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
-  const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+  // Perf: 1× render (was 1.5) — these are faint, blurred, ~0.15-opacity layers
+  // behind crisp content, so resolution barely matters but GPU cost does.
+  const DPR = Math.min(window.devicePixelRatio || 1, 1);
+
+  // Perf: cap the faint ambient scenes to ~30fps. They're decorative; 30fps
+  // halves their per-second GPU/CPU work and is imperceptible behind content.
+  const FRAME_MS = 1000 / 30;
 
   // ── Brand palette (CSS hex, for 2D canvas textures) ──
   const INDIGO = "#6366f1"; // indigo-500
@@ -162,7 +168,12 @@
 
       _running = true;
 
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: false,             // perf: MSAA off (faint/blurred — no visible aliasing)
+        alpha: true,
+        powerPreference: "low-power", // efficient GPU path = quieter fans
+      });
       renderer.setPixelRatio(DPR);
       renderer.setSize(W, H, false);
       renderer.setClearColor(0x000000, 0);
@@ -202,10 +213,16 @@
 
       let t = 0;
       let lastNow = performance.now();
+      let lastDraw = 0; // perf: timestamp of last rendered frame (for 30fps cap)
 
       function loop(now) {
         if (!_running) return;
         animId = requestAnimationFrame(loop);
+
+        // Perf: skip frames to hold ~30fps. rAF still fires at display rate,
+        // but we only step+render when FRAME_MS has elapsed.
+        if (now - lastDraw < FRAME_MS) return;
+        lastDraw = now;
 
         const dt = Math.min((now - lastNow) / 1000, 0.05);
         lastNow = now;

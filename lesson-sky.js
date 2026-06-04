@@ -40,7 +40,14 @@
     "167, 139, 250", // violet-400
   ];
 
-  const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+  // Perf: cap DPR at 1.25 (was 1.5). Stars/meteors are soft dots & gradients,
+  // so slightly lower resolution is invisible but cuts fill cost — and TWO
+  // instances now run (lesson #lessonSky + editor #editorSky).
+  const DPR = Math.min(window.devicePixelRatio || 1, 1.25);
+
+  // Perf: render the night sky at ~30fps. Twinkle + slow meteors look identical
+  // at 30 vs 60fps but cost half as much; matters with two live instances.
+  const SKY_FRAME_MS = 1000 / 30;
 
   // ── Tuning constants (minimal-distraction is the priority) ──
   const STAR_MIN = 120;
@@ -66,6 +73,7 @@
   let moon = null;
 
   let lastNow = 0;
+  let lastDraw = 0; // perf: timestamp of last painted frame (for 30fps cap)
   let spawnTimer = 0;     // seconds accumulated toward next meteor
   let nextSpawn = 0;      // seconds until next meteor is allowed
 
@@ -297,6 +305,10 @@
   function loop(now) {
     if (!_running) return;
     animId = requestAnimationFrame(loop);
+
+    // Perf: hold ~30fps — skip the frame if too soon since the last paint.
+    if (now - lastDraw < SKY_FRAME_MS) return;
+    lastDraw = now;
 
     const dt = Math.min((now - lastNow) / 1000, 0.05);
     lastNow = now;

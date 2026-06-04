@@ -1163,37 +1163,24 @@
         <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
-        <!-- ES-module import map for the real-3D/physics module (panel-physics.js).
-             Must precede any <script type="module">. Maps bare specifiers to
-             verified CDN ESM builds. SEPARATE from the global window.THREE UMD
-             below — they coexist; old scenes use window.THREE, the module imports
-             its own ESM three. -->
-        <script type="importmap">
-        {
-          "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js",
-            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/",
-            "cannon-es": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js"
-          }
-        }
-        </script>
         <!-- Phase 7: Three.js (r152 — last version with UMD global bundle) -->
         <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-        <script src="landing-3d.js?v=9"></script>
+        <script src="landing-3d.js?v=10"></script>
         <!-- Faint 3D ambiance inside editor / tutor / lesson panels -->
-        <script src="panel-3d.js?v=4"></script>
-        <script src="lesson-sky.js?v=2"></script>
+        <script src="panel-3d.js?v=5"></script>
+        <script src="lesson-sky.js?v=3"></script>
         <!-- Focus background music toggle -->
         <script src="music.js?v=1"></script>
         <!-- 3D tilt + AI-tutor showcase demo (must load before landing-fx boot()) -->
         <script src="landing-tilt.js?v=2"></script>
-        <!-- Real 3D panel tilt + cannon-es physics (ES module; crisp-text panels) -->
-        <script type="module" src="panel-physics.js?v=5"></script>
-        <!-- Truly-3D hero code window: lit Three.js box + crisp CSS3D HTML front face
-             (ES module; uses the import map above; after panel-physics) -->
+        <!-- Truly-3D hero code window: lit Three.js box + crisp CSS3D HTML front face -->
         <script src="hero-3d-window.js?v=9"></script>
+        <!-- PERF: panel-physics.js (cannon-es) + its ESM import map were removed.
+             Its #physicsFX canvas no longer exists and every .panel-3d-real card
+             is now a data-slab CSS slab, so the physics module had nothing to do
+             but still downloaded a 2nd three.js + cannon-es. Dropped entirely. -->
         <script src="slab-3d.js?v=5"></script>
-        <script src="landing-fx.js?v=23"></script>
+        <script src="landing-fx.js?v=24"></script>
         <!-- Pro toast notification -->
         <div id="proToastContainer"></div>
 

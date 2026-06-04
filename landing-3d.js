@@ -20,7 +20,10 @@
   let targetMouseX = 0, targetMouseY = 0;
   let cleanup = null;
 
-  const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+  // Perf: render at 1× even on Retina (was 1.5). On an M-series Retina panel
+  // 1.5× = ~2.25× the fragment work; 1× roughly halves GPU load with the faint
+  // ambient shapes barely changing visually.
+  const DPR = Math.min(window.devicePixelRatio || 1, 1);
 
   // Python / indigo brand palette — richer set
   const COLORS = [
@@ -70,7 +73,12 @@
 
     _running = true;
 
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: false,             // perf: MSAA off — invisible on soft glowy shapes
+      alpha: true,
+      powerPreference: "low-power", // ask macOS for the efficient GPU path (quieter fans)
+    });
     renderer.setPixelRatio(DPR);
     renderer.setSize(W, H);
     renderer.setClearColor(0x000000, 0);
@@ -174,7 +182,7 @@
     });
 
     // ── Particle cloud (small dots floating behind objects) ──
-    const particleCount = 120;
+    const particleCount = 60; // perf: halved from 120 — still reads as a faint dust field
     const pGeo = new THREE.BufferGeometry();
     const pPositions = new Float32Array(particleCount * 3);
     const pSpeeds = [];
@@ -229,12 +237,34 @@
     }
     document.addEventListener("visibilitychange", onVisible);
 
+    // ── Perf: pause rendering when the hero is scrolled offscreen ──
+    // Without this the 12-shape WebGL scene keeps rendering full-tilt behind the
+    // page while you read content far below the hero. rAF keeps ticking (cheap)
+    // but we skip the expensive scene render whenever the hero isn't visible.
+    let onScreen = true;
+    let io = null;
+    if (hero && "IntersectionObserver" in window) {
+      io = new IntersectionObserver(
+        (entries) => { onScreen = entries[0].isIntersecting; },
+        { threshold: 0 }
+      );
+      io.observe(hero);
+    }
+
     let t = 0;
     let lastNow = performance.now();
+    let lastDraw = 0; // perf: last paint time for 30fps cap
+    const FRAME_MS = 1000 / 30;
 
     function loop(now) {
       if (!_running) return;
       animId = requestAnimationFrame(loop);
+
+      // Perf: skip entirely when hero is offscreen (nothing to show).
+      if (!onScreen) return;
+      // Perf: cap to ~30fps — the slow orbital drift is identical at 30 vs 60.
+      if (now - lastDraw < FRAME_MS) return;
+      lastDraw = now;
 
       const dt = Math.min((now - lastNow) / 1000, 0.05);
       lastNow = now;
@@ -289,6 +319,7 @@
     cleanup = () => {
       _running = false;
       if (animId) cancelAnimationFrame(animId);
+      if (io) { io.disconnect(); io = null; }
       window.removeEventListener("resize", onResize);
       window.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("visibilitychange", onVisible);

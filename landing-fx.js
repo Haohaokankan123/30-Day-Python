@@ -310,7 +310,10 @@
     }
     const { gl, canvas, uRes, uTime, uMouse } = S;
 
-    const DPR = Math.min(window.devicePixelRatio || 1, 1.5); // cap DPR
+    // Perf: render the full-screen background shader at 1× (was 1.5×). It's a
+    // soft blurry gradient, so the resolution drop is invisible but it cuts the
+    // per-pixel fragment work ~2.25× — one of the biggest always-on GPU costs.
+    const DPR = Math.min(window.devicePixelRatio || 1, 1);
     function resize() {
       const w = Math.floor(window.innerWidth * DPR);
       const h = Math.floor(window.innerHeight * DPR);
@@ -355,9 +358,14 @@
 
     let startT = null;
     let rafId = null;
+    let lastShaderDraw = 0; // perf: last paint time (seconds) for 30fps cap
+    const SHADER_FRAME_S = 1 / 30;
     function frame(timeSec) {
       if (!shaderRunning) return;
       if (startT === null) startT = timeSec;
+      // Perf: cap to ~30fps. The drifting gradient is identical at 30 vs 60fps.
+      if (timeSec - lastShaderDraw < SHADER_FRAME_S) return;
+      lastShaderDraw = timeSec;
       if (onScreen) {
         mouse.x += (mouse.tx - mouse.x) * 0.05;
         mouse.y += (mouse.ty - mouse.y) * 0.05;
@@ -985,13 +993,8 @@
       window.LandingTilt.initTilt();
       window.LandingTilt.initTutorDemo();
     }
-    // Real 3D panel tilt (crisp text) + cannon-es tumbling physics objects.
-    // The module may still be loading (type="module" is async/deferred), so
-    // retry briefly until window.PanelPhysics is defined.
-    (function waitForPhysics(tries) {
-      if (window.PanelPhysics) { window.PanelPhysics.init(); return; }
-      if (tries > 0) setTimeout(() => waitForPhysics(tries - 1), 120);
-    })(20);
+    // PERF: panel-physics (cannon-es) was removed — nothing to init here now.
+    // The hero slab + data-slab cards own all the 3D; no physics world runs.
     // Truly-3D hero code window (lit Three.js box + crisp CSS3D front face). Same
     // async-module retry pattern as PanelPhysics above.
     (function waitForHero(tries) {
@@ -1506,13 +1509,18 @@
 
     const W = canvas.offsetWidth || window.innerWidth;
     const H = canvas.offsetHeight || window.innerHeight;
-    const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+    const DPR = Math.min(window.devicePixelRatio || 1, 1); // perf: 1× on Retina
 
     // Let Three.js create its own WebGL context — no pre-claim to avoid type conflict
     // (Three.js r152 prefers webgl2; pre-claiming webgl would cause "existing context of different type")
     let renderer;
     try {
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: false,             // perf: MSAA off
+        alpha: true,
+        powerPreference: "low-power", // perf: efficient GPU path
+      });
     } catch (e) {
       return null; // WebGL unavailable
     }
