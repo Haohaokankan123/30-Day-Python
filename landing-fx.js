@@ -109,7 +109,9 @@
     ensureST();
 
     // Gentle parallax: hero code window drifts slower than scroll.
-    const codeWin = document.querySelector(".landing-code-window");
+    // SKIP #heroCodeWindow — the slab (hero-3d-window.js) owns its transform;
+    // a parallax transform here fights it and breaks the side-face alignment.
+    const codeWin = document.querySelector(".landing-code-window:not(#heroCodeWindow)");
     if (codeWin) {
       const tw = window.gsap.to(codeWin, {
         yPercent: 12,
@@ -996,6 +998,8 @@
       if (window.HeroWindow3D) { window.HeroWindow3D.init(); return; }
       if (tries > 0) setTimeout(() => waitForHero(tries - 1), 120);
     })(20);
+    // Generic CSS slabs for all data-slab cards.
+    if (window.Slab3D) { window.Slab3D.init(); }
     if (hasGsap && window.ScrollTrigger) {
       // Recalc trigger start/end once layout settles. Fonts change heights;
       // the code-typer also calls ScrollTrigger.refresh() when it finishes.
@@ -1030,6 +1034,7 @@
     if (window.HeroWindow3D) {
       window.HeroWindow3D.destroy();
     }
+    if (window.Slab3D) { window.Slab3D.destroy(); }
     teardownAll();
   }
 
@@ -1347,7 +1352,11 @@
     });
 
     // ── 4. Code window: slides up with 3D perspective tilt ──
-    const codeWin = document.querySelector(".landing-code-window");
+    // SKIP the hero window (#heroCodeWindow): hero-3d-window.js now owns its
+    // transform as a CSS extruded slab. A GSAP transform here would overwrite
+    // the slab's translateZ(depth/2) on the front face, pushing it off-axis
+    // from the side faces so the right edge overhangs past the panel.
+    const codeWin = document.querySelector(".landing-code-window:not(#heroCodeWindow)");
     if (codeWin) {
       gsap.set(codeWin, { y: 80, opacity: 0, rotateX: 8, transformPerspective: 1000 });
       const tw = gsap.to(codeWin, {

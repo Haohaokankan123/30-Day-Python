@@ -112,17 +112,17 @@ import * as CANNON from "cannon-es";
   // =============================================================
   //  FEATURE 1 — direct CSS 3D tilt on real HTML panels (crisp text)
   // =============================================================
-  const MAX_DEG = 14; // max rotateX / rotateY tilt added BY the cursor
-  const LIFT_Z = 26; // translateZ lift on hover (px)
-  const REST_TZ = 8; // small resting lift so panels float at rest
+  const MAX_DEG = 18; // max rotateX / rotateY tilt added BY the cursor
+  const LIFT_Z = 40; // translateZ lift on hover (px)
+  const REST_TZ = 12; // small resting lift so panels float at rest
   const EASE = 0.12; // per-frame lerp toward target
 
   // Resting 3D angle so each panel looks 3D AT ALL TIMES (not just on hover).
   // Panels alternate a left/right lean by index so they don't look identical.
-  // Charles: "I want it to look 3D at all times ... for all 7."
+  // Stronger angles (was 6/9) so thickness is clearly visible without hovering.
   function restAngleFor(i) {
     const side = i % 2 === 0 ? 1 : -1;
-    return { rx: 6, ry: 9 * side }; // gentle pitch-down + alternating yaw
+    return { rx: 10, ry: 18 * side }; // strong pitch + alternating yaw — clearly 3D at rest
   }
 
   function initTilt() {
@@ -130,7 +130,7 @@ import * as CANNON from "cannon-es";
     // Skip #heroCodeWindow — hero-3d-window.js owns its 3D (lit box + CSS3D);
     // letting panel-physics also tilt it would make two systems fight one element.
     const els = Array.from(document.querySelectorAll(".panel-3d-real")).filter(
-      (el) => el.id !== "heroCodeWindow"
+      (el) => el.id !== "heroCodeWindow" && !el.hasAttribute("data-slab")
     );
     if (!els.length) return;
 
@@ -141,7 +141,7 @@ import * as CANNON from "cannon-es";
       // perspective lives on the element itself so its own children get depth.
       el.style.transformStyle = "preserve-3d";
       el.style.willChange = "transform";
-      if (!el.style.perspective) el.style.perspective = "1100px";
+      if (!el.style.perspective) el.style.perspective = "750px";
 
       const rest = restAngleFor(i);
 
@@ -207,7 +207,7 @@ import * as CANNON from "cannon-es";
       p.ry += (p.try_ - p.ry) * EASE;
       p.tz += (p.ttz - p.tz) * EASE;
       p.el.style.transform =
-        "perspective(1100px) rotateX(" +
+        "perspective(750px) rotateX(" +
         p.rx.toFixed(3) +
         "deg) rotateY(" +
         p.ry.toFixed(3) +

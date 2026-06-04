@@ -147,7 +147,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    overflow-x: hidden;
     position: relative;
 }
 
@@ -706,7 +705,7 @@ body.cursor-entered .cursor-ring {
     border-radius: 20px;
     padding: 32px;
     position: relative;
-    overflow: hidden;
+    overflow: visible; /* allow 3D slab side faces */
     box-shadow: var(--shadow-glow);
 }
 .landing-about-card::before {
@@ -1015,7 +1014,7 @@ body.cursor-entered .cursor-ring {
     padding: 28px;
     box-shadow: var(--shadow-glow);
     position: relative;
-    overflow: hidden;
+    overflow: visible; /* allow 3D slab side faces to show outside card bounds */
 }
 .landing-feature-card::before {
     content: '';
@@ -1214,6 +1213,19 @@ body.cursor-entered .cursor-ring {
 .reveal.visible {
     opacity: 1;
     transform: translateY(0);
+}
+/* Opacity-only reveal for sections that contain CSS 3D slabs.
+   Any transform on an ancestor (even identity) kills preserve-3d on children. */
+.reveal--slab,
+.reveal--slab.visible {
+    transform: none !important;
+}
+.reveal--slab {
+    opacity: 0;
+    transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1);
+}
+.reveal--slab.visible {
+    opacity: 1;
 }
 
 /* =============================================
@@ -3609,6 +3621,13 @@ body.panel-resizing { cursor: ew-resize !important; }
     opacity: 1;
     transform: translateY(0);
 }
+/* Slab sections: no transform ever (transform kills CSS preserve-3d on children) */
+.reveal--slab,
+.reveal--slab.visible {
+    transform: none !important;
+}
+.reveal--slab { opacity: 0; }
+.reveal--slab.visible { opacity: 1; }
 .hero-sub-fade {
     opacity: 0;
     transform: translateY(16px);
@@ -8078,13 +8097,20 @@ select:focus-visible {
    flat #heroCodeWindow stays and still looks correct. */
 #heroWindow3DStage {
     position: relative;
-    width: min(500px, 86%);   /* matches the code window's responsive width */
-    margin-left: auto;        /* right-aligned, same as the code window */
-    margin-bottom: -30px;     /* match the code window's resting offset */
+    width: min(500px, 86%);
+    margin-left: auto;
+    margin-bottom: -30px;
     align-self: flex-end;
-    perspective: 1300px;       /* the 3D viewing context for the slab */
+    perspective: 900px;
     perspective-origin: 60% 40%;
-    pointer-events: none;     /* the window inside re-enables its own pointer events */
+    pointer-events: none;
+    padding: 12px 70px 20px 20px;
+    box-sizing: border-box;
+    animation: slab-float 6s ease-in-out infinite;
+    animation-delay: -2.1s;
+}
+@media (prefers-reduced-motion: reduce) {
+    #heroWindow3DStage { animation: none !important; }
 }
 /* The WebGL canvas is unused in CSS-slab mode (the module hides it); keep the
    rule so any stray reference still resolves to something harmless. */
@@ -8100,9 +8126,16 @@ select:focus-visible {
 /* The slab wrapper: a preserve-3d box the module rotates. Width drives the box. */
 .hero-slab {
     position: relative;
-    width: 100%;
+    /* The slab wrapper MUST be the EXACT size of the front panel, otherwise the
+       side faces (hinged at right:0 / bottom:0 of the slab) detach from the
+       panel edges and overhang into empty space. So the slab — not the front —
+       carries the panel's width + alignment; the front fills it at 100%. */
+    width: min(500px, 86%);
+    margin-left: auto;        /* right-aligned within the hero column */
+    margin-bottom: -30px;
+    align-self: flex-end;
     transform-style: preserve-3d;
-    transform: rotateX(4deg) rotateY(-9deg); /* resting tilt before JS takes over */
+    transform: rotateX(7deg) rotateY(-16deg); /* resting tilt before JS takes over — matches JS tunables */
     transition: none;
     will-change: transform;
     pointer-events: none;     /* only the front face is interactive */
@@ -8113,15 +8146,25 @@ select:focus-visible {
     position: relative;
     width: 100%;
     margin: 0 !important;
-    pointer-events: auto;     /* hover + selection work on the actual window */
+    pointer-events: auto;
     backface-visibility: hidden;
-    /* fully opaque so the slab interior never shows through the text surface */
     background: linear-gradient(155deg, rgba(20,18,42,0.98), rgba(10,9,24,0.99));
+    /* Soft blurry lift — large blur, low alpha (matches the generic slab) so the
+       shadow doesn't read as a hard black slab beyond the panel. */
+    filter: drop-shadow(0 26px 72px rgba(8,6,20,0.42)) drop-shadow(0 6px 28px rgba(99,102,241,0.18));
 }
 /* Neutralise the .panel-3d-real resting CSS-tilt for the hero window ONLY — the
    slab owns its 3D. (All OTHER .panel-3d-real keep their tilt.) */
 #heroCodeWindow.panel-3d-real {
-    transform: translateZ(calc(var(--slab-depth, 26px) / 2));
+    transform: translateZ(calc(var(--slab-depth, 44px) / 2));
+}
+/* When wrapped in the slab, the front face MUST fill the slab exactly (the slab
+   now carries the panel width + alignment). Override the .landing-hero-right
+   width:min(500px,86%) + auto margins so the side faces stay flush to the edges. */
+#heroCodeWindow.hero-slab-front {
+    width: 100% !important;
+    margin: 0 !important;
+    align-self: auto !important;
 }
 
 /* ── The four thickness faces ──
@@ -8130,55 +8173,51 @@ select:focus-visible {
    floating cubes' edges. --slab-depth is set on .hero-slab by the module. */
 .hero-slab-face {
     position: absolute;
-    background:
-        linear-gradient(180deg, rgba(40,34,78,0.95), rgba(8,7,20,0.98));
-    box-shadow: inset 0 0 18px rgba(124,58,237,0.18);
+    background: rgba(46, 36, 96, 0.32);
     pointer-events: none;
     backface-visibility: hidden;
 }
-/* RIGHT side face: a vertical strip at the right edge, hinged along Y. */
+/* RIGHT side face: a vertical strip at the right edge, hinged along Y.
+   TRANSLUCENT violet (shader palette) so the moving background bleeds through
+   — never a solid black bar. */
 .hero-slab-face--right {
     top: 0;
     right: 0;
-    width: var(--slab-depth, 26px);
+    width: var(--slab-depth, 30px);
     height: 100%;
     transform-origin: right center;
-    transform: rotateY(90deg) translateZ(calc(var(--slab-depth, 26px) / -2));
-    background: linear-gradient(180deg, rgba(46,38,90,0.95), rgba(10,8,24,0.98));
-    box-shadow: inset 2px 0 16px rgba(6,182,212,0.22);
+    transform: rotateY(90deg);
+    background: linear-gradient(90deg, rgba(40,30,84,0.30), rgba(28,22,60,0.36));
 }
 /* LEFT side face. */
 .hero-slab-face--left {
     top: 0;
     left: 0;
-    width: var(--slab-depth, 26px);
+    width: var(--slab-depth, 30px);
     height: 100%;
     transform-origin: left center;
-    transform: rotateY(-90deg) translateZ(calc(var(--slab-depth, 26px) / -2));
-    background: linear-gradient(180deg, rgba(30,26,62,0.95), rgba(8,6,18,0.98));
-    box-shadow: inset -2px 0 16px rgba(124,58,237,0.20);
+    transform: rotateY(-90deg);
+    background: linear-gradient(90deg, rgba(28,22,60,0.36), rgba(40,30,84,0.30));
 }
 /* BOTTOM face: a horizontal strip at the bottom edge, hinged along X. */
 .hero-slab-face--bottom {
     left: 0;
     bottom: 0;
     width: 100%;
-    height: var(--slab-depth, 26px);
+    height: var(--slab-depth, 30px);
     transform-origin: center bottom;
-    transform: rotateX(-90deg) translateZ(calc(var(--slab-depth, 26px) / -2));
-    background: linear-gradient(90deg, rgba(36,30,74,0.95), rgba(10,8,24,0.98));
-    box-shadow: inset 0 -2px 16px rgba(79,70,229,0.22);
+    transform: rotateX(-90deg);
+    background: rgba(24, 19, 52, 0.38);
 }
 /* TOP face. */
 .hero-slab-face--top {
     left: 0;
     top: 0;
     width: 100%;
-    height: var(--slab-depth, 26px);
+    height: var(--slab-depth, 30px);
     transform-origin: center top;
-    transform: rotateX(90deg) translateZ(calc(var(--slab-depth, 26px) / -2));
-    background: linear-gradient(90deg, rgba(44,37,86,0.95), rgba(12,10,26,0.98));
-    box-shadow: inset 0 2px 16px rgba(99,102,241,0.22);
+    transform: rotateX(90deg);
+    background: linear-gradient(180deg, rgba(64,52,120,0.28), rgba(46,36,94,0.32));
 }
 
 /* Reduced motion / no-JS: the module no-ops, no slab is built; the plain flat
@@ -8186,6 +8225,94 @@ select:focus-visible {
 @media (prefers-reduced-motion: reduce) {
     #heroWindowGL { display: none; }
     #heroCodeWindow.panel-3d-real { transform: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Generic CSS slab — slab-3d.js
+   Any element with data-slab gets wrapped in .slab3d with four
+   .slab3d-face--* side faces so it reads as a real 3D box.
+   ══════════════════════════════════════════════════════════════ */
+/* Outer perspective container — perspective MUST be on parent of the preserve-3d element */
+@keyframes slab-float {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-14px); }
+    100% { transform: translateY(0px); }
+}
+.slab3d-outer {
+    overflow: visible;
+    pointer-events: none;
+    animation: slab-float 5s ease-in-out infinite;
+}
+/* Stagger float timing per card so they don't all bob in sync */
+.slab3d-outer:nth-of-type(2) { animation-delay: -1.7s; }
+.slab3d-outer:nth-of-type(3) { animation-delay: -3.3s; }
+.slab3d {
+    position: relative;
+    transform-style: preserve-3d;
+    will-change: transform;
+    pointer-events: none;
+    overflow: visible;
+}
+/* The original card element becomes the FRONT face */
+.slab3d-front {
+    position: relative;
+    pointer-events: auto;
+    backface-visibility: hidden;
+    /* Soft, blurry floating shadow — large blur radius + low alpha so it reads
+       as a gentle lift, not a hard dark slab under the card. */
+    filter: drop-shadow(0 24px 70px rgba(8,6,20,0.40)) drop-shadow(0 6px 28px rgba(99,102,241,0.16));
+}
+@media (prefers-reduced-motion: reduce) {
+    .slab3d-outer { animation: none !important; }
+}
+/* Side faces: TRANSLUCENT violet tint pulled from the shader palette — NOT
+   opaque black. Low alpha lets the moving purple/indigo shader bleed THROUGH
+   the face, so each side reads as a dimmed slice of the background itself
+   instead of a black bar. The two right/left faces are darkened a touch more
+   (they catch less light) and the top is the lightest (catches the most). */
+.slab3d-face {
+    position: absolute;
+    pointer-events: none;
+    backface-visibility: hidden;
+    background: rgba(46, 36, 96, 0.32);
+}
+.slab3d-face--right {
+    top: 0; right: 0;
+    width: var(--slab3d-depth, 34px);
+    height: 100%;
+    transform-origin: right center;
+    transform: rotateY(90deg);
+    background: linear-gradient(90deg, rgba(40,30,84,0.30), rgba(28,22,60,0.36));
+}
+.slab3d-face--left {
+    top: 0; left: 0;
+    width: var(--slab3d-depth, 34px);
+    height: 100%;
+    transform-origin: left center;
+    transform: rotateY(-90deg);
+    background: linear-gradient(90deg, rgba(28,22,60,0.36), rgba(40,30,84,0.30));
+}
+.slab3d-face--bottom {
+    left: 0; bottom: 0;
+    width: 100%;
+    height: var(--slab3d-depth, 34px);
+    transform-origin: center bottom;
+    transform: rotateX(-90deg);
+    background: rgba(24, 19, 52, 0.38);
+}
+.slab3d-face--top {
+    left: 0; top: 0;
+    width: 100%;
+    height: var(--slab3d-depth, 34px);
+    transform-origin: center top;
+    transform: rotateX(90deg);
+    background: linear-gradient(180deg, rgba(64,52,120,0.28), rgba(46,36,94,0.32));
+}
+@media (prefers-reduced-motion: reduce) {
+    .slab3d-outer { perspective: none !important; }
+    .slab3d { transform: none !important; }
+    .slab3d-face { display: none; }
+    .slab3d-front { transform: none !important; }
 }
 
 /* ── Hero title: bigger punch ── */
@@ -8319,6 +8446,9 @@ select:focus-visible {
 .landing-about-card {
     border: 1px solid rgba(99,102,241,0.15);
     background: linear-gradient(145deg, rgba(99,102,241,0.06), rgba(6,182,212,0.03));
+    /* Frosted glass: softly blur the shader showing through the translucent card. */
+    -webkit-backdrop-filter: blur(24px) saturate(1.25);
+    backdrop-filter: blur(24px) saturate(1.25);
     transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s, box-shadow 0.3s;
 }
 .landing-about-card:hover {
@@ -8871,11 +9001,27 @@ select:focus-visible {
    FLOATING CODE EDITOR — DARK GLASS IDE RESKIN  (ultracode pass)
    ════════════════════════════════════════════════════════════════ */
 .floating-playground-panel {
-    background:linear-gradient(155deg, rgba(23,21,48,0.93) 0%, rgba(12,11,28,0.95) 100%);
+    /* Deep-space tone matching the lesson page (.app) so the stars + meteor
+       canvas (#editorSky) reads against dark space, not a flat indigo fill. */
+    background:linear-gradient(180deg, #06060d 0%, #080812 100%);
     backdrop-filter:blur(24px) saturate(1.5); -webkit-backdrop-filter:blur(24px) saturate(1.5);
     border:1px solid var(--border-light);
     box-shadow:0 1px 0 rgba(255,255,255,0.05) inset, 0 24px 70px rgba(0,0,0,0.6),
                0 0 64px rgba(124,58,237,0.16);
+    overflow:hidden; /* clip the absolute sky canvas to the panel's rounded box */
+}
+/* Stars + meteor background canvas — sits BEHIND all panel content. */
+.editor-sky-canvas {
+    position:absolute; inset:0; width:100%; height:100%;
+    z-index:0; pointer-events:none;
+}
+/* All real panel content rides above the sky canvas. NOTE: do NOT include
+   .panel-resize-handle here — it must keep its own absolute positioning;
+   forcing it position:relative pulls it into the flex column and collapses
+   the editor body to 0 height. */
+.floating-playground-panel > .tutor-header,
+.floating-playground-panel > .floating-playground-body {
+    position:relative; z-index:1;
 }
 .floating-playground-panel .tutor-header {
     background:linear-gradient(180deg, rgba(99,102,241,0.08) 0%, transparent 100%);
@@ -9166,7 +9312,7 @@ select:focus-visible {
     border: 1px solid rgba(129,140,248,0.22);
     border-radius: 20px;
     box-shadow: 0 24px 60px rgba(0,0,0,0.45), 0 0 50px rgba(99,102,241,0.10);
-    overflow: hidden;
+    overflow: visible; /* allow 3D slab side faces to show outside card bounds */
 }
 .tutor-demo-header {
     display: flex;

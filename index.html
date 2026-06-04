@@ -21,7 +21,7 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
         />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-        <link rel="stylesheet" href="style.css?v=45" />
+        <link rel="stylesheet" href="style.css?v=65" />
         <script>
         (function(){
             var t=localStorage.getItem('py30_theme')||'dark';
@@ -217,7 +217,7 @@
             </div>
 
             <!-- About section (near top — personal story) -->
-            <div class="landing-about reveal" id="landing-about">
+            <div class="landing-about reveal reveal--slab" id="landing-about">
                 <div class="landing-about-inner">
                     <div class="landing-about-text">
                         <p class="landing-eyebrow">Why I built this</p>
@@ -246,7 +246,7 @@
                             environment I wish I had when I started.
                         </p>
                     </div>
-                    <div class="landing-about-card">
+                    <div class="landing-about-card" data-slab="30" data-slab-yaw="-13" data-slab-pitch="6">
                         <div class="landing-about-quote">
                             "The best way to learn Python is to write Python. Every single day."
                         </div>
@@ -332,7 +332,7 @@
             </div>
 
             <!-- ── AI Tutor showcase — moved up into the removed Built-in-tools spot ── -->
-            <div class="landing-feature landing-feature-reverse reveal" id="landing-features" style="padding-top: 40px">
+            <div class="landing-feature landing-feature-reverse reveal reveal--slab" id="landing-features" style="padding-top: 40px">
                 <div class="landing-feature-left">
                     <p class="landing-eyebrow">Stuck? Just ask.</p>
                     <h2 class="landing-feature-title">
@@ -344,7 +344,7 @@
                     </p>
                 </div>
                 <div class="landing-feature-card-wrap">
-                    <div class="tutor-demo-card panel-3d-real">
+                    <div class="tutor-demo-card panel-3d-real" data-slab="30" data-slab-yaw="-13" data-slab-pitch="6">
                         <div class="tutor-demo-header">
                             <span class="tutor-demo-avatar">✦</span>
                             <span class="tutor-demo-name">AI Tutor</span>
@@ -356,7 +356,7 @@
             </div>
 
             <!-- Interactive feature card (code/quiz tabs) -->
-            <div class="landing-feature reveal">
+            <div class="landing-feature reveal reveal--slab">
                 <div class="landing-feature-left">
                     <p class="landing-eyebrow">Hands-on from Day 1.</p>
                     <h2 class="landing-feature-title">
@@ -367,7 +367,7 @@
                     </p>
                 </div>
                 <div class="landing-feature-card-wrap">
-                    <div class="landing-feature-card panel-3d-real">
+                    <div class="landing-feature-card panel-3d-real" data-slab="24" data-slab-yaw="8" data-slab-pitch="4">
                         <div class="landing-feature-card-tag">DAY 05</div>
                         <h3 class="landing-feature-card-title">Lists</h3>
                         <!-- Tab switcher -->
@@ -623,6 +623,8 @@
                 id="floatingPlaygroundPanel"
                 aria-hidden="true"
             >
+                <!-- Stars + meteor background (same engine as the lesson page) -->
+                <canvas id="editorSky" class="editor-sky-canvas" aria-hidden="true"></canvas>
                 <div class="panel-resize-handle" data-resize-target="floatingPlaygroundPanel" title="Drag to resize"></div>
                 <header class="tutor-header">
                     <h3>&lt;/&gt; Code Editor</h3>
@@ -1149,7 +1151,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
         <script src="days-data.js?v=3"></script>
-        <script src="app.js?v=21"></script>
+        <script src="app.js?v=22"></script>
         <script src="playground.js?v=14"></script>
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
         <script src="ai-tutor.js?v=13"></script>
@@ -1179,18 +1181,19 @@
         <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
         <script src="landing-3d.js?v=9"></script>
         <!-- Faint 3D ambiance inside editor / tutor / lesson panels -->
-        <script src="panel-3d.js?v=3"></script>
-        <script src="lesson-sky.js?v=1"></script>
+        <script src="panel-3d.js?v=4"></script>
+        <script src="lesson-sky.js?v=2"></script>
         <!-- Focus background music toggle -->
         <script src="music.js?v=1"></script>
         <!-- 3D tilt + AI-tutor showcase demo (must load before landing-fx boot()) -->
         <script src="landing-tilt.js?v=2"></script>
         <!-- Real 3D panel tilt + cannon-es physics (ES module; crisp-text panels) -->
-        <script type="module" src="panel-physics.js?v=3"></script>
+        <script type="module" src="panel-physics.js?v=5"></script>
         <!-- Truly-3D hero code window: lit Three.js box + crisp CSS3D HTML front face
              (ES module; uses the import map above; after panel-physics) -->
-        <script src="hero-3d-window.js?v=5"></script>
-        <script src="landing-fx.js?v=21"></script>
+        <script src="hero-3d-window.js?v=9"></script>
+        <script src="slab-3d.js?v=5"></script>
+        <script src="landing-fx.js?v=23"></script>
         <!-- Pro toast notification -->
         <div id="proToastContainer"></div>
 

@@ -13,12 +13,21 @@
    Lifecycle mirrors landing-3d.js (IIFE, prefersReduced gate, canRun,
    DPR-capped sizing to parent, delta-time rAF loop, visibility pause,
    resize listener, stop()/cleanup()).
-   Exposes window.LessonSky = { start, stop, running }
+
+   Exposes TWO independent instances of the same night-sky engine:
+     window.LessonSky → draws into <canvas id="lessonSky"> (lesson page)
+     window.EditorSky → draws into <canvas id="editorSky"> (built-in code
+                        editor panel, so the editor matches the lesson theme)
+   The engine is parameterised by canvas id via makeSky(canvasId); each
+   instance owns its own state, rAF loop, and listeners.
    ============================================================= */
 (function () {
   "use strict";
 
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Factory: build one fully-independent night-sky bound to `canvasId`.
+  function makeSky(canvasId) {
 
   // ── Brand-tinted palette (indigo / violet / cyan / white) ──
   // Meteors pick from these so glints stay on-brand and on-AA backgrounds.
@@ -62,7 +71,7 @@
 
   function canRun() {
     if (prefersReduced) return false;
-    canvas = document.getElementById("lessonSky");
+    canvas = document.getElementById(canvasId);
     if (!canvas) return false;
     return true;
   }
@@ -379,11 +388,17 @@
     _running = false;
   }
 
-  window.LessonSky = {
-    start,
-    stop,
-    get running() {
-      return _running;
-    },
-  };
+    // Public API for THIS instance.
+    return {
+      start,
+      stop,
+      get running() {
+        return _running;
+      },
+    };
+  } // end makeSky
+
+  // Two independent instances of the same engine, each bound to its canvas.
+  window.LessonSky = makeSky("lessonSky"); // lesson page background
+  window.EditorSky = makeSky("editorSky"); // built-in code editor background
 })();

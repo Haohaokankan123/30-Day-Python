@@ -522,6 +522,8 @@ function goHome() {
   }
   // Stop the lesson sky canvas (meteors/stars/moon) when leaving the lesson.
   if (window.LessonSky) window.LessonSky.stop();
+  // Stop the editor's star/meteor canvas too, so nothing keeps rendering.
+  if (window.EditorSky) window.EditorSky.stop();
   buildPreviewGrid();
   // Re-trigger scroll reveals for sections now visible
   setTimeout(() => {
@@ -1850,6 +1852,12 @@ function toggleFloatingPlayground() {
   if (window.PanelFX && window.PanelFX.editor) {
     if (isOpen) window.PanelFX.editor.start();
     else window.PanelFX.editor.stop();
+  }
+  // Stars + meteor background (same engine as the lesson page). Start in a
+  // deferred frame so #editorSky is laid out (sized to the open panel) first.
+  if (window.EditorSky) {
+    if (isOpen) requestAnimationFrame(() => window.EditorSky.start());
+    else window.EditorSky.stop();
   }
   syncPanelPositions();
 }

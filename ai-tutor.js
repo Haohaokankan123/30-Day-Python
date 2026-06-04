@@ -6,6 +6,7 @@
 
 const AITutor = (() => {
   let useCodeContext = false;
+  let thinkMode = false;
   let history = [];
   let currentAssistantEl = null;
   let isGenerating = false;
@@ -355,9 +356,12 @@ const AITutor = (() => {
       if (code === "# Type your Python here!\nprint('Hello, Python!')") code = "";
     }
 
-    const fullPrompt = code
+    let fullPrompt = code
       ? `Here is my current Python code:\n\`\`\`python\n${code}\n\`\`\`\n\nMy question: ${userText}`
       : userText;
+    if (thinkMode) {
+      fullPrompt = `Please think step by step and give a thorough, detailed explanation.\n\n${fullPrompt}`;
+    }
 
     // Ensure session exists (creates one named after first message)
     await ensureSession(userText);
@@ -372,10 +376,11 @@ const AITutor = (() => {
     if (sess) { sess.updated_at = new Date().toISOString(); _sessions.sort((a,b) => b.updated_at > a.updated_at ? 1 : -1); }
     renderSidebar();
 
+    autoResize(ta);
     isGenerating = true;
     setStatus("Thinking…");
     const btn = document.getElementById("tutorSendBtn");
-    if (btn) { btn.disabled = true; btn.textContent = "…"; }
+    if (btn) { btn.disabled = true; btn.classList.add("loading"); btn.classList.remove("has-text"); }
 
     startAssistantBubble();
 
@@ -440,7 +445,8 @@ const AITutor = (() => {
       setStatus("Network error. Check your connection.");
     } finally {
       isGenerating = false;
-      if (btn) { btn.disabled = false; btn.textContent = "Send"; }
+      if (btn) { btn.disabled = false; btn.classList.remove("loading"); }
+      updateSendState();
     }
   }
 
@@ -468,6 +474,27 @@ const AITutor = (() => {
     if (btn) btn.classList.toggle("active", useCodeContext);
   }
 
+  function toggleThink() {
+    thinkMode = !thinkMode;
+    const btn = document.getElementById("tutorThinkBtn");
+    if (btn) btn.classList.toggle("active", thinkMode);
+  }
+
+  // Reflect whether the textarea has text on the send button (bright vs dim)
+  function updateSendState() {
+    const ta  = document.getElementById("tutorTextarea");
+    const btn = document.getElementById("tutorSendBtn");
+    if (!ta || !btn) return;
+    btn.classList.toggle("has-text", ta.value.trim().length > 0);
+  }
+
+  // Grow the textarea with content up to its CSS max-height
+  function autoResize(ta) {
+    if (!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = Math.min(ta.scrollHeight, 160) + "px";
+  }
+
   function clearHistory() { newChat(); }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -476,11 +503,38 @@ const AITutor = (() => {
       ta.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
       });
+      ta.addEventListener("input", () => { autoResize(ta); updateSendState(); });
+    }
+
+    // Quick-prompt chips: fill the textarea (optionally enabling code context) and send
+    const chips = document.getElementById("tutorChips");
+    if (chips) {
+      chips.addEventListener("click", (e) => {
+        const chip = e.target.closest(".tutor-chip");
+        if (!chip) return;
+        const prompt = chip.getAttribute("data-prompt") || "";
+        if (chip.getAttribute("data-usecode") === "1" && !useCodeContext) toggleContext();
+        if (ta) { ta.value = prompt; autoResize(ta); updateSendState(); ta.focus(); }
+        send();
+      });
+    }
+
+    // Screenshot upload: acknowledge the file by naming it in the prompt
+    const imgInput = document.getElementById("tutorImageInput");
+    if (imgInput) {
+      imgInput.addEventListener("change", () => {
+        const f = imgInput.files && imgInput.files[0];
+        if (!f || !ta) return;
+        const note = `(I attached a screenshot: ${f.name}) `;
+        ta.value = note + ta.value;
+        autoResize(ta); updateSendState(); ta.focus();
+        imgInput.value = "";
+      });
     }
   });
 
   return {
-    toggle, toggleContext, send, clearHistory,
+    toggle, toggleContext, toggleThink, send, clearHistory,
     toggleSidebar, newChat, loadSession, deleteSession,
   };
 })();

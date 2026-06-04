@@ -55,57 +55,6 @@
   }
 
   /* -------------------------------------------------------------
-     makeTextPlaneTexture(text) — SHARED helper (editor + lesson)
-     Draws a monospace code string with an indigo/cyan glow onto a
-     transparent 2D canvas, then wraps it in a THREE.CanvasTexture.
-     Returns { texture, aspect } so callers size their plane.
-     ------------------------------------------------------------- */
-  function makeTextPlaneTexture(THREE, text) {
-    const pad = 24;
-    const fontSize = 48;
-    const font =
-      fontSize +
-      'px "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace';
-
-    // Measure on a throwaway context to size the real canvas.
-    const meas = document.createElement("canvas").getContext("2d");
-    meas.font = font;
-    const textW = Math.ceil(meas.measureText(text).width);
-
-    const cw = textW + pad * 2;
-    const ch = fontSize + pad * 2;
-
-    const cvs = document.createElement("canvas");
-    cvs.width = cw;
-    cvs.height = ch;
-    const ctx = cvs.getContext("2d");
-
-    ctx.font = font;
-    ctx.textBaseline = "middle";
-    ctx.textAlign = "left";
-
-    // Glow pass (cyan halo) then crisp indigo glyphs on top.
-    ctx.shadowColor = CYAN;
-    ctx.shadowBlur = 18;
-    ctx.fillStyle = INDIGO_LIGHT;
-    ctx.fillText(text, pad, ch / 2);
-
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = "#c7d2fe"; // indigo-200, crisp top layer
-    ctx.fillText(text, pad, ch / 2);
-
-    const texture = new THREE.CanvasTexture(cvs);
-    if (THREE.SRGBColorSpace !== undefined) {
-      texture.colorSpace = THREE.SRGBColorSpace;
-    }
-    texture.minFilter = THREE.LinearFilter;
-    texture.magFilter = THREE.LinearFilter;
-    texture.generateMipmaps = false;
-
-    return { texture, aspect: cw / ch };
-  }
-
-  /* -------------------------------------------------------------
      makeBubbleTexture(kind) — tutor scene helper
      Draws a rounded-rect chat bubble. kind "q" => indigo tint,
      kind "a" => cyan/violet tint. Transparent background.
@@ -482,52 +431,10 @@
     scene.add(stars);
     disposables.push(stars);
 
-    // ── A few drifting code planes (reuse shared text helper) ──
-    const TOP = 8;
-    const BOTTOM = -8;
-    const SPAN = TOP - BOTTOM;
-    const planeHeight = 0.7;
-    const codeCount = 4; // 3-5 faint code planes
-    const codeLines = [
-      "for i in range(10):",
-      "def greet(name):",
-      "x = [n*n for n in nums]",
-      "import math",
-      "class Robot:",
-    ];
-
-    const planes = [];
-    for (let i = 0; i < codeCount; i++) {
-      const text = codeLines[i % codeLines.length];
-      const { texture, aspect } = makeTextPlaneTexture(THREE, text);
-      const geo = new THREE.PlaneGeometry(planeHeight * aspect, planeHeight);
-      const mat = new THREE.MeshBasicMaterial({
-        map: texture,
-        transparent: true,
-        opacity: 0.32,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        depthTest: false,
-      });
-      const mesh = new THREE.Mesh(geo, mat);
-
-      const x = (Math.random() - 0.5) * 16;
-      const z = (Math.random() - 0.5) * 5 - 1;
-      const y = BOTTOM + Math.random() * SPAN;
-      mesh.position.set(x, y, z);
-      scene.add(mesh);
-
-      planes.push({
-        mesh,
-        speed: 0.28 + Math.random() * 0.42,
-        baseX: x,
-        swayAmp: 0.08 + Math.random() * 0.12,
-        swaySpeed: 0.25 + Math.random() * 0.4,
-        swayPhase: Math.random() * Math.PI * 2,
-        baseOpacity: 0.22 + Math.random() * 0.16,
-      });
-      disposables.push(mesh);
-    }
+    // NOTE: the drifting Python code planes were removed here — Charles asked
+    // for NO code snippets in the lesson background (stars/meteor only; the
+    // meteor shower lives in lesson-sky.js on #lessonSky). Only the starfield
+    // remains in this WebGL layer.
 
     function step(t, dt) {
       // Starfield: gentle upward drift + opacity twinkle.
@@ -539,27 +446,6 @@
       }
       pos.needsUpdate = true;
       stars.material.opacity = 0.45 + Math.sin(t * 1.2) * 0.14; // twinkle
-
-      // Code planes: drift up, sway, fade-recycle.
-      for (let i = 0; i < planes.length; i++) {
-        const p = planes[i];
-        const m = p.mesh;
-        m.position.y += p.speed * dt;
-        m.position.x = p.baseX + Math.sin(t * p.swaySpeed + p.swayPhase) * p.swayAmp;
-
-        const edge = Math.min(
-          1,
-          (TOP - m.position.y) / 1.8,
-          (m.position.y - BOTTOM) / 1.8
-        );
-        m.material.opacity = p.baseOpacity * Math.max(0, edge);
-
-        if (m.position.y > TOP) {
-          m.position.y = BOTTOM;
-          p.baseX = (Math.random() - 0.5) * 16;
-          m.position.z = (Math.random() - 0.5) * 5 - 1;
-        }
-      }
     }
 
     return { step, disposables };

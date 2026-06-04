@@ -57,23 +57,21 @@
 
   // ── Tunables ──────────────────────────────────────────────────
   // Slab depth in px (the visible thickness of the side faces).
-  const DEPTH = 26;
+  const DEPTH = 30;
 
-  // Resting tilt (degrees). ~-9° yaw / ~+4° pitch: clearly 3D at rest, but the
-  // front face stays square-on enough that the code reads easily. Matches the
-  // other .panel-3d-real resting tilt so the whole hero feels consistent.
-  const REST_YAW = -9;   // rotateY
-  const REST_PITCH = 4;  // rotateX
+  // Resting tilt — clearly 3D at rest without the edge blade protruding too far.
+  const REST_YAW = -15;  // rotateY — shows left/right edge clearly
+  const REST_PITCH = 7;  // rotateX — shows top/bottom edge
 
   // Extra tilt added by the cursor, on TOP of the resting angle.
-  const HOVER_YAW_RANGE = 8;   // deg added across the stage width
-  const HOVER_PITCH_RANGE = 6; // deg added across the stage height
+  const HOVER_YAW_RANGE = 12;  // deg added across the stage width
+  const HOVER_PITCH_RANGE = 9; // deg added across the stage height
 
   // Spring easing toward the target tilt (per frame).
   const EASE = 0.10;
 
-  // Perspective distance (px) on the stage. Smaller = stronger 3D.
-  const PERSPECTIVE = 1300;
+  // Perspective distance (px) on the stage. Smaller = stronger 3D foreshortening.
+  const PERSPECTIVE = 900;
 
   // ── Module state ──────────────────────────────────────────────
   let _running = false;
