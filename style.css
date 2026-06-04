@@ -190,10 +190,8 @@ body {
    .cursor-dot  = small filled circle, tracks instantly
    .cursor-ring = larger ring, lerps behind the dot
    Both hidden by default; only visible on desktop-pointer (no touch). */
-body.cursor-active { cursor: none; }
-body.cursor-active a,
-body.cursor-active button,
-body.cursor-active [role="button"] { cursor: none; }
+body.cursor-active,
+body.cursor-active * { cursor: none !important; }
 
 .cursor-dot,
 .cursor-ring {

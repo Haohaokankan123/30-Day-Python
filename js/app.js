@@ -1894,7 +1894,7 @@ const FloatingPlayground = (() => {
     if (!mountEl || editor) return;
     editor = ace.edit(mountEl, {
       mode: "ace/mode/python",
-      theme: "ace/theme/tomorrow_night_eighties",
+      theme: "ace/theme/tomorrow_night",
       fontSize: 13,
       showPrintMargin: false,
       tabSize: 4,
@@ -1904,6 +1904,20 @@ const FloatingPlayground = (() => {
     editor.session.setOption("useWorker", false);
     editor.setValue("# Type your Python here!\nprint('Hello, Python!')\n", -1);
     editor.clearSelection();
+    // Make the editor container transparent so the night-sky canvas shows through.
+    // ACE injects theme CSS into <head> at runtime which overwrites our stylesheet
+    // overrides, so we must clear the background via inline style after mount.
+    const makeTransparent = () => {
+      mountEl.style.background = "transparent";
+      const scroller = mountEl.querySelector(".ace_scroller");
+      const content = mountEl.querySelector(".ace_content");
+      const gutter  = mountEl.querySelector(".ace_gutter");
+      if (scroller) scroller.style.background = "transparent";
+      if (content)  content.style.background  = "transparent";
+      if (gutter)   gutter.style.background   = "transparent";
+    };
+    editor.on("changeTheme", makeTransparent);
+    makeTransparent();
   }
 
   async function run() {
