@@ -990,6 +990,12 @@
       if (window.PanelPhysics) { window.PanelPhysics.init(); return; }
       if (tries > 0) setTimeout(() => waitForPhysics(tries - 1), 120);
     })(20);
+    // Truly-3D hero code window (lit Three.js box + crisp CSS3D front face). Same
+    // async-module retry pattern as PanelPhysics above.
+    (function waitForHero(tries) {
+      if (window.HeroWindow3D) { window.HeroWindow3D.init(); return; }
+      if (tries > 0) setTimeout(() => waitForHero(tries - 1), 120);
+    })(20);
     if (hasGsap && window.ScrollTrigger) {
       // Recalc trigger start/end once layout settles. Fonts change heights;
       // the code-typer also calls ScrollTrigger.refresh() when it finishes.
@@ -1019,6 +1025,10 @@
     // Tear down the real-3D panel tilt + physics world so nothing renders hidden.
     if (window.PanelPhysics) {
       window.PanelPhysics.destroy();
+    }
+    // Tear down the truly-3D hero window so its WebGL + CSS3D loop stops while hidden.
+    if (window.HeroWindow3D) {
+      window.HeroWindow3D.destroy();
     }
     teardownAll();
   }

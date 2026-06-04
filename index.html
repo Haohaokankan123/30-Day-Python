@@ -21,7 +21,7 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
         />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-        <link rel="stylesheet" href="style.css?v=43" />
+        <link rel="stylesheet" href="style.css?v=45" />
         <script>
         (function(){
             var t=localStorage.getItem('py30_theme')||'dark';
@@ -161,16 +161,19 @@
                 <!-- RIGHT col: animated code window — 3D objects float behind it.
                      tilt-3d = follows the cursor in 3D; typing replays on hover. -->
                 <div class="landing-hero-right hero-sub-fade">
-                    <div class="landing-code-window panel-3d-real" id="heroCodeWindow">
-                        <div class="landing-code-titlebar">
-                            <span class="lc-dot dot-red"></span
-                            ><span class="lc-dot dot-yellow"></span
-                            ><span class="lc-dot dot-green"></span>
-                            <span class="landing-code-filename"
-                                >day_10_loops.py</span
-                            >
+                    <div id="heroWindow3DStage">
+                        <canvas id="heroWindowGL"></canvas>
+                        <div class="landing-code-window panel-3d-real" id="heroCodeWindow">
+                            <div class="landing-code-titlebar">
+                                <span class="lc-dot dot-red"></span
+                                ><span class="lc-dot dot-yellow"></span
+                                ><span class="lc-dot dot-green"></span>
+                                <span class="landing-code-filename"
+                                    >day_10_loops.py</span
+                                >
+                            </div>
+                            <pre class="landing-code-body" id="heroCodePre"></pre>
                         </div>
-                        <pre class="landing-code-body" id="heroCodePre"></pre>
                     </div>
                 </div>
             </div>
@@ -1146,7 +1149,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
         <script src="days-data.js?v=3"></script>
-        <script src="app.js?v=20"></script>
+        <script src="app.js?v=21"></script>
         <script src="playground.js?v=14"></script>
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
         <script src="ai-tutor.js?v=13"></script>
@@ -1183,8 +1186,11 @@
         <!-- 3D tilt + AI-tutor showcase demo (must load before landing-fx boot()) -->
         <script src="landing-tilt.js?v=2"></script>
         <!-- Real 3D panel tilt + cannon-es physics (ES module; crisp-text panels) -->
-        <script type="module" src="panel-physics.js?v=2"></script>
-        <script src="landing-fx.js?v=20"></script>
+        <script type="module" src="panel-physics.js?v=3"></script>
+        <!-- Truly-3D hero code window: lit Three.js box + crisp CSS3D HTML front face
+             (ES module; uses the import map above; after panel-physics) -->
+        <script src="hero-3d-window.js?v=5"></script>
+        <script src="landing-fx.js?v=21"></script>
         <!-- Pro toast notification -->
         <div id="proToastContainer"></div>
 

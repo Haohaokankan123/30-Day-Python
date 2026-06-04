@@ -127,7 +127,11 @@ import * as CANNON from "cannon-es";
 
   function initTilt() {
     if (!canTilt()) return;
-    const els = Array.from(document.querySelectorAll(".panel-3d-real"));
+    // Skip #heroCodeWindow — hero-3d-window.js owns its 3D (lit box + CSS3D);
+    // letting panel-physics also tilt it would make two systems fight one element.
+    const els = Array.from(document.querySelectorAll(".panel-3d-real")).filter(
+      (el) => el.id !== "heroCodeWindow"
+    );
     if (!els.length) return;
 
     tiltActive = true;

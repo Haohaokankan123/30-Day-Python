@@ -8069,6 +8069,125 @@ select:focus-visible {
     align-self: flex-end;
 }
 
+/* ── Truly-3D hero window — CSS extruded slab (hero-3d-window.js) ──
+   The window is rebuilt as a real box: the #heroCodeWindow HTML is the FRONT
+   face (crisp text), and four thin divs form the side faces so you see genuine
+   thickness when it tilts. Everything lives under one preserve-3d wrapper, so
+   the text can never drift off the box. The stage supplies the perspective and
+   captures hover. When the module no-ops (reduced-motion / mobile) the plain
+   flat #heroCodeWindow stays and still looks correct. */
+#heroWindow3DStage {
+    position: relative;
+    width: min(500px, 86%);   /* matches the code window's responsive width */
+    margin-left: auto;        /* right-aligned, same as the code window */
+    margin-bottom: -30px;     /* match the code window's resting offset */
+    align-self: flex-end;
+    perspective: 1300px;       /* the 3D viewing context for the slab */
+    perspective-origin: 60% 40%;
+    pointer-events: none;     /* the window inside re-enables its own pointer events */
+}
+/* The WebGL canvas is unused in CSS-slab mode (the module hides it); keep the
+   rule so any stray reference still resolves to something harmless. */
+#heroWindowGL {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    display: none;
+}
+/* The slab wrapper: a preserve-3d box the module rotates. Width drives the box. */
+.hero-slab {
+    position: relative;
+    width: 100%;
+    transform-style: preserve-3d;
+    transform: rotateX(4deg) rotateY(-9deg); /* resting tilt before JS takes over */
+    transition: none;
+    will-change: transform;
+    pointer-events: none;     /* only the front face is interactive */
+}
+/* FRONT face — the real crisp code window, pushed forward half the depth so the
+   side faces show behind/around it. (The module sets the translateZ inline.) */
+.hero-slab-front {
+    position: relative;
+    width: 100%;
+    margin: 0 !important;
+    pointer-events: auto;     /* hover + selection work on the actual window */
+    backface-visibility: hidden;
+    /* fully opaque so the slab interior never shows through the text surface */
+    background: linear-gradient(155deg, rgba(20,18,42,0.98), rgba(10,9,24,0.99));
+}
+/* Neutralise the .panel-3d-real resting CSS-tilt for the hero window ONLY — the
+   slab owns its 3D. (All OTHER .panel-3d-real keep their tilt.) */
+#heroCodeWindow.panel-3d-real {
+    transform: translateZ(calc(var(--slab-depth, 26px) / 2));
+}
+
+/* ── The four thickness faces ──
+   Each is a thin strip placed at a box edge and rotated into depth so it reads
+   as the slab's side. Dark base + a faint violet→cyan sheen echoes the lit
+   floating cubes' edges. --slab-depth is set on .hero-slab by the module. */
+.hero-slab-face {
+    position: absolute;
+    background:
+        linear-gradient(180deg, rgba(40,34,78,0.95), rgba(8,7,20,0.98));
+    box-shadow: inset 0 0 18px rgba(124,58,237,0.18);
+    pointer-events: none;
+    backface-visibility: hidden;
+}
+/* RIGHT side face: a vertical strip at the right edge, hinged along Y. */
+.hero-slab-face--right {
+    top: 0;
+    right: 0;
+    width: var(--slab-depth, 26px);
+    height: 100%;
+    transform-origin: right center;
+    transform: rotateY(90deg) translateZ(calc(var(--slab-depth, 26px) / -2));
+    background: linear-gradient(180deg, rgba(46,38,90,0.95), rgba(10,8,24,0.98));
+    box-shadow: inset 2px 0 16px rgba(6,182,212,0.22);
+}
+/* LEFT side face. */
+.hero-slab-face--left {
+    top: 0;
+    left: 0;
+    width: var(--slab-depth, 26px);
+    height: 100%;
+    transform-origin: left center;
+    transform: rotateY(-90deg) translateZ(calc(var(--slab-depth, 26px) / -2));
+    background: linear-gradient(180deg, rgba(30,26,62,0.95), rgba(8,6,18,0.98));
+    box-shadow: inset -2px 0 16px rgba(124,58,237,0.20);
+}
+/* BOTTOM face: a horizontal strip at the bottom edge, hinged along X. */
+.hero-slab-face--bottom {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: var(--slab-depth, 26px);
+    transform-origin: center bottom;
+    transform: rotateX(-90deg) translateZ(calc(var(--slab-depth, 26px) / -2));
+    background: linear-gradient(90deg, rgba(36,30,74,0.95), rgba(10,8,24,0.98));
+    box-shadow: inset 0 -2px 16px rgba(79,70,229,0.22);
+}
+/* TOP face. */
+.hero-slab-face--top {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: var(--slab-depth, 26px);
+    transform-origin: center top;
+    transform: rotateX(90deg) translateZ(calc(var(--slab-depth, 26px) / -2));
+    background: linear-gradient(90deg, rgba(44,37,86,0.95), rgba(12,10,26,0.98));
+    box-shadow: inset 0 2px 16px rgba(99,102,241,0.22);
+}
+
+/* Reduced motion / no-JS: the module no-ops, no slab is built; the plain flat
+   #heroCodeWindow shows with no transform. */
+@media (prefers-reduced-motion: reduce) {
+    #heroWindowGL { display: none; }
+    #heroCodeWindow.panel-3d-real { transform: none; }
+}
+
 /* ── Hero title: bigger punch ── */
 .landing-title {
     font-size: clamp(48px, 5.5vw, 82px);

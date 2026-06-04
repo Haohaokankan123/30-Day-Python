@@ -2156,6 +2156,12 @@ function initCodeTyper() {
   resetTyping(); // start empty — just the blinking cursor
   win.addEventListener("mouseenter", startTyping);
   win.addEventListener("mouseleave", resetTyping);
+
+  // Expose the typing controls so hero-3d-window.js can re-trigger them after
+  // it relocates #heroCodeWindow into the CSS3D layer (where the original
+  // mouseenter/mouseleave may not fire through the transformed wrapper). The
+  // 3D module attaches its own hover listener to the stage and calls these.
+  window.heroTyper = { start: startTyping, reset: resetTyping };
 }
 
 // ── Stagger curriculum grid entrance ──────────
