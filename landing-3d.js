@@ -151,7 +151,7 @@
       const col = i % 4;
       const row = Math.floor(i / 4);
 
-      const baseX = -0.5 + col * 0.8 + (i % 2) * 0.15;
+      const baseX = -1.5 + col * 0.62 + (i % 2) * 0.12;
       const baseY = 1.8 - row * 1.5 + (i % 3) * 0.25;
 
       return {
@@ -248,7 +248,7 @@
       camera.position.x = mouseX * 0.45;
       camera.position.y = -mouseY * 0.32;
       camera.position.z = 8 - Math.abs(mouseX) * 0.3;
-      camera.lookAt(0.8 + mouseX * 0.3, mouseY * 0.15, 0);
+      camera.lookAt(0.0 + mouseX * 0.3, mouseY * 0.15, 0);
 
       // Animate objects
       objects.forEach((o) => {
@@ -256,7 +256,7 @@
                 floatAmp, floatSpeed, floatPhase, rotSpeed, baseX, baseY } = o;
 
         const a = t * orbitSpeed + orbitPhase;
-        mesh.position.x = baseX + Math.cos(a) * orbitRadius * 0.45;
+        mesh.position.x = baseX + Math.cos(a) * orbitRadius * 0.30;
         mesh.position.y = baseY
                         + Math.sin(a) * orbitRadius * orbitTilt
                         + Math.sin(t * floatSpeed + floatPhase) * floatAmp;

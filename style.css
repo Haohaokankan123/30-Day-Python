@@ -8130,7 +8130,7 @@ select:focus-visible {
     width: min(540px, 88%);   /* a touch narrower so there's room beside the 3D */
     animation: none;
     pointer-events: auto;
-    margin-right: -90px;      /* sits on the right; the 3D cloud was moved left so there's a clear gap */
+    margin-right: -150px;     /* hugs the right edge; 3D cloud tightened + moved left so there's a real gap */
     margin-left: auto;        /* right-aligned within its column */
     margin-bottom: -30px;
     align-self: flex-end;
