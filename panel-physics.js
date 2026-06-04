@@ -112,9 +112,18 @@ import * as CANNON from "cannon-es";
   // =============================================================
   //  FEATURE 1 — direct CSS 3D tilt on real HTML panels (crisp text)
   // =============================================================
-  const MAX_DEG = 14; // max rotateX / rotateY tilt
+  const MAX_DEG = 14; // max rotateX / rotateY tilt added BY the cursor
   const LIFT_Z = 26; // translateZ lift on hover (px)
+  const REST_TZ = 8; // small resting lift so panels float at rest
   const EASE = 0.12; // per-frame lerp toward target
+
+  // Resting 3D angle so each panel looks 3D AT ALL TIMES (not just on hover).
+  // Panels alternate a left/right lean by index so they don't look identical.
+  // Charles: "I want it to look 3D at all times ... for all 7."
+  function restAngleFor(i) {
+    const side = i % 2 === 0 ? 1 : -1;
+    return { rx: 6, ry: 9 * side }; // gentle pitch-down + alternating yaw
+  }
 
   function initTilt() {
     if (!canTilt()) return;
@@ -123,21 +132,26 @@ import * as CANNON from "cannon-es";
 
     tiltActive = true;
 
-    panels = els.map((el) => {
+    panels = els.map((el, i) => {
       // Give the element a 3D context so rotateX/Y + translateZ have depth.
       // perspective lives on the element itself so its own children get depth.
       el.style.transformStyle = "preserve-3d";
       el.style.willChange = "transform";
-      if (!el.style.perspective) el.style.perspective = "900px";
+      if (!el.style.perspective) el.style.perspective = "1100px";
+
+      const rest = restAngleFor(i);
 
       const state = {
         el,
-        rx: 0,
-        ry: 0,
-        tz: 0,
-        trx: 0, // target rotateX
-        try_: 0, // target rotateY
-        ttz: 0, // target translateZ
+        restRx: rest.rx,
+        restRy: rest.ry,
+        // start AT the resting angle so it's 3D from the first frame
+        rx: rest.rx,
+        ry: rest.ry,
+        tz: REST_TZ,
+        trx: rest.rx, // target rotateX (defaults to resting)
+        try_: rest.ry, // target rotateY (defaults to resting)
+        ttz: REST_TZ, // target translateZ (defaults to resting lift)
         hover: false,
       };
 
@@ -147,10 +161,10 @@ import * as CANNON from "cannon-es";
       };
       const onLeave = () => {
         state.hover = false;
-        // Spring everything back to flat.
-        state.trx = 0;
-        state.try_ = 0;
-        state.ttz = 0;
+        // Spring back to the RESTING 3D angle (not flat) so it stays 3D.
+        state.trx = state.restRx;
+        state.try_ = state.restRy;
+        state.ttz = REST_TZ;
       };
 
       el.addEventListener("mouseenter", onEnter);
@@ -173,9 +187,10 @@ import * as CANNON from "cannon-es";
         // -0.5 .. 0.5 across the panel
         const px = (mx - r.left) / r.width - 0.5;
         const py = (my - r.top) / r.height - 0.5;
-        // Cursor right => rotate toward Y+, cursor down => rotate toward X-.
-        p.try_ = px * MAX_DEG * 2; // rotateY follows horizontal
-        p.trx = -py * MAX_DEG * 2; // rotateX follows vertical (inverted)
+        // Cursor tilt is ADDED on top of the resting 3D angle so the panel
+        // always looks 3D and the hover just nudges it toward the cursor.
+        p.try_ = p.restRy + px * MAX_DEG * 2; // rotateY follows horizontal
+        p.trx = p.restRx - py * MAX_DEG * 2; // rotateX follows vertical (inverted)
       }
     };
     window.addEventListener("mousemove", tiltMoveHandler, { passive: true });
@@ -188,7 +203,7 @@ import * as CANNON from "cannon-es";
       p.ry += (p.try_ - p.ry) * EASE;
       p.tz += (p.ttz - p.tz) * EASE;
       p.el.style.transform =
-        "perspective(900px) rotateX(" +
+        "perspective(1100px) rotateX(" +
         p.rx.toFixed(3) +
         "deg) rotateY(" +
         p.ry.toFixed(3) +

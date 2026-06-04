@@ -9141,17 +9141,29 @@ select:focus-visible {
 @media (prefers-reduced-motion: reduce) { .physics-fx-canvas { display: none; } }
 
 /* panel-3d-real: panel-physics.js applies an inline perspective(...) rotateX/Y/
-   translateZ transform each frame. These keep the GPU transform smooth and give
-   children real depth — text stays crisp (it's native HTML, never a texture). */
+   translateZ transform each frame (resting angle + cursor tilt). The CSS below
+   gives a permanent resting 3D angle so the panel looks 3D AT ALL TIMES even
+   before JS runs or on touch devices. Text stays crisp (native HTML, never a
+   texture). Charles: "I want it to look 3D at all times ... for all 7." */
 .panel-3d-real {
     transform-style: preserve-3d;
     will-change: transform;
+    /* resting 3D angle — JS refines per-panel (alternating yaw) when active */
+    transform: perspective(1100px) rotateX(6deg) rotateY(9deg) translateZ(8px);
     transition: box-shadow .3s ease;
+}
+/* every 2nd panel leans the other way so they don't look identical (matches the
+   JS restAngleFor() alternation) */
+.panel-3d-real:nth-of-type(even) {
+    transform: perspective(1100px) rotateX(6deg) rotateY(-9deg) translateZ(8px);
 }
 .panel-3d-real:hover {
     box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 60px rgba(124,58,237,0.28);
 }
-@media (prefers-reduced-motion: reduce) { .panel-3d-real { transform: none !important; } }
+/* Reduced motion: keep a STATIC resting 3D angle (no animation), still 3D. */
+@media (prefers-reduced-motion: reduce) {
+    .panel-3d-real { transform: perspective(1100px) rotateX(5deg) rotateY(7deg); }
+}
 
 /* ── Curriculum preview cards: 3D hover depth (CSS-only, crisp text) ── */
 .preview-grid { perspective: 1000px; }

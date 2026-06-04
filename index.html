@@ -21,7 +21,7 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
         />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-        <link rel="stylesheet" href="style.css?v=42" />
+        <link rel="stylesheet" href="style.css?v=43" />
         <script>
         (function(){
             var t=localStorage.getItem('py30_theme')||'dark';
@@ -328,119 +328,26 @@
                 </div>
             </div>
 
-            <!-- Features showcase -->
-            <div class="landing-features-section reveal" id="landing-features">
-                <!-- cannon-es tumbling 3D physics objects, full-bleed behind the section -->
-                <canvas id="physicsFX" class="physics-fx-canvas" aria-hidden="true"></canvas>
-                <p class="landing-eyebrow" style="text-align: center">
-                    What makes this different
-                </p>
-                <h2 class="landing-section-title" data-mask-reveal>
-                    Built-in tools. Right in your browser.
-                </h2>
-                <p class="landing-section-desc">
-                    No installs. No setup. Just open and start coding.
-                </p>
-
-                <!-- AI Tutor + Editor demo -->
-                <div class="landing-demo-split">
-                    <!-- Left: buggy code editor -->
-                    <div class="landing-demo-editor panel-3d-real">
-                        <div class="landing-code-titlebar">
-                            <span class="lc-dot dot-red"></span
-                            ><span class="lc-dot dot-yellow"></span
-                            ><span class="lc-dot dot-green"></span>
-                            <span class="landing-code-filename"
-                                >my_code.py</span
-                            >
-                            <span class="landing-demo-tag"
-                                >Built-in Editor</span
-                            >
-                        </div>
-                        <pre
-                            class="landing-demo-code"
-                        ><span class="lc-comment"># Calculate average score</span>
-scores = [85, 92, 78, 90, 88]
-total = 0
-
-<span class="lc-keyword">for</span> score in scores
-    total += score
-
-average = total / len(scores
-<span class="lc-error">print(f&quot;Average: {average}&quot;)</span>
-
-<span class="lc-comment"># SyntaxError: invalid syntax</span></pre>
-                        <div class="landing-demo-run-row">
-                            <button
-                                class="landing-demo-run-btn liquid-glass-btn"
-                                id="demoRunBtn"
-                                onclick="runDemoCode()"
-                            >
-                                ▶ Run
-                            </button>
-                            <div
-                                class="landing-demo-output"
-                                id="demoOutput"
-                                style="opacity: 0"
-                            ></div>
-                        </div>
-                    </div>
-
-                    <!-- Right: AI chat -->
-                    <div class="landing-demo-chat panel-3d-real">
-                        <div class="landing-demo-chat-header">
-                            <span class="landing-demo-chat-icon">🤖</span>
-                            <div>
-                                <div class="landing-demo-chat-title">
-                                    AI Tutor
-                                </div>
-                                <div class="landing-demo-chat-sub">
-                                    Powered by Claude
-                                </div>
-                            </div>
-                            <span class="landing-demo-online"></span>
-                        </div>
-                        <div class="landing-demo-chat-body" id="demoChat">
-                            <!-- messages injected by JS animation -->
-                        </div>
-                        <div class="landing-demo-chat-input">
-                            <span>Ask anything about Python…</span>
-                        </div>
-                    </div>
+            <!-- ── AI Tutor showcase — moved up into the removed Built-in-tools spot ── -->
+            <div class="landing-feature landing-feature-reverse reveal" id="landing-features" style="padding-top: 40px">
+                <div class="landing-feature-left">
+                    <p class="landing-eyebrow">Stuck? Just ask.</p>
+                    <h2 class="landing-feature-title">
+                        Your own<br />AI Python tutor.
+                    </h2>
+                    <p class="landing-feature-desc">
+                        Ask anything, any time. Get hints, explanations, and code
+                        reviews in plain English — right inside every lesson.
+                    </p>
                 </div>
-
-                <!-- Feature cards row -->
-                <div class="landing-feature-cards reveal" data-gsap-managed>
-                    <div class="landing-feat-card">
-                        <div class="landing-feat-icon">⌨️</div>
-                        <h3 data-letterroll>Live Code Editor</h3>
-                        <p>
-                            Run real Python in your browser with no installs needed. Powered by Pyodide.
-                        </p>
-                    </div>
-                    <div class="landing-feat-card">
-                        <div class="landing-feat-icon">✦</div>
-                        <h3 data-letterroll>AI Tutor</h3>
-                        <p>
-                            Stuck on a bug? Ask the AI Tutor. It reads your code
-                            and explains the fix in plain English.
-                        </p>
-                    </div>
-                    <div class="landing-feat-card">
-                        <div class="landing-feat-icon">◈</div>
-                        <h3 data-letterroll>Exercises + Quizzes</h3>
-                        <p>
-                            Every day includes hands-on exercises and a quiz to
-                            lock in what you learned.
-                        </p>
-                    </div>
-                    <div class="landing-feat-card">
-                        <div class="landing-feat-icon">↗</div>
-                        <h3 data-letterroll>Track Progress</h3>
-                        <p>
-                            Your progress is saved automatically. Pick up
-                            exactly where you left off.
-                        </p>
+                <div class="landing-feature-card-wrap">
+                    <div class="tutor-demo-card panel-3d-real">
+                        <div class="tutor-demo-header">
+                            <span class="tutor-demo-avatar">✦</span>
+                            <span class="tutor-demo-name">AI Tutor</span>
+                            <span class="tutor-demo-status">online</span>
+                        </div>
+                        <div class="tutor-demo-chat" id="tutorDemoChat"></div>
                     </div>
                 </div>
             </div>
@@ -515,30 +422,6 @@ average = total / len(scores
                                 </button>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ── AI Tutor showcase — animated Q&A demo, 3D tilt on hover ── -->
-            <div class="landing-feature landing-feature-reverse reveal">
-                <div class="landing-feature-left">
-                    <p class="landing-eyebrow">Stuck? Just ask.</p>
-                    <h2 class="landing-feature-title">
-                        Your own<br />AI Python tutor.
-                    </h2>
-                    <p class="landing-feature-desc">
-                        Ask anything, any time. Get hints, explanations, and code
-                        reviews in plain English — right inside every lesson.
-                    </p>
-                </div>
-                <div class="landing-feature-card-wrap">
-                    <div class="tutor-demo-card panel-3d-real">
-                        <div class="tutor-demo-header">
-                            <span class="tutor-demo-avatar">✦</span>
-                            <span class="tutor-demo-name">AI Tutor</span>
-                            <span class="tutor-demo-status">online</span>
-                        </div>
-                        <div class="tutor-demo-chat" id="tutorDemoChat"></div>
                     </div>
                 </div>
             </div>
@@ -1300,7 +1183,7 @@ average = total / len(scores
         <!-- 3D tilt + AI-tutor showcase demo (must load before landing-fx boot()) -->
         <script src="landing-tilt.js?v=2"></script>
         <!-- Real 3D panel tilt + cannon-es physics (ES module; crisp-text panels) -->
-        <script type="module" src="panel-physics.js?v=1"></script>
+        <script type="module" src="panel-physics.js?v=2"></script>
         <script src="landing-fx.js?v=20"></script>
         <!-- Pro toast notification -->
         <div id="proToastContainer"></div>
