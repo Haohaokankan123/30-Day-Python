@@ -21,6 +21,8 @@
 
   function isChecked() { return _checked; }
 
+  const OWNER_EMAIL = "haiou.chenho@gmail.com";
+
   async function refresh() {
     const user = currentUser();
     const client = sb();
@@ -29,6 +31,13 @@
       _checked = true;
       window.dispatchEvent(new CustomEvent("pro:updated"));
       return false;
+    }
+    // Owner always has full access — no DB check needed.
+    if (user.email === OWNER_EMAIL) {
+      _isPro = true;
+      _checked = true;
+      window.dispatchEvent(new CustomEvent("pro:updated"));
+      return true;
     }
     try {
       const { data, error } = await client
