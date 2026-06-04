@@ -1,0 +1,682 @@
+{
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/diagnose/scripts/hitl-loop.template.sh": {
+    "mtime": 1779040784.6179242,
+    "ast_hash": "46a2a00761be2785e59661f0e3c11471",
+    "semantic_hash": "46a2a00761be2785e59661f0e3c11471"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.claude/hooks/recall_memories.py": {
+    "mtime": 1778280137.8592474,
+    "ast_hash": "0bd19a94bd5393075b84b514f227e182",
+    "semantic_hash": "0bd19a94bd5393075b84b514f227e182"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.claude/hooks/save_memory.py": {
+    "mtime": 1778280137.859442,
+    "ast_hash": "51dd308bb23a373f52723f34cda495e9",
+    "semantic_hash": "51dd308bb23a373f52723f34cda495e9"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.claude/settings.json": {
+    "mtime": 1780039099.7455344,
+    "ast_hash": "8ef7a9c558279bce1aeab10f263f40f2",
+    "semantic_hash": "8ef7a9c558279bce1aeab10f263f40f2"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.claude/settings.local.json": {
+    "mtime": 1780454353.3985837,
+    "ast_hash": "701c235aebf90fe9cf78d9ff986a6e1b",
+    "semantic_hash": "701c235aebf90fe9cf78d9ff986a6e1b"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/api/chat.js": {
+    "mtime": 1779436441.11734,
+    "ast_hash": "3ddda3a8a7c50621d1914bc988edd791",
+    "semantic_hash": "3ddda3a8a7c50621d1914bc988edd791"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/api/checkout.js": {
+    "mtime": 1779337576.835646,
+    "ast_hash": "9ff75f46616058ac3c7019835c42696c",
+    "semantic_hash": "9ff75f46616058ac3c7019835c42696c"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/api/stripe-webhook.js": {
+    "mtime": 1779337576.8358047,
+    "ast_hash": "1e8415246e04cf789d3ec34b4c5de2fb",
+    "semantic_hash": "1e8415246e04cf789d3ec34b4c5de2fb"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/.claude/settings.json": {
+    "mtime": 1780038795.7641654,
+    "ast_hash": "55a2eae5fc8c6388c2e585dc58a4853f",
+    "semantic_hash": "55a2eae5fc8c6388c2e585dc58a4853f"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut.rb": {
+    "mtime": 1780038795.766444,
+    "ast_hash": "3e2edc6f5b3a9ccec23ddd5bda4f6684",
+    "semantic_hash": "3e2edc6f5b3a9ccec23ddd5bda4f6684"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/backup_libraries.rb": {
+    "mtime": 1780038795.7680924,
+    "ast_hash": "a0f8191a6ad37cbb8784c2beb45ecc9b",
+    "semantic_hash": "a0f8191a6ad37cbb8784c2beb45ecc9b"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/contact_sheet.rb": {
+    "mtime": 1780038795.7682536,
+    "ast_hash": "eb4900c2a29fc55e7949c3a9df227179",
+    "semantic_hash": "eb4900c2a29fc55e7949c3a9df227179"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/contact_sheet_job.rb": {
+    "mtime": 1780038795.7683344,
+    "ast_hash": "3e50a37a9e89df0a817093d44e0b381d",
+    "semantic_hash": "3e50a37a9e89df0a817093d44e0b381d"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/distribution.rb": {
+    "mtime": 1780038795.7684116,
+    "ast_hash": "ed7125857cacf99ecfbe3c73f0f2a9cc",
+    "semantic_hash": "ed7125857cacf99ecfbe3c73f0f2a9cc"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/editor_base.rb": {
+    "mtime": 1780038795.7685316,
+    "ast_hash": "b065687f221742edbd49c867fa1660c9",
+    "semantic_hash": "b065687f221742edbd49c867fa1660c9"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/export.rb": {
+    "mtime": 1780038795.768712,
+    "ast_hash": "810a978408ac1f6b95c4c58fbf898bbe",
+    "semantic_hash": "810a978408ac1f6b95c4c58fbf898bbe"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/fcp7.rb": {
+    "mtime": 1780038795.7688706,
+    "ast_hash": "4bb084c9f2f0c73904d384a993b709a0",
+    "semantic_hash": "4bb084c9f2f0c73904d384a993b709a0"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/fcpx.rb": {
+    "mtime": 1780038795.7689586,
+    "ast_hash": "4d31e7d68dbb37a85b654b2ff13da7a1",
+    "semantic_hash": "4d31e7d68dbb37a85b654b2ff13da7a1"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/full_transcript.rb": {
+    "mtime": 1780038795.7690341,
+    "ast_hash": "89d23b3d76f245471cbe70e8852f0267",
+    "semantic_hash": "89d23b3d76f245471cbe70e8852f0267"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/library.rb": {
+    "mtime": 1780038795.7693472,
+    "ast_hash": "445d23f1371b94399550155c847f62a1",
+    "semantic_hash": "445d23f1371b94399550155c847f62a1"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/prepare_audio_script.rb": {
+    "mtime": 1780038795.769446,
+    "ast_hash": "3ae4ed11cde307a3ab98b30dbc12096a",
+    "semantic_hash": "3ae4ed11cde307a3ab98b30dbc12096a"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/script_extractor.rb": {
+    "mtime": 1780038795.7695296,
+    "ast_hash": "fde2e0cb7d56c5bfbe23730e12cd2593",
+    "semantic_hash": "fde2e0cb7d56c5bfbe23730e12cd2593"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/version.rb": {
+    "mtime": 1780038795.7696018,
+    "ast_hash": "ca11e6f4698a6ac1493260054640468d",
+    "semantic_hash": "ca11e6f4698a6ac1493260054640468d"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/scripts/001_migrate_0.2_to_0.3.rb": {
+    "mtime": 1780038795.7698307,
+    "ast_hash": "af52b45a9ff39d081ca22430fef3a2d2",
+    "semantic_hash": "af52b45a9ff39d081ca22430fef3a2d2"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/scripts/002_migrate_add_transcript_refinement.rb": {
+    "mtime": 1780038795.769922,
+    "ast_hash": "05152447201347573f2ca110b2712e69",
+    "semantic_hash": "05152447201347573f2ca110b2712e69"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/scripts/003_migrate_add_summary.rb": {
+    "mtime": 1780038795.7699955,
+    "ast_hash": "7634336286ed695912c7f2f96d8d14a3",
+    "semantic_hash": "7634336286ed695912c7f2f96d8d14a3"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/scripts/004_migrate_roughcuts_to_cuts.rb": {
+    "mtime": 1780038795.7700737,
+    "ast_hash": "25a3ba69077d770eaeaed944afa957f1",
+    "semantic_hash": "25a3ba69077d770eaeaed944afa957f1"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/scripts/migrate_all.rb": {
+    "mtime": 1780038795.7701445,
+    "ast_hash": "d5dfce95d6129ab486354a2a0264ce18",
+    "semantic_hash": "d5dfce95d6129ab486354a2a0264ce18"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/scripts/upload_test_assets.sh": {
+    "mtime": 1780038795.7703,
+    "ast_hash": "7fe3f456a2c90f3e3e3c7f719293315d",
+    "semantic_hash": "7fe3f456a2c90f3e3e3c7f719293315d"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/buttercut/backup_spec.rb": {
+    "mtime": 1780038795.7742794,
+    "ast_hash": "bb3ff0f6fb6c8668780c4a121f08a049",
+    "semantic_hash": "bb3ff0f6fb6c8668780c4a121f08a049"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/buttercut/contact_sheet_benchmark_spec.rb": {
+    "mtime": 1780038795.7743614,
+    "ast_hash": "bd3803484672e7ff6a3b529fe40a2adb",
+    "semantic_hash": "bd3803484672e7ff6a3b529fe40a2adb"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/buttercut/contact_sheet_spec.rb": {
+    "mtime": 1780038795.774536,
+    "ast_hash": "d40673cadcab188896d11f27d88b85ac",
+    "semantic_hash": "d40673cadcab188896d11f27d88b85ac"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/buttercut/fcp7_spec.rb": {
+    "mtime": 1780038795.7746713,
+    "ast_hash": "e885ce2b792be1797c9e22f17a991d0a",
+    "semantic_hash": "e885ce2b792be1797c9e22f17a991d0a"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/buttercut/fcpx_spec.rb": {
+    "mtime": 1780038795.7747855,
+    "ast_hash": "d683cf57459d4039127d7e8e6fe60a29",
+    "semantic_hash": "d683cf57459d4039127d7e8e6fe60a29"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/buttercut/library_spec.rb": {
+    "mtime": 1780038795.7749014,
+    "ast_hash": "4ba8b9e2ea2acb97585ee2f59d692b5f",
+    "semantic_hash": "4ba8b9e2ea2acb97585ee2f59d692b5f"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/buttercut_spec.rb": {
+    "mtime": 1780038795.7749784,
+    "ast_hash": "eeaabe74b538b6a709322f8c44237491",
+    "semantic_hash": "eeaabe74b538b6a709322f8c44237491"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/migrations_spec.rb": {
+    "mtime": 1780038795.782962,
+    "ast_hash": "0ebb322070987264dc5e58a4208eedbe",
+    "semantic_hash": "0ebb322070987264dc5e58a4208eedbe"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/spec_helper.rb": {
+    "mtime": 1780038795.7830544,
+    "ast_hash": "698bf2aa70731a31f6e824ebba6f679a",
+    "semantic_hash": "698bf2aa70731a31f6e824ebba6f679a"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/support/fixtures.rb": {
+    "mtime": 1780038795.7831993,
+    "ast_hash": "2d3baec990d3ad6966afa6ad6c4ff4c5",
+    "semantic_hash": "2d3baec990d3ad6966afa6ad6c4ff4c5"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/video_metadata_spec.rb": {
+    "mtime": 1780038795.783293,
+    "ast_hash": "d34504fa53871bfe9ab5a1291c089c82",
+    "semantic_hash": "d34504fa53871bfe9ab5a1291c089c82"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/ai-tutor.js": {
+    "mtime": 1780557214.013067,
+    "ast_hash": "aed9e523842031b7494bde105a7c3ba9",
+    "semantic_hash": "aed9e523842031b7494bde105a7c3ba9"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/app.js": {
+    "mtime": 1780557214.0135338,
+    "ast_hash": "ff8bf610b1007d3a53711944f3291e00",
+    "semantic_hash": "ff8bf610b1007d3a53711944f3291e00"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/auth.js": {
+    "mtime": 1779501600.3280892,
+    "ast_hash": "ac2d5b8ae724cf6c2041ce87131d85c1",
+    "semantic_hash": "ac2d5b8ae724cf6c2041ce87131d85c1"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/days-data.js": {
+    "mtime": 1780040020.8972983,
+    "ast_hash": "1bb6473cff0c4377e3a5e7db18818c92",
+    "semantic_hash": "1bb6473cff0c4377e3a5e7db18818c92"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/hero-3d-window.js": {
+    "mtime": 1780557214.0138283,
+    "ast_hash": "5a6e4ccffe273dd509ff3981e1009e79",
+    "semantic_hash": "5a6e4ccffe273dd509ff3981e1009e79"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/landing-3d.js": {
+    "mtime": 1780557214.0143204,
+    "ast_hash": "4066ef982657f96aa5052fcc1cd3d0ae",
+    "semantic_hash": "4066ef982657f96aa5052fcc1cd3d0ae"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/landing-fx.js": {
+    "mtime": 1780557214.0147507,
+    "ast_hash": "41253d37210ab19af7596f352608b289",
+    "semantic_hash": "41253d37210ab19af7596f352608b289"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/landing-tilt.js": {
+    "mtime": 1780557214.0151744,
+    "ast_hash": "ba7d7ff537bac2f86ba84cd64a9efba9",
+    "semantic_hash": "ba7d7ff537bac2f86ba84cd64a9efba9"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/lesson-sky.js": {
+    "mtime": 1780557214.0154767,
+    "ast_hash": "32edd1c968a4cfbba3cf8b84f3e8c6a3",
+    "semantic_hash": "32edd1c968a4cfbba3cf8b84f3e8c6a3"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/music.js": {
+    "mtime": 1780557214.0158405,
+    "ast_hash": "77e71084fa0980a98360d6d4fde5664b",
+    "semantic_hash": "77e71084fa0980a98360d6d4fde5664b"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/panel-3d.js": {
+    "mtime": 1780557214.0160863,
+    "ast_hash": "ba6bf0423c7b0f6dfe7cf13567fd00b5",
+    "semantic_hash": "ba6bf0423c7b0f6dfe7cf13567fd00b5"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/playground.js": {
+    "mtime": 1780557214.0166864,
+    "ast_hash": "adc9e20f689547b668a5286772bf6ffd",
+    "semantic_hash": "adc9e20f689547b668a5286772bf6ffd"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/pro.js": {
+    "mtime": 1779501600.3288844,
+    "ast_hash": "e5938a406ff1342c3677611d9b6e1496",
+    "semantic_hash": "e5938a406ff1342c3677611d9b6e1496"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/settings.js": {
+    "mtime": 1780557214.0169613,
+    "ast_hash": "910452977a77394cdbcd7c091948b398",
+    "semantic_hash": "910452977a77394cdbcd7c091948b398"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/slab-3d.js": {
+    "mtime": 1780557214.0172827,
+    "ast_hash": "e1a56638085ce6d17e1436479e0b1c8f",
+    "semantic_hash": "e1a56638085ce6d17e1436479e0b1c8f"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/js/sync.js": {
+    "mtime": 1780040020.8980682,
+    "ast_hash": "f0b10155832daf934048621e88ee2759",
+    "semantic_hash": "f0b10155832daf934048621e88ee2759"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/package.json": {
+    "mtime": 1780445353.0725946,
+    "ast_hash": "7d8c3708d5462f34d0ad34581dc624a2",
+    "semantic_hash": "7d8c3708d5462f34d0ad34581dc624a2"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/skills-lock.json": {
+    "mtime": 1779040785.006836,
+    "ast_hash": "b9698903225c93da0853c8b53f5d2942",
+    "semantic_hash": "b9698903225c93da0853c8b53f5d2942"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/vercel.json": {
+    "mtime": 1779256814.6563547,
+    "ast_hash": "2289c291a59c81064cb9642daeefab70",
+    "semantic_hash": "2289c291a59c81064cb9642daeefab70"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/caveman/SKILL.md": {
+    "mtime": 1779040784.93651,
+    "ast_hash": "d675bd2128851ccb38a88a15fd941986",
+    "semantic_hash": "d675bd2128851ccb38a88a15fd941986"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/diagnose/SKILL.md": {
+    "mtime": 1779040784.6178613,
+    "ast_hash": "70cd92c9a5219eb8db60629b1bf59949",
+    "semantic_hash": "70cd92c9a5219eb8db60629b1bf59949"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/grill-me/SKILL.md": {
+    "mtime": 1779040784.9556994,
+    "ast_hash": "8cb45c74133150e6a00f18b2059aae8c",
+    "semantic_hash": "8cb45c74133150e6a00f18b2059aae8c"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/grill-with-docs/ADR-FORMAT.md": {
+    "mtime": 1779040784.64998,
+    "ast_hash": "bb327bab674f400796f64b6e2ef5850c",
+    "semantic_hash": "bb327bab674f400796f64b6e2ef5850c"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/grill-with-docs/CONTEXT-FORMAT.md": {
+    "mtime": 1779040784.6499588,
+    "ast_hash": "57e7e26a1a46884f8f952c67fb233af2",
+    "semantic_hash": "57e7e26a1a46884f8f952c67fb233af2"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/grill-with-docs/SKILL.md": {
+    "mtime": 1779040784.649981,
+    "ast_hash": "8bf29044d7890561fe964b884498ff9e",
+    "semantic_hash": "8bf29044d7890561fe964b884498ff9e"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/handoff/SKILL.md": {
+    "mtime": 1779040784.9739609,
+    "ast_hash": "a75221c11f7c7361d9005b3f2feed178",
+    "semantic_hash": "a75221c11f7c7361d9005b3f2feed178"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/improve-codebase-architecture/DEEPENING.md": {
+    "mtime": 1779040784.685829,
+    "ast_hash": "ebdd48f7e3b0afeb8085d797df543e1a",
+    "semantic_hash": "ebdd48f7e3b0afeb8085d797df543e1a"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/improve-codebase-architecture/INTERFACE-DESIGN.md": {
+    "mtime": 1779040784.6857119,
+    "ast_hash": "aee2c0695396f8c6432ba5bfe547f195",
+    "semantic_hash": "aee2c0695396f8c6432ba5bfe547f195"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/improve-codebase-architecture/LANGUAGE.md": {
+    "mtime": 1779040784.685838,
+    "ast_hash": "680627d828b489f96b92d4a2d7fa3bb6",
+    "semantic_hash": "680627d828b489f96b92d4a2d7fa3bb6"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/improve-codebase-architecture/SKILL.md": {
+    "mtime": 1779040784.6858382,
+    "ast_hash": "38f2089311c7cb0fa42d2dc4a3e1340e",
+    "semantic_hash": "38f2089311c7cb0fa42d2dc4a3e1340e"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/prototype/LOGIC.md": {
+    "mtime": 1779040784.7236419,
+    "ast_hash": "d57721452aacaa04caacd0bc7c5c2f49",
+    "semantic_hash": "d57721452aacaa04caacd0bc7c5c2f49"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/prototype/SKILL.md": {
+    "mtime": 1779040784.723763,
+    "ast_hash": "cff567de82e277cfd0e3b9e12b67cd2c",
+    "semantic_hash": "cff567de82e277cfd0e3b9e12b67cd2c"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/prototype/UI.md": {
+    "mtime": 1779040784.72376,
+    "ast_hash": "c1eaad6437c90d5660b2ffc9ff91ffb4",
+    "semantic_hash": "c1eaad6437c90d5660b2ffc9ff91ffb4"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/setup-matt-pocock-skills/SKILL.md": {
+    "mtime": 1779040784.7689104,
+    "ast_hash": "a9e22edd638f1b2bd5b3e2934eb209c3",
+    "semantic_hash": "a9e22edd638f1b2bd5b3e2934eb209c3"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/setup-matt-pocock-skills/domain.md": {
+    "mtime": 1779040784.7689114,
+    "ast_hash": "477d9959972912279da5677825ef61c3",
+    "semantic_hash": "477d9959972912279da5677825ef61c3"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/setup-matt-pocock-skills/issue-tracker-github.md": {
+    "mtime": 1779040784.768912,
+    "ast_hash": "b3268117bb0bb6b731632d35d6a1369a",
+    "semantic_hash": "b3268117bb0bb6b731632d35d6a1369a"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/setup-matt-pocock-skills/issue-tracker-gitlab.md": {
+    "mtime": 1779040784.7691069,
+    "ast_hash": "e91b1122d99f423b5375142a14b68f76",
+    "semantic_hash": "e91b1122d99f423b5375142a14b68f76"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/setup-matt-pocock-skills/issue-tracker-local.md": {
+    "mtime": 1779040784.7691085,
+    "ast_hash": "0f479992c0a4fd62a0d1be807f31e132",
+    "semantic_hash": "0f479992c0a4fd62a0d1be807f31e132"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/setup-matt-pocock-skills/triage-labels.md": {
+    "mtime": 1779040784.7689073,
+    "ast_hash": "22add54cb98451c55b20e6b7992d4a85",
+    "semantic_hash": "22add54cb98451c55b20e6b7992d4a85"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/tdd/SKILL.md": {
+    "mtime": 1779040784.817512,
+    "ast_hash": "7ca080c0a0b0986e031fe6a47771d57e",
+    "semantic_hash": "7ca080c0a0b0986e031fe6a47771d57e"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/tdd/deep-modules.md": {
+    "mtime": 1779040784.8175163,
+    "ast_hash": "fee2c44ab025f43e10ed717bb42cc9c2",
+    "semantic_hash": "fee2c44ab025f43e10ed717bb42cc9c2"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/tdd/interface-design.md": {
+    "mtime": 1779040784.8175864,
+    "ast_hash": "fc309d957e5735a1ac3d27023842fa1b",
+    "semantic_hash": "fc309d957e5735a1ac3d27023842fa1b"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/tdd/mocking.md": {
+    "mtime": 1779040784.8175542,
+    "ast_hash": "c5505e8da8f516c7dacebd01c58a4c2c",
+    "semantic_hash": "c5505e8da8f516c7dacebd01c58a4c2c"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/tdd/refactoring.md": {
+    "mtime": 1779040784.8176467,
+    "ast_hash": "ecbf516d99a591169adce39a8a933f2e",
+    "semantic_hash": "ecbf516d99a591169adce39a8a933f2e"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/tdd/tests.md": {
+    "mtime": 1779040784.8176596,
+    "ast_hash": "253c991bba867959c0146c72b93a6f6f",
+    "semantic_hash": "253c991bba867959c0146c72b93a6f6f"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/to-issues/SKILL.md": {
+    "mtime": 1779040784.837697,
+    "ast_hash": "a26ffd48dbf2d0ad29f65369b7dda42e",
+    "semantic_hash": "a26ffd48dbf2d0ad29f65369b7dda42e"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/to-prd/SKILL.md": {
+    "mtime": 1779040784.8565352,
+    "ast_hash": "6b2fd61841ec7c51e148f8483f378a65",
+    "semantic_hash": "6b2fd61841ec7c51e148f8483f378a65"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/triage/AGENT-BRIEF.md": {
+    "mtime": 1779040784.8991148,
+    "ast_hash": "7f815fa62b523f97710dde414f98e70b",
+    "semantic_hash": "7f815fa62b523f97710dde414f98e70b"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/triage/OUT-OF-SCOPE.md": {
+    "mtime": 1779040784.8991163,
+    "ast_hash": "d3fcb04f7f250f2d07ce4ccbc3a26c7d",
+    "semantic_hash": "d3fcb04f7f250f2d07ce4ccbc3a26c7d"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/triage/SKILL.md": {
+    "mtime": 1779040784.899117,
+    "ast_hash": "dafdaa928b34a5c317fd190591c89a65",
+    "semantic_hash": "dafdaa928b34a5c317fd190591c89a65"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/write-a-skill/SKILL.md": {
+    "mtime": 1779040784.9960055,
+    "ast_hash": "492ef034b4fc9e497cc69b8fed78a742",
+    "semantic_hash": "492ef034b4fc9e497cc69b8fed78a742"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/.agents/skills/zoom-out/SKILL.md": {
+    "mtime": 1779040784.9185326,
+    "ast_hash": "204f114b01386f4a0a8e6c7784266369",
+    "semantic_hash": "204f114b01386f4a0a8e6c7784266369"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/CLAUDE.md": {
+    "mtime": 1779405940.394443,
+    "ast_hash": "099651094fdb4d93afcd6f90fcbd5082",
+    "semantic_hash": "099651094fdb4d93afcd6f90fcbd5082"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/.github/workflows/ci.yml": {
+    "mtime": 1780038795.764436,
+    "ast_hash": "e784e08c69cfc0d475b0fb9cb3e5f96e",
+    "semantic_hash": "e784e08c69cfc0d475b0fb9cb3e5f96e"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/AGENTS.md": {
+    "mtime": 1780038795.7650192,
+    "ast_hash": "f35cbe31d01cacba9b305b564d324d56",
+    "semantic_hash": "f35cbe31d01cacba9b305b564d324d56"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/CHANGELOG.md": {
+    "mtime": 1780038795.7651482,
+    "ast_hash": "2c27d6ae7c480972ab11013013042c4a",
+    "semantic_hash": "2c27d6ae7c480972ab11013013042c4a"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/CLAUDE.md": {
+    "mtime": 1780038795.7652133,
+    "ast_hash": "5c27369b226fcf2be8a6cfe52224e767",
+    "semantic_hash": "5c27369b226fcf2be8a6cfe52224e767"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/README.md": {
+    "mtime": 1780038795.7657182,
+    "ast_hash": "7e716721af8289abddb66dcaada11f1b",
+    "semantic_hash": "7e716721af8289abddb66dcaada11f1b"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/docs/basic-xml-generation.md": {
+    "mtime": 1780038795.765841,
+    "ast_hash": "8cce1b985abed4080203d45d4438e339",
+    "semantic_hash": "8cce1b985abed4080203d45d4438e339"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/docs/example-library-setup.md": {
+    "mtime": 1780038795.7660248,
+    "ast_hash": "c57f9574569f648bdbed108b78b873a6",
+    "semantic_hash": "c57f9574569f648bdbed108b78b873a6"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/docs/installation.md": {
+    "mtime": 1780038795.7661164,
+    "ast_hash": "2e13f9e8a9697a94733504634f643c54",
+    "semantic_hash": "2e13f9e8a9697a94733504634f643c54"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/lib/buttercut/library.md": {
+    "mtime": 1780038795.7692225,
+    "ast_hash": "83c0cf1d4fcda54ee716e8b256c6b38d",
+    "semantic_hash": "83c0cf1d4fcda54ee716e8b256c6b38d"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/requirements.txt": {
+    "mtime": 1780038795.7696967,
+    "ast_hash": "39b0442e71bee770dd21e070841d58cd",
+    "semantic_hash": "39b0442e71bee770dd21e070841d58cd"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/analyze-video/SKILL.md": {
+    "mtime": 1780038795.7707784,
+    "ast_hash": "8348a33ef143b7f091297882a05ee0cc",
+    "semantic_hash": "8348a33ef143b7f091297882a05ee0cc"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/analyze-video/agent_prompt.md": {
+    "mtime": 1780038795.7708986,
+    "ast_hash": "160b2b7a9c0f9a73d76fa05338570bfb",
+    "semantic_hash": "160b2b7a9c0f9a73d76fa05338570bfb"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/backup-library/SKILL.md": {
+    "mtime": 1780038795.7710555,
+    "ast_hash": "c35a1b6b08a659aa507b0338e19c0842",
+    "semantic_hash": "c35a1b6b08a659aa507b0338e19c0842"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/contact-sheet/SKILL.md": {
+    "mtime": 1780038795.771199,
+    "ast_hash": "54f2ad8e3c3beb08f84b9d1b7209053c",
+    "semantic_hash": "54f2ad8e3c3beb08f84b9d1b7209053c"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/cut/SKILL.md": {
+    "mtime": 1780038795.771473,
+    "ast_hash": "79efe4444cfbb50db28334685b5992e6",
+    "semantic_hash": "79efe4444cfbb50db28334685b5992e6"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/cut/cut_yaml_schema.md": {
+    "mtime": 1780038795.7715783,
+    "ast_hash": "8c62db540684fe716159a002dd014852",
+    "semantic_hash": "8c62db540684fe716159a002dd014852"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/cut/direct_path.md": {
+    "mtime": 1780038795.771668,
+    "ast_hash": "d4fefc87d00ffc154bc826fa2f8cf179",
+    "semantic_hash": "d4fefc87d00ffc154bc826fa2f8cf179"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/cut/roughcut_agent_prompt.md": {
+    "mtime": 1780038795.7718928,
+    "ast_hash": "57c2188e85f0a0a6c92dfd8aedaf60f9",
+    "semantic_hash": "57c2188e85f0a0a6c92dfd8aedaf60f9"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/cut/roughcut_launch_prompt.md": {
+    "mtime": 1780038795.7719817,
+    "ast_hash": "1b1f88427e470067e64208149e0dfe86",
+    "semantic_hash": "1b1f88427e470067e64208149e0dfe86"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/cut/roughcut_path.md": {
+    "mtime": 1780038795.7720788,
+    "ast_hash": "26acf46f6c149e85c91a2b3f1b96aebb",
+    "semantic_hash": "26acf46f6c149e85c91a2b3f1b96aebb"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/cut/roughcut_planning.md": {
+    "mtime": 1780038795.7721825,
+    "ast_hash": "afafe357cad5c1531ef0ed57958e8306",
+    "semantic_hash": "afafe357cad5c1531ef0ed57958e8306"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/full-transcript/SKILL.md": {
+    "mtime": 1780038795.7723203,
+    "ast_hash": "4415d56964c99820ad3784834ef34a77",
+    "semantic_hash": "4415d56964c99820ad3784834ef34a77"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/process-library/SKILL.md": {
+    "mtime": 1780038795.7725177,
+    "ast_hash": "03daa5e819a65f060470a5ee394d8d2c",
+    "semantic_hash": "03daa5e819a65f060470a5ee394d8d2c"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/release/SKILL.md": {
+    "mtime": 1780038795.7727687,
+    "ast_hash": "c0b6866ef10c37ed52ee3846d5d7edfb",
+    "semantic_hash": "c0b6866ef10c37ed52ee3846d5d7edfb"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/reprocess-with-contact-sheets/SKILL.md": {
+    "mtime": 1780038795.7729278,
+    "ast_hash": "07b22926813f6a080e77bfa0bf00b324",
+    "semantic_hash": "07b22926813f6a080e77bfa0bf00b324"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/setup/SKILL.md": {
+    "mtime": 1780038795.7730646,
+    "ast_hash": "b827bf88e7c4f420b64757a7bc14279c",
+    "semantic_hash": "b827bf88e7c4f420b64757a7bc14279c"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/setup/advanced-setup.md": {
+    "mtime": 1780038795.7732418,
+    "ast_hash": "46deca7cbc55aeb18ecd890c20cedd21",
+    "semantic_hash": "46deca7cbc55aeb18ecd890c20cedd21"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/setup/simple-setup.md": {
+    "mtime": 1780038795.7734368,
+    "ast_hash": "619705bd25f66d839657f80793590aef",
+    "semantic_hash": "619705bd25f66d839657f80793590aef"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/transcribe-audio/SKILL.md": {
+    "mtime": 1780038795.77358,
+    "ast_hash": "5d33c143b0fd4eeffbff95c8b41331b7",
+    "semantic_hash": "5d33c143b0fd4eeffbff95c8b41331b7"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/transcribe-audio/agent_prompt.md": {
+    "mtime": 1780038795.7736628,
+    "ast_hash": "3bc1b5ed5175401fb07461240b66a6f5",
+    "semantic_hash": "3bc1b5ed5175401fb07461240b66a6f5"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/transcribe-audio/refine_instructions.md": {
+    "mtime": 1780038795.7738056,
+    "ast_hash": "cbbe390d736dc8372fd9afc483de4e9a",
+    "semantic_hash": "cbbe390d736dc8372fd9afc483de4e9a"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/skills/update-buttercut/SKILL.md": {
+    "mtime": 1780038795.7739232,
+    "ast_hash": "0ab786cd1d173eecd829dc8cc7b8657e",
+    "semantic_hash": "0ab786cd1d173eecd829dc8cc7b8657e"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/assets_manifest.yml": {
+    "mtime": 1780038795.7740598,
+    "ast_hash": "3728492401aace099940e7395d0df927",
+    "semantic_hash": "3728492401aace099940e7395d0df927"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/templates/library_template.yaml": {
+    "mtime": 1780038795.783418,
+    "ast_hash": "b5e8ec2bacc180cd758b60d0a5eaa18e",
+    "semantic_hash": "b5e8ec2bacc180cd758b60d0a5eaa18e"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/templates/plan_template.md": {
+    "mtime": 1780038795.7835085,
+    "ast_hash": "9a6f6d4dc10a5878379c5bfd51708c0e",
+    "semantic_hash": "9a6f6d4dc10a5878379c5bfd51708c0e"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/templates/roughcut_template.yaml": {
+    "mtime": 1780038795.7835994,
+    "ast_hash": "5ba34c0aeb0c9fdab8ae4b9e95a0d776",
+    "semantic_hash": "5ba34c0aeb0c9fdab8ae4b9e95a0d776"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/templates/settings_template.yaml": {
+    "mtime": 1780038795.7836912,
+    "ast_hash": "f96bcd7f2daade919e694542df33bd36",
+    "semantic_hash": "f96bcd7f2daade919e694542df33bd36"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/docs/PLAN-true-3d-code-window.md": {
+    "mtime": 1780545002.5490203,
+    "ast_hash": "841140a51c901f669a0b7319569e21ab",
+    "semantic_hash": "841140a51c901f669a0b7319569e21ab"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/docs/superpowers/plans/2026-05-29-chat-history-sidebar.md": {
+    "mtime": 1780049114.5473216,
+    "ast_hash": "fbd3ea8cef07eac35d844fa8776afbaf",
+    "semantic_hash": "fbd3ea8cef07eac35d844fa8776afbaf"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/index.html": {
+    "mtime": 1780559890.2572742,
+    "ast_hash": "15ae2a8b76eb50ee955ec788f9e2123a",
+    "semantic_hash": "15ae2a8b76eb50ee955ec788f9e2123a"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/fixtures/media/MVI_0309_720p.mov": {
+    "mtime": 1780038795.7780678,
+    "ast_hash": "62e573dd40b580b45a813e5e63450f85",
+    "semantic_hash": "62e573dd40b580b45a813e5e63450f85"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/fixtures/media/MVI_0323_720p.mov": {
+    "mtime": 1780038795.78215,
+    "ast_hash": "2ae12b7ee3877a125a2c54b9c57f7690",
+    "semantic_hash": "2ae12b7ee3877a125a2c54b9c57f7690"
+  },
+  "/Users/charleschen/Downloads/Projects/python-30-days/buttercut/spec/fixtures/media/P1044376_timecode_fixture.mov": {
+    "mtime": 1780038795.782738,
+    "ast_hash": "4269d41e94d9c3f76f7b2235f73de284",
+    "semantic_hash": "4269d41e94d9c3f76f7b2235f73de284"
+  }
+}

@@ -9036,7 +9036,13 @@ select:focus-visible {
     overflow:hidden;
 }
 .floating-playground-panel .ace-editor-mount .ace_editor,
-.floating-playground-panel .ace-editor-mount .ace_gutter { background:transparent !important; }
+.floating-playground-panel .ace-editor-mount .ace_scroller,
+.floating-playground-panel .ace-editor-mount .ace_content,
+.floating-playground-panel .ace-editor-mount .ace_gutter,
+.floating-playground-panel .ace-editor-mount .ace_gutter-layer { background:transparent !important; }
+/* Active-line highlight: subtle tint that works against the dark space bg */
+.floating-playground-panel .ace-editor-mount .ace_active-line { background:rgba(255,255,255,0.04) !important; }
+.floating-playground-panel .ace-editor-mount .ace_gutter-active-line { background:rgba(255,255,255,0.04) !important; }
 .floating-playground-panel .run-btn {
     background:linear-gradient(180deg, #1aa06d 0%, #15885c 100%);
     border:1px solid rgba(16,185,129,0.4); color:#eafff5; font-weight:700;
