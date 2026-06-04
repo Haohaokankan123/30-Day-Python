@@ -21,7 +21,7 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
         />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-        <link rel="stylesheet" href="style.css?v=41" />
+        <link rel="stylesheet" href="style.css?v=42" />
         <script>
         (function(){
             var t=localStorage.getItem('py30_theme')||'dark';
@@ -161,7 +161,7 @@
                 <!-- RIGHT col: animated code window — 3D objects float behind it.
                      tilt-3d = follows the cursor in 3D; typing replays on hover. -->
                 <div class="landing-hero-right hero-sub-fade">
-                    <div class="landing-code-window tilt-3d" id="heroCodeWindow">
+                    <div class="landing-code-window panel-3d-real" id="heroCodeWindow">
                         <div class="landing-code-titlebar">
                             <span class="lc-dot dot-red"></span
                             ><span class="lc-dot dot-yellow"></span
@@ -330,6 +330,8 @@
 
             <!-- Features showcase -->
             <div class="landing-features-section reveal" id="landing-features">
+                <!-- cannon-es tumbling 3D physics objects, full-bleed behind the section -->
+                <canvas id="physicsFX" class="physics-fx-canvas" aria-hidden="true"></canvas>
                 <p class="landing-eyebrow" style="text-align: center">
                     What makes this different
                 </p>
@@ -343,7 +345,7 @@
                 <!-- AI Tutor + Editor demo -->
                 <div class="landing-demo-split">
                     <!-- Left: buggy code editor -->
-                    <div class="landing-demo-editor">
+                    <div class="landing-demo-editor panel-3d-real">
                         <div class="landing-code-titlebar">
                             <span class="lc-dot dot-red"></span
                             ><span class="lc-dot dot-yellow"></span
@@ -385,7 +387,7 @@ average = total / len(scores
                     </div>
 
                     <!-- Right: AI chat -->
-                    <div class="landing-demo-chat">
+                    <div class="landing-demo-chat panel-3d-real">
                         <div class="landing-demo-chat-header">
                             <span class="landing-demo-chat-icon">🤖</span>
                             <div>
@@ -455,7 +457,7 @@ average = total / len(scores
                     </p>
                 </div>
                 <div class="landing-feature-card-wrap">
-                    <div class="landing-feature-card">
+                    <div class="landing-feature-card panel-3d-real">
                         <div class="landing-feature-card-tag">DAY 05</div>
                         <h3 class="landing-feature-card-title">Lists</h3>
                         <!-- Tab switcher -->
@@ -530,7 +532,7 @@ average = total / len(scores
                     </p>
                 </div>
                 <div class="landing-feature-card-wrap">
-                    <div class="tutor-demo-card tilt-3d">
+                    <div class="tutor-demo-card panel-3d-real">
                         <div class="tutor-demo-header">
                             <span class="tutor-demo-avatar">✦</span>
                             <span class="tutor-demo-name">AI Tutor</span>
@@ -1261,7 +1263,7 @@ average = total / len(scores
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
         <script src="days-data.js?v=3"></script>
-        <script src="app.js?v=19"></script>
+        <script src="app.js?v=20"></script>
         <script src="playground.js?v=14"></script>
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
         <script src="ai-tutor.js?v=13"></script>
@@ -1273,6 +1275,20 @@ average = total / len(scores
         <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+        <!-- ES-module import map for the real-3D/physics module (panel-physics.js).
+             Must precede any <script type="module">. Maps bare specifiers to
+             verified CDN ESM builds. SEPARATE from the global window.THREE UMD
+             below — they coexist; old scenes use window.THREE, the module imports
+             its own ESM three. -->
+        <script type="importmap">
+        {
+          "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/",
+            "cannon-es": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js"
+          }
+        }
+        </script>
         <!-- Phase 7: Three.js (r152 — last version with UMD global bundle) -->
         <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
         <script src="landing-3d.js?v=9"></script>
@@ -1282,8 +1298,10 @@ average = total / len(scores
         <!-- Focus background music toggle -->
         <script src="music.js?v=1"></script>
         <!-- 3D tilt + AI-tutor showcase demo (must load before landing-fx boot()) -->
-        <script src="landing-tilt.js?v=1"></script>
-        <script src="landing-fx.js?v=19"></script>
+        <script src="landing-tilt.js?v=2"></script>
+        <!-- Real 3D panel tilt + cannon-es physics (ES module; crisp-text panels) -->
+        <script type="module" src="panel-physics.js?v=1"></script>
+        <script src="landing-fx.js?v=20"></script>
         <!-- Pro toast notification -->
         <div id="proToastContainer"></div>
 

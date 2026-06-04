@@ -2149,15 +2149,13 @@ function initCodeTyper() {
     typingTimer = setTimeout(typeNext, 200);
   }
 
-  // Replay the typing each time the cursor enters the window; reset on leave so
-  // it starts fresh next time (Charles: "reset after the user goes away and
-  // comes back to it"). Also type once on first load so it isn't blank.
+  // Empty on first load; types ONLY on hover and resets on leave so it replays
+  // fresh next time (Charles: "when the page first loads it should be empty.
+  // When I hover over it, it should animate").
   const win = document.getElementById("heroCodeWindow") || pre;
+  resetTyping(); // start empty — just the blinking cursor
   win.addEventListener("mouseenter", startTyping);
   win.addEventListener("mouseleave", resetTyping);
-
-  // First-load play (gives the hero something to show before any hover).
-  lfTimer(startTyping, 800);
 }
 
 // ── Stagger curriculum grid entrance ──────────

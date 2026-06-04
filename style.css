@@ -8692,8 +8692,17 @@ select:focus-visible {
     border-top:1px solid var(--border-light);
     box-shadow:0 -8px 24px rgba(0,0,0,0.3);
 }
-/* Glass cards — engine's real emitted classes */
-.content-wrap .day-hero,
+/* Day-hero header: TRANSPARENT so the single uniform .app space wash shows
+   through it — the old glass fill made the full-width header read as a lighter
+   "band" across the top of every lesson (Charles's complaint). Cards below keep
+   their glass look; the header does not. */
+.content-wrap .day-hero {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+}
+/* Glass cards — engine's real emitted classes (NOT the full-width day-hero) */
 .content-wrap .example-card,
 .content-wrap .quiz-card,
 .content-wrap .quiz-section,
@@ -9115,4 +9124,47 @@ select:focus-visible {
     .tutor-demo-card { width: 100%; }
     .landing-feature-reverse .landing-feature-left,
     .landing-feature-reverse .landing-feature-card-wrap { order: initial; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   REAL 3D PANELS + cannon-es PHYSICS  (panel-physics.js)
+   ════════════════════════════════════════════════════════════════ */
+/* Physics canvas: full-bleed behind the features section, non-interactive,
+   low opacity so the tumbling shapes read as ambient depth, not clutter. */
+.landing-features-section { position: relative; }
+.physics-fx-canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; opacity: 0.5;
+}
+/* The section's real content sits above the physics canvas. */
+.landing-features-section > *:not(.physics-fx-canvas) { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) { .physics-fx-canvas { display: none; } }
+
+/* panel-3d-real: panel-physics.js applies an inline perspective(...) rotateX/Y/
+   translateZ transform each frame. These keep the GPU transform smooth and give
+   children real depth — text stays crisp (it's native HTML, never a texture). */
+.panel-3d-real {
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: box-shadow .3s ease;
+}
+.panel-3d-real:hover {
+    box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 60px rgba(124,58,237,0.28);
+}
+@media (prefers-reduced-motion: reduce) { .panel-3d-real { transform: none !important; } }
+
+/* ── Curriculum preview cards: 3D hover depth (CSS-only, crisp text) ── */
+.preview-grid { perspective: 1000px; }
+.preview-day {
+    transform-style: preserve-3d;
+    transition: transform .3s cubic-bezier(0.16,1,0.3,1), box-shadow .3s, border-color .3s;
+}
+.preview-day:hover {
+    transform: translateZ(26px) rotateX(7deg) rotateY(-5deg);
+    box-shadow: 0 22px 50px rgba(0,0,0,0.5), 0 0 34px rgba(99,102,241,0.30);
+    border-color: rgba(129,140,248,0.5);
+    z-index: 2;
+}
+@media (prefers-reduced-motion: reduce) {
+    .preview-day, .preview-day:hover { transform: none; transition: none; }
 }

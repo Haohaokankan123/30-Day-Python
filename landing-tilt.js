@@ -156,42 +156,65 @@
       }
     }
 
-    async function loop() {
-      while (alive) {
-        for (let p = 0; p < QA_PAIRS.length && alive; p++) {
-          const pair = QA_PAIRS[p];
-          chat.innerHTML = "";
-          await waitWhilePaused();
+    // Play the Q&A sequence ONCE (no infinite loop). Charles: it should only
+    // replay when the user scrolls away and comes back — handled by the
+    // IntersectionObserver below, not by looping here.
+    let playing = false;
+    async function playOnce() {
+      if (playing || !alive) return;
+      playing = true;
+      for (let p = 0; p < QA_PAIRS.length && alive; p++) {
+        const pair = QA_PAIRS[p];
+        chat.innerHTML = "";
+        await waitWhilePaused();
 
-          // user question slides in
-          const userB = makeBubble("user");
-          chat.appendChild(userB);
-          requestAnimationFrame(() => userB.classList.add("in"));
-          await typeInto(userB.querySelector(".tutor-demo-text"), pair.q);
-          await sleep(500);
+        // user question slides in
+        const userB = makeBubble("user");
+        chat.appendChild(userB);
+        requestAnimationFrame(() => userB.classList.add("in"));
+        await typeInto(userB.querySelector(".tutor-demo-text"), pair.q);
+        await sleep(500);
 
-          // AI typing indicator, then typed answer
-          const aiB = makeBubble("ai");
-          chat.appendChild(aiB);
-          requestAnimationFrame(() => aiB.classList.add("in"));
-          const aiText = aiB.querySelector(".tutor-demo-text");
-          const dots = document.createElement("span");
-          dots.className = "tutor-demo-dots";
-          dots.innerHTML = "<i></i><i></i><i></i>";
-          aiText.appendChild(dots);
-          await sleep(700);
-          aiText.textContent = "";
-          await typeInto(aiText, pair.a);
+        // AI typing indicator, then typed answer
+        const aiB = makeBubble("ai");
+        chat.appendChild(aiB);
+        requestAnimationFrame(() => aiB.classList.add("in"));
+        const aiText = aiB.querySelector(".tutor-demo-text");
+        const dots = document.createElement("span");
+        dots.className = "tutor-demo-dots";
+        dots.innerHTML = "<i></i><i></i><i></i>";
+        aiText.appendChild(dots);
+        await sleep(700);
+        aiText.textContent = "";
+        await typeInto(aiText, pair.a);
 
-          await sleep(2200); // let the user read
-        }
+        await sleep(1800); // let the user read
       }
+      playing = false; // finished — sits settled until a re-entry replays it
     }
 
-    loop();
+    // Replay only on scroll-away-and-back: when the card leaves the viewport
+    // and later re-enters, run the one-shot again. Also plays on first appearance.
+    let wasVisible = false;
+    let io = null;
+    if ("IntersectionObserver" in window) {
+      io = new IntersectionObserver((entries) => {
+        const vis = entries[0] && entries[0].isIntersecting;
+        if (vis && !wasVisible) {
+          wasVisible = true;
+          if (!playing) playOnce();
+        } else if (!vis) {
+          wasVisible = false; // left the viewport → arm the next re-entry replay
+        }
+      }, { threshold: 0.35 });
+      io.observe(card);
+    } else {
+      playOnce(); // no IO support → just play once
+    }
 
     demoCleanup = () => {
       alive = false;
+      if (io) { io.disconnect(); io = null; }
       sleep._ids.forEach((id) => clearTimeout(id));
       sleep._ids = [];
       card.removeEventListener("mouseenter", onEnter);

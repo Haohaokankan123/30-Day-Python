@@ -983,6 +983,13 @@
       window.LandingTilt.initTilt();
       window.LandingTilt.initTutorDemo();
     }
+    // Real 3D panel tilt (crisp text) + cannon-es tumbling physics objects.
+    // The module may still be loading (type="module" is async/deferred), so
+    // retry briefly until window.PanelPhysics is defined.
+    (function waitForPhysics(tries) {
+      if (window.PanelPhysics) { window.PanelPhysics.init(); return; }
+      if (tries > 0) setTimeout(() => waitForPhysics(tries - 1), 120);
+    })(20);
     if (hasGsap && window.ScrollTrigger) {
       // Recalc trigger start/end once layout settles. Fonts change heights;
       // the code-typer also calls ScrollTrigger.refresh() when it finishes.
@@ -1008,6 +1015,10 @@
     if (window.LandingTilt) {
       window.LandingTilt.destroyTilt();
       window.LandingTilt.destroyTutorDemo();
+    }
+    // Tear down the real-3D panel tilt + physics world so nothing renders hidden.
+    if (window.PanelPhysics) {
+      window.PanelPhysics.destroy();
     }
     teardownAll();
   }
