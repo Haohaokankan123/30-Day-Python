@@ -418,7 +418,7 @@ const LangSwitcher = (() => {
   function _collectTranslatableNodes() {
     // Collect text-bearing elements that are NOT code blocks
     const selectors = [
-      ".landing-nav a", ".landing-cta-btn", ".landing-eyebrow",
+      ".landing-nav a", ".landing-eyebrow",
       ".landing-title", ".landing-subtitle", ".landing-btn-primary", ".landing-btn-secondary",
       ".landing-stat-label", ".landing-feature-title", ".landing-feature-desc",
       ".landing-about-label", ".landing-about-headline", ".landing-about-body",

@@ -320,96 +320,10 @@
   }
 
   /* =============================================================
-     1) EDITOR SCENE — drifting Python code lines (#editorFX3D)
+     NOTE: the editor scene was removed (Charles wanted no faint
+     running-code behind the code editor). window.PanelFX.editor is a
+     no-op stub below; buildEditor + EDITOR_LINES were deleted as dead code.
      ============================================================= */
-  const EDITOR_LINES = [
-    "print('Hello, world')",
-    "for i in range(10):",
-    "def greet(name):",
-    "    return x ** 2",
-    "if score > 90:",
-    "import math",
-    "while running:",
-    "data = [1, 2, 3]",
-    "x = [n*n for n in nums]",
-    "class Robot:",
-  ];
-
-  function buildEditor(THREE, scene, camera, W, H) {
-    camera.position.set(0, 0, 10);
-
-    // Vertical bounds in world units (a touch past the frustum edges).
-    const TOP = 6.5;
-    const BOTTOM = -6.5;
-    const SPAN = TOP - BOTTOM;
-
-    const planeHeight = 0.62; // world height of every line plane
-    const count = 13; // ~10-14 planes; cycles through EDITOR_LINES
-
-    const planes = [];
-    const disposables = [];
-
-    for (let i = 0; i < count; i++) {
-      const text = EDITOR_LINES[i % EDITOR_LINES.length];
-      const { texture, aspect } = makeTextPlaneTexture(THREE, text);
-
-      const geo = new THREE.PlaneGeometry(planeHeight * aspect, planeHeight);
-      const mat = new THREE.MeshBasicMaterial({
-        map: texture,
-        transparent: true,
-        opacity: 0.5,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        depthTest: false,
-      });
-      const mesh = new THREE.Mesh(geo, mat);
-
-      // Spread across x/z; stagger initial y down the column.
-      const x = (Math.random() - 0.5) * 9;
-      const z = (Math.random() - 0.5) * 4 - 1;
-      const y = BOTTOM + Math.random() * SPAN;
-
-      mesh.position.set(x, y, z);
-      scene.add(mesh);
-
-      planes.push({
-        mesh,
-        speed: 0.35 + Math.random() * 0.55, // gentle upward drift
-        baseX: x,
-        swayAmp: 0.06 + Math.random() * 0.1,
-        swaySpeed: 0.3 + Math.random() * 0.5,
-        swayPhase: Math.random() * Math.PI * 2,
-        baseOpacity: 0.38 + Math.random() * 0.22,
-      });
-      disposables.push(mesh);
-    }
-
-    function step(t, dt) {
-      for (let i = 0; i < planes.length; i++) {
-        const p = planes[i];
-        const m = p.mesh;
-        m.position.y += p.speed * dt;
-        m.position.x = p.baseX + Math.sin(t * p.swaySpeed + p.swayPhase) * p.swayAmp;
-
-        // Fade near top/bottom edges for soft recycle.
-        const edge = Math.min(
-          1,
-          (TOP - m.position.y) / 1.5,
-          (m.position.y - BOTTOM) / 1.5
-        );
-        m.material.opacity = p.baseOpacity * Math.max(0, edge);
-
-        // Wrap to bottom once above the top.
-        if (m.position.y > TOP) {
-          m.position.y = BOTTOM;
-          p.baseX = (Math.random() - 0.5) * 9;
-          m.position.z = (Math.random() - 0.5) * 4 - 1;
-        }
-      }
-    }
-
-    return { step, disposables };
-  }
 
   /* =============================================================
      2) TUTOR SCENE — Q&A chat bubbles popping in/out (#tutorFX3D)

@@ -1333,24 +1333,7 @@
       });
     }
 
-    // ── 5. CTA / footer "Start for free" — zoom in from small scale ──
-    const ctaHeading = document.querySelector(".landing-cta-title, .landing-footer-cta h2");
-    if (ctaHeading) {
-      gsap.set(ctaHeading, { scale: 0.9, opacity: 0 });
-      const tw = gsap.to(ctaHeading, {
-        scale: 1,
-        opacity: 1,
-        duration: 0.9,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ctaHeading, start: "top 88%", once: true },
-      });
-      onCleanup(() => {
-        tw.scrollTrigger?.kill(); tw.kill();
-        ctaHeading.removeAttribute("style");
-      });
-    }
-
-    // ── 6. Stat bar: slide up + fade in as a unit, then punch each number ──
+    // ── 5. Stat bar: slide up + fade in as a unit, then punch each number ──
     const statsBar = document.querySelector(".landing-stats-bar");
     if (statsBar) {
       gsap.set(statsBar, { y: 30, opacity: 0 });
