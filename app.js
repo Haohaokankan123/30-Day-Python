@@ -2100,6 +2100,18 @@ function initCodeTyper() {
   ];
 
   let segIdx = 0, charIdx = 0;
+  let typingTimer = null;
+
+  function clearTyping() {
+    if (typingTimer) { clearTimeout(typingTimer); typingTimer = null; }
+  }
+
+  // Reset the window back to just-a-cursor so the next hover replays it.
+  function resetTyping() {
+    clearTyping();
+    segIdx = 0; charIdx = 0;
+    pre.innerHTML = '<span class="demo-cursor"></span>';
+  }
 
   function typeNext() {
     const cursor = pre.querySelector(".demo-cursor");
@@ -2119,21 +2131,33 @@ function initCodeTyper() {
       }
       pre.insertBefore(node, cursor);
       charIdx++;
-      lfTimer(typeNext, ch === "\n" ? 80 : 32);
+      typingTimer = setTimeout(typeNext, ch === "\n" ? 80 : 32);
     } else {
       segIdx++;
       charIdx = 0;
       if (segIdx >= segments.length) {
         // Code window finished typing → its height is now final.
-        // Tell ScrollTrigger to recompute trigger start/end against real layout.
         if (window.ScrollTrigger) window.ScrollTrigger.refresh();
         return;
       }
-      lfTimer(typeNext, segIdx % 3 === 0 ? 120 : 20);
+      typingTimer = setTimeout(typeNext, segIdx % 3 === 0 ? 120 : 20);
     }
   }
 
-  lfTimer(typeNext, 800);
+  function startTyping() {
+    resetTyping();
+    typingTimer = setTimeout(typeNext, 200);
+  }
+
+  // Replay the typing each time the cursor enters the window; reset on leave so
+  // it starts fresh next time (Charles: "reset after the user goes away and
+  // comes back to it"). Also type once on first load so it isn't blank.
+  const win = document.getElementById("heroCodeWindow") || pre;
+  win.addEventListener("mouseenter", startTyping);
+  win.addEventListener("mouseleave", resetTyping);
+
+  // First-load play (gives the hero something to show before any hover).
+  lfTimer(startTyping, 800);
 }
 
 // ── Stagger curriculum grid entrance ──────────

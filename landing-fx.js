@@ -978,6 +978,11 @@
     initLusionScrollFX();
     initConnectorLine();
     initZoomSection();
+    // 3D mouse-tilt (hero code window + tutor card) + the AI-tutor Q&A demo.
+    if (window.LandingTilt) {
+      window.LandingTilt.initTilt();
+      window.LandingTilt.initTutorDemo();
+    }
     if (hasGsap && window.ScrollTrigger) {
       // Recalc trigger start/end once layout settles. Fonts change heights;
       // the code-typer also calls ScrollTrigger.refresh() when it finishes.
@@ -998,6 +1003,11 @@
     // Reset the demo section so it doesn't resume half-filled on return.
     if (typeof window.resetDemoSection === "function") {
       window.resetDemoSection();
+    }
+    // Stop the 3D tilt loops + the tutor Q&A demo so nothing runs while hidden.
+    if (window.LandingTilt) {
+      window.LandingTilt.destroyTilt();
+      window.LandingTilt.destroyTutorDemo();
     }
     teardownAll();
   }

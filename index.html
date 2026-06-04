@@ -21,7 +21,7 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
         />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-        <link rel="stylesheet" href="style.css?v=40" />
+        <link rel="stylesheet" href="style.css?v=41" />
         <script>
         (function(){
             var t=localStorage.getItem('py30_theme')||'dark';
@@ -158,9 +158,10 @@
                         </button>
                     </div>
                 </div>
-                <!-- RIGHT col: animated code window — 3D objects float behind it -->
+                <!-- RIGHT col: animated code window — 3D objects float behind it.
+                     tilt-3d = follows the cursor in 3D; typing replays on hover. -->
                 <div class="landing-hero-right hero-sub-fade">
-                    <div class="landing-code-window">
+                    <div class="landing-code-window tilt-3d" id="heroCodeWindow">
                         <div class="landing-code-titlebar">
                             <span class="lc-dot dot-red"></span
                             ><span class="lc-dot dot-yellow"></span
@@ -512,6 +513,30 @@ average = total / len(scores
                                 </button>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── AI Tutor showcase — animated Q&A demo, 3D tilt on hover ── -->
+            <div class="landing-feature landing-feature-reverse reveal">
+                <div class="landing-feature-left">
+                    <p class="landing-eyebrow">Stuck? Just ask.</p>
+                    <h2 class="landing-feature-title">
+                        Your own<br />AI Python tutor.
+                    </h2>
+                    <p class="landing-feature-desc">
+                        Ask anything, any time. Get hints, explanations, and code
+                        reviews in plain English — right inside every lesson.
+                    </p>
+                </div>
+                <div class="landing-feature-card-wrap">
+                    <div class="tutor-demo-card tilt-3d">
+                        <div class="tutor-demo-header">
+                            <span class="tutor-demo-avatar">✦</span>
+                            <span class="tutor-demo-name">AI Tutor</span>
+                            <span class="tutor-demo-status">online</span>
+                        </div>
+                        <div class="tutor-demo-chat" id="tutorDemoChat"></div>
                     </div>
                 </div>
             </div>
@@ -1236,7 +1261,7 @@ average = total / len(scores
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
         <script src="days-data.js?v=3"></script>
-        <script src="app.js?v=18"></script>
+        <script src="app.js?v=19"></script>
         <script src="playground.js?v=14"></script>
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
         <script src="ai-tutor.js?v=13"></script>
@@ -1256,7 +1281,9 @@ average = total / len(scores
         <script src="lesson-sky.js?v=1"></script>
         <!-- Focus background music toggle -->
         <script src="music.js?v=1"></script>
-        <script src="landing-fx.js?v=18"></script>
+        <!-- 3D tilt + AI-tutor showcase demo (must load before landing-fx boot()) -->
+        <script src="landing-tilt.js?v=1"></script>
+        <script src="landing-fx.js?v=19"></script>
         <!-- Pro toast notification -->
         <div id="proToastContainer"></div>
 
